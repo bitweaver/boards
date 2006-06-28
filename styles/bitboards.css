@@ -1,0 +1,45 @@
+.mb-row-even-unapproved {
+	
+	background-color: #FF3366;
+}
+
+.mb-row-odd-unapproved {
+	background-color: #FF3399;
+}
+
+.mb-row-even-moved {
+	background-color: #FF6600;
+}
+
+.mb-row-odd-moved {
+	background-color: #FF9900;
+}
+
+.mb-row-even {
+	background-color: #99CC99;
+}
+
+.mb-row-odd {
+	background-color: #d9fcdb;
+}
+
+.mb-row-even-deleted {
+	background-color: #fff;
+}
+
+.mb-row-odd-deleted {
+	background-color: #e5e5e5;
+}
+
+.mb-table {
+	border:1px solid #339933;
+}
+
+.mb-table tr {
+	padding:3px 2px;
+	border:1px solid #339933;
+}
+
+.mb-table .header h1 {
+	 background-image: none;
+}
