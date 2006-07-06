@@ -9,7 +9,7 @@
 					{forminput}
 						<select name="homeBitForum" id="homeBitForum">
 							{section name=ix loop=$bitboards}
-								<option value="{$bitboards[ix].bitforum_id|escape}" {if $bitforums[ix].bitforum_id eq $home_bitforum}selected="selected"{/if}>{$bitforums[ix].title|escape|truncate:20:"...":true}</option>
+								<option value="{$bitboards[ix].bitboards_id|escape}" {if $bitforums[ix].bitboards_id eq $home_bitforum}selected="selected"{/if}>{$bitforums[ix].title|escape|truncate:20:"...":true}</option>
 							{sectionelse}
 								<option>{tr}No records found{/tr}</option>
 							{/section}

@@ -13,7 +13,7 @@ $flip_downname=>$flip.$flip_name.downname
 {if $gBitUser->hasPermission( 'p_boards_edit' )}
 <span>
 	<a onclick="
-	var url = '{$smarty.const.BITBOARDS_PKG_URL}ajax.php?req={$flip.$flip_name.req}&seq=' 
+	var url = '{$smarty.const.BITBOARDS_PKG_URL}ajax.php?req={$flip.$flip_name.req}&seq='
 		+ new Date().getTime()+
 		'&{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}
 		&{$flip_name}={$flip.$flip_name.state|escape:"url"}';
@@ -31,13 +31,13 @@ $flip_downname=>$flip.$flip_name.downname
 	    &{$flip_name}={$flip.$flip_name.state|escape:"url"}">
 {/if}
 {if $flip.$flip_name.state==1}
-	{biticon ipackage=bitboard iname=$flip.$flip_name.up iexplain=$flip.$flip_name.upname}
+	{biticon ipackage=bitboards iname=$flip.$flip_name.up iexplain=$flip.$flip_name.upname}
 {else}
-	{if $gBitUser->hasPermission( 'p_bitboard_edit' )}
-		{biticon ipackage=bitboard iname=$flip.$flip_name.down iexplain=$flip.$flip_name.downname}
+	{if $gBitUser->hasPermission( 'p_bitboards_edit' )}
+		{biticon ipackage=bitboards iname=$flip.$flip_name.down iexplain=$flip.$flip_name.downname}
 	{/if}
 {/if}
-{if $gBitUser->hasPermission( 'p_bitboard_edit' )}
+{if $gBitUser->hasPermission( 'p_bitboards_edit' )}
 	</a>
 </span>
 {/if}

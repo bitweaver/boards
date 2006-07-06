@@ -7,7 +7,7 @@ require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 $gBitSystem->verifyPackage( 'bitboards' );
 
 // Now check permissions to access this page
-$gBitSystem->verifyPermission( 'p_bitboard_edit' );
+$gBitSystem->verifyPermission( 'p_bitboards_edit' );
 
 
 if( isset( $_REQUEST["confirm"] ) ) {

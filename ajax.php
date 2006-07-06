@@ -18,7 +18,7 @@ require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 $gBitSystem->verifyPackage( 'bitboards' );
 
 // Now check permissions to access this page
-$gBitSystem->verifyPermission( 'p_bitboard_read' );
+$gBitSystem->verifyPermission( 'p_bitboards_read' );
 
 function ajax_nice_error($errno, $errstr, $errfile, $errline) {
 	$errortype = array (

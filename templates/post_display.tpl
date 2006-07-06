@@ -23,7 +23,7 @@
 <div class="display bitboard">
 	<div class="floaticon">
 		{if $print_page ne 'y' && $comment.deleted==0 }
-			{if $gBitUser->hasPermission( 'p_bitboard_edit' ) && (($comment.user_id<0 && $comment.approved==0)||$comment.user_id>=0)}
+			{if $gBitUser->hasPermission( 'p_bitboards_edit' ) && (($comment.user_id<0 && $comment.approved==0)||$comment.user_id>=0)}
 				<div style="display: inline; border-right: 1px solid blue; padding: 2px; margin-right: 8px;">
 					{if $comment.user_id<0 && $comment.approved==0}
 						<a title="{tr}Approve this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&action=1&post_id={$comment.post_id}">

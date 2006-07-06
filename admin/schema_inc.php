@@ -46,24 +46,24 @@ $gBitInstaller->registerSchemaSequences( BITBOARDS_PKG_NAME, $sequences );
 
 
 $gBitInstaller->registerSchemaDefault( BITBOARDS_PKG_NAME, array(
-	//      "INSERT INTO `".BIT_DB_PREFIX."bit_bitboard_types` (`type`) VALUES ('BitForum')",
+	//      "INSERT INTO `".BIT_DB_PREFIX."bit_bitboards_types` (`type`) VALUES ('BitForum')",
 ) );
 
 // ### Default UserPermissions
 $gBitInstaller->registerUserPermissions( BITBOARDS_PKG_NAME, array(
-	array( 'p_bitboard_admin', 'Can admin bitforum', 'admin', BITBOARDS_PKG_NAME ),
-	array( 'p_bitboard_create', 'Can create a bitforum', 'admin', BITBOARDS_PKG_NAME ),
-	array( 'p_bitboard_edit', 'Can edit any bitforum', 'admin', BITBOARDS_PKG_NAME ),
-	array( 'p_bitboard_read', 'Can read bitforum', 'basic',  BITBOARDS_PKG_NAME ),
-	array( 'p_bitboard_remove', 'Can delete bitforum', 'admin',  BITBOARDS_PKG_NAME ),
+	array( 'p_bitboards_admin', 'Can admin bitforum', 'admin', BITBOARDS_PKG_NAME ),
+	array( 'p_bitboards_create', 'Can create a bitforum', 'admin', BITBOARDS_PKG_NAME ),
+	array( 'p_bitboards_edit', 'Can edit any bitforum', 'admin', BITBOARDS_PKG_NAME ),
+	array( 'p_bitboards_read', 'Can read bitforum', 'basic',  BITBOARDS_PKG_NAME ),
+	array( 'p_bitboards_remove', 'Can delete bitforum', 'admin',  BITBOARDS_PKG_NAME ),
 ) );
 
 // ### Default Preferences
 $gBitInstaller->registerPreferences( BITBOARDS_PKG_NAME, array(
-	array( BITBOARDS_PKG_NAME, 'bitboard_default_ordering', 'bitforum_id_desc' ),
-	array( BITBOARDS_PKG_NAME, 'bitboard_list_bitforum_id', 'y' ),
-	array( BITBOARDS_PKG_NAME, 'bitboard_list_title', 'y' ),
-	array( BITBOARDS_PKG_NAME, 'bitboard_list_description', 'y' ),
-	array( BITBOARDS_PKG_NAME, 'bitboard_list_bitforums', 'y' ),
+	array( BITBOARDS_PKG_NAME, 'bitboards_default_ordering', 'bitforum_id_desc' ),
+	array( BITBOARDS_PKG_NAME, 'bitboards_list_bitforum_id', 'y' ),
+	array( BITBOARDS_PKG_NAME, 'bitboards_list_title', 'y' ),
+	array( BITBOARDS_PKG_NAME, 'bitboards_list_description', 'y' ),
+	array( BITBOARDS_PKG_NAME, 'bitboards_list_bitforums', 'y' ),
 ) );
 ?>

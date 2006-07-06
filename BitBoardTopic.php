@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.2 2006/07/06 15:05:27 hash9 Exp $
-* $Id: BitBoardTopic.php,v 1.2 2006/07/06 15:05:27 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.3 2006/07/06 19:44:26 hash9 Exp $
+* $Id: BitBoardTopic.php,v 1.3 2006/07/06 19:44:26 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.2 $ $Date: 2006/07/06 15:05:27 $ $Author: hash9 $
+* @version $Revision: 1.3 $ $Date: 2006/07/06 19:44:26 $ $Author: hash9 $
 * @class BitBoardTopic
 */
 
@@ -52,11 +52,11 @@ class BitBoardTopic extends LibertyAttachable {
 			array_push( $bindVars, $lookupId = @BitBase::verifyId( $this->mRootId ) ? $this->mRootId : $this->mContentId );
 			$this->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
-			if (!($gBitUser->hasPermission('p_bitboard_edit') || $gBitUser->hasPermission('p_bitforum_post_edit'))) {
+			if (!($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
 				//$whereSql .= " AND ((first.`approved` = 1) OR (flc.`user_id` >= 0))";
 			}
 
-			if (!($gBitUser->hasPermission('p_bitboard_edit'))) {
+			if (!($gBitUser->hasPermission('p_bitboards_edit'))) {
 				//$whereSql .= " AND (th.`deleted` = 0)";
 			}
 
@@ -111,7 +111,7 @@ WHERE
 	* This function removes a bitboard entry
 	**/
 	function expunge() {
-		$gBitSystem->verifyPermission('p_bitboard_edit');
+		$gBitSystem->verifyPermission('p_bitboards_edit');
 		$this->mDb->StartTrans();
 		$comment =  new LibertyComment($this->mRootId);
 		$comment->expungeComments();
@@ -130,7 +130,7 @@ WHERE
 		if ($state==null || !is_numeric($state) || $state > 1 || $state<0) {
 			$this->mErrors[]=("Invalid current state");
 		} else {
-			$gBitSystem->verifyPermission('p_bitboard_edit');
+			$gBitSystem->verifyPermission('p_bitboards_edit');
 			$state = (($state+1)%2);
 			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."forum_thread` WHERE `parent_id` = ?";
 			$query_ins = "INSERT INTO `".BIT_DB_PREFIX."forum_thread` (`parent_id`,`locked`) VALUES ( ?, $state)";
@@ -155,7 +155,7 @@ WHERE
 		if ($state==null || !is_numeric($state) || $state > 1 || $state<0) {
 			$this->mErrors[]=("Invalid current state");
 		} else {
-			$gBitSystem->verifyPermission('p_bitboard_edit');
+			$gBitSystem->verifyPermission('p_bitboards_edit');
 			$state = (($state+1)%2);
 			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."forum_thread` WHERE `parent_id` = ?";
 			$query_ins = "INSERT INTO `".BIT_DB_PREFIX."forum_thread` (`parent_id`,`sticky`) VALUES ( ?, $state)";
@@ -243,7 +243,7 @@ WHERE
 		}
 
 
-		if (!($gBitUser->hasPermission('p_bitboard_edit') || $gBitUser->hasPermission('p_bitforum_post_edit'))) {
+		if (!($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
 			/*$whereSql .= " AND ((post.`approved` = TRUE) OR (lc.`user_id` >= 0))";
 			$selectSql = " 0 AS unreg";*/
 		} else {
@@ -254,7 +254,7 @@ WHERE
 			WHERE s.`deleted`=FALSE AND ((s.`approved` = FALSE) AND (lc.`user_id` < 0)) AND s.`thread_id` = th.`thread_id`
 			) AS unreg";*/
 		}
-		if (!($gBitUser->hasPermission('p_bitboard_edit'))) {
+		if (!($gBitUser->hasPermission('p_bitboards_edit'))) {
 			//$whereSql .= " AND (th.`deleted` = FALSE)";
 		}
 

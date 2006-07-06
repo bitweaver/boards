@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.2 2006/07/06 14:31:23 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.3 2006/07/06 19:44:26 hash9 Exp $ *}
 {strip}
 		{if $comments and $gBitSystem->isFeatureActive('comments_display_option_bar')}
 			{form action="`$comments_return_url`#editcomments"}
@@ -73,7 +73,7 @@
 				{/foreach}
 			</table>
 			<p style="text-align: right;"><a title="{tr}Post on this thread{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}Post on this thread{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="Post on this thread"}</a></p>
-			{if $gBitUser->hasPermission( 'p_bitboard_remove' )}
+			{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
 				<div style="text-align:right;">
 					<script type="text/javascript">/* <![CDATA[ check / uncheck all */
 						document.write("<label for=\"switcher\">{tr}Select All{/tr}</label> ");
@@ -82,7 +82,7 @@
 
 					<select name="submit_mult" onchange="this.form.submit();">
 						<option value="" selected="selected">{tr}with checked{/tr}:</option>
-						{if $gBitUser->hasPermission( 'p_bitboard_remove' )}
+						{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
 							<option value="remove_bitboards">{tr}remove{/tr}</option>
 						{/if}
 					</select>

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/board.tpl,v 1.1 2006/06/28 15:45:26 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/board.tpl,v 1.2 2006/07/06 19:44:26 hash9 Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -30,12 +30,12 @@
 							</td>
 						<td><a href="{$board.url}" title="{$board_title}">{$board_title}</a></td>
 						{*
-					{if $gBitUser->hasPermission('p_bitboard_edit') || $gBitUser->hasPermission('p_bitforum_post_edit')}
+					{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
 					<td style="text-align:right;">{if $board.unreg > 0}<a style="color: blue;" href="{$smarty.const.MESSAGEBOARDS_PKG_URL}index.php?board_id={$board.board_id|escape:"url"}" title="{$board.title|escape}">{$board.unreg}&nbsp;Unregistered&nbsp;Posts</a>{/if}</td>{/if}
-						{if $gBitUser->hasPermission( 'p_bitboard_remove' )}
+						{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
 							<td class="actionicon">
 								{smartlink ititle="Edit" ifile="edit.php" ibiticon="liberty/edit" board_id=$board.board_id}
-								<input type="checkbox" name="checked[]" title="{$board.title|escape}" value="{$board.bitboard_id}" />
+								<input type="checkbox" name="checked[]" title="{$board.title|escape}" value="{$board.bitboards_id}" />
 							</td>
 							{/if}
 							*}
@@ -49,7 +49,7 @@
 				{/foreach}
 			</table>
 			{*
-			{if $gBitUser->hasPermission( 'p_bitboard_remove' )}
+			{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
 				<div style="text-align:right;">
 					<script type="text/javascript">/* <![CDATA[ check / uncheck all */
 						document.write("<label for=\"switcher\">{tr}Select All{/tr}</label> ");
@@ -58,7 +58,7 @@
 
 					<select name="submit_mult" onchange="this.form.submit();">
 						<option value="" selected="selected">{tr}with checked{/tr}:</option>
-						{if $gBitUser->hasPermission( 'p_bitboard_remove' )}
+						{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
 							<option value="remove_bitboards">{tr}remove{/tr}</option>
 						{/if}
 					</select>

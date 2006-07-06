@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.2 2006/07/06 14:31:24 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.3 2006/07/06 19:44:26 hash9 Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="header">
@@ -29,7 +29,7 @@
 					<th>{smartlink ititle="Started" isort=flc_created offset=$control.offset}</th>
 					<th>{smartlink ititle="Last Update By" isort=llc_user_id offset=$control.offset}</th>
 					<th>{smartlink ititle="Last Update" isort=llc_created offset=$control.offset}</th>
-					{if $gBitUser->hasPermission( 'p_bitboard_remove' )}
+					{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
 						<th>{tr}Actions{/tr}</th>
 					{/if}
 				</tr>*}
@@ -66,12 +66,12 @@
 					<td>
 						<a href="{$thread.url}" title="{$thread.flc_title}">{$thread.flc_title|escape}</a>, started by {if $thread.flc_user_id < 0}{$thread.first_unreg_uname|escape}{else}{displayname user_id=$thread.flc_user_id}{/if} {$thread.flc_created|reltime|escape}{if $thread.post_count > 1}, with {$thread.post_count|escape} posts, last update by {if $thread.flc_user_id < 0}{$thread.first_unreg_uname|escape}{else}{displayname user_id=$thread.flc_user_id}{/if} {$thread.llc_last_modified|reltime|escape}{/if}.
 					</td>
-					{if $gBitUser->hasPermission('p_bitboard_edit') || $gBitUser->hasPermission('p_bitforum_post_edit')}
+					{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
 					<td style="text-align:right;">{if $thread.unreg > 0}<a style="color: blue;" href="{$smarty.const.BITBOARDS_PKG_URL}index.php?board_id={$thread.th_board_id|escape:"url"}&thread_id={$thread.th_thread_id|escape:"url"}" title="{$thread.flc_title}">{$thread.unreg}&nbsp;Unregistered&nbsp;Posts</a>{/if}</td>
-						{if ($gBitUser->hasPermission( 'p_bitboard_edit' )||$gBitUser->hasPermission( 'p_bitforum_remove' ))}
+						{if ($gBitUser->hasPermission( 'p_bitboards_edit' )||$gBitUser->hasPermission( 'p_bitboards_remove' ))}
 							<td class="actionicon">
 							{if $thread.th_moved==0}
-								{if $gBitUser->hasPermission( 'p_bitboard_edit' )}
+								{if $gBitUser->hasPermission( 'p_bitboards_edit' )}
 									{*smartlink ititle="Edit" ifile="edit.php" ibiticon="liberty/edit" board_id=$thread.board_id*}
 									<a onclick="
 									document.getElementById('move_block_{$thread.th_thread_id|escape:"url"}').style['display']='inline'; 
@@ -98,7 +98,7 @@
 											</select>
 									</div>
 								{/if}
-								{if $gBitUser->hasPermission( 'p_bitboard_remove' )}
+								{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
 									<a title="{tr}Delete Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove_bitboard.php?thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage=bitboard iname="mail_delete" iexplain="Delete Thread"}</a>
 									<input type="checkbox" name="checked[]" title="{$thread.flc_title|escape}" value="{$thread.th_thread_id}" />
 								{/if}
@@ -115,7 +115,7 @@
 			</table>
 
 			<p style="text-align: right;"><a title="{tr}Start a new thread{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}Start a new thread{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="Start a new thread"}</a></p>
-			{if $gBitUser->hasPermission( 'p_bitboard_remove' )}
+			{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
 				<div style="text-align:right;">
 					<script type="text/javascript">/* <![CDATA[ check / uncheck all */
 					document.write("<label for=\"switcher\">{tr}Select All{/tr}</label> ");
@@ -124,7 +124,7 @@
 
 					<select name="submit_mult" onchange="this.form.submit();">
 						<option value="" selected="selected">{tr}with checked{/tr}:</option>
-						{if $gBitUser->hasPermission( 'p_bitboard_remove' )}
+						{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
 							<option value="remove_bitboards">{tr}remove{/tr}</option>
 						{/if}
 					</select>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.2 2006/07/06 14:31:21 hash9 Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.3 2006/07/06 19:44:26 hash9 Exp $
 // Copyright (c) 2004 bitweaver Messageboards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -10,7 +10,7 @@ require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 $gBitSystem->verifyPackage( 'bitboards' );
 
 // Now check permissions to access this page
-$gBitSystem->verifyPermission( 'p_bitboard_read' );
+$gBitSystem->verifyPermission( 'p_bitboards_read' );
 
 /* mass-remove:
 the checkboxes are sent as the array $_REQUEST["checked[]"], values are the wiki-PageNames,
@@ -24,7 +24,7 @@ if so, we call histlib's method remove_all_versions for all the checked bitboard
 if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQUEST["submit_mult"] == "remove_bitboards" ) {
 
 	// Now check permissions to remove the selected bitboard
-	$gBitSystem->verifyPermission( 'p_bitboard_remove' );
+	$gBitSystem->verifyPermission( 'p_bitboards_remove' );
 
 	if( !empty( $_REQUEST['cancel'] ) ) {
 		// user cancelled - just continue on, doing nothing

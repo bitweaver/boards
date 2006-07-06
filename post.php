@@ -5,7 +5,7 @@ require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 
 if (!empty($_REQUEST['action'])) {
 	// Now check permissions to access this page
-	$gBitSystem->verifyPermission( 'p_bitboard_edit' );
+	$gBitSystem->verifyPermission( 'p_bitboards_edit' );
 
 	require_once( BITBOARDS_PKG_PATH.'lookup_inc.php' );
 	switch ($_REQUEST['action']) {
@@ -41,7 +41,7 @@ $board = new LibertyContent();
 $board->mContentId=$thread->mInfo['th_root_id'];
 $board->mInfo['content_id']=$thread->mInfo['th_root_id'];
 $board->mInfo=BitBoard::loadContent($thread->mInfo['th_root_id']);
-$board->mInfo['display_url']=BitBoard::getForumDisplayUrl(&$board);
+$board->mInfo['display_url']=BitBoard::getForumDisplayUrl($board);
 $board->load();
 $gBitSmarty->assign_by_ref( 'board', $board );
 
