@@ -48,7 +48,7 @@ $gBitSmarty->assign_by_ref( 'board', $board );
 $commentsParentId=$board->mContentId;
 $comments_return_url= BITBOARDS_PKG_URL."index.php?t={$thread->mRootId}";
 $gComment = new BitBoardPost($_REQUEST['t']);
-$gBitSmarty->assign('comment_template','bitpackage:bitboard/post_display.tpl');
+$gBitSmarty->assign('comment_template','bitpackage:bitboards/post_display.tpl');
 
 require_once (LIBERTY_PKG_PATH.'comments_inc.php');
 
@@ -59,9 +59,9 @@ if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
 }
 
 // WYSIWYG and Quicktag variable
-$gBitSmarty->assign( 'textarea_id', 'editbitboard' );
+$gBitSmarty->assign( 'textarea_id', 'editbitboards' );
 
-$gBitSystem->display('bitpackage:bitboard/post.tpl', "Show Thread" );
+$gBitSystem->display('bitpackage:bitboards/post.tpl', "Show Thread" );
 
 
 ?>

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.1 2006/06/28 15:45:26 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.2 2006/07/06 14:31:23 hash9 Exp $ *}
 {strip}
 		{if $comments and $gBitSystem->isFeatureActive('comments_display_option_bar')}
 			{form action="`$comments_return_url`#editcomments"}
@@ -42,9 +42,9 @@
 <div class="floaticon">
 {assign var=flip value=$thread->getFlipFlop()}
 {assign var=flip_name value="locked"}
-{include file="bitpackage:bitboard/flipswitch.tpl"}
+{include file="bitpackage:bitboards/flipswitch.tpl"}
 {assign var=flip_name value="sticky"}
-{include file="bitpackage:bitboard/flipswitch.tpl"}
+{include file="bitpackage:bitboards/flipswitch.tpl"}
 <a title="{tr}Post on this thread{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments"> {biticon ipackage=bitboard iname="mail_new" iexplain="Post on this thread"}</a>
 {bithelp}</div>
 
@@ -95,6 +95,6 @@
 		{pagination}
 	</div><!-- end .body -->
 </div><!-- end .admin -->
-		{include file="bitpackage:bitboard/comment_post.tpl"}
+		{include file="bitpackage:bitboards/comment_post.tpl"}
 {/strip}
 

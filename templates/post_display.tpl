@@ -1,18 +1,23 @@
 {strip}
 {assign var='gContent' value=$comment}
-<td valign="top">
-{if $comment.warned}
-	{biticon ipackage=bitboard iname="error" iexplain="Warned Post"}
-{/if}
-<br/>
-{if $comment.user_id >= 0}
-	{$comment.user_id|avatar}
+<td valign="top" width="0" class="mb-warned">
+	{if $comment.warned}
+		{biticon ipackage=bitboard iname="error" iexplain="Warned Post"}
+	{/if}
+</td>
+<td valign="top" width="0" class="mb-avatar">
+{if $gBitUser->getPreference('boards_show_avatars','y')==y}
+	<strong>{if $comment.user_id < 0}{$comment.unreg_uname|escape}{else}{displayname hash=$comment}{/if}</strong><br />
+	{if $comment.user_id >= 0}
+	{$comment.user_id|avatar}<br />
+	{/if}
+	<small>{tr}Joined: {/tr}{$comment.registration_date|bit_short_date}</small><br />
 {/if}
 </td>
 {if $comments_style eq 'threaded'}
-	<td width="100%" style="padding-left: {math equation="level * marginIncrement" level=$comment.level marginIncrement=20}px">
+	<td width="100%" style="padding-left: {math equation="level * marginIncrement +3 " level=$comment.level marginIncrement=20}px" valign="top">
 {else}
-	<td width="100%" style="padding-left: 0px">
+	<td width="100%" style="padding-left: 3px" valign="top">
 {/if}
 <a name="{$comment.post_id|escape}" id="{$comment.post_id|escape}">
 <div class="display bitboard">
@@ -63,11 +68,8 @@
 					{/if}
 				</div>
 			{/if}
-			{*
-			<a title="{tr}Reply to this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}edit.php?thread_id={$comment.thread_id}&quote_id={$comment.post_id}">{biticon ipackage=bitboard iname="mail_reply" iexplain="Reply to this Post"}</a>
-			*}
 			{if $gBitUser->hasPermission( 'p_liberty_post_comments' )}
-				<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="liberty" iname="reply" iexplain="Reply to this comment"}</a>
+				<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="liberty" iname="reply" iexplain="Reply to this Post"}</a>
 			{/if}
 			{if $gBitUser->isAdmin() || ($gBitUser && $comment.user_id == $gBitUser->mInfo.user_id)}
 				<a href="{$comments_return_url}&amp;post_comment_id={$comment.comment_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="liberty" iname="edit" iexplain="Edit"}</a>
@@ -75,27 +77,23 @@
 			{if $gBitUser->isAdmin()}
 				<a href="{$comments_return_url}&amp;delete_comment_id={$comment.comment_id}" rel="nofollow">{biticon ipackage="liberty" iname="delete" iexplain="Remove"}</a>
 			{/if}
-			{*if $gBitUser->hasPermission( 'p_bitboard_edit' )}
-				<a title="{tr}Edit this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}edit.php?post_id={$comment.post_id}&thread_id={$comment.thread_id}">{biticon ipackage=liberty iname="edit" iexplain="Edit Post"}</a>
-			{/if}
-			{if $gBitUser->hasPermission( 'p_bitboard_remove' )}
-				<a title="{tr}Remove this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove_bitboard.php?post_id={$comment.post_id}&thread_id={$comment.thread_id}">{biticon ipackage=liberty iname="delete" iexplain="Remove Post"}</a>
-				<input type="checkbox" name="checked[]" title="{$comment.title|escape}" value="{$comment.thread_id}" />
-			{/if*}
 		{/if}<!-- end print_page -->
 	</div><!-- end .floaticon -->
 
 	<div class="header">
-		{if $comment.title neq ""}<h1>{$comment.title|escape}</h1>{/if}
-		<div class="date">
-			{tr}Created by{/tr}: 
-			{if $comment.user_id < 0}{$comment.unreg_uname|escape}{else}
-			{displayname hash=$comment}{/if}, {$comment.created|reltime},
-			{if $comment.created != $comment.last_modified}
-			{tr}Last modification by{/tr}: 
-			{if $comment.user_id < 0}{$comment.unreg_uname|escape}{else}
-			{displayname user=$comment.modifier_user user_id=$comment.modifier_user_id real_name=$comment.modifier_real_name}{/if}, {$comment.last_modified|reltime}
-			{/if}
+		{if $comment.title neq ""}<h3>{$comment.title|escape}</h3>{/if}
+			<div class="date">
+				{if $gBitUser->getPreference('boards_show_avatars','y')==n}
+					{tr}Posted by{/tr}: {if $comment.user_id < 0}{$comment.unreg_uname|escape}{else}{displayname hash=$comment}{/if}, {else} 
+					{tr}Posted{/tr}: {/if}
+				{$comment.created|reltime}, {if $comment.created != $comment.last_modified}
+					{tr}Last modification by{/tr}: 
+					{if $comment.user_id < 0}
+						{$comment.unreg_uname|escape}
+					{else}
+						{displayname user=$comment.modifier_user user_id=$comment.modifier_user_id real_name=$comment.modifier_real_name}
+					{/if}, {$comment.last_modified|reltime}
+				{/if}
 		</div>
 	</div><!-- end .header -->
 

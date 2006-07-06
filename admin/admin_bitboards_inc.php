@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/admin/Attic/admin_bitboards_inc.php,v 1.1 2006/06/28 15:45:26 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/admin/Attic/admin_bitboards_inc.php,v 1.2 2006/07/06 14:31:22 hash9 Exp $
 // Copyright (c) 2005 bitweaver BitForum
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -10,7 +10,7 @@
 //	$gBitSmarty->assign('home_bitboard', $_REQUEST["homeBitForum"]);
 //}
 
-require_once( BITBOARDS_PKG_PATH.'BitForum.php' );
+require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 
 $formBitForumLists = array(
 	"bitboard_list_bitforum_id" => array(
@@ -42,7 +42,7 @@ if( $processForm ) {
 
 }
 
-$bitboard = new BitForum();
-$bitboards = $bitforum->getList( $_REQUEST );
+$bitboard = new BitBoard();
+$bitboards = $bitboard->getForumBoardSelectList( $_REQUEST );
 $gBitSmarty->assign_by_ref('bitboards', $bitforums['data']);
 ?>

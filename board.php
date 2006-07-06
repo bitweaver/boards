@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.1 2006/06/28 15:45:26 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.2 2006/07/06 14:31:21 hash9 Exp $
 // Copyright (c) 2004 bitweaver Messageboards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -7,7 +7,7 @@
 require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 
 // Is package installed and enabled
-$gBitSystem->verifyPackage( 'bitboard' );
+$gBitSystem->verifyPackage( 'bitboards' );
 
 // Now check permissions to access this page
 $gBitSystem->verifyPermission( 'p_bitboard_read' );
@@ -59,6 +59,6 @@ if (!empty($_REQUEST['content_type_guid'])) {
 $gBitSmarty->assign_by_ref( 'listInfo', $_REQUEST['listInfo'] );
 
 // Display the template
-$gBitSystem->display( 'bitpackage:bitboard/board.tpl', tra( 'Forums' ) );
+$gBitSystem->display( 'bitpackage:bitboards/board.tpl', tra( 'Forums' ) );
 
 ?>

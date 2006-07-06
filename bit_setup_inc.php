@@ -7,8 +7,8 @@ $registerHash = array(
 );
 $gBitSystem->registerPackage( $registerHash );
 
-if( $gBitSystem->isPackageActive( 'bitboard' ) ) {
-	$gBitSystem->registerAppMenu( BITBOARDS_PKG_NAME, ucfirst( BITBOARD_PKG_DIR ), BITBOARD_PKG_URL.'index.php', 'bitpackage:bitboard/menu_bitforum.tpl', BITBOARD_PKG_NAME );
+if( $gBitSystem->isPackageActive( 'bitboards' ) ) {
+	$gBitSystem->registerAppMenu( BITBOARDS_PKG_NAME, ucfirst( BITBOARDS_PKG_DIR ), BITBOARDS_PKG_URL.'index.php', 'bitpackage:bitboards/menu_bitboards.tpl', BITBOARDS_PKG_NAME );
 }
 if (!function_exists('reltime')) {
 	function reltime($time) {
@@ -63,7 +63,7 @@ if (!function_exists('avatar')) {
 		$u = new BitUser($user_id);
 		$u->load();
 		if (!empty($u->mInfo['avatar_url'])) {
-			return "<img src=\"{$u->mInfo['avatar_url']}\" class=\"thumb\" title=\"".('Avatar')."\" alt=\"".('Avatar')."\"/>";
+			return "<a href=\"{$u->getDisplayUrl()}\"><img src=\"{$u->mInfo['avatar_url']}\" class=\"thumb\" title=\"".('Avatar')."\" alt=\"".('Avatar')."\"/></a>";
 		} else {
 			return "";
 		}

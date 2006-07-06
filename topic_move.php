@@ -4,7 +4,7 @@ require_once( '../bit_setup_inc.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 
 // Is package installed and enabled
-$gBitSystem->verifyPackage( 'bitboard' );
+$gBitSystem->verifyPackage( 'bitboards' );
 
 // Now check permissions to access this page
 $gBitSystem->verifyPermission( 'p_bitboard_edit' );
@@ -51,5 +51,5 @@ $board = new BitBoard();
 $gBitSmarty->assign_by_ref('boards', $board->getForumBoardSelectList());
 require_once( BITBOARDS_PKG_PATH .'lookup_bittopic_inc.php' );
 
-$gBitSystem->display( 'bitpackage:bitboard/topic_move.tpl', tra('Category') );
+$gBitSystem->display( 'bitpackage:bitboards/topic_move.tpl', tra('Category') );
 ?>

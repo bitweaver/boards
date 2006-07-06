@@ -15,7 +15,7 @@ require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 
 // Is package installed and enabled
-$gBitSystem->verifyPackage( 'bitboard' );
+$gBitSystem->verifyPackage( 'bitboards' );
 
 // Now check permissions to access this page
 $gBitSystem->verifyPermission( 'p_bitboard_read' );
@@ -89,7 +89,7 @@ switch ($_GET['req']) {
 		$board = new BitBoard();
 		$boardList=$board->getForumBoardSelectList();
 		$gBitSmarty->assign_by_ref('boardList',$boardList);
-		$gBitSmarty->display('bitpackage:bitboard/ajax.tpl');
+		$gBitSmarty->display('bitpackage:bitboards/ajax.tpl');
 		break;
 	case 2:
 		// Now check permissions to access this page
@@ -100,7 +100,7 @@ switch ($_GET['req']) {
 			$gContent->load();
 			$gBitSmarty->assign_by_ref('flip',$gContent->getFlipFlop());
 			$gBitSmarty->assign('flip_name','locked');
-			$gBitSmarty->display('bitpackage:bitboard/flipswitch.tpl');
+			$gBitSmarty->display('bitpackage:bitboards/flipswitch.tpl');
 		} else {
 			trigger_error(var_export($gContent->mErrors,true ));
 			va($gContent);
@@ -115,7 +115,7 @@ switch ($_GET['req']) {
 			$gContent->load();
 			$gBitSmarty->assign_by_ref('flip',$gContent->getFlipFlop());
 			$gBitSmarty->assign('flip_name','sticky');
-			$gBitSmarty->display('bitpackage:bitboard/flipswitch.tpl');
+			$gBitSmarty->display('bitpackage:bitboards/flipswitch.tpl');
 		} else {
 			trigger_error(var_export($gContent->mErrors,true ));
 		}

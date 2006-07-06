@@ -1,5 +1,5 @@
-{if $smarty.const.ACTIVE_PACKAGE == 'bitboard'}
-<link rel="stylesheet" title="{$style}" type="text/css" href="{$smarty.const.BITBOARDS_PKG_URL}styles/forums.css" media="all" />	
+{if $smarty.const.ACTIVE_PACKAGE == 'bitboards'}
+<link rel="stylesheet" title="{$style}" type="text/css" href="{$smarty.const.BITBOARDS_PKG_URL}styles/bitboards.css" media="all" />	
 <script>
 {literal}
 function reportError(request) {

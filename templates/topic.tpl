@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.1 2006/06/28 15:45:26 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.2 2006/07/06 14:31:24 hash9 Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="header">
@@ -58,9 +58,9 @@
 							{/if}
 							{assign var=flip value=$thread.flip}
 							{assign var=flip_name value="locked"}
-							{include file="bitpackage:bitboard/flipswitch.tpl"}
+							{include file="bitpackage:bitboards/flipswitch.tpl"}
 							{assign var=flip_name value="sticky"}
-							{include file="bitpackage:bitboard/flipswitch.tpl"}
+							{include file="bitpackage:bitboards/flipswitch.tpl"}
 						{/if}
 					</td>
 					<td>
@@ -136,5 +136,5 @@
 		{pagination}
 	</div><!-- end .body -->
 </div><!-- end .admin -->
-{include file="bitpackage:bitboard/comment_post.tpl"}
+{include file="bitpackage:bitboards/comment_post.tpl"}
 {/strip}

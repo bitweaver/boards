@@ -40,6 +40,20 @@
 	border:1px solid #339933;
 }
 
+.mb-warned img {
+	padding:3px;
+	padding-top: 2em;
+}
+
+.mb-avatar {
+	padding:3px;
+	/*border:1px solid #339933;*/
+}
+
+.mb-table .header {
+	border-bottom:1px solid #339933;
+}
+
 .mb-table .header h1 {
 	 background-image: none;
 }

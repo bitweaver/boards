@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.1 2006/06/28 15:45:26 spiderr Exp $
-* $Id: BitBoardPost.php,v 1.1 2006/06/28 15:45:26 spiderr Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.2 2006/07/06 14:31:21 hash9 Exp $
+* $Id: BitBoardPost.php,v 1.2 2006/07/06 14:31:21 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.1 $ $Date: 2006/06/28 15:45:26 $ $Author: spiderr $
+* @version $Revision: 1.2 $ $Date: 2006/07/06 14:31:21 $ $Author: hash9 $
 * @class BitMBPost
 */
 
@@ -81,12 +81,12 @@ class BitBoardPost extends LibertyComment {
 		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this );
 
 		if ($pContentId) {
-			$sql = "SELECT lcom.comment_id, lcom.parent_id, lcom.root_id, lcom.thread_forward_sequence, lcom.thread_reverse_sequence, lc.*, uu.`email`, uu.`real_name`, uu.`login` $selectSql $select1
+			$sql = "SELECT lcom.comment_id, lcom.parent_id, lcom.root_id, lcom.thread_forward_sequence,
+				lcom.thread_reverse_sequence, lc.*, uu.`email`, uu.`real_name`, uu.`login`, post.*, uu.registration_date AS registration_date $selectSql $select1
 					FROM `".BIT_DB_PREFIX."liberty_comments` lcom
-						LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
-						LEFT OUTER JOIN `".BIT_DB_PREFIX."users_users` uu ON (lc.`user_id` = uu.`user_id`) $joinSql $join1
+						INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
+						INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (lc.`user_id` = uu.`user_id`) $joinSql $join1
 						LEFT JOIN `".BIT_DB_PREFIX."forum_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
-						LEFT JOIN `".BIT_DB_PREFIX."forum_thread` th ON (th.`parent_id`=lcom.`comment_id`)
 				    WHERE $mid2 $whereSql $mid";
 			$flat_comments = array();
 
@@ -95,6 +95,7 @@ class BitBoardPost extends LibertyComment {
 					$row['parsed_data'] = $this->parseData( $row );
 					$row['level'] = substr_count ( $row['thread_forward_sequence'], '.' ) - 1;
 					$flat_comments[] = $row;
+					//va($row);
 				}
 			}
 
