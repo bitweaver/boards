@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.1 2006/06/28 15:45:26 spiderr Exp $
-* $Id: BitBoardTopic.php,v 1.1 2006/06/28 15:45:26 spiderr Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.2 2006/07/06 15:05:27 hash9 Exp $
+* $Id: BitBoardTopic.php,v 1.2 2006/07/06 15:05:27 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.1 $ $Date: 2006/06/28 15:45:26 $ $Author: spiderr $
+* @version $Revision: 1.2 $ $Date: 2006/07/06 15:05:27 $ $Author: hash9 $
 * @class BitBoardTopic
 */
 
@@ -62,7 +62,7 @@ class BitBoardTopic extends LibertyAttachable {
 
 			$BIT_DB_PREFIX = BIT_DB_PREFIX;
 			$query ="
-SELECT 
+SELECT
 	lc.`user_id` AS flc_user_id,
 	lc.`created` AS flc_created,
 	lc.`last_modified` AS flc_last_modified,
@@ -77,19 +77,20 @@ SELECT
 	COALESCE(th.`moved`,0) AS th_moved,
 	COALESCE(th.`sticky`,0) AS th_sticky,
 	COALESCE(th.`deleted`,0) AS th_deleted,
-	
-	
+
+
 	lcom.`comment_id` AS th_thread_id,
 	lcom.`root_id` AS th_root_id,
-	
+
 	lcom.`root_id` AS content_id,
 	lc.`content_type_guid` AS content_type_guid
-	
+
 	$selectSql
 		FROM `${BIT_DB_PREFIX}liberty_comments` AS lcom
 		INNER JOIN `${BIT_DB_PREFIX}liberty_content` AS lc ON( lc.`content_id` = lcom.`content_id` )
 		LEFT JOIN `${BIT_DB_PREFIX}forum_thread` th ON (th.`parent_id`=lcom.`comment_id`)
 		LEFT JOIN `${BIT_DB_PREFIX}forum_post` AS post ON(post.`comment_id`=lcom.`comment_id`)
+		$joinSql
 WHERE
 	lcom.`root_id`=lcom.`parent_id` AND	$lookupColumn=?
 	$whereSql";
@@ -192,14 +193,14 @@ WHERE
 		$query = "UPDATE `".BIT_DB_PREFIX."liberty_comments`
 			SET
 				`root_id` = $board_id
-			WHERE 
+			WHERE
 				`thread_forward_sequence` LIKE '".sprintf("%09d.", $this->mRootId)."%'";
 
 		$query = "UPDATE `".BIT_DB_PREFIX."liberty_comments`
-			SET 
+			SET
 				`root_id` = $board_id,
 				`parent_id` = $board_id
-			WHERE 
+			WHERE
 				`thread_forward_sequence` LIKE '".sprintf("%09d.", $this->mRootId)."%'
 				AND `root_id`=`parent_id`
 				";
@@ -270,7 +271,7 @@ WHERE
 		unreg DESC,
 		*/
 		$query = <<<SQL
-SELECT 
+SELECT
 	lc.`user_id` AS flc_user_id,
 	lc.`created` AS flc_created,
 	lc.`last_modified` AS flc_last_modified,
@@ -285,13 +286,13 @@ SELECT
 	COALESCE(th.`moved`,0) AS th_moved,
 	COALESCE(th.`sticky`,0) AS th_sticky,
 	COALESCE(th.`deleted`,0) AS th_deleted,
-	
+
 	lcom.`comment_id` AS th_thread_id,
 	lcom.`root_id` AS th_root_id,
-	
+
 	lcom.`root_id` AS content_id,
 	lc.`content_type_guid` AS content_type_guid
-	
+
 	$selectSql
 		FROM `${BIT_DB_PREFIX}liberty_comments` AS lcom
 		INNER JOIN `${BIT_DB_PREFIX}liberty_content` AS lc ON( lc.`content_id` = lcom.`content_id` )
