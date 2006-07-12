@@ -1,16 +1,15 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/board.tpl,v 1.2 2006/07/06 19:44:26 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/board.tpl,v 1.3 2006/07/12 16:57:33 hash9 Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
 <div class="listing bitboard">
 	<div class="header">
-	<h1>{$cType.content_description|escape|default:"Forum Group"}s</h1>
+	<h1>Forums</h1>
 	</div>
 
 	<div class="body">
-		{minifind sort_mode=$sort_mode category_id=$smarty.request.category_id}
+		{minifind sort_mode=$sort_mode b=$smarty.request.b}
 		{form id="checkform"}
-			<input type="hidden" name="category_id" value="{$smarty.request.category_id}" />
 			<input type="hidden" name="offset" value="{$control.offset|escape}" />
 			<input type="hidden" name="sort_mode" value="{$control.sort_mode|escape}" />
 
@@ -24,10 +23,10 @@
 					{assign var=board_title value="(Content $board_title)"}
 				{/if}
 					<tr class="mb-row-{cycle values="even,odd"}{if $board.unreg > 0}-unapproved{/if}">
-					<td  width="1px">
-					
+					{*<td  width="1px">
+
 							<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$board.content_id|escape:"url"}" title="Show: $board_title">{biticon ipackage=liberty iname="view" iexplain="Show: $board_title"}</a>
-							</td>
+							</td>*}
 						<td><a href="{$board.url}" title="{$board_title}">{$board_title}</a></td>
 						{*
 					{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
@@ -40,7 +39,7 @@
 							{/if}
 							*}
 							<td style="text-align:right; color: blue;">{if $board.post_count > 0}{$board.post_count}&nbsp;Threads</a>{/if}</td>
-							
+
 					</tr>
 				{foreachelse}
 					<tr class="norecords"><td colspan="16">
@@ -69,7 +68,7 @@
 			*}
 		{/form}
 
-		{pagination}
+		{pagination b=$smarty.request.b}
 	</div><!-- end .body -->
 </div><!-- end .admin -->
 {/strip}

@@ -1,20 +1,33 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.3 2006/07/06 19:44:26 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.4 2006/07/12 16:57:33 hash9 Exp $ *}
 {strip}
 <div class="listing bitboard">
+	<div class="floaticon">
+		{if $print_page ne 'y'}
+			{if $gBitUser->hasPermission( 'p_bitforum_edit' )}
+				<a title="{tr}Remove this bitforum{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage=liberty iname="edit" iexplain="Edit BitForum"}</a>
+			{/if}
+			{if $gBitUser->hasPermission( 'p_bitforum_remove' )}
+				<a title="{tr}Remove this bitforum{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove.php?b={$board->mInfo.board_id}">{biticon ipackage=liberty iname="delete" iexplain="Remove BitForum"}</a>
+			{/if}
+		{/if}<!-- end print_page -->
+	</div><!-- end .floaticon -->
 	<div class="header">
-		<h1>{$board->mInfo.title|escape|default:"Forum Topic"}</h1>
+		<h1>{$board->mInfo.title|escape|default:"Forum Topic"} <a id='content_1' href="{$comments_return_url}&show={if empty($smarty.request.show)}1{else}0{/if}" onclick="{literal}if (this.innerHTML=='-') { document.getElementById('content_div').style.display='none'; this.innerHTML='+'; } else { document.getElementById('content_div').style.display='block'; this.innerHTML='-'; } return false;{/literal}">{if empty($smarty.request.show)}+{else}-{/if}</a></h1>
 		<div class="date">
-			{tr}Posted by{/tr}: {displayname user=$board->mInfo.creator_user user_id=$board->mInfo.creator_user_id real_name=$board->mInfo.creator_real_name} on {$board->getField('created')|bit_short_datetime}
+			{tr}Created by{/tr}: {displayname user=$board->mInfo.creator_user user_id=$board->mInfo.creator_user_id real_name=$board->mInfo.creator_real_name} on {$board->getField('created')|bit_short_datetime}
 
 			{if $board->getField('last_modified') != $board->getField('created')}
-				<br/>{tr}Edited by{/tr}: {displayname user=$board->mInfo.modifier_user user_id=$board->mInfo.modifier_user_id real_name=$board->mInfo.modifier_real_name}, {$board->getField('last_modified')|bit_short_datetime}
+				&nbsp; {tr}Edited by{/tr}: {displayname user=$board->mInfo.modifier_user user_id=$board->mInfo.modifier_user_id real_name=$board->mInfo.modifier_real_name}, {$board->getField('last_modified')|bit_short_datetime}
 			{/if}
 		</div>
-		
-		<span style="text-align: right; width: 100%;">Back to <a href="{$cat_url}">{$board->mInfo.content_type.content_description}s</a></span>
+
+		Back to <a href="{$cat_url}">{$board->mInfo.content_type.content_description}s</a>
 	</div>
 
 	<div class="body">
+		<div id="content_div" class="content" style="text-align: right; {if empty($smarty.request.show)}display: none;{/if}">
+			{$board->mInfo.parsed_data}
+		</div><!-- end .content -->
 		<p style="text-align: right; margin: 0px; padding: 0px;"><a title="{tr}Start a new thread{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}Start a new thread{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="Start a new thread"}</a></p>
 		{minifind sort_mode=$sort_mode board_id=$smarty.request.board_id}
 		{form id="checkform"}
@@ -23,17 +36,6 @@
 			<input type="hidden" name="sort_mode" value="{$control.sort_mode|escape}" />
 
 			<table class="mb-table">
-			{*<tr>
-					<th>{smartlink ititle="Title" isort=flc_title iurl=$request.url offset=$control.offset}</th>
-					<th>{smartlink ititle="Started By" isort=flc_user_id offset=$control.offset}</th>
-					<th>{smartlink ititle="Started" isort=flc_created offset=$control.offset}</th>
-					<th>{smartlink ititle="Last Update By" isort=llc_user_id offset=$control.offset}</th>
-					<th>{smartlink ititle="Last Update" isort=llc_created offset=$control.offset}</th>
-					{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
-						<th>{tr}Actions{/tr}</th>
-					{/if}
-				</tr>*}
-
 				{foreach item=thread from=$threadList}
 					<tr class="mb-row-{cycle values="even,odd"}
 					{if $thread.first_deleted==1 or $thread.th_deleted==1}
@@ -64,7 +66,8 @@
 						{/if}
 					</td>
 					<td>
-						<a href="{$thread.url}" title="{$thread.flc_title}">{$thread.flc_title|escape}</a>, started by {if $thread.flc_user_id < 0}{$thread.first_unreg_uname|escape}{else}{displayname user_id=$thread.flc_user_id}{/if} {$thread.flc_created|reltime|escape}{if $thread.post_count > 1}, with {$thread.post_count|escape} posts, last update by {if $thread.flc_user_id < 0}{$thread.first_unreg_uname|escape}{else}{displayname user_id=$thread.flc_user_id}{/if} {$thread.llc_last_modified|reltime|escape}{/if}.
+						<a href="{$thread.url}" title="{$thread.flc_title}|default:"[Thread `$thread.th_thread_id`]"|escape">{$thread.flc_title|default:"[Thread `$thread.th_thread_id`]"|escape}</a>, started by {if $thread.flc_user_id < 0}{$thread.first_unreg_uname|escape}{else}{displayname user_id=$thread.flc_user_id}{/if} {$thread.flc_created|reltime|escape}{if $thread.post_count > 1}, with {$thread.post_count|escape} posts,
+						last update by {if $thread.llc_user_id < 0}{$thread.first_unreg_uname|escape}{else}{displayname user_id=$thread.llc_user_id}{/if} {$thread.llc_last_modified|reltime|escape}{/if}
 					</td>
 					{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
 					<td style="text-align:right;">{if $thread.unreg > 0}<a style="color: blue;" href="{$smarty.const.BITBOARDS_PKG_URL}index.php?board_id={$thread.th_board_id|escape:"url"}&thread_id={$thread.th_thread_id|escape:"url"}" title="{$thread.flc_title}">{$thread.unreg}&nbsp;Unregistered&nbsp;Posts</a>{/if}</td>
@@ -74,7 +77,7 @@
 								{if $gBitUser->hasPermission( 'p_bitboards_edit' )}
 									{*smartlink ititle="Edit" ifile="edit.php" ibiticon="liberty/edit" board_id=$thread.board_id*}
 									<a onclick="
-									document.getElementById('move_block_{$thread.th_thread_id|escape:"url"}').style['display']='inline'; 
+									document.getElementById('move_block_{$thread.th_thread_id|escape:"url"}').style['display']='inline';
 									var url = '{$smarty.const.BITBOARDS_PKG_URL}ajax.php?req=1&seq=' + new Date().getTime();
 									var element = 'move_{$thread.th_thread_id|escape:"url"}';
 									var params = null;
@@ -86,7 +89,7 @@
 									{/literal}
 									this.oldonclick=this.onclick;
 									this.onclick=new Function('
-										document.getElementById(\'move_block_{$thread.th_thread_id|escape:"url"}\').style[\'display\']=\'none\'; 
+										document.getElementById(\'move_block_{$thread.th_thread_id|escape:"url"}\').style[\'display\']=\'none\';
 										document.getElementById(\'move_{$thread.th_thread_id|escape:"url"}\').innerHTML=\'\';
 										this.onclick=this.oldonclick;
 										return false;
@@ -133,8 +136,8 @@
 				</div>
 			{/if}
 		{/form}
-		{pagination}
+		{pagination b=$smarty.request.b}
 	</div><!-- end .body -->
 </div><!-- end .admin -->
-{include file="bitpackage:bitboards/comment_post.tpl"}
+{include file="bitpackage:liberty/comments_post_inc.tpl"  post_title="Post" hide=1}
 {/strip}

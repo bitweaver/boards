@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/topic_move.tpl,v 1.1 2006/06/28 15:45:26 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/topic_move.tpl,v 1.2 2006/07/12 16:57:33 hash9 Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -17,7 +17,7 @@
 				{forminput}
 					<select name="target" id="target">
 						{section name=ix loop=$boards}
-							<option value="{$boards[ix].content_id|escape}">{$boards[ix].title|escape|truncate:20:"...":true} ({$boards[ix].post_count|escape}) ({$boards[ix].description|escape|truncate:20:"...":true})</option>
+							<option value="{$boards[ix].content_id|escape}">{$boards[ix].title|escape|truncate:20:"...":true} [{$boards[ix].post_count|escape}]</option>
 						{sectionelse}
 							<option>{tr}No records found{/tr}</option>
 						{/section}

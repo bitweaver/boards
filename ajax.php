@@ -1,9 +1,9 @@
 <?php
 /**
  * AJAX Function Call Stuff
- * 
+ *
  * reqs:
- *   1 - list all boards 
+ *   1 - list all boards
  *   2 - switch lock state on a given thread
  *   3 - switch sticky state on a given thread
  */
@@ -13,6 +13,7 @@ require_once( '../bit_setup_inc.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
+require_once( BITBOARDS_PKG_PATH.'BitBoardForum.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'bitboards' );
@@ -86,7 +87,7 @@ set_error_handler("ajax_nice_error");
 
 switch ($_GET['req']) {
 	case 1:
-		$board = new BitBoard();
+		$board = new BitBoardForum();
 		$boardList=$board->getForumBoardSelectList();
 		$gBitSmarty->assign_by_ref('boardList',$boardList);
 		$gBitSmarty->display('bitpackage:bitboards/ajax.tpl');

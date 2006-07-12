@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.3 2006/07/06 19:44:26 hash9 Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.4 2006/07/12 16:57:33 hash9 Exp $
 // Copyright (c) 2004 bitweaver Messageboards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -7,6 +7,7 @@
 require_once( '../bit_setup_inc.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
+require_once( BITBOARDS_PKG_PATH.'BitBoardForum.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 
 $gBitSmarty->assign( 'loadAjax', TRUE );
@@ -35,8 +36,8 @@ if (isset($_REQUEST["locked"]) || isset($_REQUEST["sticky"])) {
 		trigger_error(var_export($gContent->mErrors,true ));
 	}
 	die();
-} elseif (empty($_REQUEST['c'])) {
-	$gBitSystem->fatalError("Content id not given");
+} elseif (empty($_REQUEST['b'])) {
+	$gBitSystem->fatalError("board id not given");
 }
 
 
@@ -74,15 +75,13 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 		}
 	}
 }
-$board = new LibertyContent();
-$board->mInfo=BitBoard::loadContent($_REQUEST['c']);
-$board->mContentId=$_REQUEST['c'];
+
+$board = new BitBoard($_REQUEST['b']);
 $board->load();
-$board->mInfo['content_type']=$gLibertySystem->mContentTypes[$board->mInfo['content_type_guid']];
 $gContent = $board;
 
 $commentsParentId=$board->mContentId;
-$comments_return_url=  BITBOARDS_PKG_URL."index.php?c=".urlencode($board->mContentId);
+$comments_return_url=  BITBOARDS_PKG_URL."index.php?b=".urlencode($board->mBitBoardId);
 
 require_once (LIBERTY_PKG_PATH.'comments_inc.php');
 

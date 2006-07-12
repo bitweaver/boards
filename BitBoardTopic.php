@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.3 2006/07/06 19:44:26 hash9 Exp $
-* $Id: BitBoardTopic.php,v 1.3 2006/07/06 19:44:26 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.4 2006/07/12 16:57:33 hash9 Exp $
+* $Id: BitBoardTopic.php,v 1.4 2006/07/12 16:57:33 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.3 $ $Date: 2006/07/06 19:44:26 $ $Author: hash9 $
+* @version $Revision: 1.4 $ $Date: 2006/07/12 16:57:33 $ $Author: hash9 $
 * @class BitBoardTopic
 */
 
@@ -20,7 +20,7 @@ require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
 /**
 * This is used to uniquely identify the object
 */
-define( 'BitBoardTopic_CONTENT_TYPE_GUID', 'BitForumTopic' );
+define( 'BitBoardTopic_CONTENT_TYPE_GUID', 'BitBoardTopic' );
 
 class BitBoardTopic extends LibertyAttachable {
 	/**
@@ -83,11 +83,14 @@ SELECT
 	lcom.`root_id` AS th_root_id,
 
 	lcom.`root_id` AS content_id,
-	lc.`content_type_guid` AS content_type_guid
+	lc.`content_type_guid` AS content_type_guid,
+
+	map.`board_content_id` AS board_content_id
 
 	$selectSql
 		FROM `${BIT_DB_PREFIX}liberty_comments` AS lcom
 		INNER JOIN `${BIT_DB_PREFIX}liberty_content` AS lc ON( lc.`content_id` = lcom.`content_id` )
+		INNER JOIN `${BIT_DB_PREFIX}forum_map` map ON (map.`topic_content_id`=lcom.`root_id` )
 		LEFT JOIN `${BIT_DB_PREFIX}forum_thread` th ON (th.`parent_id`=lcom.`comment_id`)
 		LEFT JOIN `${BIT_DB_PREFIX}forum_post` AS post ON(post.`comment_id`=lcom.`comment_id`)
 		$joinSql
@@ -238,9 +241,12 @@ WHERE
 			$bindVars[] = '%' . strtoupper( $find ). '%';
 		}
 
-		if(!empty($pParamHash['c'])) {
-			$whereSql .= " AND lcom.`root_id` = ". $pParamHash['c'] ;
+		if(!empty($pParamHash['b'])) {
+			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}forum_map` AS map ON (map.`topic_content_id` = lcom.`root_id`)";
+			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}forum_board` AS b ON (b.`content_id` = map.`board_content_id`)";
+			$whereSql .= " AND b.`board_id` = ". $pParamHash['b'] ;
 		}
+
 
 
 		if (!($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
@@ -270,8 +276,8 @@ WHERE
 		post.`unreg_uname` AS first_unreg_uname,
 		unreg DESC,
 		*/
-		$query = <<<SQL
-SELECT
+
+		$query = "SELECT
 	lc.`user_id` AS flc_user_id,
 	lc.`created` AS flc_created,
 	lc.`last_modified` AS flc_last_modified,
@@ -291,7 +297,14 @@ SELECT
 	lcom.`root_id` AS th_root_id,
 
 	lcom.`root_id` AS content_id,
-	lc.`content_type_guid` AS content_type_guid
+	lc.`content_type_guid` AS content_type_guid,
+
+	(
+		SELECT COUNT(*)
+		FROM `".BIT_DB_PREFIX."liberty_comments` s_lcom
+		INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
+	    WHERE SUBSTRING(s_lcom.`thread_forward_sequence`,1,10) LIKE SUBSTRING(lcom.`thread_forward_sequence`,1,10)
+	) AS post_count
 
 	$selectSql
 		FROM `${BIT_DB_PREFIX}liberty_comments` AS lcom
@@ -307,9 +320,8 @@ ORDER BY
 	th_moved ASC,
 	th_deleted ASC,
 	lc.created DESC
-SQL;
-		$query_cant  = <<<SQL
-SELECT count(*)
+";
+		$query_cant  = "SELECT count(*)
 FROM `${BIT_DB_PREFIX}liberty_comments` AS lcom
 INNER JOIN `${BIT_DB_PREFIX}liberty_content` AS lc ON( lc.`content_id` = lcom.`content_id` )
 LEFT JOIN `${BIT_DB_PREFIX}forum_thread` th ON (th.`parent_id`=lcom.`comment_id`)
@@ -317,8 +329,7 @@ LEFT JOIN `${BIT_DB_PREFIX}forum_post` AS post ON (post.`comment_id` = lcom.`com
 $joinSql
 WHERE
 	lcom.`root_id`=lcom.`parent_id`
-	$whereSql
-SQL;
+	$whereSql";
 		$result = $this->mDb->query( $query, $bindVars, $max_records, $offset );
 		$ret = array();
 		while( $res = $result->fetchRow() ) {
@@ -327,6 +338,8 @@ SQL;
 			} else {
 				$res['url']=BITBOARDS_PKG_URL."index.php?t=".$res['th_thread_id'];
 			}
+			$llc_data = BitBoardTopic::getLastPost($res);
+			$res = array_merge($res,$llc_data);
 			$res['flip']=BitBoardTopic::getFlipFlop($res);
 			$ret[] = $res;
 		}
@@ -334,52 +347,62 @@ SQL;
 		// add all pagination info to pParamHash
 		LibertyAttachable::postGetList( $pParamHash );
 		return $ret;
-}
+	}
 
-/**
+	function getLastPost($data) {
+		$BIT_DB_PREFIX = BIT_DB_PREFIX;
+		$query="SELECT MAX(lc.`last_modified`) AS llc_last_modified, MAX(lc.`user_id`) AS llc_user_id
+		FROM `".BIT_DB_PREFIX."liberty_comments` lcom
+		INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
+	    WHERE SUBSTRING(lcom.`thread_forward_sequence`,1,10) LIKE '".sprintf("%09d.",$data['th_thread_id'])."%'";
+		$result = $this->mDb->getRow( $query);
+		return $result;
+	}
+
+	/**
 	* Generates the URL to the bitboard page
 	* @param pExistsHash the hash that was returned by LibertyAttachable::pageExists
 	* @return the link to display the page.
 	*/
-function getDisplayUrl() {
-	$ret = NULL;
-	if( @$this->verifyId( $this->mRootId ) ) {
-		$res['url']=BITBOARDS_PKG_URL."index.php?c=".$this->mContentId;
+	function getDisplayUrl() {
+		$ret = NULL;
+		if( @$this->verifyId( $this->mRootId ) ) {
+			$res['url']=BITBOARDS_PKG_URL."index.php?c=".$this->mContentId;
+		}
+		return $ret;
 	}
-	return $ret;
-}
 
-function isLocked($thread_id=false) {
-	global $gBitSystem;
-	if (!$thread_id) {
-		$thread_id = $this->mRootId;
+	function isLocked($thread_id=false) {
+		global $gBitSystem;
+		if (!$thread_id) {
+			$thread_id = $this->mRootId;
+		}
+		return $gBitSystem->mDb->getOne("SELECT `locked` FROM `".BIT_DB_PREFIX."forum_thread` WHERE `parent_id` = $thread_id");
 	}
-	return $gBitSystem->mDb->getOne("SELECT `locked` FROM `".BIT_DB_PREFIX."forum_thread` WHERE `parent_id` = $thread_id");
-}
 
-function getFlipFlop($arr=false) {
-	if(! $arr) {
-		$arr = $this->mInfo;
+	function getFlipFlop($arr=false) {
+		if(! $arr) {
+			$arr = $this->mInfo;
+		}
+		global $gBitSmarty;
+		$flip['locked']['state']=$arr['th_locked'];
+		$flip['locked']['req']=2;
+		$flip['locked']['id']=$arr['th_thread_id'];
+		$flip['locked']['idname']='t';
+		$flip['locked']['up']='locked';
+		$flip['locked']['upname']='Thread Locked';
+		$flip['locked']['down']='unlocked';
+		$flip['locked']['downname']='Thread Unlocked';
+
+		$flip['sticky']['state']=$arr['th_sticky'];
+		$flip['sticky']['req']=3;
+		$flip['sticky']['id']=$arr['th_thread_id'];
+		$flip['sticky']['idname']='t';
+		$flip['sticky']['up']='idea';
+		$flip['sticky']['upname']='Sticky Thread';
+		$flip['sticky']['down']='agt_uninstall-product';
+		$flip['sticky']['downname']='Non Sticky Thread';
+		return $flip;
 	}
-	global $gBitSmarty;
-	$flip['locked']['state']=$arr['th_locked'];
-	$flip['locked']['req']=2;
-	$flip['locked']['id']=$arr['th_thread_id'];
-	$flip['locked']['idname']='t';
-	$flip['locked']['up']='locked';
-	$flip['locked']['upname']='Thread Locked';
-	$flip['locked']['down']='unlocked';
-	$flip['locked']['downname']='Thread Unlocked';
-
-	$flip['sticky']['state']=$arr['th_sticky'];
-	$flip['sticky']['req']=3;
-	$flip['sticky']['id']=$arr['th_thread_id'];
-	$flip['sticky']['idname']='t';
-	$flip['sticky']['up']='idea';
-	$flip['sticky']['upname']='Sticky Thread';
-	$flip['sticky']['down']='agt_uninstall-product';
-	$flip['sticky']['downname']='Non Sticky Thread';
-	return $flip;
-}
 }
 ?>

@@ -1,3 +1,4 @@
+{if $smarty.request.post_comment_request}
 {strip}
 <br />
 <div class="display comment">
@@ -35,7 +36,7 @@
 
 					{*assign var=gContent value=$commentpost*}
 					{*include file="bitpackage:liberty/edit_format.tpl"*}
-					
+
 					{assign var=textarea_id value="commentpost"}
 					{if $gBitSystem->isPackageActive( 'smileys' )}
 						{include file="bitpackage:smileys/smileys_full.tpl"}
@@ -44,7 +45,7 @@
 					{if $gBitSystem->isPackageActive( 'quicktags' )}
 						{include file="bitpackage:quicktags/quicktags_full.tpl" formId="commentpost"}
 					{/if}
-		
+
 					<div class="row">
 						{formlabel label="Comment" for="commentpost"}
 						{forminput}
@@ -62,8 +63,9 @@
 			{/if}
 		{/form}
 
-		
+
 		{libertypagination hash=$commentsPgnHash}
 	</div><!-- end .body -->
 </div><!-- end .comment -->
 {/strip}
+{/if}

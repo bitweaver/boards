@@ -2,6 +2,7 @@
 require_once( '../bit_setup_inc.php' );
 
 require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
+require_once( BITBOARDS_PKG_PATH.'BitBoardForum.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'bitboards' );
@@ -47,9 +48,9 @@ if( isset( $_REQUEST["target"] ) ) {
 	$gBitSystem->confirmDialog( $formHash,$msgHash );
 }
 
-$board = new BitBoard();
+$board = new BitBoardForum();
 $gBitSmarty->assign_by_ref('boards', $board->getForumBoardSelectList());
-require_once( BITBOARDS_PKG_PATH .'lookup_bittopic_inc.php' );
+require_once( BITBOARDS_PKG_PATH .'lookup_inc.php' );
 
 $gBitSystem->display( 'bitpackage:bitboards/topic_move.tpl', tra('Category') );
 ?>

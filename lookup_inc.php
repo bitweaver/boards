@@ -1,20 +1,23 @@
 <?php
-
 require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php');
 require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
-
-// if p supplied, use that
+require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
+// if t supplied, use that
 if( @BitBase::verifyId( $_REQUEST['t'] ) ) {
 	$gContent = new BitBoardTopic( $_REQUEST['t'] );
-
-	// if t supplied, use that
+// if p supplied, use that
 } elseif( @BitBase::verifyId( $_REQUEST['p'] ) ) {
 	$gContent = new BitBoardPost( $_REQUEST['p'] );
+} elseif( @BitBase::verifyId( $_REQUEST['b'] ) ) {
+
+	$gContent = new BitBoard( $_REQUEST['b'] );
 } elseif (isset($_REQUEST['p'])) {
 	$gContent = new BitBoardPost();
 	// otherwise create new object
-} else {
+} elseif (isset($_REQUEST['t'])) {
 	$gContent = new BitBoardTopic();
+} else {
+	$gContent = new BitBoard();
 }
 
 $gContent->load();

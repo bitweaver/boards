@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.3 2006/07/06 19:44:26 hash9 Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.4 2006/07/12 16:57:33 hash9 Exp $
 // Copyright (c) 2004 bitweaver Messageboards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -50,11 +50,11 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 
 // create new bitboard object
 $boards = new BitBoard();
-$boardsList = $boards->getFullList( $_REQUEST );
+$boardsList = $boards->getList( $_REQUEST );
 $gBitSmarty->assign_by_ref( 'boardsList', $boardsList );
-if (!empty($_REQUEST['content_type_guid'])) {
+/*if (!empty($_REQUEST['content_type_guid'])) {
 	$gBitSmarty->assign_by_ref( 'cType', $gLibertySystem->mContentTypes[$_REQUEST['content_type_guid']] );
-}
+}*/
 // getList() has now placed all the pagination information in $_REQUEST['listInfo']
 $gBitSmarty->assign_by_ref( 'listInfo', $_REQUEST['listInfo'] );
 

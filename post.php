@@ -1,6 +1,7 @@
 <?php
 require_once( '../bit_setup_inc.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
+require_once( BITBOARDS_PKG_PATH.'BitBoardForum.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 
 if (!empty($_REQUEST['action'])) {
@@ -37,11 +38,7 @@ if (empty($thread->mInfo['th_root_id'])) {
 	$gBitSystem->fatalError(tra( "Invalid thread selection." ) );
 }
 
-$board = new LibertyContent();
-$board->mContentId=$thread->mInfo['th_root_id'];
-$board->mInfo['content_id']=$thread->mInfo['th_root_id'];
-$board->mInfo=BitBoard::loadContent($thread->mInfo['th_root_id']);
-$board->mInfo['display_url']=BitBoard::getForumDisplayUrl($board);
+$board = new BitBoard(null,$thread->mInfo['board_content_id']);
 $board->load();
 $gBitSmarty->assign_by_ref( 'board', $board );
 
