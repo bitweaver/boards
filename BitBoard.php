@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.2 2006/07/12 16:57:33 hash9 Exp $
-* $Id: BitBoard.php,v 1.2 2006/07/12 16:57:33 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.3 2006/07/18 21:59:17 hash9 Exp $
+* $Id: BitBoard.php,v 1.3 2006/07/18 21:59:17 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.2 $ $Date: 2006/07/12 16:57:33 $ $Author: hash9 $
+* @version $Revision: 1.3 $ $Date: 2006/07/18 21:59:17 $ $Author: hash9 $
 * @class BitBoard
 */
 
@@ -332,7 +332,7 @@ class BitBoard extends LibertyAttachable {
 				FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 				WHERE lcom.`root_id`=lcom.`parent_id` AND lcom.`root_id`=lc.`content_id`
 				) AS thread_count,
-			((blc.`content_id`- lc.`content_id)*(blc.`content_id`- lc.`content_id)) AS order_key
+			((blc.`content_id`- lc.`content_id`)*(blc.`content_id`- lc.`content_id`)) AS order_key
 					FROM `".BIT_DB_PREFIX."forum_board` b
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` blc ON (blc.`content_id`=b.`content_id`)
 					INNER JOIN  `".BIT_DB_PREFIX."forum_map` map ON (map.`board_content_id`= blc.`content_id`)
