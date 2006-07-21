@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.3 2006/07/18 21:59:17 hash9 Exp $
-* $Id: BitBoard.php,v 1.3 2006/07/18 21:59:17 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.4 2006/07/21 23:58:44 hash9 Exp $
+* $Id: BitBoard.php,v 1.4 2006/07/21 23:58:44 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.3 $ $Date: 2006/07/18 21:59:17 $ $Author: hash9 $
+* @version $Revision: 1.4 $ $Date: 2006/07/21 23:58:44 $ $Author: hash9 $
 * @class BitBoard
 */
 
@@ -373,6 +373,18 @@ class BitBoard extends LibertyAttachable {
 			$whereSql .= " AND UPPER( lc.`title` )like ? ";
 			$bindVars[] = '%' . strtoupper( $find ). '%';
 		}
+		$track = $gBitSystem->isFeatureActive('bitboards_thread_track');
+		$track = true;
+		if ($track) {
+			$selectSql .= ", (
+					SELECT COUNT(trk.`topic_id`)
+					FROM `".BIT_DB_PREFIX."forum_map` AS map
+					INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
+					INNER JOIN `".BIT_DB_PREFIX."forum_tracking` trk ON (trk.`topic_id` = lcom.`thread_forward_sequence`)
+					WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=lc.`content_id` AND trk.`user_id`=".$gBitUser->mUserId."
+				) AS track_count ";
+
+		}
 
 		$query = "SELECT ts.*, lc.`content_id`, lc.`title`, lc.`data`,
 			( SELECT count(*)
@@ -391,6 +403,20 @@ class BitBoard extends LibertyAttachable {
 		$ret = array();
 		while( $res = $result->fetchRow() ) {
 			$res['url']= BITBOARDS_PKG_URL."index.php?b={$res['board_id']}";
+			if($track) {
+				if ($gBitUser->isRegistered()) {
+					$res['track']['on'] = true;
+					$res['track']['count'] = $res['track_count'];
+					if ($res['post_count']>$res['track_count']) {
+						$res['track']['mod'] = true;
+					} else {
+						$res['track']['mod'] = false;
+					}
+				}  else {
+					$res['track']['on'] = false;
+				}
+				unset($res['track_count']);
+			}
 			$ret[] = $res;
 		}
 		$pParamHash["cant"] = $this->mDb->getOne( $query_cant, $bindVars );

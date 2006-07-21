@@ -1,10 +1,10 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/topic_move.tpl,v 1.2 2006/07/12 16:57:33 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/topic_move.tpl,v 1.3 2006/07/21 23:58:45 hash9 Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
 <div class="admin bitboard">
 	<div class="header">
-		<h1>{tr}Move Thread{/tr}: {$gContent->mInfo.flc_title|escape}</h1>
+		<h1>{tr}Move Thread{/tr}: {$gContent->mInfo.title|escape}</h1>
 	</div>
 
 	<div class="body">

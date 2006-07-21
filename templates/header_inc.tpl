@@ -1,5 +1,5 @@
 {if $smarty.const.ACTIVE_PACKAGE == 'bitboards'}
-<link rel="stylesheet" title="{$style}" type="text/css" href="{$smarty.const.BITBOARDS_PKG_URL}styles/bitboards.css" media="all" />	
+<link rel="stylesheet" title="{$style}" type="text/css" href="{$smarty.const.BITBOARDS_PKG_URL}styles/bitboards.css" media="all" />
 <script>
 {literal}
 function reportError(request) {
@@ -31,4 +31,9 @@ function reportError(request) {
 }
 {/literal}
 </script>
+
+	{if $gBitSystem->isPackageActive( 'rss' ) && !empty($board)}
+		<link rel="alternate" type="application/rss+xml" title="Board {$board->mInfo.title} RSS" href="{$smarty.const.BITBOARDS_PKG_URL}bitboards_rss.php?version=rss20&b={$smarty.request.b}" />
+		<link rel="alternate" type="application/rss+xml" title="Board {$board->mInfo.title} ATOM" href="{$smarty.const.BITBOARDS_PKG_URL}bitboards_rss.php?version=atom&b={$smarty.request.b}" />
+	{/if}
 {/if}

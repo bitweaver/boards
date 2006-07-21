@@ -30,7 +30,7 @@ if( isset( $_REQUEST["target"] ) ) {
 	require_once( LIBERTY_PKG_PATH.'lookup_content_inc.php' );
 	$bitBoard = $gContent;
 
-	$gBitSystem->setBrowserTitle( tra( 'Confirm moving' ).' "' .$bitThread->mInfo['flc_title'] .'" '. tra("to Board"). ' "'.$bitBoard->mInfo['title'].'"');
+	$gBitSystem->setBrowserTitle( tra( 'Confirm moving' ).' "' .$bitThread->mInfo['title'] .'" '. tra("to Board"). ' "'.$bitBoard->mInfo['title'].'"');
 	$formHash=array();
 	if (empty($_REQUEST["ref"])) {
 		$_REQUEST["ref"]=$_SERVER['HTTP_REFERER'];
@@ -41,9 +41,9 @@ if( isset( $_REQUEST["target"] ) ) {
 	$formHash["target"]=$_REQUEST["target"];
 	$formHash["t"]=$_REQUEST["t"];
 	$msgHash = array(
-	'label' => tra( "Move Thread" ).": ".$bitThread->mInfo['flc_title']  ,
-	'confirm_item' => $bitThread->mInfo['flc_title'] ,
-	'warning' => tra( "Move ".' "' .$bitThread->mInfo['flc_title'] .'" '. tra("to Board"). ' "'.$bitBoard->mInfo['title'].'"'."<br />This cannot be undone!" ),
+	'label' => tra( "Move Thread" ).": ".$bitThread->mInfo['title']  ,
+	'confirm_item' => $bitThread->mInfo['title'] ,
+	'warning' => tra( "Move ".' "' .$bitThread->mInfo['title'] .'" '. tra("to Board"). ' "'.$bitBoard->mInfo['title'].'"'."<br />This cannot be undone!" ),
 	);
 	$gBitSystem->confirmDialog( $formHash,$msgHash );
 }

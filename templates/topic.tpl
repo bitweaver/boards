@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.4 2006/07/12 16:57:33 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.5 2006/07/21 23:58:45 hash9 Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
@@ -54,23 +54,22 @@
 					<td class="actionicon">{* thread status icons *}
 						{if $thread.th_moved>0}
 							{biticon ipackage=bitboard iname="move" iexplain="Moved Thread"}
-						{else}
-							{if $thread.first_deleted==1 or $thread.th_deleted==1}
-								{biticon ipackage=bitboard iname="deleted" iexplain="Deleted Thread"}
-							{/if}
-							{assign var=flip value=$thread.flip}
-							{assign var=flip_name value="locked"}
-							{include file="bitpackage:bitboards/flipswitch.tpl"}
-							{assign var=flip_name value="sticky"}
-							{include file="bitpackage:bitboards/flipswitch.tpl"}
 						{/if}
 					</td>
+					{assign var=flip value=$thread.flip}
+					{foreach from=$flip item=flip_s key=flip_name}
+						<td class="actionicon">{* thread status icons *}
+							{if $thread.th_moved<=0}
+								{include file="bitpackage:bitboards/flipswitch.tpl"}
+							{/if}
+						</td>
+					{/foreach}
 					<td>
-						<a href="{$thread.url}" title="{$thread.flc_title}|default:"[Thread `$thread.th_thread_id`]"|escape">{$thread.flc_title|default:"[Thread `$thread.th_thread_id`]"|escape}</a>, started by {if $thread.flc_user_id < 0}{$thread.first_unreg_uname|escape}{else}{displayname user_id=$thread.flc_user_id}{/if} {$thread.flc_created|reltime|escape}{if $thread.post_count > 1}, with {$thread.post_count|escape} posts,
+						<a href="{$thread.url}" title="{$thread.title|escape}">{$thread.title|escape}</a>, started by {if $thread.flc_user_id < 0}{$thread.first_unreg_uname|escape}{else}{displayname user_id=$thread.flc_user_id}{/if} {$thread.flc_created|reltime|escape}{if $thread.post_count > 1}, with {$thread.post_count|escape} posts,
 						last update by {if $thread.llc_user_id < 0}{$thread.first_unreg_uname|escape}{else}{displayname user_id=$thread.llc_user_id}{/if} {$thread.llc_last_modified|reltime|escape}{/if}
 					</td>
 					{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
-					<td style="text-align:right;">{if $thread.unreg > 0}<a style="color: blue;" href="{$smarty.const.BITBOARDS_PKG_URL}index.php?board_id={$thread.th_board_id|escape:"url"}&thread_id={$thread.th_thread_id|escape:"url"}" title="{$thread.flc_title}">{$thread.unreg}&nbsp;Unregistered&nbsp;Posts</a>{/if}</td>
+					<td style="text-align:right;">{if $thread.unreg > 0}<a style="color: blue;" href="{$smarty.const.BITBOARDS_PKG_URL}index.php?board_id={$thread.th_board_id|escape:"url"}&thread_id={$thread.th_thread_id|escape:"url"}" title="{$thread.title}">{$thread.unreg}&nbsp;Unregistered&nbsp;Posts</a>{/if}</td>
 						{if ($gBitUser->hasPermission( 'p_bitboards_edit' )||$gBitUser->hasPermission( 'p_bitboards_remove' ))}
 							<td class="actionicon">
 							{if $thread.th_moved==0}
@@ -101,11 +100,17 @@
 											</select>
 									</div>
 								{/if}
-								{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
-									<a title="{tr}Delete Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove_bitboard.php?thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage=bitboard iname="mail_delete" iexplain="Delete Thread"}</a>
-									<input type="checkbox" name="checked[]" title="{$thread.flc_title|escape}" value="{$thread.th_thread_id}" />
-								{/if}
 							{/if}
+							</td>
+							<td class="actionicon">
+								{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_bitboards_remove' )}
+									<a title="{tr}Delete Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove_bitboard.php?thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage=bitboard iname="mail_delete" iexplain="Delete Thread"}</a>
+								{/if}
+							</td>
+							<td class="actionicon">
+								{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_bitboards_remove' )}
+									<input type="checkbox" name="checked[]" title="{$thread.title|escape}" value="{$thread.th_thread_id}" />
+								{/if}
 							</td>
 						{/if}
 					{/if}

@@ -29,20 +29,25 @@ if (!empty($_REQUEST['action'])) {
 	$gBitSystem->fatalError("Thread id not given");
 }
 
+$gBitSystem->verifyPermission( 'p_bitboards_read' );
+
 $gBitSmarty->assign( 'loadAjax', TRUE );
 
 $thread = new BitBoardTopic($_REQUEST['t']);
 $thread->load();
-$gBitSmarty->assign_by_ref( 'thread', $thread );
 if (empty($thread->mInfo['th_root_id'])) {
 	$gBitSystem->fatalError(tra( "Invalid thread selection." ) );
 }
+$thread->readTopic();
 
+$gBitSmarty->assign('topic_locked',$thread->isLocked());
+
+$gBitSmarty->assign_by_ref( 'thread', $thread );
 $board = new BitBoard(null,$thread->mInfo['board_content_id']);
 $board->load();
 $gBitSmarty->assign_by_ref( 'board', $board );
 
-$commentsParentId=$board->mContentId;
+$commentsParentId=$thread->mInfo['content_id'];
 $comments_return_url= BITBOARDS_PKG_URL."index.php?t={$thread->mRootId}";
 $gComment = new BitBoardPost($_REQUEST['t']);
 $gBitSmarty->assign('comment_template','bitpackage:bitboards/post_display.tpl');

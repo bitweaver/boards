@@ -24,6 +24,13 @@ $tables = array(
 		topic_content_id I4 PRIMARY
 		CONSTRAINT ', CONSTRAINT `bitforums_topics_forum_ref` FOREIGN KEY (`board_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)
 					, CONSTRAINT `bitforums_topics_related_ref` FOREIGN KEY (`topic_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
+	",
+	'forum_tracking' => "
+		user_id I4 NOTNULL,
+		topic_id C(10),
+		date I4 NOTNULL DEFAULT(0),
+		notify I1 NOTNULL DEFAULT(0),
+		notify_date I4 NOTNULL DEFAULT(0)
 	"
 );
 
@@ -71,10 +78,6 @@ $gBitInstaller->registerUserPermissions( BITBOARDS_PKG_NAME, array(
 
 // ### Default Preferences
 $gBitInstaller->registerPreferences( BITBOARDS_PKG_NAME, array(
-	array( BITBOARDS_PKG_NAME, 'bitboards_default_ordering', 'bitforum_id_desc' ),
-	array( BITBOARDS_PKG_NAME, 'bitboards_list_bitforum_id', 'y' ),
-	array( BITBOARDS_PKG_NAME, 'bitboards_list_title', 'y' ),
-	array( BITBOARDS_PKG_NAME, 'bitboards_list_description', 'y' ),
-	array( BITBOARDS_PKG_NAME, 'bitboards_list_bitforums', 'y' ),
+	array( BITBOARDS_PKG_NAME, 'bitboards_thread_track', 'y' ),
 ) );
 ?>

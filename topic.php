@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.4 2006/07/12 16:57:33 hash9 Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.5 2006/07/21 23:58:44 hash9 Exp $
 // Copyright (c) 2004 bitweaver Messageboards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -19,7 +19,20 @@ $gBitSystem->verifyPackage( 'bitboards' );
 $gBitSystem->verifyPermission( 'p_bitboards_read' );
 
 
-if (isset($_REQUEST["locked"]) || isset($_REQUEST["sticky"])) {
+if (isset($_REQUEST["new"])) {
+	$gBitSystem->verifyPermission( 'p_board_view' );
+	require_once( BITBOARDS_PKG_PATH.'lookup_inc.php' );
+	$res = true;
+	if (isset($_REQUEST["new"]) && is_numeric($_REQUEST["new"])) {
+		$res = $gContent->readTopicSet($_REQUEST["new"]);
+	}
+	if ($res) {
+		header ("location: ".$_SERVER['HTTP_REFERER']);
+	} else {
+		trigger_error(var_export($gContent->mErrors,true ));
+	}
+	die();
+} elseif (isset($_REQUEST["locked"]) || isset($_REQUEST["sticky"])) {
 	// Now check permissions to access this page
 	$gBitSystem->verifyPermission( 'p_board_edit' );
 

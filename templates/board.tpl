@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/board.tpl,v 1.3 2006/07/12 16:57:33 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/board.tpl,v 1.4 2006/07/21 23:58:45 hash9 Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -23,6 +23,13 @@
 					{assign var=board_title value="(Content $board_title)"}
 				{/if}
 					<tr class="mb-row-{cycle values="even,odd"}{if $board.unreg > 0}-unapproved{/if}">
+					<td class="actionicon" width="1px">{* thread tracking icons *}
+						{if $board.track.on && $board.track.mod}
+							{biticon ipackage=bitboard iname="track_new_l" iexplain="New Posts"}
+						{elseif $board.track.on}
+							{biticon ipackage=bitboard iname="track_old_l" iexplain="No New Posts"}
+						{/if}
+					</td>
 					{*<td  width="1px">
 
 							<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$board.content_id|escape:"url"}" title="Show: $board_title">{biticon ipackage=liberty iname="view" iexplain="Show: $board_title"}</a>
@@ -51,8 +58,8 @@
 			{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
 				<div style="text-align:right;">
 					<script type="text/javascript">/* <![CDATA[ check / uncheck all */
-						document.write("<label for=\"switcher\">{tr}Select All{/tr}</label> ");
-						document.write("<input name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"switchCheckboxes(this.form.id,'checked[]','switcher')\" /><br />");
+					document.write("<label for=\"switcher\">{tr}Select All{/tr}</label> ");
+					document.write("<input name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"switchCheckboxes(this.form.id,'checked[]','switcher')\" /><br />");
 					/* ]]> */</script>
 
 					<select name="submit_mult" onchange="this.form.submit();">

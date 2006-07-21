@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.2 2006/07/06 14:31:21 hash9 Exp $
-* $Id: BitBoardPost.php,v 1.2 2006/07/06 14:31:21 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.3 2006/07/21 23:58:44 hash9 Exp $
+* $Id: BitBoardPost.php,v 1.3 2006/07/21 23:58:44 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.2 $ $Date: 2006/07/06 14:31:21 $ $Author: hash9 $
+* @version $Revision: 1.3 $ $Date: 2006/07/21 23:58:44 $ $Author: hash9 $
 * @class BitMBPost
 */
 
@@ -105,6 +105,30 @@ class BitBoardPost extends LibertyComment {
 		}
 		return $ret;
 	}
+
+	function getNumComments($pContentId = NULL) {
+		$ret = 0;
+
+		$contentId = $this->mCommentId;
+
+		$bindVars = array();
+
+		$joinSql = $selectSql = $whereSql = '';
+		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this );
+
+		if ($pContentId) {
+			$sql = "SELECT COUNT(*)
+					FROM `".BIT_DB_PREFIX."liberty_comments` lcom
+						INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
+						INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (lc.`user_id` = uu.`user_id`) $joinSql
+						LEFT JOIN `".BIT_DB_PREFIX."forum_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
+					WHERE lcom.`thread_forward_sequence` LIKE '".sprintf("%09d.",$contentId)."%' $whereSql
+			";
+			$ret = $this->mDb->getOne( $sql, $bindVars );
+		}
+		return $ret;
+	}
+
 	/**
 	* Generates the URL to the bitboard page
 	* @param pExistsHash the hash that was returned by LibertyAttachable::pageExists

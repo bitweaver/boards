@@ -10,7 +10,7 @@ $flip_down=>$flip.$flip_name.down
 $flip_downname=>$flip.$flip_name.downname
 *}
 {strip}
-{if $gBitUser->hasPermission( 'p_boards_edit' )}
+{if $gBitUser->hasPermission( $flip.$flip_name.perm )}
 <span>
 	<a onclick="
 	var url = '{$smarty.const.BITBOARDS_PKG_URL}ajax.php?req={$flip.$flip_name.req}&seq='
@@ -33,7 +33,7 @@ $flip_downname=>$flip.$flip_name.downname
 {if $flip.$flip_name.state==1}
 	{biticon ipackage=bitboards iname=$flip.$flip_name.up iexplain=$flip.$flip_name.upname}
 {else}
-	{if $gBitUser->hasPermission( 'p_bitboards_edit' )}
+	{if $gBitUser->hasPermission( $flip.$flip_name.perm )}
 		{biticon ipackage=bitboards iname=$flip.$flip_name.down iexplain=$flip.$flip_name.downname}
 	{/if}
 {/if}

@@ -1,6 +1,7 @@
 {assign var=package value='boards'}
 {assign var=title value=$package|ucwords}
 {strip}
+{jstab title=$title}
 {form legend=$title}
 	{foreach from=$boardsSettings key=option item=output}
 		<div class="row">
@@ -26,4 +27,5 @@
 		<input type="submit" name="boards[submit]" value="{tr}Change preferences{/tr}" />
 	</div>
 {/form}
+{/jstab}
 {/strip}

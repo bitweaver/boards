@@ -122,7 +122,33 @@ switch ($_GET['req']) {
 		}
 		break;
 	case 4:
+		// Now check permissions to access this page
+		$gBitSystem->verifyPermission( 'p_bitboards_read' );
 
+		require_once( BITBOARDS_PKG_PATH.'lookup_inc.php' );
+		if($gContent->readTopicSet($_REQUEST["new"]) ) {
+			$gContent->load();
+			$gBitSmarty->assign_by_ref('flip',$gContent->getFlipFlop());
+			$gBitSmarty->assign('flip_name','new');
+			$gBitSmarty->display('bitpackage:bitboards/flipswitch.tpl');
+		} else {
+			trigger_error(var_export($gContent->mErrors,true ));
+		}
+		break;
+	case 5:
+		// Now check permissions to access this page
+		$gBitSystem->verifyPermission( 'p_bitboards_read' );
+
+		require_once( BITBOARDS_PKG_PATH.'lookup_inc.php' );
+		if($gContent->notify($_REQUEST["notify"]) ) {
+			$gContent->load();
+			$gBitSmarty->assign_by_ref('flip',$gContent->getFlipFlop());
+			$gBitSmarty->assign('flip_name','notify');
+			$gBitSmarty->display('bitpackage:bitboards/flipswitch.tpl');
+		} else {
+			trigger_error(var_export($gContent->mErrors,true ));
+		}
+		break;
 	default:
 		break;
 }

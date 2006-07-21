@@ -31,14 +31,14 @@
 						</a>
 						<a title="{tr}Reject this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&action=2&post_id={$comment.post_id}">
 							{biticon ipackage=bitboard iname="edit_remove" iexplain="Reject Post"}
-						</a>				
+						</a>
 					{else}
 						{if $comment.user_id>=0}
 							<a onclick="
 				this.oldonclick=this.onclick;
 				document.getElementById('warn_block_{$comment.post_id|escape:"url"}').style['display']='inline';
 				this.onclick=new Function('
-					document.getElementById(\'warn_block_{$comment.post_id|escape:"url"}\').style[\'display\']=\'none\'; 
+					document.getElementById(\'warn_block_{$comment.post_id|escape:"url"}\').style[\'display\']=\'none\';
 					this.onclick=this.oldonclick;
 					return false;
 				');
@@ -59,7 +59,7 @@
 								this.cleared=true;
 								this.value='';
 							}
-				{/literal}				
+				{/literal}
 							" >Enter Warning Message</textarea>
 							<input type="submit" value="Warn" />
 							</form>
@@ -68,7 +68,7 @@
 					{/if}
 				</div>
 			{/if}
-			{if $gBitUser->hasPermission( 'p_liberty_post_comments' )}
+			{if !topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
 				<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="liberty" iname="reply" iexplain="Reply to this Post"}</a>
 			{/if}
 			{if $gBitUser->isAdmin() || ($gBitUser && $comment.user_id == $gBitUser->mInfo.user_id)}
@@ -84,10 +84,10 @@
 		{if $comment.title neq ""}<h3>{$comment.title|escape}</h3>{/if}
 			<div class="date">
 				{if $gBitUser->getPreference('boards_show_avatars','y')==n}
-					{tr}Posted by{/tr}: {if $comment.user_id < 0}{$comment.unreg_uname|escape}{else}{displayname hash=$comment}{/if}, {else} 
+					{tr}Posted by{/tr}: {if $comment.user_id < 0}{$comment.unreg_uname|escape}{else}{displayname hash=$comment}{/if}, {else}
 					{tr}Posted{/tr}: {/if}
 				{$comment.created|reltime}, {if $comment.created != $comment.last_modified}
-					{tr}Last modification by{/tr}: 
+					{tr}Last modification by{/tr}:
 					{if $comment.user_id < 0}
 						{$comment.unreg_uname|escape}
 					{else}
@@ -99,7 +99,7 @@
 
 	<div class="body">
 		<div class="content">
-			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$comment} 
+			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$comment}
 			{$comment.parsed_data}
 		</div><!-- end .content -->
 	</div><!-- end .body -->
