@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.5 2006/07/21 23:58:45 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.6 2006/07/22 15:05:14 hash9 Exp $ *}
 {strip}
 <div class="floaticon">
 {assign var=flip value=$thread->getFlipFlop()}
@@ -9,7 +9,7 @@
 {include file="bitpackage:bitboards/flipswitch.tpl"}
 {assign var=flip_name value="sticky"}
 {include file="bitpackage:bitboards/flipswitch.tpl"}*}
-{if !topic_locked}<a title="{tr}Post on this thread{/tr}" href="{$comments_return_url}&post_comment_reply_id={$thread->mInfo.flc_content_id}&post_comment_request=1#editcomments"> {biticon ipackage=bitboard iname="mail_new" iexplain="Post on this thread"}</a>{/if}
+{if !$topic_locked}<a title="{tr}Post on this thread{/tr}" href="{$comments_return_url}&post_comment_reply_id={$thread->mInfo.flc_content_id}&post_comment_request=1#editcomments"> {biticon ipackage=bitboard iname="mail_new" iexplain="Post on this thread"}</a>{/if}
 
 {bithelp}</div>
 
@@ -34,7 +34,7 @@
 				</td></tr>
 			{/foreach}
 		</table>
-		{if !topic_locked}<p style="text-align: right;"><a title="{tr}Post on this thread{/tr}" href="{$comments_return_url}&post_comment_reply_id={$thread->mInfo.flc_content_id}&post_comment_request=1#editcomments">{tr}Post on this thread{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="Post on this thread"}</a></p>{/if}
+		{if !$topic_locked}<p style="text-align: right;"><a title="{tr}Post on this thread{/tr}" href="{$comments_return_url}&post_comment_reply_id={$thread->mInfo.flc_content_id}&post_comment_request=1#editcomments">{tr}Post on this thread{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="Post on this thread"}</a></p>{/if}
 
 		{libertypagination ihash=$commentsPgnHash}
 	</div><!-- end .body -->

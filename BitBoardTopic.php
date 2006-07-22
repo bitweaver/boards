@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.5 2006/07/21 23:58:44 hash9 Exp $
-* $Id: BitBoardTopic.php,v 1.5 2006/07/21 23:58:44 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.6 2006/07/22 15:05:14 hash9 Exp $
+* $Id: BitBoardTopic.php,v 1.6 2006/07/22 15:05:14 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.5 $ $Date: 2006/07/21 23:58:44 $ $Author: hash9 $
+* @version $Revision: 1.6 $ $Date: 2006/07/22 15:05:14 $ $Author: hash9 $
 * @class BitBoardTopic
 */
 
@@ -387,7 +387,8 @@ WHERE
 		} else {
 			$thread_id=intval($thread_id);
 		}
-		return $gBitSystem->mDb->getOne("SELECT `locked` FROM `".BIT_DB_PREFIX."forum_thread` WHERE `parent_id` = $thread_id");
+		$ret = $gBitSystem->mDb->getOne("SELECT `locked` FROM `".BIT_DB_PREFIX."forum_thread` WHERE `parent_id` = $thread_id");
+		return !empty($ret);
 	}
 
 	function isLockedMsg($parent_id) {

@@ -68,7 +68,7 @@
 					{/if}
 				</div>
 			{/if}
-			{if !topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
+			{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
 				<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="liberty" iname="reply" iexplain="Reply to this Post"}</a>
 			{/if}
 			{if $gBitUser->isAdmin() || ($gBitUser && $comment.user_id == $gBitUser->mInfo.user_id)}

@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.3 2006/07/21 23:58:44 hash9 Exp $
-* $Id: BitBoardPost.php,v 1.3 2006/07/21 23:58:44 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.4 2006/07/22 15:05:13 hash9 Exp $
+* $Id: BitBoardPost.php,v 1.4 2006/07/22 15:05:13 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.3 $ $Date: 2006/07/21 23:58:44 $ $Author: hash9 $
+* @version $Revision: 1.4 $ $Date: 2006/07/22 15:05:13 $ $Author: hash9 $
 * @class BitMBPost
 */
 
@@ -82,7 +82,12 @@ class BitBoardPost extends LibertyComment {
 
 		if ($pContentId) {
 			$sql = "SELECT lcom.comment_id, lcom.parent_id, lcom.root_id, lcom.thread_forward_sequence,
-				lcom.thread_reverse_sequence, lc.*, uu.`email`, uu.`real_name`, uu.`login`, post.*, uu.registration_date AS registration_date $selectSql $select1
+				lcom.thread_reverse_sequence, lc.*, uu.`email`, uu.`real_name`, uu.`login`,
+				post.approved,
+				post.deleted,
+				post.warned,
+				post.warned_content_id,
+				uu.registration_date AS registration_date $selectSql $select1
 					FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 						INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
 						INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (lc.`user_id` = uu.`user_id`) $joinSql $join1

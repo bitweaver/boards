@@ -1,5 +1,5 @@
 .mb-row-even-unapproved {
-	
+
 	background-color: #FF3366;
 }
 
@@ -56,4 +56,19 @@
 
 .mb-table .header h1 {
 	 background-image: none;
+}
+
+.mb-signature {
+	margin: 0px;
+	margin-top: 1em;
+	padding: 2px;
+	padding-top: 4px;
+	padding-left: 1.3em;
+	border: none;
+	border-top: 2px black solid;
+}
+
+.mb-signature p {
+	padding: 0px;
+	margin: 0px;
 }

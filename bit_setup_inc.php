@@ -63,7 +63,7 @@ if (!function_exists('avatar')) {
 		$u = new BitUser($user_id);
 		$u->load();
 		if (!empty($u->mInfo['avatar_url'])) {
-			return "<a href=\"{$u->getDisplayUrl()}\"><img src=\"{$u->mInfo['avatar_url']}\" class=\"thumb\" title=\"".('Avatar')."\" alt=\"".('Avatar')."\"/></a>";
+			return "<a href=\"".$u->getDisplayUrl()."\"><img src=\"{$u->mInfo['avatar_url']}\" class=\"thumb\" title=\"".('Avatar')."\" alt=\"".('Avatar')."\"/></a>";
 		} else {
 			return "";
 		}

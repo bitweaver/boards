@@ -1,21 +1,12 @@
 <?php
-$title ="Boards";
-
 $boardsSettings = array(
-	'show_avatars' => array(
-		'pref' => 'boards_show_avatars',
-		'label' => "Show Avatars",
-		'type' => "checkbox",
-		'default'=> 'y',
-		'note' => "",
-	),
-	'signature' => array(
-		'pref' => 'boards_signature',
-		'label' => "Board Post Signature",
-		'type' => "text",
-		'default'=> '',
-		'note' => "",
-	),
+'boards_show_avatars' => array(
+'pref' => 'boards_show_avatars',
+'label' => "Show Avatars",
+'type' => "checkbox",
+'default'=> 'y',
+'note' => "",
+),
 );
 
 foreach( $boardsSettings as $option => $op) {
@@ -27,5 +18,51 @@ foreach( $boardsSettings as $option => $op) {
 }
 
 $gBitSmarty->assign('boardsSettings',$boardsSettings);
+
+if( isset( $_REQUEST['bitboarduprefs']['board_id'] ) ) {
+	$_REQUEST['b'] = $_REQUEST['bitboarduprefs']['board_id'];
+}
+
+$signatureContent= new LibertyContent();
+$content_type = $gBitUser->getPreference('signiture_content_type',"");
+$content_data = $gBitUser->getPreference('signiture_content_data',"");
+if (!empty($content_type) && !empty($content_data)) {
+	$signatureContent->mInfo['format_guid']=$gBitUser->getPreference('signiture_content_type');
+	$signatureContent->mInfo['data']=$content_data;
+}
+$gBitSmarty->assign_by_ref( 'signatureContent', $signatureContent );
+
+
+if( isset( $_REQUEST["format_guid"] ) ) {
+	$signatureContent->mInfo['format_guid'] = $_REQUEST["format_guid"];
+}
+
+if( isset( $_REQUEST['bitboarduprefs']["edit"] ) ) {
+	$signatureContent->mInfo["data"] = $_REQUEST['bitboarduprefs']["edit"];
+	$signatureContent->mInfo['parsed_data'] = $signatureContent->parseData();
+}
+
+// If we are in preview mode then preview it!
+if( isset( $_REQUEST["preview"] ) ) {
+	$gBitSmarty->assign('preview', 'y');
+}
+
+// Pro
+// Check if the page has changed
+if( !empty( $_REQUEST["save_bitboarduprefs"] ) ) {
+	// Check if all Request values are delivered, and if not, set them
+	// to avoid error messages. This can happen if some features are
+	// disabled
+	$gBitUser->storePreference('signiture_content_type',$signatureContent->mInfo['format_guid'], 'users');
+	$gBitUser->storePreference('signiture_content_data',$signatureContent->mInfo['data'], 'users');
+}
+
+// Configure quicktags list
+if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
+	include_once( QUICKTAGS_PKG_PATH.'quicktags_inc.php' );
+}
+
+// WYSIWYG and Quicktag variable
+$gBitSmarty->assign( 'textarea_id', 'editbitforum' );
 
 ?>
