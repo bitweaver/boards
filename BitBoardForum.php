@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/Attic/BitBoardForum.php,v 1.1 2006/07/12 17:00:32 hash9 Exp $
-* $Id: BitBoardForum.php,v 1.1 2006/07/12 17:00:32 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/Attic/BitBoardForum.php,v 1.2 2006/07/26 22:45:29 hash9 Exp $
+* $Id: BitBoardForum.php,v 1.2 2006/07/26 22:45:29 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.1 $ $Date: 2006/07/12 17:00:32 $ $Author: hash9 $
+* @version $Revision: 1.2 $ $Date: 2006/07/26 22:45:29 $ $Author: hash9 $
 * @class BitBoardBoard
 */
 
@@ -138,7 +138,7 @@ class BitBoardForum extends LibertyAttachable {
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = b.`content_id` )
 			ORDER BY  lc.`title` ASC";
 
-		$result = $gBitDb->query( $query);
+		$result = $gBitDb->getAll( $query);
 		$ret = array();
 		while( $res = $result->fetchRow() ) {
 			$ret[] = $res;

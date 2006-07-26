@@ -2,17 +2,14 @@
 $tables = array(
 	'forum_post' => "
 		comment_id I4 PRIMARY,
-		unreg_uname C(80),
 		approved I1 NOTNULL DEFAULT(0),
-		deleted I1 NOTNULL DEFAULT(0),
 		warned I1 NOTNULL DEFAULT(0),
-		warned_content_id I4 NULL
+		warned_message TEXT NULL
 	",
 	'forum_thread' => "
 		parent_id I4 PRIMARY,
 		locked I1 NOTNULL DEFAULT(0),
 		moved I4 NOTNULL DEFAULT(0),
-		deleted I1 NOTNULL DEFAULT(0),
 		sticky I1 NOTNULL DEFAULT(0)
 	",
 	'forum_board' => "

@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.4 2006/07/21 23:58:44 hash9 Exp $
-* $Id: BitBoard.php,v 1.4 2006/07/21 23:58:44 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.5 2006/07/26 22:45:29 hash9 Exp $
+* $Id: BitBoard.php,v 1.5 2006/07/26 22:45:29 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.4 $ $Date: 2006/07/21 23:58:44 $ $Author: hash9 $
+* @version $Revision: 1.5 $ $Date: 2006/07/26 22:45:29 $ $Author: hash9 $
 * @class BitBoard
 */
 
@@ -261,7 +261,7 @@ class BitBoard extends LibertyAttachable {
 				AND lc.`title` != ''
 			ORDER BY lc.`content_type_guid`, lc.`title`
 			";
-		$rs = $this->mDb->query( $sql );
+		$rs = $this->mDb->getAll( $sql );
 		while( $row = $rs->fetchRow() ) {
 			$ret[$row['content_id']] = $row;
 		}
@@ -384,6 +384,22 @@ class BitBoard extends LibertyAttachable {
 					WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=lc.`content_id` AND trk.`user_id`=".$gBitUser->mUserId."
 				) AS track_count ";
 
+		}
+
+		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
+			$whereSql .= " AND ((post.`approved` = 1) OR (lc.`user_id` >= 0))";
+		}
+		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') || $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')) {
+			$selectSql .= ", ( SELECT COUNT(*)
+			FROM `".BIT_DB_PREFIX."forum_map` AS map
+			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` s_lcom ON (map.`topic_content_id` = s_lcom.`root_id`)
+			LEFT JOIN `".BIT_DB_PREFIX."forum_thread` th ON (th.`parent_id`=s_lcom.`comment_id`)
+			INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
+			LEFT JOIN  `".BIT_DB_PREFIX."forum_post` s ON( s_lcom.`comment_id` = s.`comment_id` )
+WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`approved` = 0 OR s.`approved` IS NULL) AND (th.`moved` = 0 OR th.`moved` IS NULL))
+			) AS unreg";
+		} else {
+			$selectSql .= ", 0 AS unreg";
 		}
 
 		$query = "SELECT ts.*, lc.`content_id`, lc.`title`, lc.`data`,

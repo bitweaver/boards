@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.5 2006/07/21 23:58:45 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.6 2006/07/26 22:45:30 hash9 Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
@@ -37,20 +37,12 @@
 
 			<table class="mb-table">
 				{foreach item=thread from=$threadList}
-					<tr class="mb-row-{cycle values="even,odd"}
-					{if $thread.first_deleted==1 or $thread.th_deleted==1}
-						-deleted
-					{else}
-						{if $thread.th_moved>0}
-							-moved
-						{else}
-							{if $thread.unreg > 0 or $thread.flc_user_id<0 and $thread.first_approved==0}
-								-unapproved
-							{/if}
-						{/if}
+				{cycle values="even,odd" print=false assign=cycle_var}
+				<tr class="
+ 					{$cycle_var} {if $thread.unreg > 0} mb-{$cycle_var}-unapproved
+					{elseif $thread.th_moved>0} mb-{$cycle_var}-moved
 					{/if}
-					{if $thread.th_sticky==1} sticky{/if}"
-					{if $thread.th_sticky} style="background-color: red;"{/if}>
+					{if $thread.th_sticky==1} mb-sticky{/if}">
 					<td class="actionicon">{* thread status icons *}
 						{if $thread.th_moved>0}
 							{biticon ipackage=bitboard iname="move" iexplain="Moved Thread"}
@@ -66,10 +58,10 @@
 					{/foreach}
 					<td>
 						<a href="{$thread.url}" title="{$thread.title|escape}">{$thread.title|escape}</a>, started by {if $thread.flc_user_id < 0}{$thread.first_unreg_uname|escape}{else}{displayname user_id=$thread.flc_user_id}{/if} {$thread.flc_created|reltime|escape}{if $thread.post_count > 1}, with {$thread.post_count|escape} posts,
-						last update by {if $thread.llc_user_id < 0}{$thread.first_unreg_uname|escape}{else}{displayname user_id=$thread.llc_user_id}{/if} {$thread.llc_last_modified|reltime|escape}{/if}
+						last update by {if $thread.llc_user_id < 0}{$thread.llc_anon_name|escape}{else}{displayname user_id=$thread.llc_user_id}{/if} {$thread.llc_last_modified|reltime|escape}{/if}
 					</td>
 					{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
-					<td style="text-align:right;">{if $thread.unreg > 0}<a style="color: blue;" href="{$smarty.const.BITBOARDS_PKG_URL}index.php?board_id={$thread.th_board_id|escape:"url"}&thread_id={$thread.th_thread_id|escape:"url"}" title="{$thread.title}">{$thread.unreg}&nbsp;Unregistered&nbsp;Posts</a>{/if}</td>
+					<td style="text-align:right;">{if $thread.unreg > 0}<a style="color: blue;" href="{$thread.url}" title="{$thread.title}">{$thread.unreg}&nbsp;Unregistered&nbsp;Posts</a>{/if}</td>
 						{if ($gBitUser->hasPermission( 'p_bitboards_edit' )||$gBitUser->hasPermission( 'p_bitboards_remove' ))}
 							<td class="actionicon">
 							{if $thread.th_moved==0}
@@ -144,5 +136,8 @@
 		{pagination b=$smarty.request.b}
 	</div><!-- end .body -->
 </div><!-- end .admin -->
+{if $gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && $smarty.request.post_comment_request && !$gBitUser->isRegistered()}
+	{formfeedback warning="Your post will not be shown immediately it will have to be approved by a moderator"}
+{/if}
 {include file="bitpackage:liberty/comments_post_inc.tpl"  post_title="Post" hide=1}
 {/strip}

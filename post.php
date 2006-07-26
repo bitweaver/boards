@@ -8,20 +8,24 @@ if (!empty($_REQUEST['action'])) {
 	// Now check permissions to access this page
 	$gBitSystem->verifyPermission( 'p_bitboards_edit' );
 
-	require_once( BITBOARDS_PKG_PATH.'lookup_inc.php' );
+	$comment = new BitBoardPost($_REQUEST['comment_id']);
+	$comment->loadComment();
+	if (!$comment->isValid()) {
+		$gBitSystem->fatalError("Invalid Comment Id");
+	}
 	switch ($_REQUEST['action']) {
 		case 1:
 			// Aprove
-			$gContent->mod_approve();
+			$comment->mod_approve();
 			break;
 		case 2:
 			// Reject
-			$gContent->mod_reject();
+			$comment->mod_reject();
 			break;
 		case 3:
-			// Warn
-			//$gContent->mod_warn($message);
-			break;
+			//Moderate
+			$comment->loadMetaData();
+			$comment->mod_warn($_REQUEST['warning_message']);
 		default:
 			break;
 	}
@@ -54,6 +58,17 @@ $gBitSmarty->assign('comment_template','bitpackage:bitboards/post_display.tpl');
 
 require_once (LIBERTY_PKG_PATH.'comments_inc.php');
 
+$postComment['registration_date']=$gBitUser->mInfo['registration_date'];
+
+$warnings = array();
+if (!empty($_REQUEST['warning'])) {
+	foreach ($_REQUEST['warning'] as $id => $state) {
+		if (strcasecmp($state,'show')==0) {
+			$warnings[$id]=true;
+		}
+	}
+}
+$gBitSmarty->assign_by_ref('warnings',$warnings);
 
 // Configure quicktags list
 if( $gBitSystem->isPackageActive( 'quicktags' ) ) {

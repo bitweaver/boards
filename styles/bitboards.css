@@ -1,17 +1,20 @@
-.mb-row-even-unapproved {
+.mb-sticky td {
+	background-color: red;
+}
 
+.mb-even-unapproved td {
 	background-color: #FF3366;
 }
 
-.mb-row-odd-unapproved {
+.mb-odd-unapproved td {
 	background-color: #FF3399;
 }
 
-.mb-row-even-moved {
+.mb-even-moved td {
 	background-color: #FF6600;
 }
 
-.mb-row-odd-moved {
+.mb-odd-moved td {
 	background-color: #FF9900;
 }
 
@@ -23,14 +26,6 @@
 	background-color: #d9fcdb;
 }
 
-.mb-row-even-deleted {
-	background-color: #fff;
-}
-
-.mb-row-odd-deleted {
-	background-color: #e5e5e5;
-}
-
 .mb-table {
 	border:1px solid #339933;
 }
@@ -38,6 +33,10 @@
 .mb-table tr {
 	padding:3px 2px;
 	border:1px solid #339933;
+}
+
+.mb-warned {
+	text-align:center;
 }
 
 .mb-warned img {
@@ -69,6 +68,20 @@
 }
 
 .mb-signature p {
+	display: inline;
+	margin: 0px;
+	padding: 0px;
+}
+
+.mb-signature p {
 	padding: 0px;
 	margin: 0px;
+}
+
+.mb-warning-message {
+	border-top:1px solid #339933;
+	padding: 2px;
+	padding-top: 4px;
+	margin-top: 1em;
+	white-space: nowrap;
 }

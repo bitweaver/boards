@@ -149,6 +149,16 @@ switch ($_GET['req']) {
 			trigger_error(var_export($gContent->mErrors,true ));
 		}
 		break;
+
+	case 10:
+		$comment = new BitBoardPost($_GET['comment_id']);
+		$comment->loadMetaData();
+		if (@$comment->verifyId($comment->mCommentId)) {
+			print $comment->mInfo['warned_message'];
+		} else {
+			trigger_error(var_export($comment->mErrors,true ));
+		}
+		break;
 	default:
 		break;
 }

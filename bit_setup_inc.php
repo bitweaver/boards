@@ -58,15 +58,4 @@ if (!function_exists('reltime')) {
 		}
 	}
 }
-if (!function_exists('avatar')) {
-	function avatar($user_id) {
-		$u = new BitUser($user_id);
-		$u->load();
-		if (!empty($u->mInfo['avatar_url'])) {
-			return "<a href=\"".$u->getDisplayUrl()."\"><img src=\"{$u->mInfo['avatar_url']}\" class=\"thumb\" title=\"".('Avatar')."\" alt=\"".('Avatar')."\"/></a>";
-		} else {
-			return "";
-		}
-	}
-}
 ?>

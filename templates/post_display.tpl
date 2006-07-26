@@ -1,17 +1,50 @@
 {strip}
 {assign var='gContent' value=$comment}
-<td valign="top" width="0" class="mb-warned">
+{if $gBitUser->isRegistered()}
+<td valign="top" class="mb-warned">
 	{if $comment.warned}
-		{biticon ipackage=bitboard iname="error" iexplain="Warned Post"}
+		{assign var=comment_id value=$comment.comment_id}
+		<a onclick="
+			var e = document.getElementById('warned_message_{$comment.comment_id|escape:"url"}');
+			var url = '{$smarty.const.BITBOARDS_PKG_URL}ajax.php?req=10&comment_id={$comment_id}&seq=' + new Date().getTime();
+			var element = 'warned_message_{$comment.comment_id|escape:"url"}';
+			var params = null;
+			{literal}
+				var ajax = new Ajax.Updater(
+				{success: element},
+				url, {method: 'get', parameters: params, onFailure: reportError}
+				);
+			{/literal}
+			e.style.display='block';
+			this.oldonclick=this.onclick;
+			this.onclick=new Function('
+					document.getElementById(\'warned_message_{$comment.comment_id|escape:"url"}\').style.display=\'none\';
+					this.onclick=this.oldonclick;
+					return false;
+				');
+			return false;
+			" href="{$thread_mInfo.display_url}&warning[{$comment_id}]={if empty($warnings.$comment_id)}show{else}hide{/if}"
+			>
+		{biticon ipackage=bitboard iname="error" iexplain="Warned Post"}</a>
+		<div id="warned_message_{$comment.comment_id|escape:"url"}" class="mb-warning-message">{if !empty($warnings.$comment_id)}{$comment.warned_message}{/if}</div>
+		{if empty($warnings.$comment_id)}
+		<script>
+		var warned_message_{$comment.comment_id|escape:"url"} = document.getElementById('warned_message_{$comment.comment_id|escape:"url"}');
+		warned_message_{$comment.comment_id|escape:"url"}.style.display='none';
+		</script>
+		{/if}
 	{/if}
 </td>
+{/if}
 <td valign="top" width="0" class="mb-avatar">
 {if $gBitUser->getPreference('boards_show_avatars','y')==y}
-	<strong>{if $comment.user_id < 0}{$comment.unreg_uname|escape}{else}{displayname hash=$comment}{/if}</strong><br />
+	<strong>{if $comment.user_id < 0}{$comment.anon_name|escape}{else}{displayname hash=$comment}{/if}</strong><br />
 	{if $comment.user_id >= 0}
-	{$comment.user_id|avatar}<br />
-	{/if}
+	<a href="{$comment.user_url}"><img src="{$comment.user_avatar_url}" class="thumb" title="{tr}Avatar{/tr}" alt="{tr}Avatar{/tr}" /></a><br />
 	<small>{tr}Joined: {/tr}{$comment.registration_date|bit_short_date}</small><br />
+	{else}
+	<small>{tr}Anonymous User{/tr}</small><br />
+	{/if}
 {/if}
 </td>
 {if $comments_style eq 'threaded'}
@@ -19,59 +52,49 @@
 {else}
 	<td width="100%" style="padding-left: 3px" valign="top">
 {/if}
-<a name="{$comment.post_id|escape}" id="{$comment.post_id|escape}">
+<a name="{$comment.comment_id|escape}" id="{$comment.comment_id|escape}">
 <div class="display bitboard">
 	<div class="floaticon">
 		{if $print_page ne 'y' && $comment.deleted==0 }
-			{if $gBitUser->hasPermission( 'p_bitboards_edit' ) && (($comment.user_id<0 && $comment.approved==0)||$comment.user_id>=0)}
+			{if $gBitUser->hasPermission( 'p_bitboards_edit' ) && (($comment.user_id<0 && $comment.approved==0)||$comment.user_id>=0) && !$comment.warned}
 				<div style="display: inline; border-right: 1px solid blue; padding: 2px; margin-right: 8px;">
 					{if $comment.user_id<0 && $comment.approved==0}
-						<a title="{tr}Approve this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&action=1&post_id={$comment.post_id}">
+						<a title="{tr}Approve this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&action=1&comment_id={$comment.comment_id}">
 							{biticon ipackage=bitboard iname="edit_add" iexplain="Approve Post"}
 						</a>
-						<a title="{tr}Reject this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&action=2&post_id={$comment.post_id}">
+						<a title="{tr}Reject this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&action=2&comment_id={$comment.comment_id}">
 							{biticon ipackage=bitboard iname="edit_remove" iexplain="Reject Post"}
 						</a>
-					{else}
-						{if $comment.user_id>=0}
+					{elseif !$comment.warned && $comment.user_id>=0}
 							<a onclick="
 				this.oldonclick=this.onclick;
-				document.getElementById('warn_block_{$comment.post_id|escape:"url"}').style['display']='inline';
+				document.getElementById('warn_block_{$comment.comment_id|escape:"url"}').style['display']='inline';
 				this.onclick=new Function('
-					document.getElementById(\'warn_block_{$comment.post_id|escape:"url"}\').style[\'display\']=\'none\';
+					document.getElementById(\'warn_block_{$comment.comment_id|escape:"url"}\').style[\'display\']=\'none\';
 					this.onclick=this.oldonclick;
 					return false;
 				');
 				return false;
-							" title="{tr}Warn the poster about this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&action=3&post_id={$comment.post_id}">
+							" title="{tr}Warn the poster about this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&action=3&comment_id={$comment.comment_id}">
 								{biticon ipackage=bitboard iname="warning" iexplain="Warn Post"}
 							</a>
-							<div style="display:none;" id="warn_block_{$comment.post_id|escape:"url"}">
-							{assign var='form_target' value=$smarty.const.BITBOARDS_PKG_URL}
-							{assign var='form_target' value="$form_target/moderate.php"}
-							<form action="$form_target">
+							<div style="display:none;" id="warn_block_{$comment.comment_id|escape:"url"}">
+							<form action="{$thread_mInfo.display_url}" method="post">
 							<input type="hidden" value="3" name="action" />
-							<input type="hidden" value="{$comment.post_id}" name="post_id" />
-							<textarea style="vertical-align: top;" cols="10"
-							onclick="
-				{literal}
-							if (!this.cleared) {
-								this.cleared=true;
-								this.value='';
-							}
-				{/literal}
-							" >Enter Warning Message</textarea>
+							<input type="hidden" value="{$thread_mInfo.th_thread_id}" name="t" />
+							<input type="hidden" value="{$comment.comment_id}" name="comment_id" />
+							<textarea style="vertical-align: top;" cols="10" name="warning_message"
+							onclick="this.value=''; this.innerHTML=''; this.onclick=null;" >Enter Warning Message</textarea>
 							<input type="submit" value="Warn" />
 							</form>
 							</div>
-						{/if}
 					{/if}
 				</div>
 			{/if}
 			{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
 				<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="liberty" iname="reply" iexplain="Reply to this Post"}</a>
 			{/if}
-			{if $gBitUser->isAdmin() || ($gBitUser && $comment.user_id == $gBitUser->mInfo.user_id)}
+			{if $comment.editable}
 				<a href="{$comments_return_url}&amp;post_comment_id={$comment.comment_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="liberty" iname="edit" iexplain="Edit"}</a>
 			{/if}
 			{if $gBitUser->isAdmin()}

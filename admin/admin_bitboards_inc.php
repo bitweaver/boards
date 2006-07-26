@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/admin/Attic/admin_bitboards_inc.php,v 1.4 2006/07/21 23:58:44 hash9 Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/admin/Attic/admin_bitboards_inc.php,v 1.5 2006/07/26 22:45:29 hash9 Exp $
 // Copyright (c) 2005 bitweaver BitForum
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -30,6 +30,12 @@ $formBitForumLists = array(
 		'label' => 'Text',
 		'note' => 'Display the text.',
 	),
+	"bitboards_no_boards_perpage" => array(
+		'label' => 'No Boards Per Page',
+	),
+	"bitboards_no_threads_perpage" => array(
+		'label' => 'No Threads Per Page',
+	),
 	'bitboards_thread_track' => array(
 		'label' => 'Enable Thread Status Tracking',
 		'note' => 'Allow users to see what threads have been changed since they last logged on',
@@ -37,6 +43,10 @@ $formBitForumLists = array(
 	'bitboards_thread_notification' => array(
 		'label' => 'Enable Thread Reply Notification',
 		'note' => 'Allow users to be sent emails when threads they are interested in recive replies',
+	),
+	'bitboards_post_anon_moderation' => array(
+		'label' => 'Enable Forced Anon Post Moderation',
+		'note' => 'Require that ALL Anon posts must be validated before they are shown',
 	),
 );
 $gBitSmarty->assign( 'formBitForumLists',$formBitForumLists );

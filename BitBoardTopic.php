@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.6 2006/07/22 15:05:14 hash9 Exp $
-* $Id: BitBoardTopic.php,v 1.6 2006/07/22 15:05:14 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.7 2006/07/26 22:45:29 hash9 Exp $
+* $Id: BitBoardTopic.php,v 1.7 2006/07/26 22:45:29 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.6 $ $Date: 2006/07/22 15:05:14 $ $Author: hash9 $
+* @version $Revision: 1.7 $ $Date: 2006/07/26 22:45:29 $ $Author: hash9 $
 * @class BitBoardTopic
 */
 
@@ -56,10 +56,6 @@ class BitBoardTopic extends LibertyAttachable {
 				//$whereSql .= " AND ((first.`approved` = 1) OR (flc.`user_id` >= 0))";
 			}
 
-			if (!($gBitUser->hasPermission('p_bitboards_edit'))) {
-				//$whereSql .= " AND (th.`deleted` = 0)";
-			}
-
 			BitBoardTopic::loadTrack($selectSql, $joinSql);
 
 			$BIT_DB_PREFIX = BIT_DB_PREFIX;
@@ -72,13 +68,11 @@ SELECT
 	lc.`content_id` AS flc_content_id,
 
 	COALESCE(post.`approved`,0) AS first_approved,
-	COALESCE(post.`deleted`,0) AS first_deleted,
 
 	th.`parent_id` AS th_first_id,
 	COALESCE(th.`locked`,0) AS th_locked,
 	COALESCE(th.`moved`,0) AS th_moved,
 	COALESCE(th.`sticky`,0) AS th_sticky,
-	COALESCE(th.`deleted`,0) AS th_deleted,
 
 
 	lcom.`comment_id` AS th_thread_id,
@@ -253,33 +247,23 @@ WHERE
 
 		BitBoardTopic::loadTrack($selectSql,$joinSql);
 
-		if (!($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
-			/*$whereSql .= " AND ((post.`approved` = TRUE) OR (lc.`user_id` >= 0))";
-			$selectSql = " 0 AS unreg";*/
-		} else {
-			/*$selectSql = "( SELECT COUNT(*)
-			FROM `${BIT_DB_PREFIX}forum_post` s
-			INNER JOIN `${BIT_DB_PREFIX}liberty_comments` AS lcom ON( lcom.`comment_id` = s.`comment_id` )
-			INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
-			WHERE s.`deleted`=FALSE AND ((s.`approved` = FALSE) AND (lc.`user_id` < 0)) AND s.`thread_id` = th.`thread_id`
-			) AS unreg";*/
+
+		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
+			$whereSql .= " AND ((post.`approved` = 1) OR (lc.`user_id` >= 0))";
 		}
-		if (!($gBitUser->hasPermission('p_bitboards_edit'))) {
-			//$whereSql .= " AND (th.`deleted` = FALSE)";
+		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') || $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')) {
+			$selectSql .= ", ( SELECT COUNT(*)
+			FROM `${BIT_DB_PREFIX}liberty_comments` AS s_lcom
+			INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
+			LEFT JOIN  `${BIT_DB_PREFIX}forum_post` s ON( s_lcom.`comment_id` = s.`comment_id` )
+WHERE SUBSTRING(s_lcom.`thread_forward_sequence`,1,10) LIKE SUBSTRING(lcom.`thread_forward_sequence`,1,10) AND ((s_lc.`user_id` < 0) AND (s.`approved` = 0 OR s.`approved` IS NULL))
+			) AS unreg";
+		} else {
+			$selectSql .= ", 0 AS unreg";
 		}
 
 		$sort_sql = "flc.".$this->mDb->convert_sortmode( $sort_mode );
 		//flc.*, first.*, th.*, last.*, llc.*
-		/*
-		(
-		SELECT COUNT(*)
-		FROM `${BIT_DB_PREFIX}mb_post` s
-		INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = s.`content_id` )
-		WHERE s.`deleted` = FALSE AND ((s.`approved` = TRUE) OR (lc.`user_id` >= 0)) AND s.`thread_id` = th.`thread_id`
-		) AS post_count,
-		post.`unreg_uname` AS first_unreg_uname,
-		unreg DESC,
-		*/
 
 		$query = "SELECT
 	lc.`user_id` AS flc_user_id,
@@ -289,13 +273,11 @@ WHERE
 	lc.`content_id` AS flc_content_id,
 
 	COALESCE(post.`approved`,0) AS first_approved,
-	COALESCE(post.`deleted`,0) AS first_deleted,
 
 	th.`parent_id` AS th_first_id,
 	COALESCE(th.`locked`,0) AS th_locked,
 	COALESCE(th.`moved`,0) AS th_moved,
 	COALESCE(th.`sticky`,0) AS th_sticky,
-	COALESCE(th.`deleted`,0) AS th_deleted,
 
 	lcom.`comment_id` AS th_thread_id,
 	lcom.`root_id` AS th_root_id,
@@ -322,7 +304,6 @@ WHERE
 ORDER BY
 	th_sticky DESC,
 	th_moved ASC,
-	th_deleted ASC,
 	lc.created DESC
 ";
 		$query_cant  = "SELECT count(*)
@@ -358,11 +339,18 @@ WHERE
 	}
 
 	function getLastPost($data) {
+		global $gBitSystem;
+		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation')) {
+			$whereSql = " AND ((post.`approved` = 1) OR (lc.`user_id` >= 0))";
+		}
 		$BIT_DB_PREFIX = BIT_DB_PREFIX;
-		$query="SELECT MAX(lc.`last_modified`) AS llc_last_modified, MAX(lc.`user_id`) AS llc_user_id, MAX(lc.`content_id`) AS llc_content_id
+		$query="SELECT lc.`last_modified` AS llc_last_modified, lc.`user_id` AS llc_user_id, lc.`content_id` AS llc_content_id,  lcom.`anon_name` AS llc_anon_name
 		FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 		INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
-	    WHERE SUBSTRING(lcom.`thread_forward_sequence`,1,10) LIKE '".sprintf("%09d.",$data['th_thread_id'])."%'";
+		LEFT JOIN `${BIT_DB_PREFIX}forum_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
+	    WHERE SUBSTRING(lcom.`thread_forward_sequence`,1,10) LIKE '".sprintf("%09d.",$data['th_thread_id'])."%' $whereSql
+	    ORDER BY lc.`last_modified` DESC
+	    ";
 		$result = $this->mDb->getRow( $query);
 		return $result;
 	}
