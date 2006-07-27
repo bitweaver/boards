@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.5 2006/07/21 23:58:44 hash9 Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.6 2006/07/27 23:00:40 hash9 Exp $
 // Copyright (c) 2004 bitweaver Messageboards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -49,6 +49,27 @@ if (isset($_REQUEST["new"])) {
 		trigger_error(var_export($gContent->mErrors,true ));
 	}
 	die();
+} elseif (!empty($_REQUEST['action'])) {
+	// Now check permissions to access this page
+	$gBitSystem->verifyPermission( 'p_bitboards_edit' );
+
+	$comment = new BitBoardPost($_REQUEST['comment_id']);
+	$comment->loadComment();
+	if (!$comment->isValid()) {
+		$gBitSystem->fatalError("Invalid Comment Id");
+	}
+	switch ($_REQUEST['action']) {
+		case 1:
+			// Aprove
+			$comment->mod_approve();
+			break;
+		case 2:
+			// Reject
+			$comment->mod_reject();
+			break;
+		default:
+			break;
+	}
 } elseif (empty($_REQUEST['b'])) {
 	$gBitSystem->fatalError("board id not given");
 }

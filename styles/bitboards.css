@@ -26,15 +26,6 @@
 	background-color: #d9fcdb;
 }
 
-.mb-table {
-	border:1px solid #339933;
-}
-
-.mb-table tr {
-	padding:3px 2px;
-	border:1px solid #339933;
-}
-
 .mb-warned {
 	text-align:center;
 }
@@ -84,4 +75,18 @@
 	padding-top: 4px;
 	margin-top: 1em;
 	white-space: nowrap;
+}
+
+.quote .quote-title {
+	font-size: 90%;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.quote blockquote {
+	margin: 1.3em;
+	margin-top: 4px;
+	margin-left: 1.3em;
+	border: 1px #aaa solid;
+	background: #f7f7f7;
 }

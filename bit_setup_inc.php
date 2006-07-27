@@ -11,12 +11,13 @@ if( $gBitSystem->isPackageActive( 'bitboards' ) ) {
 	$gBitSystem->registerAppMenu( BITBOARDS_PKG_NAME, ucfirst( BITBOARDS_PKG_DIR ), BITBOARDS_PKG_URL.'index.php', 'bitpackage:bitboards/menu_bitboards.tpl', BITBOARDS_PKG_NAME );
 }
 if (!function_exists('reltime')) {
-	function reltime($time) {
+	function reltime($time,$mode='long') {
 		$m = 60;
 		$h = 3600;
 		$d = $h * 24;
 		$w = $d * 7;
 		$M = $w * 4;
+		$L = $M * 2;
 
 		if (! is_numeric($time)) return $time;
 		$delta = (time() - $time);
@@ -49,12 +50,26 @@ if (!function_exists('reltime')) {
 			if ($delta<($d*1.7)) {
 				return "Yesterday " .date('h:i:s A',$time);
 			} else {
+				if ($mode='short') {
+					return date('D H:i:s',$time);
+				}
 				return date('l h:i:s A',$time);
 			}
 		} elseif ($delta<($M)) {
-			return date('l dS \a\t h:i:s A',$time);
+			if ($mode='short') {
+				return date('D d, H:i',$time);
+			}
+			return date('l dS \a\t h:i A',$time);
+		} elseif ($delta<($L)) {
+			if ($mode='short') {
+				return date('M d, H:i',$time);
+			}
+			return date('l dS \of F h:i A',$time);
 		} else {
-			return date('l dS \of F Y h:i:s A',$time);
+			if ($mode='short') {
+				return date('M d, Y H:i',$time);
+			}
+			return date('l dS \of F Y h:i A',$time);
 		}
 	}
 }

@@ -39,7 +39,7 @@
 <td valign="top" width="0" class="mb-avatar">
 {if $gBitUser->getPreference('boards_show_avatars','y')==y}
 	<strong>{if $comment.user_id < 0}{$comment.anon_name|escape}{else}{displayname hash=$comment}{/if}</strong><br />
-	{if $comment.user_id >= 0}
+	{if $comment.user_id >= 0 && !empty($comment.user_avatar_url)}
 	<a href="{$comment.user_url}"><img src="{$comment.user_avatar_url}" class="thumb" title="{tr}Avatar{/tr}" alt="{tr}Avatar{/tr}" /></a><br />
 	<small>{tr}Joined: {/tr}{$comment.registration_date|bit_short_date}</small><br />
 	{else}
@@ -54,6 +54,7 @@
 {/if}
 <a name="{$comment.comment_id|escape}" id="{$comment.comment_id|escape}">
 <div class="display bitboard">
+	{if !$post_is_preview}
 	<div class="floaticon">
 		{if $print_page ne 'y' && $comment.deleted==0 }
 			{if $gBitUser->hasPermission( 'p_bitboards_edit' ) && (($comment.user_id<0 && $comment.approved==0)||$comment.user_id>=0) && !$comment.warned}
@@ -94,6 +95,9 @@
 			{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
 				<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="liberty" iname="reply" iexplain="Reply to this Post"}</a>
 			{/if}
+			{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
+				<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1&amp;quote=y#editcomments" rel="nofollow">{biticon ipackage="liberty" iname="reply_quote" iexplain="Reply with Quote to this Post"}</a>
+			{/if}
 			{if $comment.editable}
 				<a href="{$comments_return_url}&amp;post_comment_id={$comment.comment_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="liberty" iname="edit" iexplain="Edit"}</a>
 			{/if}
@@ -102,6 +106,7 @@
 			{/if}
 		{/if}<!-- end print_page -->
 	</div><!-- end .floaticon -->
+	{/if}
 
 	<div class="header">
 		{if $comment.title neq ""}<h3>{$comment.title|escape}</h3>{/if}

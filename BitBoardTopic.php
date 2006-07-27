@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.7 2006/07/26 22:45:29 hash9 Exp $
-* $Id: BitBoardTopic.php,v 1.7 2006/07/26 22:45:29 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.8 2006/07/27 23:00:40 hash9 Exp $
+* $Id: BitBoardTopic.php,v 1.8 2006/07/27 23:00:40 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.7 $ $Date: 2006/07/26 22:45:29 $ $Author: hash9 $
+* @version $Revision: 1.8 $ $Date: 2006/07/27 23:00:40 $ $Author: hash9 $
 * @class BitBoardTopic
 */
 
@@ -68,6 +68,7 @@ SELECT
 	lc.`content_id` AS flc_content_id,
 
 	COALESCE(post.`approved`,0) AS first_approved,
+	lcom.`anon_name`,
 
 	th.`parent_id` AS th_first_id,
 	COALESCE(th.`locked`,0) AS th_locked,
@@ -101,6 +102,7 @@ WHERE
 				$this->mRootId = $result->fields['th_thread_id'];
 				BitBoardTopic::track($this->mInfo);
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
+				if (empty($this->mInfo['anon_name'])) $this->mInfo['anon_name'] = "Anonymous";
 
 				LibertyAttachable::load();
 			}
@@ -251,7 +253,7 @@ WHERE
 		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
 			$whereSql .= " AND ((post.`approved` = 1) OR (lc.`user_id` >= 0))";
 		}
-		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') || $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')) {
+		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && ($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
 			$selectSql .= ", ( SELECT COUNT(*)
 			FROM `${BIT_DB_PREFIX}liberty_comments` AS s_lcom
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
@@ -273,6 +275,7 @@ WHERE SUBSTRING(s_lcom.`thread_forward_sequence`,1,10) LIKE SUBSTRING(lcom.`thre
 	lc.`content_id` AS flc_content_id,
 
 	COALESCE(post.`approved`,0) AS first_approved,
+	lcom.`anon_name`,
 
 	th.`parent_id` AS th_first_id,
 	COALESCE(th.`locked`,0) AS th_locked,
@@ -318,6 +321,7 @@ WHERE
 		$result = $this->mDb->query( $query, $bindVars, $max_records, $offset );
 		$ret = array();
 		while( $res = $result->fetchRow() ) {
+			if (empty($res['anon_name'])) $res['anon_name'] = "Anonymous";
 			if ($res['th_moved']>0) {
 				$res['url']=BITBOARDS_PKG_URL."index.php?t=".$res['th_moved'];
 			} else {
@@ -340,11 +344,12 @@ WHERE
 
 	function getLastPost($data) {
 		global $gBitSystem;
+		$whereSql = '';
 		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation')) {
 			$whereSql = " AND ((post.`approved` = 1) OR (lc.`user_id` >= 0))";
 		}
 		$BIT_DB_PREFIX = BIT_DB_PREFIX;
-		$query="SELECT lc.`last_modified` AS llc_last_modified, lc.`user_id` AS llc_user_id, lc.`content_id` AS llc_content_id,  lcom.`anon_name` AS llc_anon_name
+		$query="SELECT lc.`last_modified` AS llc_last_modified, lc.`user_id` AS llc_user_id, lc.`content_id` AS llc_content_id,  lcom.`anon_name` AS l_anon_name
 		FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 		INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
 		LEFT JOIN `${BIT_DB_PREFIX}forum_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
@@ -352,6 +357,7 @@ WHERE
 	    ORDER BY lc.`last_modified` DESC
 	    ";
 		$result = $this->mDb->getRow( $query);
+		if (empty($result['l_anon_name'])) $result['l_anon_name'] = "Anonymous";
 		return $result;
 	}
 
@@ -609,6 +615,9 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 		if($gBitUser->isRegistered() && $gBitSystem->isFeatureActive('bitboards_thread_track') && $res['th_moved']<=0) {
 			$res['track']['on'] = true;
 			$res['track']['date'] = $res['track_date'];
+			if (empty($res['llc_last_modified'])) {
+				$res['llc_last_modified']=0;
+			}
 			if ($res['llc_last_modified']>$res['track_date']) {
 				$res['track']['mod'] = true;
 			} else {

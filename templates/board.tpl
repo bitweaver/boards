@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/board.tpl,v 1.5 2006/07/26 22:45:30 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/board.tpl,v 1.6 2006/07/27 23:00:40 hash9 Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -14,7 +14,17 @@
 			<input type="hidden" name="sort_mode" value="{$control.sort_mode|escape}" />
 
 			<table class="mb-table">
-
+				{if !$gBitSystem->isFeatureActive('bitboards_thread_verbrose')}
+					<th width="1">{if $boardsList.0.track.on}<small>UBSI</small>{/if}</td>
+					<th style="text-align:left;white-space: nowrap;">Title</td><br />
+					{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
+						<th style="text-align: center;">Anon</td>
+					{/if}
+					<th style="text-align: center;">Topics</td>
+					<th style="text-align: center;">Last Topic</td>
+					<th style="text-align: center;">Poster</td>
+					<th style="text-align: right;">Updated</td>
+				{/if}
 				{foreach item=board from=$boardsList}
 				{if $board.title}
 					{assign var=board_title value=$board.title|escape}
@@ -31,11 +41,27 @@
 							{biticon ipackage=bitboard iname="track_old_l" iexplain="No New Posts"}
 						{/if}
 					</td>
-						<td><a href="{$board.url}" title="{$board_title}">{$board_title}</a></td>
-
-					{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
-					<td style="text-align:right;">{if $board.unreg > 0}<a style="color: blue;" href="{$board.url}" title="{$board.title|escape}">{$board.unreg}&nbsp;Unregistered&nbsp;Posts</a>{/if}</td>{/if}
-					<td style="text-align:right; color: blue;">{if $board.post_count > 0}{$board.post_count}&nbsp;Threads</a>{/if}</td>
+					<td><a href="{$board.url}" title="{$board_title}">{$board_title}</a><div style="margin-left:2em;" class="small">{$board.parsed_data}</blockquote></td>
+					{if $gBitSystem->isFeatureActive('bitboards_thread_verbrose')}
+						{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
+							<td style="text-align:right;">{if $board.unreg > 0}<a style="color: blue;" href="{$board.url}" title="{$board.title|escape}">{$board.unreg}&nbsp;Unregistered&nbsp;Posts</a>{/if}</td>
+						{/if}
+						<td style="text-align:right; color: blue;">{if $board.post_count > 0}{$board.post_count}&nbsp;Threads</a>{/if}</td>
+					{else}
+						{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
+							<td style="text-align:center;">{if $board.unreg > 0}<a style="color: blue;" href="{$board.url}" title="{$board.title|escape}">{$board.unreg}</a>{/if}</td>
+						{/if}
+						<td style="text-align:center;">{if $board.post_count > 0}{$board.post_count}</a>{/if}</td>
+						{if !empty($board.last)}
+						<td style="text-align:center;"><a href="{$board.last.url}">{$board.last.title}</td>
+						<td style="text-align:center;">{if $board.last.user_id < 0}{$board.last.l_anon_name|escape}{else}{displayname user_id=$board.last.user_id}{/if}</td>
+						<td style="text-align:right;">{if $board.last.last_modified > 0}{$board.last.last_modified|reltime}</a>{/if}</td>
+						{else}
+						<td></td>
+						<td></td>
+						<td></td>
+						{/if}
+					{/if}
 					</tr>
 				{foreachelse}
 					<tr class="norecords"><td colspan="16">

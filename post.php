@@ -40,7 +40,13 @@ $gBitSmarty->assign( 'loadAjax', TRUE );
 $thread = new BitBoardTopic($_REQUEST['t']);
 $thread->load();
 if (empty($thread->mInfo['th_root_id'])) {
-	$gBitSystem->fatalError(tra( "Invalid thread selection." ) );
+	if ($_REQUEST['action']==3) {
+		//Invalid as a result of rejecting the post, redirect to the board
+		$tb = new BitBoard(null,$thread->mInfo['board_content_id']);
+		header("Location: ".$tb->getDisplayUrl());
+	} else {
+		$gBitSystem->fatalError(tra( "Invalid thread selection." ) );
+	}
 }
 $thread->readTopic();
 
@@ -59,6 +65,8 @@ $gBitSmarty->assign('comment_template','bitpackage:bitboards/post_display.tpl');
 require_once (LIBERTY_PKG_PATH.'comments_inc.php');
 
 $postComment['registration_date']=$gBitUser->mInfo['registration_date'];
+$postComment['user_avatar_url']=$gBitUser->mInfo['avatar_url'];
+$postComment['user_url'] = $gBitUser->getDisplayUrl();
 
 $warnings = array();
 if (!empty($_REQUEST['warning'])) {

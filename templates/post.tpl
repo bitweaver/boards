@@ -1,14 +1,10 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.7 2006/07/26 22:45:30 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.8 2006/07/27 23:00:40 hash9 Exp $ *}
 {strip}
 <div class="floaticon">
 {assign var=flip value=$thread->getFlipFlop()}
 {foreach from=$flip item=flip_s key=flip_name}
 		{include file="bitpackage:bitboards/flipswitch.tpl"}
 {/foreach}
-{*{assign var=flip_name value="locked"}
-{include file="bitpackage:bitboards/flipswitch.tpl"}
-{assign var=flip_name value="sticky"}
-{include file="bitpackage:bitboards/flipswitch.tpl"}*}
 {if !$topic_locked}<a title="{tr}Post on this thread{/tr}" href="{$comments_return_url}&post_comment_reply_id={$thread->mInfo.flc_content_id}&post_comment_request=1#editcomments"> {biticon ipackage=bitboard iname="mail_new" iexplain="Post on this thread"}</a>{/if}
 
 {bithelp}</div>
@@ -40,7 +36,9 @@
 			<tr><td colspan="10"><h2 style="text-align:center; padding:.5em">{tr}{$post_title} Preview{/tr}</h2></td></tr>
 			<tr>
 			<div class="preview">
+				{assign var=post_is_preview value=1}
 				{displaycomment comment=$postComment template=$comment_template}
+				{assign var=post_is_preview value=0}
 			</div><!-- end .preview -->
 			</tr>
 			<tr><td colspan="10">&nbsp;</td></tr>

@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.5 2006/07/26 22:45:29 hash9 Exp $
-* $Id: BitBoard.php,v 1.5 2006/07/26 22:45:29 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.6 2006/07/27 23:00:39 hash9 Exp $
+* $Id: BitBoard.php,v 1.6 2006/07/27 23:00:39 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.5 $ $Date: 2006/07/26 22:45:29 $ $Author: hash9 $
+* @version $Revision: 1.6 $ $Date: 2006/07/27 23:00:39 $ $Author: hash9 $
 * @class BitBoard
 */
 
@@ -387,9 +387,9 @@ class BitBoard extends LibertyAttachable {
 		}
 
 		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
-			$whereSql .= " AND ((post.`approved` = 1) OR (lc.`user_id` >= 0))";
+
 		}
-		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') || $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')) {
+		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && ($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
 			$selectSql .= ", ( SELECT COUNT(*)
 			FROM `".BIT_DB_PREFIX."forum_map` AS map
 			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` s_lcom ON (map.`topic_content_id` = s_lcom.`root_id`)
@@ -402,11 +402,13 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 			$selectSql .= ", 0 AS unreg";
 		}
 
-		$query = "SELECT ts.*, lc.`content_id`, lc.`title`, lc.`data`,
+		$query = "SELECT ts.*, lc.`content_id`, lc.`title`, lc.`data`, lc.`format_guid`,
 			( SELECT count(*)
 				FROM `".BIT_DB_PREFIX."forum_map` AS map
 				INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
-				WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=lc.`content_id`
+				INNER JOIN `".BIT_DB_PREFIX."liberty_content` AS slc ON( slc.`content_id` = lcom.`content_id` )
+				LEFT JOIN `".BIT_DB_PREFIX."forum_post` AS fp ON (fp.`comment_id` = lcom.`comment_id`)
+				WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=lc.`content_id` AND ((fp.`approved` = 1) OR (slc.`user_id` >= 0))
 				) AS post_count
 			 $selectSql
 			FROM `".BIT_DB_PREFIX."forum_board` ts INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
@@ -432,6 +434,8 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 					$res['track']['on'] = false;
 				}
 				unset($res['track_count']);
+				$res['parsed_data']=$this->parseData($res);
+				$res['last'] = $this->getLastTopic($res);
 			}
 			$ret[] = $res;
 		}
@@ -440,6 +444,30 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 		// add all pagination info to pParamHash
 		LibertyContent::postGetList( $pParamHash );
 		return $ret;
+	}
+
+	function getLastTopic($data) {
+		global $gBitSystem;
+		$BIT_DB_PREFIX = BIT_DB_PREFIX;
+		$query="SELECT
+		slc.`last_modified`, slc.`user_id`, lcom.`anon_name` AS l_anon_name, f_lc.`title`, SUBSTRING(f_lcom.`thread_forward_sequence`,1,9) AS thread_id
+			FROM `".BIT_DB_PREFIX."forum_map` AS map
+			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
+			INNER JOIN `".BIT_DB_PREFIX."liberty_content` AS slc ON( slc.`content_id` = lcom.`content_id` )
+			LEFT JOIN `".BIT_DB_PREFIX."forum_post` AS fp ON (fp.`comment_id` = lcom.`comment_id`)
+			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` f_lcom ON (SUBSTRING(lcom.`thread_forward_sequence`,1,10) = SUBSTRING(f_lcom.`thread_forward_sequence`,1,10) AND f_lcom.`root_id`=f_lcom.`parent_id`)
+			INNER JOIN `".BIT_DB_PREFIX."liberty_content` AS f_lc ON( f_lc.`content_id` = f_lcom.`content_id` )
+			WHERE lcom.`root_id`=lcom.`parent_id` AND ".$data['content_id']."=map.`board_content_id` AND ((fp.`approved` = 1) OR (slc.`user_id` >= 0))
+	    ORDER BY slc.`last_modified` DESC
+	    ";
+		$result = $this->mDb->getRow( $query);
+		if (!empty($result['thread_id'])) {
+			if (empty($result['l_anon_name'])) $result['l_anon_name'] = "Anonymous";
+			$result['thread_id']=intval($result['thread_id']);
+			$t = new BitBoardTopic($result['thread_id']);
+			$result['url']=$t->getDisplayUrl();
+		}
+		return $result;
 	}
 
 	/**
