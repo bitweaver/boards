@@ -44,6 +44,17 @@
 	border-bottom:1px solid #339933;
 }
 
+.mb-cat-list h2 {
+	margin: 2px;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+}
+
+.mb-cat-indent {
+	padding: 2px;
+	padding-left: 2em;
+}
+
 .mb-table .header h1 {
 	 background-image: none;
 }
@@ -89,4 +100,5 @@
 	margin-left: 1.3em;
 	border: 1px #aaa solid;
 	background: #f7f7f7;
+	padding: 2px;
 }

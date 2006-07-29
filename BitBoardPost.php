@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.5 2006/07/26 22:45:29 hash9 Exp $
-* $Id: BitBoardPost.php,v 1.5 2006/07/26 22:45:29 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.6 2006/07/29 15:10:00 hash9 Exp $
+* $Id: BitBoardPost.php,v 1.6 2006/07/29 15:10:00 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.5 $ $Date: 2006/07/26 22:45:29 $ $Author: hash9 $
+* @version $Revision: 1.6 $ $Date: 2006/07/29 15:10:00 $ $Author: hash9 $
 * @class BitMBPost
 */
 
@@ -69,24 +69,6 @@ class BitBoardPost extends LibertyComment {
 		$ret = array();
 		$contentId = $this->mCommentId;
 
-		$mid = "";
-
-		$sort_order = "ASC";
-		$mid = 'last_modified ASC';
-		if (!empty($pSortOrder)) {
-			if ($pSortOrder == 'commentDate_desc') {
-				$mid = 'last_modified DESC';
-			} else if ($pSortOrder == 'commentDate_asc') {
-				$mid = 'last_modified ASC';
-			} elseif ($pSortOrder == 'thread_asc') {
-				$mid = 'thread_forward_sequence  ASC';
-				// thread newest first is harder...
-			} elseif ($pSortOrder == 'thread_desc') {
-				$mid = 'thread_reverse_sequence  ASC';
-			} else {
-				$mid = $this->mDb->convert_sortmode( $pSortOrder );
-			}
-		}
 		$mid = 'thread_forward_sequence  ASC';
 		$mid = 'order by ' . $mid;
 
@@ -101,9 +83,6 @@ class BitBoardPost extends LibertyComment {
 			$select1 = '';
 			$join1 = '';
 		}
-
-
-
 
 		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
 			$whereSql .= " AND ((post.`approved` = 1) OR (lc.`user_id` >= 0))";

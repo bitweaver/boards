@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.8 2006/07/27 23:00:40 hash9 Exp $
-* $Id: BitBoardTopic.php,v 1.8 2006/07/27 23:00:40 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.9 2006/07/29 15:10:00 hash9 Exp $
+* $Id: BitBoardTopic.php,v 1.9 2006/07/29 15:10:00 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.8 $ $Date: 2006/07/27 23:00:40 $ $Author: hash9 $
+* @version $Revision: 1.9 $ $Date: 2006/07/29 15:10:00 $ $Author: hash9 $
 * @class BitBoardTopic
 */
 
@@ -125,7 +125,7 @@ WHERE
 	}
 
 	/**
-	* This function locks a thread
+	* This function locks a topic
 	**/
 	function lock($state) {
 		global $gBitSystem;
@@ -150,7 +150,7 @@ WHERE
 	}
 
 	/**
-	* This function stickies a thread
+	* This function stickies a topic
 	**/
 	function sticky($state) {
 		global $gBitSystem;
@@ -175,7 +175,7 @@ WHERE
 	}
 
 	/**
-	* This function moves a thread to a new messageboard
+	* This function moves a topic to a new messageboard
 	**/
 	function moveTo($board_id) {
 		$ret = FALSE;
@@ -237,8 +237,7 @@ WHERE
 			$bindVars = array_merge ( $bindVars, $find );
 		} elseif( is_string( $find ) ) {
 			// or a string
-			$whereSql .= " AND UPPER( flc.`title` )like ? ";
-			$bindVars[] = '%' . strtoupper( $find ). '%';
+			$whereSql .= " AND UPPER( lc.`title` ) LIKE '%". strtoupper( $find ). "%'";
 		}
 
 		if(!empty($pParamHash['b'])) {
@@ -265,7 +264,6 @@ WHERE SUBSTRING(s_lcom.`thread_forward_sequence`,1,10) LIKE SUBSTRING(lcom.`thre
 		}
 
 		$sort_sql = "flc.".$this->mDb->convert_sortmode( $sort_mode );
-		//flc.*, first.*, th.*, last.*, llc.*
 
 		$query = "SELECT
 	lc.`user_id` AS flc_user_id,

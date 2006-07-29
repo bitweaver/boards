@@ -1,10 +1,10 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/topic_move.tpl,v 1.3 2006/07/21 23:58:45 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/topic_move.tpl,v 1.4 2006/07/29 15:10:00 hash9 Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
 <div class="admin bitboard">
 	<div class="header">
-		<h1>{tr}Move Thread{/tr}: {$gContent->mInfo.title|escape}</h1>
+		<h1>{tr}Move Topic{/tr}: {$gContent->mInfo.title|escape}</h1>
 	</div>
 
 	<div class="body">
@@ -25,7 +25,7 @@
 				{/forminput}
 			</div>
 			<div class="row submit">
-				<input type="submit" name="move_thread" value="{tr}Move Thread{/tr}" />
+				<input type="submit" name="move_thread" value="{tr}Move Topic{/tr}" />
 			</div>
 		{/form}
 	</div><!-- end .body -->

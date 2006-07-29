@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.6 2006/07/27 23:00:39 hash9 Exp $
-* $Id: BitBoard.php,v 1.6 2006/07/27 23:00:39 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.7 2006/07/29 15:09:59 hash9 Exp $
+* $Id: BitBoard.php,v 1.7 2006/07/29 15:09:59 hash9 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.6 $ $Date: 2006/07/27 23:00:39 $ $Author: hash9 $
+* @version $Revision: 1.7 $ $Date: 2006/07/29 15:09:59 $ $Author: hash9 $
 * @class BitBoard
 */
 
@@ -373,6 +373,21 @@ class BitBoard extends LibertyAttachable {
 			$whereSql .= " AND UPPER( lc.`title` )like ? ";
 			$bindVars[] = '%' . strtoupper( $find ). '%';
 		}
+
+		$pagination=true;
+		if (!empty($pParamHash['paginationOff'])) {
+			$pagination=false;
+		}
+
+		if (!empty($pParamHash['boards']) && is_array($pParamHash['boards'])) {
+			$whereSql .= " AND lc.`content_id` IN ( ".implode( ',',array_fill( 0,count( $pParamHash['boards'] ),'?' ) )." )";
+			$bindVars = array_merge ( $bindVars, $pParamHash['boards'] );
+		}
+		if (!empty($pParamHash['nboards']) && is_array($pParamHash['nboards'])) {
+			$whereSql .= " AND lc.`content_id` NOT IN ( ".implode( ',',array_fill( 0,count( $pParamHash['nboards'] ),'?' ) )." )";
+			$bindVars = array_merge ( $bindVars, $pParamHash['nboards'] );
+		}
+
 		$track = $gBitSystem->isFeatureActive('bitboards_thread_track');
 		$track = true;
 		if ($track) {
@@ -417,7 +432,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 		$query_cant = "select count(*)
 				FROM `".BIT_DB_PREFIX."forum_board` ts INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql";
-		$result = $this->mDb->query( $query, $bindVars, $max_records, $offset );
+		$result = $this->mDb->query( $query, $bindVars );
 		$ret = array();
 		while( $res = $result->fetchRow() ) {
 			$res['url']= BITBOARDS_PKG_URL."index.php?b={$res['board_id']}";

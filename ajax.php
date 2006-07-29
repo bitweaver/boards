@@ -4,8 +4,8 @@
  *
  * reqs:
  *   1 - list all boards
- *   2 - switch lock state on a given thread
- *   3 - switch sticky state on a given thread
+ *   2 - switch lock state on a given topic
+ *   3 - switch sticky state on a given topic
  */
 
 require_once( '../bit_setup_inc.php' );

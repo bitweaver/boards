@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.7 2006/07/27 23:00:41 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.8 2006/07/29 15:10:00 hash9 Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
@@ -23,8 +23,8 @@
 	</div>
 
 	<div class="body">
-		<p style="text-align: right; margin: 0px; padding: 0px;"><a title="{tr}Start a new thread{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}Start a new topic{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="Start a new topic"}</a></p>
-		{minifind sort_mode=$sort_mode board_id=$smarty.request.board_id}
+		<p style="text-align: right; margin: 0px; padding: 0px;"><a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="New Topic"}</a></p>
+		{minifind sort_mode=$sort_mode b=$smarty.request.b}
 		{form id="checkform"}
 			<input type="hidden" name="board_id" value="{$smarty.request.board_id}" />
 			<input type="hidden" name="offset" value="{$control.offset|escape}" />
@@ -54,26 +54,17 @@
 					{/if}
 					{if $thread.th_sticky==1} mb-sticky{/if}">
 					{if $thread.th_moved>0}
-					<td class="actionicon" width="1" colspan="{$thread.flip|@count}">{* thread status icons *}
-							{biticon ipackage=bitboard iname="move" iexplain="Moved Thread"}
+					<td class="actionicon" width="1" colspan="{$thread.flip|@count}">{* topic status icons *}
+							{biticon ipackage=bitboard iname="move" iexplain="Moved Topic"}
 					</td>
 					{else}
 					{assign var=flip value=$thread.flip}
 					{foreach from=$flip item=flip_s key=flip_name}
-						<td class="actionicon" width="1">{* thread status icons *}
+						<td class="actionicon" width="1">{* topic status icons *}
 								{include file="bitpackage:bitboards/flipswitch.tpl"}
 						</td>
 					{/foreach}
 					{/if}
-					{if $gBitSystem->isFeatureActive('bitboards_thread_verbrose')}
-					<td>
-						<a href="{$thread.url}" title="{$thread.title|escape}">{$thread.title|escape}</a>, started by {if $thread.flc_user_id < 0}{$thread.anon_name|escape}{else}{displayname user_id=$thread.flc_user_id}{/if} {$thread.flc_created|reltime|escape}{if $thread.post_count > 1}, with {$thread.post_count|escape} posts,
-						last update by {if $thread.llc_user_id < 0}{$thread.l_anon_name|escape}{else}{displayname user_id=$thread.llc_user_id}{/if} {$thread.llc_last_modified|reltime|escape}{/if}
-					</td>
-					{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
-						<td style="text-align:right;">{if $thread.unreg > 0}<a style="color: blue;" href="{$thread.url}" title="{$thread.title}">{$thread.unreg}&nbsp;Unregistered&nbsp;Posts</a>{/if}</td>
-					{/if}
-					{else}
 					<td style="white-space: nowrap;"><a href="{$thread.url}" title="{$thread.title|escape}">{$thread.title|escape}</a></td>
 					<td style="text-align: center;">{if $thread.flc_user_id < 0}{$thread.anon_name|escape}{else}{displayname user_id=$thread.flc_user_id}{/if}</td>
 					<td>{$thread.flc_created|reltime:short|escape}</td>
@@ -83,7 +74,6 @@
 					{/if}
 					<td style="text-align: center;">{if $thread.post_count > 1}{if $thread.llc_user_id < 0}{$thread.l_anon_name|escape}{else}{displayname user_id=$thread.llc_user_id}{/if}{else}{/if}</td>
 					<td style="text-align: right;">{if $thread.post_count > 1}{$thread.llc_last_modified|reltime:short|escape}{else}{/if}</td>
-					{/if}
 						{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
 							<td class="actionicon">
 								{if $thread.flc_user_id<0 && $thread.first_approved==0}
@@ -145,7 +135,7 @@
 				{/foreach}
 			</table>
 
-			<p style="text-align: right;"><a title="{tr}Start a new thread{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}Start a new topic{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="Start a new topic"}</a></p>
+			<p style="text-align: right;"><a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="New Topic"}</a></p>
 			{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
 				<div style="text-align:right;">
 					<script type="text/javascript">/* <![CDATA[ check / uncheck all */

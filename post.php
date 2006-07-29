@@ -45,7 +45,7 @@ if (empty($thread->mInfo['th_root_id'])) {
 		$tb = new BitBoard(null,$thread->mInfo['board_content_id']);
 		header("Location: ".$tb->getDisplayUrl());
 	} else {
-		$gBitSystem->fatalError(tra( "Invalid thread selection." ) );
+		$gBitSystem->fatalError(tra( "Invalid topic selection." ) );
 	}
 }
 $thread->readTopic();
@@ -61,6 +61,10 @@ $commentsParentId=$thread->mInfo['content_id'];
 $comments_return_url= BITBOARDS_PKG_URL."index.php?t={$thread->mRootId}";
 $gComment = new BitBoardPost($_REQUEST['t']);
 $gBitSmarty->assign('comment_template','bitpackage:bitboards/post_display.tpl');
+
+if( empty( $_REQUEST["comments_style"] ) ) {
+	$_REQUEST["comments_style"] = "flats";
+}
 
 require_once (LIBERTY_PKG_PATH.'comments_inc.php');
 
