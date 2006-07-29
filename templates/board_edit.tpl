@@ -1,13 +1,13 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.1 2006/07/12 17:00:33 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.2 2006/07/29 17:14:26 spiderr Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
-<div class="admin bitforum">
+<div class="admin bitboard">
 	{if $preview}
 		<h2>Preview {$gContent->mInfo.title|escape}</h2>
 		<div class="preview">
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$gContent->mInfo}
-				<div class="display bitforum">
+				<div class="display bitboard">
 					<div class="header">
 						<h1>{$gContent->mInfo.title|escape|default:"Board"}</h1>
 					</div><!-- end .header -->
@@ -16,7 +16,7 @@
 							{$gContent->mInfo.parsed_data}
 						</div><!-- end .content -->
 					</div><!-- end .body -->
-				</div><!-- end .bitforum -->
+				</div><!-- end .bitboard -->
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='view' serviceHash=$gContent->mInfo}
 		</div>
 	{/if}
@@ -40,14 +40,14 @@
 				{assign var='leg' value='Create Board'}
 			{/if}
 			{jstab title=$leg}
-				{form enctype="multipart/form-data" id="editbitforumform"}
+				{form enctype="multipart/form-data" id="editbitboardform"}
 					{legend legend=$leg}
-						<input type="hidden" name="bitforum[board_id]" value="{$gContent->mInfo.board_id}" />
+						<input type="hidden" name="bitboard[board_id]" value="{$gContent->mInfo.board_id}" />
 
 						<div class="row">
 							{formlabel label="Title" for="title"}
 							{forminput}
-								<input type="text" size="60" maxlength="200" name="bitforum[title]" id="title" value="{$gContent->mInfo.title|escape}" />
+								<input type="text" size="60" maxlength="200" name="bitboard[title]" id="title" value="{$gContent->mInfo.title|escape}" />
 							{/forminput}
 						</div>
 
@@ -63,7 +63,7 @@
 
 						<div class="row">
 							{forminput}
-								<textarea {spellchecker} id="{$textarea_id}" name="bitforum[edit]" rows="{$smarty.cookies.rows|default:10}" cols="50">{$gContent->mInfo.data|escape:html}</textarea>
+								<textarea {spellchecker} id="{$textarea_id}" name="bitboard[edit]" rows="{$smarty.cookies.rows|default:10}" cols="50">{$gContent->mInfo.data|escape:html}</textarea>
 							{/forminput}
 						</div>
 
@@ -72,7 +72,7 @@
 
 						<div class="row submit">
 							<input type="submit" name="preview" value="{tr}Preview{/tr}" />
-							<input type="submit" name="save_bitforum" value="{tr}Save{/tr}" />
+							<input type="submit" name="save_bitboard" value="{tr}Save{/tr}" />
 						</div>
 					{/legend}
 				{/form}
@@ -81,6 +81,6 @@
 			{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_tab_tpl}
 		{/jstabs}
 	</div><!-- end .body -->
-</div><!-- end .bitforum -->
+</div><!-- end .bitboard -->
 
 {/strip}

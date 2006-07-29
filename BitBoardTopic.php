@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.9 2006/07/29 15:10:00 hash9 Exp $
-* $Id: BitBoardTopic.php,v 1.9 2006/07/29 15:10:00 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.10 2006/07/29 17:14:26 spiderr Exp $
+* $Id: BitBoardTopic.php,v 1.10 2006/07/29 17:14:26 spiderr Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.9 $ $Date: 2006/07/29 15:10:00 $ $Author: hash9 $
+* @version $Revision: 1.10 $ $Date: 2006/07/29 17:14:26 $ $Author: spiderr $
 * @class BitBoardTopic
 */
 
@@ -87,9 +87,9 @@ SELECT
 	$selectSql
 		FROM `${BIT_DB_PREFIX}liberty_comments` AS lcom
 		INNER JOIN `${BIT_DB_PREFIX}liberty_content` AS lc ON( lc.`content_id` = lcom.`content_id` )
-		INNER JOIN `${BIT_DB_PREFIX}forum_map` map ON (map.`topic_content_id`=lcom.`root_id` )
-		LEFT JOIN `${BIT_DB_PREFIX}forum_thread` th ON (th.`parent_id`=lcom.`comment_id`)
-		LEFT JOIN `${BIT_DB_PREFIX}forum_post` AS post ON(post.`comment_id`=lcom.`comment_id`)
+		INNER JOIN `${BIT_DB_PREFIX}boards_map` map ON (map.`topic_content_id`=lcom.`root_id` )
+		LEFT JOIN `${BIT_DB_PREFIX}boards_topic` th ON (th.`parent_id`=lcom.`comment_id`)
+		LEFT JOIN `${BIT_DB_PREFIX}boards_post` AS post ON(post.`comment_id`=lcom.`comment_id`)
 		$joinSql
 WHERE
 	lcom.`root_id`=lcom.`parent_id` AND	$lookupColumn=?
@@ -118,7 +118,7 @@ WHERE
 		$this->mDb->StartTrans();
 		$comment =  new LibertyComment($this->mRootId);
 		$comment->expungeComments();
-		$query = "DELETE FROM `".BIT_DB_PREFIX."forum_topic` WHERE `thread_id` = ?";
+		$query = "DELETE FROM `".BIT_DB_PREFIX."boards_topic` WHERE `thread_id` = ?";
 		$result = $this->mDb->query( $query, array( $this->mRootId ) );
 		$this->mDb->CompleteTrans();
 		return $ret;
@@ -135,9 +135,9 @@ WHERE
 		} else {
 			$gBitSystem->verifyPermission('p_bitboards_edit');
 			$state = (($state+1)%2);
-			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."forum_thread` WHERE `parent_id` = ?";
-			$query_ins = "INSERT INTO `".BIT_DB_PREFIX."forum_thread` (`parent_id`,`locked`) VALUES ( ?, $state)";
-			$query_up = "UPDATE `".BIT_DB_PREFIX."forum_thread` SET `locked` = $state WHERE `parent_id` = ?";
+			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_topic` WHERE `parent_id` = ?";
+			$query_ins = "INSERT INTO `".BIT_DB_PREFIX."boards_topic` (`parent_id`,`locked`) VALUES ( ?, $state)";
+			$query_up = "UPDATE `".BIT_DB_PREFIX."boards_topic` SET `locked` = $state WHERE `parent_id` = ?";
 			$result = $this->mDb->query( $query_sel, array( $this->mRootId ) );
 			if($result->RowCount()==0) {
 				$result = $this->mDb->query( $query_ins, array( $this->mRootId ) );
@@ -160,9 +160,9 @@ WHERE
 		} else {
 			$gBitSystem->verifyPermission('p_bitboards_edit');
 			$state = (($state+1)%2);
-			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."forum_thread` WHERE `parent_id` = ?";
-			$query_ins = "INSERT INTO `".BIT_DB_PREFIX."forum_thread` (`parent_id`,`sticky`) VALUES ( ?, $state)";
-			$query_up = "UPDATE `".BIT_DB_PREFIX."forum_thread` SET `sticky` = $state WHERE `parent_id` = ?";
+			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_topic` WHERE `parent_id` = ?";
+			$query_ins = "INSERT INTO `".BIT_DB_PREFIX."boards_topic` (`parent_id`,`sticky`) VALUES ( ?, $state)";
+			$query_up = "UPDATE `".BIT_DB_PREFIX."boards_topic` SET `sticky` = $state WHERE `parent_id` = ?";
 			$result = $this->mDb->query( $query_sel, array( $this->mRootId ) );
 			if($result->RowCount()==0) {
 				$result = $this->mDb->query( $query_ins, array( $this->mRootId ) );
@@ -192,7 +192,7 @@ WHERE
 		$data = array();
 		$data['parent_id']=$lcom->mCommentId;
 		$data['moved']=$this->mRootId;
-		$this->mDb->associateInsert( BIT_DB_PREFIX."forum_thread", $data );
+		$this->mDb->associateInsert( BIT_DB_PREFIX."boards_topic", $data );
 		$query = "UPDATE `".BIT_DB_PREFIX."liberty_comments`
 			SET
 				`root_id` = $board_id,
@@ -241,8 +241,8 @@ WHERE
 		}
 
 		if(!empty($pParamHash['b'])) {
-			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}forum_map` AS map ON (map.`topic_content_id` = lcom.`root_id`)";
-			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}forum_board` AS b ON (b.`content_id` = map.`board_content_id`)";
+			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}boards_map` AS map ON (map.`topic_content_id` = lcom.`root_id`)";
+			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}boards` AS b ON (b.`content_id` = map.`board_content_id`)";
 			$whereSql .= " AND b.`board_id` = ". $pParamHash['b'] ;
 		}
 
@@ -256,7 +256,7 @@ WHERE
 			$selectSql .= ", ( SELECT COUNT(*)
 			FROM `${BIT_DB_PREFIX}liberty_comments` AS s_lcom
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
-			LEFT JOIN  `${BIT_DB_PREFIX}forum_post` s ON( s_lcom.`comment_id` = s.`comment_id` )
+			LEFT JOIN  `${BIT_DB_PREFIX}boards_post` s ON( s_lcom.`comment_id` = s.`comment_id` )
 WHERE SUBSTRING(s_lcom.`thread_forward_sequence`,1,10) LIKE SUBSTRING(lcom.`thread_forward_sequence`,1,10) AND ((s_lc.`user_id` < 0) AND (s.`approved` = 0 OR s.`approved` IS NULL))
 			) AS unreg";
 		} else {
@@ -296,8 +296,8 @@ WHERE SUBSTRING(s_lcom.`thread_forward_sequence`,1,10) LIKE SUBSTRING(lcom.`thre
 	$selectSql
 		FROM `${BIT_DB_PREFIX}liberty_comments` AS lcom
 		INNER JOIN `${BIT_DB_PREFIX}liberty_content` AS lc ON( lc.`content_id` = lcom.`content_id` )
-		LEFT JOIN `${BIT_DB_PREFIX}forum_thread` th ON (th.`parent_id`=lcom.`comment_id`)
-		LEFT JOIN `${BIT_DB_PREFIX}forum_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
+		LEFT JOIN `${BIT_DB_PREFIX}boards_topic` th ON (th.`parent_id`=lcom.`comment_id`)
+		LEFT JOIN `${BIT_DB_PREFIX}boards_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
 		$joinSql
 WHERE
 	lcom.`root_id`=lcom.`parent_id`
@@ -310,8 +310,8 @@ ORDER BY
 		$query_cant  = "SELECT count(*)
 FROM `${BIT_DB_PREFIX}liberty_comments` AS lcom
 INNER JOIN `${BIT_DB_PREFIX}liberty_content` AS lc ON( lc.`content_id` = lcom.`content_id` )
-LEFT JOIN `${BIT_DB_PREFIX}forum_thread` th ON (th.`parent_id`=lcom.`comment_id`)
-LEFT JOIN `${BIT_DB_PREFIX}forum_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
+LEFT JOIN `${BIT_DB_PREFIX}boards_topic` th ON (th.`parent_id`=lcom.`comment_id`)
+LEFT JOIN `${BIT_DB_PREFIX}boards_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
 $joinSql
 WHERE
 	lcom.`root_id`=lcom.`parent_id`
@@ -350,7 +350,7 @@ WHERE
 		$query="SELECT lc.`last_modified` AS llc_last_modified, lc.`user_id` AS llc_user_id, lc.`content_id` AS llc_content_id,  lcom.`anon_name` AS l_anon_name
 		FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 		INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
-		LEFT JOIN `${BIT_DB_PREFIX}forum_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
+		LEFT JOIN `${BIT_DB_PREFIX}boards_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
 	    WHERE SUBSTRING(lcom.`thread_forward_sequence`,1,10) LIKE '".sprintf("%09d.",$data['th_thread_id'])."%' $whereSql
 	    ORDER BY lc.`last_modified` DESC
 	    ";
@@ -379,7 +379,7 @@ WHERE
 		} else {
 			$thread_id=intval($thread_id);
 		}
-		$ret = $gBitSystem->mDb->getOne("SELECT `locked` FROM `".BIT_DB_PREFIX."forum_thread` WHERE `parent_id` = $thread_id");
+		$ret = $gBitSystem->mDb->getOne("SELECT `locked` FROM `".BIT_DB_PREFIX."boards_topic` WHERE `parent_id` = $thread_id");
 		return !empty($ret);
 	}
 
@@ -401,7 +401,7 @@ WHERE
 			if (is_numeric($thread_id)) {
 				$topic_id = sprintf("%09d.",$thread_id);
 			}
-			return $gBitSystem->mDb->getOne("SELECT SUM(`notify`) FROM `".BIT_DB_PREFIX."forum_tracking` WHERE topic_id='$topic_id'");
+			return $gBitSystem->mDb->getOne("SELECT SUM(`notify`) FROM `".BIT_DB_PREFIX."boards_tracking` WHERE topic_id='$topic_id'");
 		}
 		return false;
 	}
@@ -423,7 +423,7 @@ WHERE
 			trk.`date` AS track_date,
 			trk.`notify` AS track_notify,
 			trk.`notify_date` AS track_notify_date
-			FROM `".BIT_DB_PREFIX."forum_tracking` trk
+			FROM `".BIT_DB_PREFIX."boards_tracking` trk
 			LEFT JOIN `".BIT_DB_PREFIX."users_users` uu ON( uu.`user_id` = trk.`user_id` )
 			WHERE topic_id='$topic_id'";
 
@@ -468,7 +468,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 		'user_id' =>$user['user_id'],
 		'topic_id' =>sprintf("%09d.",$this->mRootId),
 		);
-		$this->mDb->associateUpdate(BIT_DB_PREFIX."forum_tracking",$data,$key);
+		$this->mDb->associateUpdate(BIT_DB_PREFIX."boards_tracking",$data,$key);
 	}
 
 	function getFlipFlop($arr=false) {
@@ -528,7 +528,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 		if ($gBitSystem->isFeatureActive('bitboards_thread_track') && $gBitUser->isRegistered()) {
 			$topic_id = sprintf("%09d.",$this->mRootId);
 			$BIT_DB_PREFIX = BIT_DB_PREFIX;
-			$c = $this->mDb->getOne("SELECT COUNT(*) FROM `".BIT_DB_PREFIX."forum_tracking` WHERE user_id=? AND topic_id='$topic_id'",array($gBitUser->mUserId));
+			$c = $this->mDb->getOne("SELECT COUNT(*) FROM `".BIT_DB_PREFIX."boards_tracking` WHERE user_id=? AND topic_id='$topic_id'",array($gBitUser->mUserId));
 
 			$data = array(
 			'user_id' =>$gBitUser->mUserId,
@@ -537,13 +537,13 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 			);
 
 			if ($c == 0) {
-				$this->mDb->associateInsert(BIT_DB_PREFIX."forum_tracking",$data);
+				$this->mDb->associateInsert(BIT_DB_PREFIX."boards_tracking",$data);
 			} else {
 				$key = array(
 				'user_id' =>$gBitUser->mUserId,
 				'topic_id' =>$topic_id,
 				);
-				$this->mDb->associateUpdate(BIT_DB_PREFIX."forum_tracking",$data,$key);
+				$this->mDb->associateUpdate(BIT_DB_PREFIX."boards_tracking",$data,$key);
 			}
 			$this->mInfo['track']['mod']=false;
 		}
@@ -561,7 +561,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 				if ($state == 0) {
 					$this->readTopic();
 				} else {
-					$this->mDb->query("DELETE FROM `".BIT_DB_PREFIX."forum_tracking` WHERE user_id=$gBitUser->mUserId AND topic_id='$topic_id'");
+					$this->mDb->query("DELETE FROM `".BIT_DB_PREFIX."boards_tracking` WHERE user_id=$gBitUser->mUserId AND topic_id='$topic_id'");
 				}
 				$ret = true;
 			}
@@ -578,7 +578,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 				$this->mErrors[]=("Invalid current state");
 			} else {
 				$state = (($state+1)%2);
-				$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."forum_tracking` WHERE user_id=$gBitUser->mUserId AND topic_id='$topic_id'";
+				$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_tracking` WHERE user_id=$gBitUser->mUserId AND topic_id='$topic_id'";
 				$data = array(
 				'user_id' =>$gBitUser->mUserId,
 				'topic_id' =>$topic_id,
@@ -586,13 +586,13 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 				);
 				$c = $this->mDb->getOne( $query_sel );
 				if ($c == 0) {
-					$this->mDb->associateInsert(BIT_DB_PREFIX."forum_tracking",$data);
+					$this->mDb->associateInsert(BIT_DB_PREFIX."boards_tracking",$data);
 				} else {
 					$key = array(
 					'user_id' =>$gBitUser->mUserId,
 					'topic_id' =>$topic_id,
 					);
-					$this->mDb->associateUpdate(BIT_DB_PREFIX."forum_tracking",$data,$key);
+					$this->mDb->associateUpdate(BIT_DB_PREFIX."boards_tracking",$data,$key);
 				}
 				$ret = true;
 			}
@@ -604,7 +604,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 		global $gBitUser, $gBitSystem;
 		if($gBitUser->isRegistered() && ($gBitSystem->isFeatureActive('bitboards_thread_track') || $gBitSystem->isFeatureActive('bitboards_thread_notify'))) {
 			$selectSql .= ", trk.`date` AS track_date,  trk.`notify` AS track_notify, trk.`notify_date` AS track_notify_date ";
-			$joinSql .= " LEFT JOIN `".BIT_DB_PREFIX."forum_tracking` AS trk ON (trk.`topic_id`=lcom.`thread_forward_sequence` AND ( trk.`user_id` = ".$gBitUser->mUserId." OR trk.`user_id` IS NULL ) ) ";
+			$joinSql .= " LEFT JOIN `".BIT_DB_PREFIX."boards_tracking` AS trk ON (trk.`topic_id`=lcom.`thread_forward_sequence` AND ( trk.`user_id` = ".$gBitUser->mUserId." OR trk.`user_id` IS NULL ) ) ";
 		}
 	}
 

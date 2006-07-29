@@ -1,15 +1,15 @@
 {strip}
 {form}
 	{jstabs}
-		{jstab title="Home BitForum"}
-			{legend legend="Home BitForum"}
+		{jstab title="Home Message Board"}
+			{legend legend="Home Message Board"}
 				<input type="hidden" name="page" value="{$page}" />
 				<div class="row">
-					{formlabel label="Home BitForum (main bitboard)" for="homeBitForum"}
+					{formlabel label="Home BitBoards (main bitboard)" for="homeBitBoards"}
 					{forminput}
-						<select name="homeBitForum" id="homeBitForum">
+						<select name="homeBitBoards" id="homeBitBoards">
 							{section name=ix loop=$bitboards}
-								<option value="{$bitboards[ix].bitboards_id|escape}" {if $bitforums[ix].bitboards_id eq $home_bitforum}selected="selected"{/if}>{$bitforums[ix].title|escape|truncate:20:"...":true}</option>
+								<option value="{$bitboards[ix].bitboards_id|escape}" {if $bitboards[ix].bitboards_id eq $home_bitboard}selected="selected"{/if}>{$bitboards[ix].title|escape|truncate:20:"...":true}</option>
 							{sectionelse}
 								<option>{tr}No records found{/tr}</option>
 							{/section}
@@ -26,7 +26,7 @@
 		{jstab title="List Settings"}
 			{legend legend="List Settings"}
 				<input type="hidden" name="page" value="{$page}" />
-				{foreach from=$formBitForumLists key=item item=output}
+				{foreach from=$formBitBoardsLists key=item item=output}
 					<div class="row">
 						{formlabel label=`$output.label` for=$item}
 						{forminput}

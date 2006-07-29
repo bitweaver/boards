@@ -1,18 +1,18 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.8 2006/07/29 15:10:00 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.9 2006/07/29 17:14:26 spiderr Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
 		{if $print_page ne 'y'}
-			{if $gBitUser->hasPermission( 'p_bitforum_edit' )}
-				<a title="{tr}Remove this bitforum{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage=liberty iname="edit" iexplain="Edit BitForum"}</a>
+			{if $gBitUser->hasPermission( 'p_bitboard_edit' )}
+				<a title="{tr}Remove this message board{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage=liberty iname="edit" iexplain="Edit Message Board"}</a>
 			{/if}
-			{if $gBitUser->hasPermission( 'p_bitforum_remove' )}
-				<a title="{tr}Remove this bitforum{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove.php?b={$board->mInfo.board_id}">{biticon ipackage=liberty iname="delete" iexplain="Remove BitForum"}</a>
+			{if $gBitUser->hasPermission( 'p_bitboard_remove' )}
+				<a title="{tr}Remove this message board{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove.php?b={$board->mInfo.board_id}">{biticon ipackage=liberty iname="delete" iexplain="Remove Message Board"}</a>
 			{/if}
 		{/if}<!-- end print_page -->
 	</div><!-- end .floaticon -->
 	<div class="header">
-		<h1>{$board->mInfo.title|escape|default:"Forum Topic"} <a id='content_1' href="{$comments_return_url}&show={if empty($smarty.request.show)}1{else}0{/if}" onclick="{literal}if (this.innerHTML=='-') { document.getElementById('content_div').style.display='none'; this.innerHTML='+'; } else { document.getElementById('content_div').style.display='block'; this.innerHTML='-'; } return false;{/literal}">{if empty($smarty.request.show)}+{else}-{/if}</a></h1>
+		<h1>{$board->mInfo.title|escape|default:"Message Board Topic"} <a id='content_1' href="{$comments_return_url}&show={if empty($smarty.request.show)}1{else}0{/if}" onclick="{literal}if (this.innerHTML=='-') { document.getElementById('content_div').style.display='none'; this.innerHTML='+'; } else { document.getElementById('content_div').style.display='block'; this.innerHTML='-'; } return false;{/literal}">{if empty($smarty.request.show)}+{else}-{/if}</a></h1>
 		<div class="date">
 			<div id="content_div" class="content" style="text-align: right; {if empty($smarty.request.show)}display: none;{/if}">
 				{$board->mInfo.parsed_data}

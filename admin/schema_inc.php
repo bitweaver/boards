@@ -1,28 +1,28 @@
 <?php
 $tables = array(
-	'forum_post' => "
+	'boards_post' => "
 		comment_id I4 PRIMARY,
 		approved I1 NOTNULL DEFAULT(0),
 		warned I1 NOTNULL DEFAULT(0),
 		warned_message TEXT NULL
 	",
-	'forum_thread' => "
+	'boards_topic' => "
 		parent_id I4 PRIMARY,
 		locked I1 NOTNULL DEFAULT(0),
 		moved I4 NOTNULL DEFAULT(0),
 		sticky I1 NOTNULL DEFAULT(0)
 	",
-	'forum_board' => "
+	'boards' => "
 		board_id I4 PRIMARY,
 		content_id I4 NOTNULL
 	",
-	'forum_map' => "
+	'boards_map' => "
 		board_content_id I4 NOTNULL,
 		topic_content_id I4 PRIMARY
-		CONSTRAINT ', CONSTRAINT `bitforums_topics_forum_ref` FOREIGN KEY (`board_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)
-					, CONSTRAINT `bitforums_topics_related_ref` FOREIGN KEY (`topic_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
+		CONSTRAINT ', CONSTRAINT `bitboards_topics_boards_ref` FOREIGN KEY (`board_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)
+					, CONSTRAINT `bitboards_topics_related_ref` FOREIGN KEY (`topic_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
 	",
-	'forum_tracking' => "
+	'boards_tracking' => "
 		user_id I4 NOTNULL,
 		topic_id C(10),
 		date I4 NOTNULL DEFAULT(0),
@@ -40,37 +40,31 @@ foreach( array_keys( $tables ) AS $tableName ) {
 }
 
 $gBitInstaller->registerPackageInfo( BITBOARDS_PKG_NAME, array(
-	'description' => "BitForum package to demonstrate how to build a bitweaver package.",
+	'description' => "Highly integrated message boards package.",
 	'license' => '<a href="http://www.gnu.org/licenses/licenses.html#LGPL">LGPL</a>',
 ) );
 
 // ### Indexes
 $indices = array(
-	'bit_bitboards_bitforum_id_idx' => array('table' => 'bitforums', 'cols' => 'bitforum_id', 'opts' => NULL ),
+	'bit_bitboards_bitboards_id_idx' => array('table' => 'bitboards', 'cols' => 'bitboards_id', 'opts' => NULL ),
 );
 $gBitInstaller->registerSchemaIndexes( BITBOARDS_PKG_NAME, $indices );
 
 // ### Sequences
 $sequences = array (
-	'forum_board_id_seq' => array( 'start' => 1 ),
+	'boards_board_id_seq' => array( 'start' => 1 ),
 	'bitboards_id_seq' => array( 'start' => 1 ),
 	'bitboards_topic_id_seq' => array( 'start' => 1 ),
 );
 $gBitInstaller->registerSchemaSequences( BITBOARDS_PKG_NAME, $sequences );
 
-
-
-$gBitInstaller->registerSchemaDefault( BITBOARDS_PKG_NAME, array(
-	//      "INSERT INTO `".BIT_DB_PREFIX."bit_bitboards_types` (`type`) VALUES ('BitForum')",
-) );
-
 // ### Default UserPermissions
 $gBitInstaller->registerUserPermissions( BITBOARDS_PKG_NAME, array(
-	array( 'p_bitboards_admin', 'Can admin bitforum', 'admin', BITBOARDS_PKG_NAME ),
-	array( 'p_bitboards_create', 'Can create a bitforum', 'admin', BITBOARDS_PKG_NAME ),
-	array( 'p_bitboards_edit', 'Can edit any bitforum', 'admin', BITBOARDS_PKG_NAME ),
-	array( 'p_bitboards_read', 'Can read bitforum', 'basic',  BITBOARDS_PKG_NAME ),
-	array( 'p_bitboards_remove', 'Can delete bitforum', 'admin',  BITBOARDS_PKG_NAME ),
+	array( 'p_bitboards_admin', 'Can admin message boards', 'admin', BITBOARDS_PKG_NAME ),
+	array( 'p_bitboards_create', 'Can create a message board', 'admin', BITBOARDS_PKG_NAME ),
+	array( 'p_bitboards_edit', 'Can edit any message board', 'admin', BITBOARDS_PKG_NAME ),
+	array( 'p_bitboards_read', 'Can read message boards', 'basic',  BITBOARDS_PKG_NAME ),
+	array( 'p_bitboards_remove', 'Can delete message boards', 'admin',  BITBOARDS_PKG_NAME ),
 ) );
 
 // ### Default Preferences

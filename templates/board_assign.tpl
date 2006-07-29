@@ -1,6 +1,6 @@
 <div class="floaticon">{bithelp}</div>
 
-<div class="admin bitforum">
+<div class="admin bitboard">
 	<div class="header">
 		<h1>
 			{tr}Assign Content to Boards{/tr}
@@ -56,4 +56,4 @@
 			{/foreach}
 		{/jstabs}
 	</div><!-- end .body -->
-</div><!-- end .bitforum -->
+</div><!-- end .bitboard -->

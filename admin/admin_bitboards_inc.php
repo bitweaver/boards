@@ -1,19 +1,18 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/admin/Attic/admin_bitboards_inc.php,v 1.6 2006/07/29 15:10:00 hash9 Exp $
-// Copyright (c) 2005 bitweaver BitForum
+// $Header: /cvsroot/bitweaver/_bit_boards/admin/Attic/admin_bitboards_inc.php,v 1.7 2006/07/29 17:14:26 spiderr Exp $
+// Copyright (c) 2005 bitweaver BitBoards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
 
 // is this used?
-//if (isset($_REQUEST["bitboardset"]) && isset($_REQUEST["homeBitForum"])) {
-//	$gBitSystem->storeConfig("home_bitboard", $_REQUEST["homeBitForum"]);
-//	$gBitSmarty->assign('home_bitboard', $_REQUEST["homeBitForum"]);
+//if (isset($_REQUEST["bitboardset"]) && isset($_REQUEST["homeBitBoards"])) {
+//	$gBitSystem->storeConfig("home_bitboard", $_REQUEST["homeBitBoards"]);
+//	$gBitSmarty->assign('home_bitboard', $_REQUEST["homeBitBoards"]);
 //}
 
 require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoardForum.php' );
 
-$formBitForumLists = array(
+$formBitBoardsLists = array(
 	'bitboards_thread_track' => array(
 		'label' => 'Enable Topic Status Tracking',
 		'note' => 'Allow users to see what topic have been changed since they last logged on',
@@ -27,19 +26,19 @@ $formBitForumLists = array(
 		'note' => 'Require that ALL Anon posts must be validated before they are shown',
 	),
 );
-$gBitSmarty->assign( 'formBitForumLists',$formBitForumLists );
+$gBitSmarty->assign( 'formBitBoardsLists',$formBitBoardsLists );
 
 $processForm = set_tab();
 
 if( $processForm ) {
-	$bitboardToggles = array_merge( $formBitForumLists );
+	$bitboardToggles = array_merge( $formBitBoardsLists );
 	foreach( $bitboardToggles as $item => $data ) {
 		simple_set_toggle( $item, BITBOARDS_PKG_NAME );
 	}
 
 }
 
-$bitboardforum = new BitBoardForum();
-$bitboards = $bitboardforum->getForumBoardSelectList( $_REQUEST );
-$gBitSmarty->assign_by_ref(BITBOARDS_PKG_NAME, $bitforums['data']);
+$board = new BitBoard();
+$bitboards = $board->getBoardSelectList( $_REQUEST );
+$gBitSmarty->assign_by_ref(BITBOARDS_PKG_NAME, $bitboards['data']);
 ?>

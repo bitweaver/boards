@@ -63,6 +63,6 @@ if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
 }
 
 // WYSIWYG and Quicktag variable
-$gBitSmarty->assign( 'textarea_id', 'editbitforum' );
+$gBitSmarty->assign( 'textarea_id', 'editbitboard' );
 
 ?>

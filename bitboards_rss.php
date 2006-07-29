@@ -12,7 +12,6 @@ require_once( "../bit_setup_inc.php" );
 require_once( RSS_PKG_PATH."rss_inc.php" );
 require_once( BITBOARDS_PKG_PATH."BitBoard.php" );
 require_once( BITBOARDS_PKG_PATH."BitBoardTopic.php" );
-require_once( BITBOARDS_PKG_PATH."BitBoardForum.php" );
 
 $gBitSystem->verifyPackage( 'bitboards' );
 $gBitSystem->verifyPackage( 'rss' );
@@ -67,7 +66,7 @@ foreach( $feeds as $feed ) {
 		$item->title = "[#] " .$item->title;
 	}
 	$item->link = 'http://'.$_SERVER['HTTP_HOST'].$feed['url'];
-	$data = BitBoardForum::loadContent($feed['llc_content_id']);
+	$data = BitBoard::getBoard($feed['llc_content_id']);
 
 	$item->description =  $data['data'];
 

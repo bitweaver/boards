@@ -1,7 +1,6 @@
 <?php
 require_once( '../bit_setup_inc.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoardForum.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 
 if (!empty($_REQUEST['action'])) {

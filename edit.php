@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.1 2006/07/12 17:00:32 hash9 Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.2 2006/07/29 17:14:26 spiderr Exp $
 // Copyright (c) 2004 bitweaver BitBoard
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -13,26 +13,26 @@ $gBitSystem->verifyPackage( 'bitboards' );
 // Now check permissions to access this page
 $gBitSystem->verifyPermission('p_bitboards_edit' );
 
-if( isset( $_REQUEST['bitforum']['board_id'] ) ) {
-	$_REQUEST['b'] = $_REQUEST['bitforum']['board_id'];
+if( isset( $_REQUEST['bitboard']['board_id'] ) ) {
+	$_REQUEST['b'] = $_REQUEST['bitboard']['board_id'];
 }
 
 require_once(BITBOARDS_PKG_PATH.'lookup_inc.php' );
 
-if( isset( $_REQUEST['bitforum']["title"] ) ) {
-	$gContent->mInfo["title"] = $_REQUEST['bitforum']["title"];
+if( isset( $_REQUEST['bitboard']["title"] ) ) {
+	$gContent->mInfo["title"] = $_REQUEST['bitboard']["title"];
 }
 
-if( isset( $_REQUEST['bitforum']["description"] ) ) {
-	$gContent->mInfo["description"] = $_REQUEST['bitforum']["description"];
+if( isset( $_REQUEST['bitboard']["description"] ) ) {
+	$gContent->mInfo["description"] = $_REQUEST['bitboard']["description"];
 }
 
 if( isset( $_REQUEST["format_guid"] ) ) {
 	$gContent->mInfo['format_guid'] = $_REQUEST["format_guid"];
 }
 
-if( isset( $_REQUEST['bitforum']["edit"] ) ) {
-	$gContent->mInfo["data"] = $_REQUEST['bitforum']["edit"];
+if( isset( $_REQUEST['bitboard']["edit"] ) ) {
+	$gContent->mInfo["data"] = $_REQUEST['bitboard']["edit"];
 	$gContent->mInfo['parsed_data'] = $gContent->parseData();
 }
 
@@ -46,11 +46,11 @@ if( isset( $_REQUEST["preview"] ) ) {
 
 // Pro
 // Check if the page has changed
-if( !empty( $_REQUEST["save_bitforum"] ) ) {
+if( !empty( $_REQUEST["save_bitboard"] ) ) {
 	// Check if all Request values are delivered, and if not, set them
 	// to avoid error messages. This can happen if some features are
 	// disabled
-	if( $gContent->store( $_REQUEST['bitforum'] ) ) {
+	if( $gContent->store( $_REQUEST['bitboard'] ) ) {
 		header( "Location: ".$gContent->getDisplayUrl() );
 		die;
 	} else {
@@ -64,7 +64,7 @@ if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
 }
 
 // WYSIWYG and Quicktag variable
-$gBitSmarty->assign( 'textarea_id', 'editbitforum' );
+$gBitSmarty->assign( 'textarea_id', 'editbitboard' );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:bitboards/board_edit.tpl', tra('Board') );

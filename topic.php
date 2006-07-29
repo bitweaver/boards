@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.6 2006/07/27 23:00:40 hash9 Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.7 2006/07/29 17:14:26 spiderr Exp $
 // Copyright (c) 2004 bitweaver Messageboards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -7,7 +7,6 @@
 require_once( '../bit_setup_inc.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoardForum.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 
 $gBitSmarty->assign( 'loadAjax', TRUE );
@@ -138,5 +137,5 @@ if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
 	include_once( QUICKTAGS_PKG_PATH.'quicktags_inc.php' );
 }
 // Display the template
-$gBitSystem->display( 'bitpackage:bitboards/topic.tpl', tra( 'Forums - Threads' ) );
+$gBitSystem->display( 'bitpackage:bitboards/topic.tpl', tra( 'Message Boards - Threads' ) );
 ?>

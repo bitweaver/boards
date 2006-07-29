@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.7 2006/07/29 15:09:59 hash9 Exp $
-* $Id: BitBoard.php,v 1.7 2006/07/29 15:09:59 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.8 2006/07/29 17:14:26 spiderr Exp $
+* $Id: BitBoard.php,v 1.8 2006/07/29 17:14:26 spiderr Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.7 $ $Date: 2006/07/29 15:09:59 $ $Author: hash9 $
+* @version $Revision: 1.8 $ $Date: 2006/07/29 17:14:26 $ $Author: spiderr $
 * @class BitBoard
 */
 
@@ -19,7 +19,7 @@ require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 /**
 * This is used to uniquely identify the object
 */
-define( 'BITFORUM_CONTENT_TYPE_GUID', 'bitforum' );
+define( 'BITBOARD_CONTENT_TYPE_GUID', 'bitboard' );
 
 class BitBoard extends LibertyAttachable {
 	/**
@@ -35,10 +35,10 @@ class BitBoard extends LibertyAttachable {
 		LibertyAttachable::LibertyAttachable();
 		$this->mBitBoardId = $pBitBoardId;
 		$this->mContentId = $pContentId;
-		$this->mContentTypeGuid = BITFORUM_CONTENT_TYPE_GUID;
-		$this->registerContentType( BITFORUM_CONTENT_TYPE_GUID, array(
-		'content_type_guid' => BITFORUM_CONTENT_TYPE_GUID,
-		'content_description' => 'Forum Board',
+		$this->mContentTypeGuid = BITBOARD_CONTENT_TYPE_GUID;
+		$this->registerContentType( BITBOARD_CONTENT_TYPE_GUID, array(
+		'content_type_guid' => BITBOARD_CONTENT_TYPE_GUID,
+		'content_description' => 'Message Board',
 		'handler_class' => 'BitBoard',
 		'handler_package' => 'bitboards',
 		'handler_file' => 'BitBoard.php',
@@ -64,7 +64,7 @@ class BitBoard extends LibertyAttachable {
 			"uue.`login` AS modifier_user, uue.`real_name` AS modifier_real_name, " .
 			"uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name " .
 			"$selectSql " .
-			"FROM `".BIT_DB_PREFIX."forum_board` s " .
+			"FROM `".BIT_DB_PREFIX."boards` s " .
 			"INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = s.`content_id` ) $joinSql" .
 			"LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = lc.`modifier_user_id` )" .
 			"LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )" .
@@ -90,7 +90,7 @@ class BitBoard extends LibertyAttachable {
 	/**
 	* Any method named Store inherently implies data will be written to the database
 	* @param pParamHash be sure to pass by reference in case we need to make modifcations to the hash
-	* This is the ONLY method that should be called in order to store( create or update )an bitforum!
+	* This is the ONLY method that should be called in order to store( create or update )an bitboard!
 	* It is very smart and will figure out what to do for you. It should be considered a black box.
 	*
 	* @param array pParams hash of values that will be used to store the page
@@ -101,23 +101,23 @@ class BitBoard extends LibertyAttachable {
 	**/
 	function store( &$pParamHash ) {
 		if( $this->verify( $pParamHash )&& LibertyAttachable::store( $pParamHash ) ) {
-			$table = BIT_DB_PREFIX."forum_board";
+			$table = BIT_DB_PREFIX."boards";
 			$this->mDb->StartTrans();
 			if( $this->mBitBoardId ) {
 				$locId = array( "board_id" => $pParamHash['board_id'] );
-				$result = $this->mDb->associateUpdate( $table, $pParamHash['bitforum_store'], $locId );
+				$result = $this->mDb->associateUpdate( $table, $pParamHash['board_store'], $locId );
 			} else {
-				$pParamHash['bitforum_store']['content_id'] = $pParamHash['content_id'];
+				$pParamHash['board_store']['content_id'] = $pParamHash['content_id'];
 				if( @$this->verifyId( $pParamHash['board_id'] ) ) {
 					// if pParamHash['board_id'] is set, some is requesting a particular board_id. Use with caution!
-					$pParamHash['bitforum_store']['board_id'] = $pParamHash['board_id'];
+					$pParamHash['board_store']['board_id'] = $pParamHash['board_id'];
 				} else {
-					$pParamHash['bitforum_store']['board_id'] = $this->mDb->GenID( 'forum_board_id_seq' );
+					$pParamHash['board_store']['board_id'] = $this->mDb->GenID( 'boards_board_id_seq' );
 				}
-				$this->mBitBoardId = $pParamHash['bitforum_store']['board_id'];
+				$this->mBitBoardId = $pParamHash['board_store']['board_id'];
 
-				$result = $this->mDb->associateInsert( $table, $pParamHash['bitforum_store'] );
-				$result = $this->mDb->associateInsert( BIT_DB_PREFIX."forum_map",array('board_content_id'=>$pParamHash['bitforum_store']['content_id'],'topic_content_id'=>$pParamHash['bitforum_store']['content_id']));
+				$result = $this->mDb->associateInsert( $table, $pParamHash['board_store'] );
+				$result = $this->mDb->associateInsert( BIT_DB_PREFIX."boards_map",array('board_content_id'=>$pParamHash['board_store']['content_id'],'topic_content_id'=>$pParamHash['board_store']['content_id']));
 			}
 
 
@@ -155,17 +155,17 @@ class BitBoard extends LibertyAttachable {
 		}
 
 		if( @$this->verifyId( $pParamHash['content_id'] ) ) {
-			$pParamHash['bitforum_store']['content_id'] = $pParamHash['content_id'];
+			$pParamHash['board_store']['content_id'] = $pParamHash['content_id'];
 		}
 
 		// check some lengths, if too long, then truncate
 		if( $this->isValid() && !empty( $this->mInfo['description'] ) && empty( $pParamHash['description'] ) ) {
 			// someone has deleted the description, we need to null it out
-			$pParamHash['bitforum_store']['description'] = '';
+			$pParamHash['board_store']['description'] = '';
 		} else if( empty( $pParamHash['description'] ) ) {
 			unset( $pParamHash['description'] );
 		} else {
-			$pParamHash['bitforum_store']['description'] = substr( $pParamHash['description'], 0, 200 );
+			$pParamHash['board_store']['description'] = substr( $pParamHash['description'], 0, 200 );
 		}
 
 		if( !empty( $pParamHash['data'] ) ) {
@@ -192,15 +192,15 @@ class BitBoard extends LibertyAttachable {
 	}
 
 	/**
-	* This function removes a bitforum entry
+	* This function removes a bitboard entry
 	**/
 	function expunge() {
 		$ret = FALSE;
 		if( $this->isValid() ) {
 			$this->mDb->StartTrans();
-			$query = "DELETE FROM `".BIT_DB_PREFIX."forum_map` WHERE `board_content_id` = ?";
+			$query = "DELETE FROM `".BIT_DB_PREFIX."boards_map` WHERE `board_content_id` = ?";
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
-			$query = "DELETE FROM `".BIT_DB_PREFIX."forum_board` WHERE `content_id` = ?";
+			$query = "DELETE FROM `".BIT_DB_PREFIX."boards` WHERE `content_id` = ?";
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
 			if( LibertyAttachable::expunge() ) {
 				$ret = TRUE;
@@ -213,7 +213,7 @@ class BitBoard extends LibertyAttachable {
 	}
 
 	/**
-	* Make sure bitforum is loaded and valid
+	* Make sure bitboard is loaded and valid
 	**/
 	function isValid() {
 		return( $this->verifyId( $this->mBitBoardId ) );
@@ -250,13 +250,13 @@ class BitBoard extends LibertyAttachable {
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content_types` lct ON (lc.`content_type_guid`=lct.`content_type_guid`)
 			WHERE lc.`content_id` NOT IN (
 				SELECT	lc.`content_id` AS content_id
-					FROM `".BIT_DB_PREFIX."forum_board` b
+					FROM `".BIT_DB_PREFIX."boards` b
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` blc ON (blc.`content_id`=b.`content_id`)
-					INNER JOIN  `".BIT_DB_PREFIX."forum_map` map ON (map.`board_content_id`= blc.`content_id`)
+					INNER JOIN  `".BIT_DB_PREFIX."boards_map` map ON (map.`board_content_id`= blc.`content_id`)
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lc.`content_id`=map.`topic_content_id`)
 				)
 				AND lc.`content_type_guid` != 'pigeonholes'
-				AND lc.`content_type_guid` != 'bitforum'
+				AND lc.`content_type_guid` != 'bitboard'
 				AND lc.`content_type_guid` != 'bitcomment'
 				AND lc.`title` != ''
 			ORDER BY lc.`content_type_guid`, lc.`title`
@@ -274,13 +274,13 @@ class BitBoard extends LibertyAttachable {
 			'board_content_id'=>$this->mContentId,
 			'topic_content_id'=>$content_id,
 			);
-			$this->mDb->associateInsert( BIT_DB_PREFIX."forum_map",$data);
+			$this->mDb->associateInsert( BIT_DB_PREFIX."boards_map",$data);
 		}
 	}
 
 	function removeContent($content_id) {
 		if (@BitBase::verifyId($content_id) && @BitBase::verifyId($this->mContentId)) {
-			$sql = "DELETE FROM `".BIT_DB_PREFIX."forum_map` WHERE `board_content_id` = ? AND `topic_content_id` = ?";
+			$sql = "DELETE FROM `".BIT_DB_PREFIX."boards_map` WHERE `board_content_id` = ? AND `topic_content_id` = ?";
 			$result = $this->mDb->query( $sql, array( $this->mContentId,$content_id ) );
 		}
 	}
@@ -291,8 +291,8 @@ class BitBoard extends LibertyAttachable {
 		if( $this->isValid() ) {
 			$sql = "SELECT
 				COUNT(*)
-				FROM `".BIT_DB_PREFIX."forum_board` b
-				INNER JOIN  `".BIT_DB_PREFIX."forum_map` map ON (map.`board_content_id`= b.`content_id`)
+				FROM `".BIT_DB_PREFIX."boards` b
+				INNER JOIN  `".BIT_DB_PREFIX."boards_map` map ON (map.`board_content_id`= b.`content_id`)
 				WHERE b.`board_id`=? AND map.`board_content_id` = map.`topic_content_id`
 			";
 			$count = $this->mDb->getOne( $sql, array( $this->mBitBoardId ));
@@ -312,7 +312,7 @@ class BitBoard extends LibertyAttachable {
 		global $gBitDb;
 		$ret = NULL;
 		if (@BitBase::verifyId($content_id)) {
-			$sql = "SELECT `board_content_id` FROM `".BIT_DB_PREFIX."forum_map` map WHERE map.`topic_content_id`=?";
+			$sql = "SELECT `board_content_id` FROM `".BIT_DB_PREFIX."boards_map` map WHERE map.`topic_content_id`=?";
 			$ret = $gBitDb->getOne( $sql, array( $content_id ));
 		}
 		return $ret;
@@ -333,9 +333,9 @@ class BitBoard extends LibertyAttachable {
 				WHERE lcom.`root_id`=lcom.`parent_id` AND lcom.`root_id`=lc.`content_id`
 				) AS thread_count,
 			((blc.`content_id`- lc.`content_id`)*(blc.`content_id`- lc.`content_id`)) AS order_key
-					FROM `".BIT_DB_PREFIX."forum_board` b
+					FROM `".BIT_DB_PREFIX."boards` b
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` blc ON (blc.`content_id`=b.`content_id`)
-					INNER JOIN  `".BIT_DB_PREFIX."forum_map` map ON (map.`board_content_id`= blc.`content_id`)
+					INNER JOIN  `".BIT_DB_PREFIX."boards_map` map ON (map.`board_content_id`= blc.`content_id`)
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lc.`content_id`=map.`topic_content_id`)
 					WHERE b.`board_id`=? AND map.`board_content_id`!=map.`topic_content_id`
 					ORDER BY order_key
@@ -393,9 +393,9 @@ class BitBoard extends LibertyAttachable {
 		if ($track) {
 			$selectSql .= ", (
 					SELECT COUNT(trk.`topic_id`)
-					FROM `".BIT_DB_PREFIX."forum_map` AS map
+					FROM `".BIT_DB_PREFIX."boards_map` AS map
 					INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
-					INNER JOIN `".BIT_DB_PREFIX."forum_tracking` trk ON (trk.`topic_id` = lcom.`thread_forward_sequence`)
+					INNER JOIN `".BIT_DB_PREFIX."boards_tracking` trk ON (trk.`topic_id` = lcom.`thread_forward_sequence`)
 					WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=lc.`content_id` AND trk.`user_id`=".$gBitUser->mUserId."
 				) AS track_count ";
 
@@ -406,11 +406,11 @@ class BitBoard extends LibertyAttachable {
 		}
 		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && ($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
 			$selectSql .= ", ( SELECT COUNT(*)
-			FROM `".BIT_DB_PREFIX."forum_map` AS map
+			FROM `".BIT_DB_PREFIX."boards_map` AS map
 			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` s_lcom ON (map.`topic_content_id` = s_lcom.`root_id`)
-			LEFT JOIN `".BIT_DB_PREFIX."forum_thread` th ON (th.`parent_id`=s_lcom.`comment_id`)
+			LEFT JOIN `".BIT_DB_PREFIX."boards_thread` th ON (th.`parent_id`=s_lcom.`comment_id`)
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
-			LEFT JOIN  `".BIT_DB_PREFIX."forum_post` s ON( s_lcom.`comment_id` = s.`comment_id` )
+			LEFT JOIN  `".BIT_DB_PREFIX."boards_post` s ON( s_lcom.`comment_id` = s.`comment_id` )
 WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`approved` = 0 OR s.`approved` IS NULL) AND (th.`moved` = 0 OR th.`moved` IS NULL))
 			) AS unreg";
 		} else {
@@ -419,18 +419,18 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 
 		$query = "SELECT ts.*, lc.`content_id`, lc.`title`, lc.`data`, lc.`format_guid`,
 			( SELECT count(*)
-				FROM `".BIT_DB_PREFIX."forum_map` AS map
+				FROM `".BIT_DB_PREFIX."boards_map` AS map
 				INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` AS slc ON( slc.`content_id` = lcom.`content_id` )
-				LEFT JOIN `".BIT_DB_PREFIX."forum_post` AS fp ON (fp.`comment_id` = lcom.`comment_id`)
+				LEFT JOIN `".BIT_DB_PREFIX."boards_post` AS fp ON (fp.`comment_id` = lcom.`comment_id`)
 				WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=lc.`content_id` AND ((fp.`approved` = 1) OR (slc.`user_id` >= 0))
 				) AS post_count
 			 $selectSql
-			FROM `".BIT_DB_PREFIX."forum_board` ts INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
+			FROM `".BIT_DB_PREFIX."boards` ts INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
 			ORDER BY ".$this->mDb->convert_sortmode( $sort_mode );
 		$query_cant = "select count(*)
-				FROM `".BIT_DB_PREFIX."forum_board` ts INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
+				FROM `".BIT_DB_PREFIX."boards` ts INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql";
 		$result = $this->mDb->query( $query, $bindVars );
 		$ret = array();
@@ -466,10 +466,10 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 		$BIT_DB_PREFIX = BIT_DB_PREFIX;
 		$query="SELECT
 		slc.`last_modified`, slc.`user_id`, lcom.`anon_name` AS l_anon_name, f_lc.`title`, SUBSTRING(f_lcom.`thread_forward_sequence`,1,9) AS thread_id
-			FROM `".BIT_DB_PREFIX."forum_map` AS map
+			FROM `".BIT_DB_PREFIX."boards_map` AS map
 			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` AS slc ON( slc.`content_id` = lcom.`content_id` )
-			LEFT JOIN `".BIT_DB_PREFIX."forum_post` AS fp ON (fp.`comment_id` = lcom.`comment_id`)
+			LEFT JOIN `".BIT_DB_PREFIX."boards_post` AS fp ON (fp.`comment_id` = lcom.`comment_id`)
 			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` f_lcom ON (SUBSTRING(lcom.`thread_forward_sequence`,1,10) = SUBSTRING(f_lcom.`thread_forward_sequence`,1,10) AND f_lcom.`root_id`=f_lcom.`parent_id`)
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` AS f_lc ON( f_lc.`content_id` = f_lcom.`content_id` )
 			WHERE lcom.`root_id`=lcom.`parent_id` AND ".$data['content_id']."=map.`board_content_id` AND ((fp.`approved` = 1) OR (slc.`user_id` >= 0))
@@ -486,7 +486,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 	}
 
 	/**
-	* Generates the URL to the bitforum page
+	* Generates the URL to the bitboard page
 	* @param pExistsHash the hash that was returned by LibertyContent::pageExists
 	* @return the link to display the page.
 	*/
@@ -497,5 +497,54 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 		}
 		return $ret;
 	}
+	
+	function getBoardSelectList() {
+		global $gBitDb;
+		$query = "SELECT lc.`content_id` as content_id, lc.`title` as title,
+			( SELECT count(*)
+				FROM `".BIT_DB_PREFIX."boards_map` AS map
+				INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
+				WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=lc.`content_id`
+				) AS post_count
+			FROM `".BIT_DB_PREFIX."boards` b
+			INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = b.`content_id` )
+			ORDER BY  lc.`title` ASC";
+
+		return $gBitDb->getAll( $query);
+	}
+
+	function getBoard( $contentId ) {
+		global $gBitDb;
+		global $gBitUser;
+		//var_dump($GLOBALS);
+		if( LibertyContent::verifyId( $contentId ) ) {
+			// LibertyContent::load()assumes you have joined already, and will not execute any sql!
+			// This is a significant performance optimization
+			$bindVars = array();
+			$selectSql = $joinSql = $whereSql = '';
+			array_push( $bindVars, $contentId );
+			$gBitUser->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
+
+			$query = "SELECT lc.*, uue.`login` AS modifier_user, uue.`real_name` AS modifier_real_name, uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name $selectSql
+			FROM `".BIT_DB_PREFIX."liberty_content` lc $joinSql
+				LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = lc.`modifier_user_id` )
+				LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
+			WHERE lc.`content_id`=? $whereSql";
+			$result = $gBitDb->query( $query, $bindVars );
+
+			$ret = array();
+			if( $result && $result->numRows() ) {
+				$ret = $result->fields;
+
+				$ret['creator'] =( isset( $result->fields['creator_real_name'] )? $result->fields['creator_real_name'] : $result->fields['creator_user'] );
+				$ret['editor'] =( isset( $result->fields['modifier_real_name'] )? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
+				$ret['display_url'] = BIT_ROOT_URL."index.php?content_id=$contentId";
+			}
+		}
+		return( $ret );
+	}
+
+
+	
 }
 ?>

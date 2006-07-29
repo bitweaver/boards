@@ -13,7 +13,6 @@ require_once( '../bit_setup_inc.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoardForum.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'bitboards' );
@@ -87,8 +86,8 @@ set_error_handler("ajax_nice_error");
 
 switch ($_GET['req']) {
 	case 1:
-		$board = new BitBoardForum();
-		$boardList=$board->getForumBoardSelectList();
+		$board = new BitBoard();
+		$boardList=$board->getBoardSelectList();
 		$gBitSmarty->assign_by_ref('boardList',$boardList);
 		$gBitSmarty->display('bitpackage:bitboards/ajax.tpl');
 		break;

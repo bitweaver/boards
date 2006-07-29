@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.6 2006/07/29 15:10:00 hash9 Exp $
-* $Id: BitBoardPost.php,v 1.6 2006/07/29 15:10:00 hash9 Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.7 2006/07/29 17:14:26 spiderr Exp $
+* $Id: BitBoardPost.php,v 1.7 2006/07/29 17:14:26 spiderr Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.6 $ $Date: 2006/07/29 15:10:00 $ $Author: hash9 $
+* @version $Revision: 1.7 $ $Date: 2006/07/29 17:14:26 $ $Author: spiderr $
 * @class BitMBPost
 */
 
@@ -33,7 +33,7 @@ class BitBoardPost extends LibertyComment {
 				post.approved,
 				post.warned,
 				post.warned_message
-				FROM `".BIT_DB_PREFIX."forum_post` post WHERE comment_id=?";
+				FROM `".BIT_DB_PREFIX."boards_post` post WHERE comment_id=?";
 				$data = $this->mDb->getRow( $query_sel , array_values($key));
 				if ($data) {
 					if (!empty($data['warned_message'])) {
@@ -54,7 +54,7 @@ class BitBoardPost extends LibertyComment {
 		}
 		$ret = FALSE;
 		if( @BitBase::verifyId($comment_id) ) {
-			$query = "DELETE FROM `".BIT_DB_PREFIX."forum_post` WHERE `comment_id` = ?";
+			$query = "DELETE FROM `".BIT_DB_PREFIX."boards_post` WHERE `comment_id` = ?";
 			$result = $this->mDb->query( $query, array( $comment_id ) );
 			$ret = TRUE;
 		}
@@ -105,7 +105,7 @@ class BitBoardPost extends LibertyComment {
 						 $joinSql $join1
 						LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` ta_ava ON ( uu.`avatar_attachment_id`=ta_ava.`attachment_id` )
 						LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` )
-						LEFT JOIN `".BIT_DB_PREFIX."forum_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
+						LEFT JOIN `".BIT_DB_PREFIX."boards_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
 				    WHERE $mid2 $whereSql $mid";
 
 			$flat_comments = array();
@@ -152,7 +152,7 @@ class BitBoardPost extends LibertyComment {
 					FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 						INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
 						INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (lc.`user_id` = uu.`user_id`) $joinSql
-						LEFT JOIN `".BIT_DB_PREFIX."forum_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
+						LEFT JOIN `".BIT_DB_PREFIX."boards_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
 					WHERE lcom.`thread_forward_sequence` LIKE '".sprintf("%09d.",$contentId)."%' $whereSql
 			";
 			$ret = $this->mDb->getOne( $sql, $bindVars );
@@ -212,14 +212,14 @@ class BitBoardPost extends LibertyComment {
 	function setMetaData($data) {
 		if ($this->isValid()) {
 			$key = array('comment_id' => $this->mCommentId);
-			$query_sel = "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."forum_post` WHERE comment_id=?";
+			$query_sel = "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."boards_post` WHERE comment_id=?";
 			$c = $this->mDb->getOne( $query_sel , array_values($key));
 			if ($c == 0) {
 				$data=array_merge($data,$key);
-				$this->mDb->associateInsert(BIT_DB_PREFIX."forum_post",$data);
+				$this->mDb->associateInsert(BIT_DB_PREFIX."boards_post",$data);
 			} else {
 
-				$this->mDb->associateUpdate(BIT_DB_PREFIX."forum_post",$data,$key);
+				$this->mDb->associateUpdate(BIT_DB_PREFIX."boards_post",$data,$key);
 			}
 		}
 	}
