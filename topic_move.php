@@ -47,7 +47,7 @@ if( isset( $_REQUEST["target"] ) ) {
 	$gBitSystem->confirmDialog( $formHash,$msgHash );
 }
 
-Message Boards$board = new BitBoard();
+$board = new BitBoard();
 $gBitSmarty->assign_by_ref('boards', $board->getBoardSelectList());
 require_once( BITBOARDS_PKG_PATH .'lookup_inc.php' );
 
