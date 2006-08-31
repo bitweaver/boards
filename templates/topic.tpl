@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.12 2006/08/31 16:45:26 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.13 2006/08/31 21:09:00 squareing Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
@@ -70,7 +70,7 @@
 						</td>
 
 						<td>
-							<h2><a href="{$thread.url}" title="{$thread.title|escape}">{$thread.title|escape}</a></h2>
+							<a href="{$thread.url}" title="{$thread.title|escape}">{$thread.title|escape}</a>
 						</td>
 
 						<td style="text-align:center;">{if $thread.post_count-1}{$thread.post_count-1}{/if}</td>
