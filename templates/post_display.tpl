@@ -77,7 +77,7 @@
 				');
 				return false;
 							" title="{tr}Warn the poster about this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&action=3&comment_id={$comment.comment_id}">
-								{biticon ipackage=bitboard iname="warning" iexplain="Warn Post"}
+								{biticon ipackage=liberty iname="warning" iexplain="Warn Post"}
 							</a>
 							<div style="display:none;" id="warn_block_{$comment.comment_id|escape:"url"}">
 							<form action="{$thread_mInfo.display_url}" method="post">

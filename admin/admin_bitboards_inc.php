@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/admin/Attic/admin_bitboards_inc.php,v 1.7 2006/07/29 17:14:26 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/admin/Attic/admin_bitboards_inc.php,v 1.8 2006/08/31 13:36:30 squareing Exp $
 // Copyright (c) 2005 bitweaver BitBoards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -15,15 +15,15 @@ require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 $formBitBoardsLists = array(
 	'bitboards_thread_track' => array(
 		'label' => 'Enable Topic Status Tracking',
-		'note' => 'Allow users to see what topic have been changed since they last logged on',
+		'note' => 'Allow users to see what topic have been changed since they last logged on.',
 	),
 	'bitboards_thread_notification' => array(
 		'label' => 'Enable Topic Reply Notification',
-		'note' => 'Allow users to be sent emails when topics they are interested in recive replies',
+		'note' => 'Allow users to be sent emails when topics they are interested in recive replies.',
 	),
 	'bitboards_post_anon_moderation' => array(
 		'label' => 'Enable Forced Anon Post Moderation',
-		'note' => 'Require that ALL Anon posts must be validated before they are shown',
+		'note' => 'Require that ALL Anonymous posts must be validated before they are shown.',
 	),
 );
 $gBitSmarty->assign( 'formBitBoardsLists',$formBitBoardsLists );

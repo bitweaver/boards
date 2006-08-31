@@ -28,7 +28,7 @@ $flip_downname=>$flip.$flip_name.downname
 	return false;
 	" href="{$smarty.const.BITBOARDS_PKG_URL}topic.php?
 		{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}
-	    &{$flip_name}={$flip.$flip_name.state|escape:"url"}">
+		&{$flip_name}={$flip.$flip_name.state|escape:"url"}">
 {/if}
 {if $flip.$flip_name.state==1}
 	{biticon ipackage=bitboards iname=$flip.$flip_name.up iexplain=$flip.$flip_name.upname}

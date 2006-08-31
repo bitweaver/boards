@@ -1,23 +1,3 @@
-.mb-sticky td {
-	background-color: red;
-}
-
-.mb-even-unapproved td {
-	background-color: #FF3366;
-}
-
-.mb-odd-unapproved td {
-	background-color: #FF3399;
-}
-
-.mb-even-moved td {
-	background-color: #FF6600;
-}
-
-.mb-odd-moved td {
-	background-color: #FF9900;
-}
-
 .mb-row-even {
 	background-color: #99CC99;
 }
@@ -50,10 +30,6 @@
 	margin-bottom: 0.3em;
 }
 
-.mb-cat-indent {
-	padding: 2px;
-	padding-left: 2em;
-}
 
 .mb-table .header h1 {
 	 background-image: none;
@@ -102,3 +78,22 @@
 	background: #f7f7f7;
 	padding: 2px;
 }
+
+/*
+.from					--> .to
+.mb-even-unapproved td	--> .even.uapproved {}
+.mb-odd-unapproved td	--> .odd.uapproved {}
+.mb-even-moved td		--> .even.moved {}
+.mb-odd-moved td		--> .odd.moved {}
+.mb-cat-indent			--> .indent {}
+.mb-sticky td			--> .highlight {}
+unregistered user post highlight
+						--> .bitboard a.highlight {}
+*/
+
+.bitboard tr.odd.unapproved		{background:pink;}
+.bitboard tr.even.unapproved	{background:purple;}
+.bitboard tr.odd.moved			{background:pink;}
+.bitboard tr.even.moved			{background:purple;}
+.bitboard div.indent			{margin-left:2em;}
+.bitboard tr.highlight			{background:#fdc;}
