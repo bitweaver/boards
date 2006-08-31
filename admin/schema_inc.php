@@ -46,7 +46,7 @@ $gBitInstaller->registerPackageInfo( BITBOARDS_PKG_NAME, array(
 
 // ### Indexes
 $indices = array(
-	'bit_bitboards_bitboards_id_idx' => array('table' => 'bitboards', 'cols' => 'bitboards_id', 'opts' => NULL ),
+	'boards_id_idx' => array('table' => 'boards', 'cols' => 'board_id', 'opts' => NULL ),
 );
 $gBitInstaller->registerSchemaIndexes( BITBOARDS_PKG_NAME, $indices );
 
