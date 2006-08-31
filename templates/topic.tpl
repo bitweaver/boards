@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.9 2006/07/29 17:14:26 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.10 2006/08/31 08:07:15 spiderr Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
@@ -32,18 +32,16 @@
 
 			<table class="mb-table">
 				{if ! $gBitSystem->isFeatureActive('bitboards_thread_verbrose')}
-					<th width="1" colspan="{$threadList.0.flip|@count}"><small>{if $gBitUser->isRegistered()}U{/if}TSI</small></td>
-					<th style="text-align:left;white-space: nowrap;">Title</td>
-					<th style="text-align: center;">Topic Starter</td>
-					<th style="text-align: left;">Started</td>
-					<th width="1" style="text-align: center;">Replies</td>
+					<th width="1" colspan="{$threadList.0.flip|@count}"><small>{if $gBitUser->isRegistered()}U{/if}TSI</small></th>
+					<th style="text-align:left;white-space: nowrap;">Title</th>
+					<th width="1" style="text-align: center;">Replies</th>
+					<th>{tr}Started{/tr}</th>
+					<th>{tr}Last Post{/tr}</th>
 					{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
-						<th style="text-align: center;">Anon</td>
+						<th style="text-align: center;">Anon</th>
 					{/if}
-					<th style="text-align: center;">Last Poster</td>
-					<th style="text-align: right;">Updated</td>
 					{if $gBitUser->hasPermission('p_bitboards_edit')}
-						<th colspan="4" style="text-align: center;">Actions</td>
+						<th colspan="4" style="text-align: center;">Actions</th>
 					{/if}
 				{/if}
 				{foreach item=thread from=$threadList}
@@ -66,14 +64,18 @@
 					{/foreach}
 					{/if}
 					<td style="white-space: nowrap;"><a href="{$thread.url}" title="{$thread.title|escape}">{$thread.title|escape}</a></td>
-					<td style="text-align: center;">{if $thread.flc_user_id < 0}{$thread.anon_name|escape}{else}{displayname user_id=$thread.flc_user_id}{/if}</td>
-					<td>{$thread.flc_created|reltime:short|escape}</td>
-					<td width="1" style="text-align: center;">{$thread.post_count-1|escape}</td>
+					<td width="1" style="text-align: center;">{if $thread.post_count-1}{$thread.post_count-1|escape}{/if}</td>
+					<td>
+						{$thread.flc_created|reltime:short|escape}<br/>
+						{if $thread.flc_user_id < 0}{$thread.anon_name|escape}{else}{displayname user_id=$thread.flc_user_id}{/if}	
+					</td>
+					<td style="text-align: right;">
+						{if $thread.post_count > 1}{$thread.llc_last_modified|reltime:short|escape}{else}{/if}<br/>
+						{if $thread.post_count > 1}{if $thread.llc_user_id < 0}{$thread.l_anon_name|escape}{else}{displayname user_id=$thread.llc_user_id}{/if}{else}{/if}
+					</td>
 					{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
 						<td style="text-align:center;">{if $thread.unreg > 0}<a style="color: blue;" href="{$thread.url}" title="{$thread.title}">{$thread.unreg}</a>{/if}</td>
 					{/if}
-					<td style="text-align: center;">{if $thread.post_count > 1}{if $thread.llc_user_id < 0}{$thread.l_anon_name|escape}{else}{displayname user_id=$thread.llc_user_id}{/if}{else}{/if}</td>
-					<td style="text-align: right;">{if $thread.post_count > 1}{$thread.llc_last_modified|reltime:short|escape}{else}{/if}</td>
 						{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
 							<td class="actionicon">
 								{if $thread.flc_user_id<0 && $thread.first_approved==0}
