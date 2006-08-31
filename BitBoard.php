@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.8 2006/07/29 17:14:26 spiderr Exp $
-* $Id: BitBoard.php,v 1.8 2006/07/29 17:14:26 spiderr Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.9 2006/08/31 06:53:01 spiderr Exp $
+* $Id: BitBoard.php,v 1.9 2006/08/31 06:53:01 spiderr Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.8 $ $Date: 2006/07/29 17:14:26 $ $Author: spiderr $
+* @version $Revision: 1.9 $ $Date: 2006/08/31 06:53:01 $ $Author: spiderr $
 * @class BitBoard
 */
 
@@ -498,19 +498,28 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 		return $ret;
 	}
 	
-	function getBoardSelectList() {
+	function getBoardSelectList( $pBlankFirst=FALSE ) {
 		global $gBitDb;
-		$query = "SELECT lc.`content_id` as content_id, lc.`title` as title,
-			( SELECT count(*)
-				FROM `".BIT_DB_PREFIX."boards_map` AS map
-				INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
-				WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=lc.`content_id`
-				) AS post_count
+		$ret = array();
+		$query = "SELECT lc.`content_id` as hash_key, lc.`title` || ' ( ' || count(lcom.`comment_id`) || ' )' AS `title`
 			FROM `".BIT_DB_PREFIX."boards` b
-			INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = b.`content_id` )
+				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = b.`content_id` )
+				LEFT JOIN `".BIT_DB_PREFIX."boards_map` AS bm ON( bm.`board_content_id`=b.`content_id` )
+				LEFT JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (bm.`topic_content_id` = lcom.`root_id`)
+			GROUP BY lc.`content_id`, lc.`title`
 			ORDER BY  lc.`title` ASC";
+		if( $pBlankFirst ) {
+			if( $rs = $gBitDb->query( $query ) ) {
+				$ret[''] = '~~~ '.tra('None').' ~~~';
+				while( $row = $rs->fetchRow() ) {
+					$ret[$row['hash_key']] = $row['title'];
+				}
+			}
+		} else {
+			$ret = $gBitDb->getAssoc( $query);
+		}
 
-		return $gBitDb->getAll( $query);
+		return $ret;
 	}
 
 	function getBoard( $contentId ) {
@@ -544,7 +553,49 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 		return( $ret );
 	}
 
-
+	function getLinkedBoard( $pContentId ) {
+		global $gBitDb;
+		$ret = NULL;
+		if( BitBase::verifyId( $pContentId ) ) {
+			$sql = "SELECT b.`board_id`, b.`content_id` AS `board_content_id`, COUNT(lcm.`comment_id`) AS `post_count`
+					FROM `".BIT_DB_PREFIX."boards_map` bm 
+						INNER JOIN `".BIT_DB_PREFIX."boards` b ON (bm.`board_content_id`=b.`content_id`) 
+						LEFT JOIN `".BIT_DB_PREFIX."liberty_comments` lcm ON (lcm.`root_id`=bm.`topic_content_id`)
+					WHERE bm.`topic_content_id`=?
+					GROUP BY b.`board_id`, b.`content_id`";
+			$ret = $gBitDb->getRow( $sql, array( $pContentId ) );
+		}
+		return $ret;
+	}
 	
 }
+
+function bitboards_content_display ( $pContent ) {
+	global $gBitSmarty;
+	if( $pContent->isValid() ) {
+		$gBitSmarty->assign( 'boardInfo', BitBoard::getLinkedBoard( $pContent->mContentId ) );
+	}
+}
+
+function bitboards_content_edit ( $pContent ) {
+	global $gBitSmarty;
+	$gBitSmarty->assign( 'boardInfo', BitBoard::getLinkedBoard( $pContent->mContentId ) );
+	$gBitSmarty->assign( 'boardList', BitBoard::getBoardSelectList( TRUE ) );
+}
+
+function bitboards_content_store( $pContent, $pParamHash ) {
+	global $gBitDb, $gBitSmarty;
+
+	require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );
+	// do not allow unassigning topics. the UI should prevent this, but just to make sure...
+	if( $pContent->isValid() && !$pContent->isContentType( BITBOARDTOPIC_CONTENT_TYPE_GUID ) ) {
+		// wipe out all previous assignments for good measure. Not the sanest thing to do, but edits are infrequent - at least for now
+		$pContent->mDb->query( "DELETE FROM `".BIT_DB_PREFIX."boards_map` WHERE `topic_content_id`=?", array( $pContent->mContentId ) );
+		if( @BitBase::verifyId( $pParamHash['linked_board_cid'] ) ) {
+			$pContent->mDb->query( "INSERT INTO `".BIT_DB_PREFIX."boards_map` (`board_content_id`,`topic_content_id`) VALUES (?,?)", array( $pParamHash['linked_board_cid'], $pContent->mContentId ) );
+		}
+		$gBitSmarty->assign( 'boardInfo', BitBoard::getLinkedBoard( $pContent->mContentId ) );
+	}
+}
+
 ?>

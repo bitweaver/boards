@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.10 2006/07/29 17:14:26 spiderr Exp $
-* $Id: BitBoardTopic.php,v 1.10 2006/07/29 17:14:26 spiderr Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.11 2006/08/31 06:53:01 spiderr Exp $
+* $Id: BitBoardTopic.php,v 1.11 2006/08/31 06:53:01 spiderr Exp $
 */
 
 /**
@@ -10,8 +10,8 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.10 $ $Date: 2006/07/29 17:14:26 $ $Author: spiderr $
-* @class BitBoardTopic
+* @version $Revision: 1.11 $ $Date: 2006/08/31 06:53:01 $ $Author: spiderr $
+* @class BitBoardTopic
 */
 
 require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
@@ -20,7 +20,7 @@ require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
 /**
 * This is used to uniquely identify the object
 */
-define( 'BitBoardTopic_CONTENT_TYPE_GUID', 'BitBoardTopic' );
+define( 'BITBOARDTOPIC_CONTENT_TYPE_GUID', 'bitboardtopic' );
 
 class BitBoardTopic extends LibertyAttachable {
 	/**
