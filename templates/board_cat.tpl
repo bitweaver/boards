@@ -1,17 +1,15 @@
 {strip}
-	<h2>{$child.data.title}</h2>
+	<div class="indent">
+		{if count($child.members) > 0}
+			{include file="bitpackage:bitboards/board_table.tpl" boardsList=$child.members heading=$heading}
+		{/if}
 
-	{if count($child.members) > 0}
-		<div class="indent">
-			{include file="bitpackage:bitboards/board_table.tpl" boardsList=$child.members}
-		</div>
-	{/if}
+		{assign var=heading value=''}
 
-	{if !empty($child.sub_count) && count($child.children)>0}
-		<div class="indent">
+		{if !empty($child.sub_count) && count($child.children)>0}
 			{foreach from=$child.children item=schild}
 				{include file="bitpackage:bitboards/board_cat.tpl" child=$schild color=$scolor}
 			{/foreach}
-		</div>
-	{/if}
+		{/if}
+	</div>
 {/strip}

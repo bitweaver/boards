@@ -27,28 +27,31 @@ unregistered user post highlight
 						--> .bitboard a.highlight {}
 */
 
-.bitboard .mb-threading				{}
+.bitboard .mb-threading			{}
 
-.bitboard tr.odd.unapproved			{background:#faa;}
-.bitboard tr.even.unapproved		{background:#fac;}
-.bitboard tr.odd.moved				{background:#aaf;}
-.bitboard tr.even.moved				{background:#acf;}
-.bitboard div.indent				{margin-left:2em;}
-.bitboard tr.highlight				{background:#fca;}
-.bitboard .mb-post .warning			{}
+.bitboard tr.odd.unapproved		{background:#faa;}
+.bitboard tr.even.unapproved	{background:#fac;}
+.bitboard tr.odd.moved			{background:#aaf;}
+.bitboard tr.even.moved			{background:#acf;}
+.bitboard div.indent .indent	{margin-left:2em;}
+.bitboard tr.highlight			{background:#fca;}
+.bitboard .mb-post .warning		{}
 
 /* post layout */
-.bitboard .mb-post 					{clear:both;}
-.bitboard .mb-post .header		{}
-.bitboard .mb-post .body			{float:right;width:100%; margin-left:-200px;}
+.bitboard .mb-post 				{clear:both;}
+.bitboard .mb-post .body		{float:right;width:100%; margin-left:-200px;}
 .bitboard .mb-post .content		{margin-left:200px;}
-.bitboard .mb-post .userinfo		{float:left;width:200px;}
+.bitboard .mb-post .header		{}
+.bitboard .mb-post .userinfo	{float:left;width:200px;}
 .bitboard .mb-post .signature	{clear:both;}
 
-/* debugging */
-.bitboard .mb-post 	 			{background:#ff8; margin-top:2em;}
-.bitboard .mb-post .header		{background:#8f8;}
-.bitboard .mb-post .body			{background:#f88;}
-.bitboard .mb-post .content		{background:#88f;}
-.bitboard .mb-post .userinfo		{background:#f8f;}
-.bitboard .mb-post .signature	{background:#8ff;}
+/* debugging and testing */
+.bitboard .mb-post 	 			{background:#ffc; padding-bottom:1em; margin:1em;}
+.bitboard .mb-post .body		{background:#ccc;}
+.bitboard .mb-post .header		{background:#cfc; padding:1em;}
+.bitboard .mb-post .header h2	{padding:0 1em; display:inline;}
+.bitboard .mb-post .content		{background:#ccf; padding:1em;}
+.bitboard .mb-post .userinfo	{background:#fcf;}
+.bitboard .mb-post .signature	{background:#cff; padding-bottom:1em;}
+.bitboard .indent				{}
+.bitboard .indent				{border-left:5px solid #c64; margin-bottom:2em;}

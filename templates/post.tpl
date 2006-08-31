@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.11 2006/08/31 16:45:26 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.12 2006/08/31 21:52:23 squareing Exp $ *}
 {strip}
 <div class="floaticon">
 	{assign var=flip value=$thread->getFlipFlop()}
@@ -11,7 +11,7 @@
 <div class="listing bitboard">
 	<div class="header">
 		<h1>{$thread->mInfo.title|escape}</h1>
-		Back to <a href="{$board->mInfo.display_url}">{$board->mInfo.title|escape}</a><br>
+		Back to <a href="{$board->mInfo.display_url}">{$board->mInfo.title|escape}</a>
 	</div>
 
 	<div class="body">
@@ -47,7 +47,7 @@
 		{formfeedback hash=$formfeedback}
 
 		{foreach item=comment from=$comments}
-			<div class="mb-post" class="{cycle values="even,odd"}{if $gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && $comment.user_id<0 and $comment.approved==0} unapproved{/if}">
+			<div class="mb-post {cycle values="even,odd"}{if $gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && $comment.user_id<0 and $comment.approved==0} unapproved{/if}">
 				{assign var=thread_mInfo value=$thread->mInfo}
 				{displaycomment comment=$comment template=$comment_template}
 			</div>

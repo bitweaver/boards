@@ -1,14 +1,20 @@
 {strip}
 <table class="data">
+	{if $heading}
+		<tr>
+			<th style="width:1%;">{*if $boardsList.0.track.on}Status{/if*}</th>
+			<th style="width:35%;">{tr}Board{/tr}</th>
+			<th style="width:40%;">{tr}Post{/tr}</th>
+			<th style="width:5%;">{tr}Topics{/tr}</th>
+			<th style="width:18%;">{tr}Last Post{/tr}</th>
+			{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
+				<th style="width:1%;"><abbr title="{tr}Number of posts by Anonymous users{/tr}">Anon</abbr></th>
+			{/if}
+		</tr>
+	{/if}
+
 	<tr>
-		<th style="width:1%;">{*if $boardsList.0.track.on}Status{/if*}</th>
-		<th style="width:35%;">{tr}Board{/tr}</th>
-		<th style="width:40%;">{tr}Post{/tr}</th>
-		<th style="width:5%;">{tr}Topics{/tr}</th>
-		<th style="width:18%;">{tr}Last Post{/tr}</th>
-		{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
-			<th style="width:1%;"><abbr title="{tr}Number of posts by Anonymous users{/tr}">Anon</abbr></th>
-		{/if}
+		<th class="title" colspan="6">{$child.data.title}</th>
 	</tr>
 
 	{foreach item=board from=$boardsList}
@@ -29,7 +35,7 @@
 			</td>
 
 			<td>
-				<h2><a href="{$board.url}" title="{$board_title}">{$board_title}</a></h2>
+				<h3><a href="{$board.url}" title="{$board_title}">{$board_title}</a></h3>
 				{$board.parsed_data}
 			</td>
 
