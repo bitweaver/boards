@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.9 2006/08/31 06:53:01 spiderr Exp $
-* $Id: BitBoard.php,v 1.9 2006/08/31 06:53:01 spiderr Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.10 2006/08/31 16:47:18 spiderr Exp $
+* $Id: BitBoard.php,v 1.10 2006/08/31 16:47:18 spiderr Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.9 $ $Date: 2006/08/31 06:53:01 $ $Author: spiderr $
+* @version $Revision: 1.10 $ $Date: 2006/08/31 16:47:18 $ $Author: spiderr $
 * @class BitBoard
 */
 
@@ -579,8 +579,10 @@ function bitboards_content_display ( $pContent ) {
 
 function bitboards_content_edit ( $pContent ) {
 	global $gBitSmarty;
-	$gBitSmarty->assign( 'boardInfo', BitBoard::getLinkedBoard( $pContent->mContentId ) );
-	$gBitSmarty->assign( 'boardList', BitBoard::getBoardSelectList( TRUE ) );
+	if( !$pContent->isContentType( BITBOARDTOPIC_CONTENT_TYPE_GUID ) ) {
+		$gBitSmarty->assign( 'boardInfo', BitBoard::getLinkedBoard( $pContent->mContentId ) );
+		$gBitSmarty->assign( 'boardList', BitBoard::getBoardSelectList( TRUE ) );
+	}
 }
 
 function bitboards_content_store( $pContent, $pParamHash ) {
