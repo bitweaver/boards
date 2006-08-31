@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.10 2006/08/31 13:36:30 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.11 2006/08/31 16:45:26 squareing Exp $ *}
 {strip}
 <div class="floaticon">
 	{assign var=flip value=$thread->getFlipFlop()}
@@ -15,8 +15,14 @@
 	</div>
 
 	<div class="body">
+		{if !$topic_locked}
+			<div class="navbar">
+				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&post_comment_reply_id={$thread->mInfo.flc_content_id}&post_comment_request=1#editcomments">{tr}Post Reply{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="New Topic"}</a>
+			</div>
+		{/if}
+
 		{* not happy with this yet - xing *}
-		{form action="$comments_return_url" style="text-align:right;"}
+		{form action="$comments_return_url" class="mb-threading"}
 			<input type="hidden" name="t" value="{$smarty.request.t}" />
 			<input type="hidden" name="comment_page" value="{$smarty.request.comment_page}" />
 			<label>
@@ -40,36 +46,35 @@
 
 		{formfeedback hash=$formfeedback}
 
-		<table class="data">
-			{foreach item=comment from=$comments}
-				<tr class="{cycle values="even,odd"}{if $gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && $comment.user_id<0 and $comment.approved==0} unapproved{/if}">
-					{assign var=thread_mInfo value=$thread->mInfo}
-					{displaycomment comment=$comment template=$comment_template}
-				</tr>
-			{foreachelse}
-				<tr class="norecords"><td colspan="16">
-					{tr}No posts found{/tr}
-				</td></tr>
-			{/foreach}
+		{foreach item=comment from=$comments}
+			<div class="mb-post" class="{cycle values="even,odd"}{if $gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && $comment.user_id<0 and $comment.approved==0} unapproved{/if}">
+				{assign var=thread_mInfo value=$thread->mInfo}
+				{displaycomment comment=$comment template=$comment_template}
+			</div>
+		{foreachelse}
+			<p class="norecords">
+				{tr}No posts found{/tr}
+			</p>
+		{/foreach}
 
-			{if $post_comment_preview}
-				<tr><td colspan="10">&nbsp;</td></tr>
-				<tr><td colspan="10"><h2 style="text-align:center; padding:.5em">{tr}{$post_title} Preview{/tr}</h2></td></tr>
-				<tr>
-				<div class="preview">
-					{assign var=post_is_preview value=1}
-					{displaycomment comment=$postComment template=$comment_template}
-					{assign var=post_is_preview value=0}
-				</div><!-- end .preview -->
-				</tr>
-				<tr><td colspan="10">&nbsp;</td></tr>
-			{/if}
-		</table>
-		{if !$topic_locked}<p style="text-align: right;"><a title="{tr}Post Reply{/tr}" href="{$comments_return_url}&post_comment_reply_id={$thread->mInfo.flc_content_id}&post_comment_request=1#editcomments">{tr}Post Reply{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="Post Reply"}</a></p>{/if}
+		{if $post_comment_preview}
+			<h2>{tr}Preview{/tr}</h2>
+			<div class="preview mb-post">
+				{assign var=post_is_preview value=1}
+				{displaycomment comment=$postComment template=$comment_template}
+				{assign var=post_is_preview value=0}
+			</div><!-- end .preview -->
+		{/if}
+
+		{if !$topic_locked}
+			<div class="navbar">
+				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&post_comment_reply_id={$thread->mInfo.flc_content_id}&post_comment_request=1#editcomments">{tr}Post Reply{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="New Topic"}</a>
+			</div>
+		{/if}
 
 		{libertypagination ihash=$commentsPgnHash}
 	</div><!-- end .body -->
-</div><!-- end .admin -->
+</div><!-- end .bitboard -->
 
 {if $gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && ($smarty.request.post_comment_request || !empty($smarty.request.post_comment_submit)) && !$gBitUser->isRegistered()}
 	{formfeedback warning="Your post will not be shown immediately it will have to be approved by a moderator"}

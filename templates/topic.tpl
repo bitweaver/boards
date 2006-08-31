@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.11 2006/08/31 13:36:30 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.12 2006/08/31 16:45:26 squareing Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
@@ -24,11 +24,7 @@
 		{minifind sort_mode=$sort_mode b=$smarty.request.b}
 		{* looks horrible, but leave for now - xing *}
 		<div class="navbar">
-			<ul>
-				<li>
-					<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="New Topic"}</a>
-				</li>
-			</ul>
+			<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="New Topic"}</a>
 		</div>
 
 		{form id="checkform"}
@@ -163,11 +159,7 @@
 			</table>
 
 			<div class="navbar">
-				<ul>
-					<li>
-						<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="New Topic"}</a>
-					</li>
-				</ul>
+				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="New Topic"}</a>
 			</div>
 
 			{if $gBitUser->hasPermission( 'p_bitboards_remove' )}

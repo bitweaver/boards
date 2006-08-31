@@ -1,69 +1,3 @@
-.mb-row-even {
-	background-color: #99CC99;
-}
-
-.mb-row-odd {
-	background-color: #d9fcdb;
-}
-
-.mb-warned {
-	text-align:center;
-}
-
-.mb-warned img {
-	padding:3px;
-	padding-top: 2em;
-}
-
-.mb-avatar {
-	padding:3px;
-	/*border:1px solid #339933;*/
-}
-
-.mb-table .header {
-	border-bottom:1px solid #339933;
-}
-
-.mb-cat-list h2 {
-	margin: 2px;
-	margin-top: 0.3em;
-	margin-bottom: 0.3em;
-}
-
-
-.mb-table .header h1 {
-	 background-image: none;
-}
-
-.mb-signature {
-	margin: 0px;
-	margin-top: 1em;
-	padding: 2px;
-	padding-top: 4px;
-	padding-left: 1.3em;
-	border: none;
-	border-top: 2px black solid;
-}
-
-.mb-signature p {
-	display: inline;
-	margin: 0px;
-	padding: 0px;
-}
-
-.mb-signature p {
-	padding: 0px;
-	margin: 0px;
-}
-
-.mb-warning-message {
-	border-top:1px solid #339933;
-	padding: 2px;
-	padding-top: 4px;
-	margin-top: 1em;
-	white-space: nowrap;
-}
-
 .quote .quote-title {
 	font-size: 90%;
 	font-weight: bold;
@@ -87,13 +21,34 @@
 .mb-odd-moved td		--> .odd.moved {}
 .mb-cat-indent			--> .indent {}
 .mb-sticky td			--> .highlight {}
+.mb-warned				--> .warning {}
+
 unregistered user post highlight
 						--> .bitboard a.highlight {}
 */
 
-.bitboard tr.odd.unapproved		{background:pink;}
-.bitboard tr.even.unapproved	{background:purple;}
-.bitboard tr.odd.moved			{background:pink;}
-.bitboard tr.even.moved			{background:purple;}
-.bitboard div.indent			{margin-left:2em;}
-.bitboard tr.highlight			{background:#fdc;}
+.bitboard .mb-threading				{}
+
+.bitboard tr.odd.unapproved			{background:#faa;}
+.bitboard tr.even.unapproved		{background:#fac;}
+.bitboard tr.odd.moved				{background:#aaf;}
+.bitboard tr.even.moved				{background:#acf;}
+.bitboard div.indent				{margin-left:2em;}
+.bitboard tr.highlight				{background:#fca;}
+.bitboard .mb-post .warning			{}
+
+/* post layout */
+.bitboard .mb-post 					{clear:both;}
+.bitboard .mb-post .header		{}
+.bitboard .mb-post .body			{float:right;width:100%; margin-left:-200px;}
+.bitboard .mb-post .content		{margin-left:200px;}
+.bitboard .mb-post .userinfo		{float:left;width:200px;}
+.bitboard .mb-post .signature	{clear:both;}
+
+/* debugging */
+.bitboard .mb-post 	 			{background:#ff8; margin-top:2em;}
+.bitboard .mb-post .header		{background:#8f8;}
+.bitboard .mb-post .body			{background:#f88;}
+.bitboard .mb-post .content		{background:#88f;}
+.bitboard .mb-post .userinfo		{background:#f8f;}
+.bitboard .mb-post .signature	{background:#8ff;}
