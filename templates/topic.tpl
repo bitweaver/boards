@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.14 2006/09/01 12:32:23 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.15 2006/09/01 21:24:16 squareing Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
@@ -182,6 +182,8 @@
 		{/form}
 
 		{pagination b=$smarty.request.b}
+
+		{include file="bitpackage:bitboards/legend_inc.tpl" topicicons=1}
 	</div><!-- end .body -->
 </div><!-- end .admin -->
 
@@ -190,6 +192,4 @@
 {/if}
 
 {include file="bitpackage:liberty/comments_post_inc.tpl"  post_title="Post" hide=1}
-
-{include file="bitpackage:liberty/legend_inc.tpl" topicicons=1}
 {/strip}
