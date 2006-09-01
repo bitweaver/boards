@@ -13,10 +13,6 @@
 		</tr>
 	{/if}
 
-	<tr>
-		<th class="title" colspan="6">{$child.data.title}</th>
-	</tr>
-
 	{foreach item=board from=$boardsList}
 		{if $board.title}
 			{assign var=board_title value=$board.title|escape}
@@ -28,9 +24,9 @@
 		<tr class="{cycle values="even,odd"}{if $board.unreg > 0} unapproved{/if}">
 			<td style="width:1px;">{* topic tracking icons *}
 				{if $board.track.on && $board.track.mod}
-					{biticon ipackage=bitboard iname="track_new_l" iexplain="New Posts"}
+					{biticon ipackage=bitboard iname="track_new_large" iexplain="New Posts"}
 				{elseif $board.track.on}
-					{biticon ipackage=bitboard iname="track_old_l" iexplain="No New Posts"}
+					{biticon ipackage=bitboard iname="track_old_large" iexplain="No New Posts"}
 				{/if}
 			</td>
 

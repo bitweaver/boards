@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.11 2006/08/31 06:53:01 spiderr Exp $
-* $Id: BitBoardTopic.php,v 1.11 2006/08/31 06:53:01 spiderr Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.12 2006/09/01 12:32:22 squareing Exp $
+* $Id: BitBoardTopic.php,v 1.12 2006/09/01 12:32:22 squareing Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.11 $ $Date: 2006/08/31 06:53:01 $ $Author: spiderr $
+* @version $Revision: 1.12 $ $Date: 2006/09/01 12:32:22 $ $Author: squareing $
 * @class BitBoardTopic
 */
 
@@ -445,6 +445,7 @@ WHERE
 		global $gBitSystem;
 		$mail_subject= "Topic Reply Notification - ".$this->mInfo['title'];
 		$host = 'http://'.$_SERVER['HTTP_HOST'];
+		//TODO: use a template for this
 		$mail_message = "Hello ".$user['user'].",
 
 You are receiving this email because you are watching the topic, \"".$this->mInfo['title']."\" at ".$gBitSystem->getConfig('site_title',"[Bitweaver Site]").".
@@ -514,9 +515,9 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 		$flip['sticky']['req']=3;
 		$flip['sticky']['id']=$arr['th_thread_id'];
 		$flip['sticky']['idname']='t';
-		$flip['sticky']['up']='idea';
+		$flip['sticky']['up']='sticky';
 		$flip['sticky']['upname']='Sticky Thread';
-		$flip['sticky']['down']='agt_uninstall-product';
+		$flip['sticky']['down']='make_sticky';
 		$flip['sticky']['downname']='Non Sticky Thread';
 		$flip['sticky']['perm']='p_bitboards_edit';
 

@@ -1,5 +1,7 @@
 {strip}
 	<div class="indent">
+		<h{$heading|default:2}>{$child.data.title}</h{$heading|default:2}>
+
 		{if count($child.members) > 0}
 			{include file="bitpackage:bitboards/board_table.tpl" boardsList=$child.members heading=$heading}
 		{/if}

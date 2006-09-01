@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.13 2006/08/31 21:09:00 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.14 2006/09/01 12:32:23 squareing Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
@@ -24,7 +24,7 @@
 		{minifind sort_mode=$sort_mode b=$smarty.request.b}
 		{* looks horrible, but leave for now - xing *}
 		<div class="navbar">
-			<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="New Topic"}</a>
+			<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage=bitboard iname="new_topic" iexplain="New Topic"}</a>
 		</div>
 
 		{form id="checkform"}
@@ -92,10 +92,10 @@
 						{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
 							<td class="actionicon">
 								{if $thread.flc_user_id<0 && $thread.first_approved==0}
-									<a title="{tr}Approve First Post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic.php?b={$board->mInfo.board_id}&action=1&comment_id={$thread.th_thread_id}">
+									<a title="{tr}Approve First Post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic.php?b={$board->mInfo.board_id}&amp;action=1&amp;comment_id={$thread.th_thread_id}">
 										{biticon ipackage=bitboard iname="edit_add" iexplain="Approve First Post"}
 									</a>
-									<a title="{tr}Reject First Post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic.php?b={$board->mInfo.board_id}&action=2&comment_id={$thread.th_thread_id}">
+									<a title="{tr}Reject First Post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic.php?b={$board->mInfo.board_id}&amp;action=2&amp;comment_id={$thread.th_thread_id}">
 										{biticon ipackage=bitboard iname="edit_remove" iexplain="Reject First Post"}
 									</a>
 								{/if}
@@ -122,12 +122,12 @@
 												return false;
 											');
 											return false;" title="{tr}Move Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}"
-										>{biticon ipackage=bitboard iname="mail_forward" iexplain="Move Thread"}</a>
+										>{biticon ipackage=bitboards iname="move" iexplain="Move Thread"}</a>
 									{/if}
 								{/if}
 
 								{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_bitboards_remove' )}
-									<a title="{tr}Delete Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove_bitboard.php?thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage=bitboard iname="mail_delete" iexplain="Delete Thread"}</a>
+									<a title="{tr}Delete Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove_bitboard.php?thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage=liberty iname="delete" iexplain="Delete Thread"}</a>
 								{else}
 									{biticon ipackage=spacer iname=spacer}
 								{/if}
@@ -159,7 +159,7 @@
 			</table>
 
 			<div class="navbar">
-				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage=bitboard iname="mail_new" iexplain="New Topic"}</a>
+				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage=bitboard iname="new_topic" iexplain="New Topic"}</a>
 			</div>
 
 			{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
@@ -190,4 +190,6 @@
 {/if}
 
 {include file="bitpackage:liberty/comments_post_inc.tpl"  post_title="Post" hide=1}
+
+{include file="bitpackage:liberty/legend_inc.tpl" topicicons=1}
 {/strip}

@@ -20,11 +20,11 @@
 					{/if}
 					{if $gBitUser->hasPermission( 'p_bitboards_edit' ) && (($comment.user_id<0 && $comment.approved==0)||$comment.user_id>=0) && !$comment.warned}
 						{if $comment.user_id<0 && $comment.approved==0}
-							<a title="{tr}Approve this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&action=1&comment_id={$comment.comment_id}">
+							<a title="{tr}Approve this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=1&amp;comment_id={$comment.comment_id}">
 								{biticon ipackage=bitboard iname="edit_add" iexplain="Approve Post"}
 							</a>
 
-							<a title="{tr}Reject this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&action=2&comment_id={$comment.comment_id}">
+							<a title="{tr}Reject this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=2&amp;comment_id={$comment.comment_id}">
 								{biticon ipackage=bitboard iname="edit_remove" iexplain="Reject Post"}
 							</a>
 						{elseif !$comment.warned && $comment.user_id>=0}
@@ -37,7 +37,7 @@
 										return false;
 									');
 									return false;
-								" title="{tr}Warn the poster about this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&action=3&comment_id={$comment.comment_id}"
+								" title="{tr}Warn the poster about this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=3&amp;comment_id={$comment.comment_id}"
 							>{biticon ipackage=liberty iname="warning" iexplain="Warn Post"}</a>
 
 							<div style="display:none;" id="warn_block_{$comment.comment_id|escape:"url"}">
@@ -98,7 +98,7 @@
 							return false;
 						');
 					return false;
-					" href="{$thread_mInfo.display_url}&warning[{$comment_id}]={if empty($warnings.$comment_id)}show{else}hide{/if}"
+					" href="{$thread_mInfo.display_url}&amp;warning[{$comment_id}]={if empty($warnings.$comment_id)}show{else}hide{/if}"
 				>{biticon ipackage=liberty iname="error" iexplain="Warned Post"}</a>
 
 				<div id="warned_message_{$comment.comment_id|escape:"url"}">

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/board.tpl,v 1.9 2006/08/31 21:52:23 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/board.tpl,v 1.10 2006/09/01 12:32:23 squareing Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="header">
@@ -10,6 +10,8 @@
 			{assign var=heading value=1}
 			{include file="bitpackage:bitboards/board_cat.tpl" child=$child color=$color}
 		{/foreach}
+
+		{include file="bitpackage:bitboards/legend_inc.tpl"  boardicons=1}
 	</div><!-- end .body -->
 </div><!-- end .admin -->
 {/strip}
