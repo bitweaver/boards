@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/assign.php,v 1.1 2006/07/12 17:00:32 hash9 Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/assign.php,v 1.2 2006/09/01 13:59:25 squareing Exp $
 // Copyright (c) 2004 bitweaver BitBoard
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -26,15 +26,15 @@ if (!empty($_REQUEST['remove'])) {
 		}
 	}
 }
-if (!empty($_REQUEST['assign'])) {
-	foreach ($_REQUEST['assign'] as $board_id => $content_ids) {
-		$b = new BitBoard($board_id);
-		$b->load();
-		foreach ($content_ids as $content_id) {
-			$b->addContent($content_id);
-		}
+
+if( !empty( $_REQUEST['assign'] ) && @BitBase::verifyId( $_REQUEST['to_board_id'] ) ) {
+	$b = new BitBoard( $_REQUEST['to_board_id'] );
+	$b->load();
+	foreach( $_REQUEST['assign'] as $content_id ) {
+		$b->addContent( $content_id );
 	}
 }
+
 if (!empty($_REQUEST['integrity'])) {
 	$board_id = $_REQUEST['integrity'];
 	$b = new BitBoard($board_id);

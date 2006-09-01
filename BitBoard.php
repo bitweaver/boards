@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.11 2006/09/01 09:33:36 squareing Exp $
-* $Id: BitBoard.php,v 1.11 2006/09/01 09:33:36 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.12 2006/09/01 13:59:25 squareing Exp $
+* $Id: BitBoard.php,v 1.12 2006/09/01 13:59:25 squareing Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.11 $ $Date: 2006/09/01 09:33:36 $ $Author: squareing $
+* @version $Revision: 1.12 $ $Date: 2006/09/01 13:59:25 $ $Author: squareing $
 * @class BitBoard
 */
 
@@ -231,7 +231,12 @@ class BitBoard extends LibertyAttachable {
 			$ret['map'][$k]['map'] = $board->getMap();
 			$ret['map'][$k]['integrity'] = $board->verifyIntegrity();
 		}
-		$ret['umap'] = $b->getUnMapped();
+		// reorganise unmapped content for better display
+		$umapped = $b->getUnMapped();
+		foreach( $umapped as $key => $content ) {
+			$umap[$content['content_description']][$key] = $content;
+		}
+		$ret['umap'] = $umap;
 		return $ret;
 	}
 
@@ -241,13 +246,13 @@ class BitBoard extends LibertyAttachable {
 		$sql = "SELECT
 			lc.`title`,
 			lc.`content_id`,
-			lct.`content_description`,
-			( SELECT count(*)
+			lct.`content_description`, (
+			SELECT count(*)
 				FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 				WHERE lcom.`root_id`=lcom.`parent_id` AND lcom.`root_id`=lc.`content_id`
-				) AS thread_count
+			) AS thread_count
 			FROM `".BIT_DB_PREFIX."liberty_content` lc
-			INNER JOIN `".BIT_DB_PREFIX."liberty_content_types` lct ON (lc.`content_type_guid`=lct.`content_type_guid`)
+				INNER JOIN `".BIT_DB_PREFIX."liberty_content_types` lct ON (lc.`content_type_guid`=lct.`content_type_guid`)
 			WHERE lc.`content_id` NOT IN (
 				SELECT	lc.`content_id` AS content_id
 					FROM `".BIT_DB_PREFIX."boards` b
@@ -325,18 +330,20 @@ class BitBoard extends LibertyAttachable {
 			$sql = "SELECT
 			lc.`title` AS t_title,
 			lc.`content_id` AS t_content_id,
+			lct.`content_description` AS t_content_description,
 			blc.`title` AS b_title,
 			blc.`content_id` AS b_content_id,
-			b.`board_id` AS b_board_id,
-						( SELECT count(*)
-				FROM `".BIT_DB_PREFIX."liberty_comments` lcom
-				WHERE lcom.`root_id`=lcom.`parent_id` AND lcom.`root_id`=lc.`content_id`
+			b.`board_id` AS b_board_id, (
+				SELECT count(*)
+					FROM `".BIT_DB_PREFIX."liberty_comments` lcom
+					WHERE lcom.`root_id`=lcom.`parent_id` AND lcom.`root_id`=lc.`content_id`
 				) AS thread_count,
 			((blc.`content_id`- lc.`content_id`)*(blc.`content_id`- lc.`content_id`)) AS order_key
 					FROM `".BIT_DB_PREFIX."boards` b
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` blc ON (blc.`content_id`=b.`content_id`)
 					INNER JOIN  `".BIT_DB_PREFIX."boards_map` map ON (map.`board_content_id`= blc.`content_id`)
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lc.`content_id`=map.`topic_content_id`)
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content_types` lct ON (lc.`content_type_guid`=lct.`content_type_guid`)
 					WHERE b.`board_id`=? AND map.`board_content_id`!=map.`topic_content_id`
 					ORDER BY order_key
 					";
