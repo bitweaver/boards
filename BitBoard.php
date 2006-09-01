@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.10 2006/08/31 16:47:18 spiderr Exp $
-* $Id: BitBoard.php,v 1.10 2006/08/31 16:47:18 spiderr Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.11 2006/09/01 09:33:36 squareing Exp $
+* $Id: BitBoard.php,v 1.11 2006/09/01 09:33:36 squareing Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.10 $ $Date: 2006/08/31 16:47:18 $ $Author: spiderr $
+* @version $Revision: 1.11 $ $Date: 2006/09/01 09:33:36 $ $Author: squareing $
 * @class BitBoard
 */
 
@@ -261,7 +261,7 @@ class BitBoard extends LibertyAttachable {
 				AND lc.`title` != ''
 			ORDER BY lc.`content_type_guid`, lc.`title`
 			";
-		$rs = $this->mDb->getAll( $sql );
+		$rs = $this->mDb->query( $sql );
 		while( $row = $rs->fetchRow() ) {
 			$ret[$row['content_id']] = $row;
 		}
