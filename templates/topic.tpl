@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.15 2006/09/01 21:24:16 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.16 2006/09/03 13:27:44 squareing Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
@@ -129,7 +129,7 @@
 								{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_bitboards_remove' )}
 									<a title="{tr}Delete Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove_bitboard.php?thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage=liberty iname="delete" iexplain="Delete Thread"}</a>
 								{else}
-									{biticon ipackage=spacer iname=spacer}
+									{biticon ipackage=liberty iname=spacer iforce=icon}
 								{/if}
 
 								{if $thread.th_moved==0}
