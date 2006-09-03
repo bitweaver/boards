@@ -31,10 +31,10 @@ $flip_downname=>$flip.$flip_name.downname
 		&{$flip_name}={$flip.$flip_name.state|escape:"url"}">
 {/if}
 {if $flip.$flip_name.state==1}
-	{biticon ipackage=bitboards iname=$flip.$flip_name.up iexplain=$flip.$flip_name.upname}
+	{biticon ipackage=icons iname=$flip.$flip_name.up iexplain=$flip.$flip_name.upname}
 {else}
 	{if $gBitUser->hasPermission( $flip.$flip_name.perm )}
-		{biticon ipackage=bitboards iname=$flip.$flip_name.down iexplain=$flip.$flip_name.downname}
+		{biticon ipackage=icons iname=$flip.$flip_name.down iexplain=$flip.$flip_name.downname}
 	{/if}
 {/if}
 {if $gBitUser->hasPermission( 'p_bitboards_edit' )}

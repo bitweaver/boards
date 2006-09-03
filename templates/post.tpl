@@ -1,11 +1,11 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.13 2006/09/01 12:32:23 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.14 2006/09/03 20:05:20 squareing Exp $ *}
 {strip}
 <div class="floaticon">
 	{assign var=flip value=$thread->getFlipFlop()}
 	{foreach from=$flip item=flip_s key=flip_name}
 		{include file="bitpackage:bitboards/flipswitch.tpl"}
 	{/foreach}
-	{if !$topic_locked}<a title="{tr}Post Reply{/tr}" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments"> {biticon ipackage=bitboard iname="post_reply" iexplain="Post Reply"}</a>{/if}
+	{if !$topic_locked}<a title="{tr}Post Reply{/tr}" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments"> {biticon ipackage="icons" iname="mail-reply-sender" iexplain="Post Reply"}</a>{/if}
 </div>
 
 <div class="listing bitboard">
@@ -17,7 +17,7 @@
 	<div class="body">
 		{if !$topic_locked}
 			<div class="navbar">
-				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{tr}Post Reply{/tr} {biticon ipackage=bitboard iname="new_topic" iexplain="New Topic"}</a>
+				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{tr}Post Reply{/tr} {biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic"}</a>
 			</div>
 		{/if}
 
@@ -68,7 +68,7 @@
 
 		{if !$topic_locked}
 			<div class="navbar">
-				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{tr}Post Reply{/tr} {biticon ipackage=bitboard iname="new_topic" iexplain="New Topic"}</a>
+				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{tr}Post Reply{/tr} {biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic"}</a>
 			</div>
 		{/if}
 

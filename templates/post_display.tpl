@@ -7,25 +7,25 @@
 			<div class="floaticon">
 				{if $print_page ne 'y' && $comment.deleted==0 }
 					{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
-						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="liberty" iname="reply" iexplain="Reply to this Post"}</a>
+						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Reply to this Post"}</a>
 					{/if}
 					{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
-						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1&amp;quote=y#editcomments" rel="nofollow">{biticon ipackage="liberty" iname="reply_quote" iexplain="Reply with Quote to this Post"}</a>
+						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1&amp;quote=y#editcomments" rel="nofollow">{biticon ipackage="icons" iname="mail-reply-all" iexplain="Reply with Quote to this Post"}</a>
 					{/if}
 					{if $comment.editable}
-						<a href="{$comments_return_url}&amp;post_comment_id={$comment.comment_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="liberty" iname="edit" iexplain="Edit"}</a>
+						<a href="{$comments_return_url}&amp;post_comment_id={$comment.comment_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit"}</a>
 					{/if}
 					{if $gBitUser->isAdmin()}
-						<a href="{$comments_return_url}&amp;delete_comment_id={$comment.comment_id}" rel="nofollow">{biticon ipackage="liberty" iname="delete" iexplain="Remove"}</a>
+						<a href="{$comments_return_url}&amp;delete_comment_id={$comment.comment_id}" rel="nofollow">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove"}</a>
 					{/if}
 					{if $gBitUser->hasPermission( 'p_bitboards_edit' ) && (($comment.user_id<0 && $comment.approved==0)||$comment.user_id>=0) && !$comment.warned}
 						{if $comment.user_id<0 && $comment.approved==0}
 							<a title="{tr}Approve this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=1&amp;comment_id={$comment.comment_id}">
-								{biticon ipackage=bitboard iname="edit_add" iexplain="Approve Post"}
+								{biticon ipackage="icons" iname="list-add" iexplain="Approve Post"}
 							</a>
 
 							<a title="{tr}Reject this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=2&amp;comment_id={$comment.comment_id}">
-								{biticon ipackage=bitboard iname="edit_remove" iexplain="Reject Post"}
+								{biticon ipackage="icons" iname="list-remove" iexplain="Reject Post"}
 							</a>
 						{elseif !$comment.warned && $comment.user_id>=0}
 							<a onclick="
@@ -38,7 +38,7 @@
 									');
 									return false;
 								" title="{tr}Warn the poster about this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=3&amp;comment_id={$comment.comment_id}"
-							>{biticon ipackage=liberty iname="warning" iexplain="Warn Post"}</a>
+							>{biticon ipackage="icons" iname="dialog-warning" iexplain="Warn Post"}</a>
 
 							<div style="display:none;" id="warn_block_{$comment.comment_id|escape:"url"}">
 								{form action="`$thread_mInfo.display_url`"}
@@ -99,7 +99,7 @@
 						');
 					return false;
 					" href="{$thread_mInfo.display_url}&amp;warning[{$comment_id}]={if empty($warnings.$comment_id)}show{else}hide{/if}"
-				>{biticon ipackage=liberty iname="error" iexplain="Warned Post"}</a>
+				>{biticon ipackage="icons" iname="dialog-error" iexplain="Warned Post"}</a>
 
 				<div id="warned_message_{$comment.comment_id|escape:"url"}">
 					{if !empty($warnings.$comment_id)}{$comment.warned_message}{/if}

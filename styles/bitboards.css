@@ -43,3 +43,7 @@ unregistered user post highlight
 .bitboard .indent				{border-left:5px solid #c64; margin-bottom:2em;}
 .quotetitle						{margin-bottom:0.5em; font-weight:bold; font-style:italic;}
 blockquote						{padding:0.5em; border:1px #aaa solid; background:#f7f7f7;}
+
+ul.iconlegend					{list-style:none; clear:both;}
+ul.iconlegend li				{list-style:none; width:200px;}
+ul.iconlegend li img			{vertical-align:middle;}

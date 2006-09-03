@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.12 2006/09/01 12:32:22 squareing Exp $
-* $Id: BitBoardTopic.php,v 1.12 2006/09/01 12:32:22 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.13 2006/09/03 20:05:19 squareing Exp $
+* $Id: BitBoardTopic.php,v 1.13 2006/09/03 20:05:19 squareing Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.12 $ $Date: 2006/09/01 12:32:22 $ $Author: squareing $
+* @version $Revision: 1.13 $ $Date: 2006/09/03 20:05:19 $ $Author: squareing $
 * @class BitBoardTopic
 */
 
@@ -483,9 +483,9 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 			$flip['new']['req']=4;
 			$flip['new']['id']=$arr['th_thread_id'];
 			$flip['new']['idname']='t';
-			$flip['new']['up']='track_new';
+			$flip['new']['up']='media-record';
 			$flip['new']['upname']='New Posts';
-			$flip['new']['down']='track_old';
+			$flip['new']['down']='media-playback-stop';
 			$flip['new']['downname']='No new posts';
 			$flip['new']['perm']='p_bitboards_read';
 		}
@@ -494,9 +494,9 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 			$flip['notify']['req']=5;
 			$flip['notify']['id']=$arr['th_thread_id'];
 			$flip['notify']['idname']='t';
-			$flip['notify']['up']='notify_on';
+			$flip['notify']['up']='mail-send-receive';
 			$flip['notify']['upname']='Reply Notification';
-			$flip['notify']['down']='notify_off';
+			$flip['notify']['down']='internet-mail';
 			$flip['notify']['downname']='Reply Notification Disabled';
 			$flip['notify']['perm']='p_bitboards_read';
 		}
@@ -505,9 +505,9 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 		$flip['locked']['req']=2;
 		$flip['locked']['id']=$arr['th_thread_id'];
 		$flip['locked']['idname']='t';
-		$flip['locked']['up']='locked';
+		$flip['locked']['up']='emblem-readonly';
 		$flip['locked']['upname']='Thread Locked';
-		$flip['locked']['down']='unlocked';
+		$flip['locked']['down']='media-playback-start';
 		$flip['locked']['downname']='Thread Unlocked';
 		$flip['locked']['perm']='p_bitboards_edit';
 
@@ -515,9 +515,9 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 		$flip['sticky']['req']=3;
 		$flip['sticky']['id']=$arr['th_thread_id'];
 		$flip['sticky']['idname']='t';
-		$flip['sticky']['up']='sticky';
+		$flip['sticky']['up']='emblem-important';
 		$flip['sticky']['upname']='Sticky Thread';
-		$flip['sticky']['down']='make_sticky';
+		$flip['sticky']['down']='media-eject';
 		$flip['sticky']['downname']='Non Sticky Thread';
 		$flip['sticky']['perm']='p_bitboards_edit';
 

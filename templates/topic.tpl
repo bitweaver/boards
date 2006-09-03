@@ -1,13 +1,13 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.16 2006/09/03 13:27:44 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.17 2006/09/03 20:05:20 squareing Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
 		{if $print_page ne 'y'}
 			{if $gBitUser->hasPermission( 'p_bitboard_edit' )}
-				<a title="{tr}Remove this message board{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage=liberty iname="edit" iexplain="Edit Message Board"}</a>
+				<a title="{tr}Remove this message board{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit Message Board"}</a>
 			{/if}
 			{if $gBitUser->hasPermission( 'p_bitboard_remove' )}
-				<a title="{tr}Remove this message board{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove.php?b={$board->mInfo.board_id}">{biticon ipackage=liberty iname="delete" iexplain="Remove Message Board"}</a>
+				<a title="{tr}Remove this message board{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove Message Board"}</a>
 			{/if}
 		{/if}<!-- end print_page -->
 	</div><!-- end .floaticon -->
@@ -24,7 +24,7 @@
 		{minifind sort_mode=$sort_mode b=$smarty.request.b}
 		{* looks horrible, but leave for now - xing *}
 		<div class="navbar">
-			<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage=bitboard iname="new_topic" iexplain="New Topic"}</a>
+			<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic"}</a>
 		</div>
 
 		{form id="checkform"}
@@ -60,7 +60,7 @@
 					>
 						<td style="white-space:nowrap;">{* topic status icons *}
 							{if $thread.th_moved>0}
-								{biticon ipackage=bitboard iname="move" iexplain="Moved Topic"}
+								{biticon ipackage="icons" iname="go-jump" iexplain="Moved Topic"}
 							{else}
 								{assign var=flip value=$thread.flip}
 								{foreach from=$flip item=flip_s key=flip_name}
@@ -93,10 +93,10 @@
 							<td class="actionicon">
 								{if $thread.flc_user_id<0 && $thread.first_approved==0}
 									<a title="{tr}Approve First Post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic.php?b={$board->mInfo.board_id}&amp;action=1&amp;comment_id={$thread.th_thread_id}">
-										{biticon ipackage=bitboard iname="edit_add" iexplain="Approve First Post"}
+										{biticon ipackage="icons" iname="list-add" iexplain="Approve First Post"}
 									</a>
 									<a title="{tr}Reject First Post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic.php?b={$board->mInfo.board_id}&amp;action=2&amp;comment_id={$thread.th_thread_id}">
-										{biticon ipackage=bitboard iname="edit_remove" iexplain="Reject First Post"}
+										{biticon ipackage="icons" iname="list-remove" iexplain="Reject First Post"}
 									</a>
 								{/if}
 
@@ -122,12 +122,12 @@
 												return false;
 											');
 											return false;" title="{tr}Move Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}"
-										>{biticon ipackage=bitboards iname="move" iexplain="Move Thread"}</a>
+										>{biticon ipackage=icons iname="go-jump" iexplain="Move Thread"}</a>
 									{/if}
 								{/if}
 
 								{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_bitboards_remove' )}
-									<a title="{tr}Delete Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove_bitboard.php?thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage=liberty iname="delete" iexplain="Delete Thread"}</a>
+									<a title="{tr}Delete Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove_bitboard.php?thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread"}</a>
 								{else}
 									{biticon ipackage=liberty iname=spacer iforce=icon}
 								{/if}
@@ -159,7 +159,7 @@
 			</table>
 
 			<div class="navbar">
-				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage=bitboard iname="new_topic" iexplain="New Topic"}</a>
+				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic"}</a>
 			</div>
 
 			{if $gBitUser->hasPermission( 'p_bitboards_remove' )}

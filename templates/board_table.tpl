@@ -24,9 +24,9 @@
 		<tr class="{cycle values="even,odd"}{if $board.unreg > 0} unapproved{/if}">
 			<td style="width:1px;">{* topic tracking icons *}
 				{if $board.track.on && $board.track.mod}
-					{biticon ipackage=bitboard iname="track_new_large" iexplain="New Posts"}
+					{biticon ipackage="icons" iname="media-record" ipath="large" iexplain="New Posts"}
 				{elseif $board.track.on}
-					{biticon ipackage=bitboard iname="track_old_large" iexplain="No New Posts"}
+					{biticon ipackage="icons" iname="media-playback-pause" ipath="large" iexplain="No New Posts"}
 				{/if}
 			</td>
 
