@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.14 2006/09/08 05:06:41 lsces Exp $
-* $Id: BitBoardTopic.php,v 1.14 2006/09/08 05:06:41 lsces Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.15 2006/09/08 06:06:30 lsces Exp $
+* $Id: BitBoardTopic.php,v 1.15 2006/09/08 06:06:30 lsces Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.14 $ $Date: 2006/09/08 05:06:41 $ $Author: lsces $
+* @version $Revision: 1.15 $ $Date: 2006/09/08 06:06:30 $ $Author: lsces $
 * @class BitBoardTopic
 */
 
@@ -85,11 +85,11 @@ SELECT
 	map.`board_content_id` AS board_content_id
 
 	$selectSql
-		FROM `${BIT_DB_PREFIX}liberty_comments` AS lcom
-		INNER JOIN `${BIT_DB_PREFIX}liberty_content` AS lc ON( lc.`content_id` = lcom.`content_id` )
+		FROM `${BIT_DB_PREFIX}liberty_comments` lcom
+		INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
 		INNER JOIN `${BIT_DB_PREFIX}boards_map` map ON (map.`topic_content_id`=lcom.`root_id` )
 		LEFT JOIN `${BIT_DB_PREFIX}boards_topic` th ON (th.`parent_id`=lcom.`comment_id`)
-		LEFT JOIN `${BIT_DB_PREFIX}boards_post` AS post ON(post.`comment_id`=lcom.`comment_id`)
+		LEFT JOIN `${BIT_DB_PREFIX}boards_post` post ON(post.`comment_id`=lcom.`comment_id`)
 		$joinSql
 WHERE
 	lcom.`root_id`=lcom.`parent_id` AND	$lookupColumn=?
@@ -257,7 +257,7 @@ WHERE
 			FROM `${BIT_DB_PREFIX}liberty_comments` AS s_lcom
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
 			LEFT JOIN  `${BIT_DB_PREFIX}boards_post` s ON( s_lcom.`comment_id` = s.`comment_id` )
-WHERE SUBSTRING(s_lcom.`thread_forward_sequence`,1,10) LIKE SUBSTRING(lcom.`thread_forward_sequence`,1,10) AND ((s_lc.`user_id` < 0) AND (s.`approved` = 0 OR s.`approved` IS NULL))
+WHERE SUBSTRING(s_lcom.`thread_forward_sequence`, 1, 10) LIKE SUBSTRING(lcom.`thread_forward_sequence`, 1, 10) AND ((s_lc.`user_id` < 0) AND (s.`approved` = 0 OR s.`approved` IS NULL))
 			) AS unreg";
 		} else {
 			$selectSql .= ", 0 AS unreg";
@@ -290,28 +290,28 @@ WHERE SUBSTRING(s_lcom.`thread_forward_sequence`,1,10) LIKE SUBSTRING(lcom.`thre
 		SELECT COUNT(*)
 		FROM `".BIT_DB_PREFIX."liberty_comments` s_lcom
 		INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
-	    WHERE SUBSTRING(s_lcom.`thread_forward_sequence`,1,10) LIKE SUBSTRING(lcom.`thread_forward_sequence`,1,10)
+	    WHERE SUBSTRING(s_lcom.`thread_forward_sequence`, 1, 10) LIKE SUBSTRING(lcom.`thread_forward_sequence`, 1, 10)
 	) AS post_count
 
 	$selectSql
-		FROM `${BIT_DB_PREFIX}liberty_comments` AS lcom
-		INNER JOIN `${BIT_DB_PREFIX}liberty_content` AS lc ON( lc.`content_id` = lcom.`content_id` )
+		FROM `${BIT_DB_PREFIX}liberty_comments` lcom
+		INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
 		LEFT JOIN `${BIT_DB_PREFIX}boards_topic` th ON (th.`parent_id`=lcom.`comment_id`)
-		LEFT JOIN `${BIT_DB_PREFIX}boards_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
+		LEFT JOIN `${BIT_DB_PREFIX}boards_post` post ON (post.`comment_id` = lcom.`comment_id`)
 		$joinSql
 WHERE
 	lcom.`root_id`=lcom.`parent_id`
 	$whereSql
 ORDER BY
-	th_sticky DESC,
-	th_moved ASC,
+	11 DESC,
+	10 ASC,
 	lc.created DESC
 ";
 		$query_cant  = "SELECT count(*)
-FROM `${BIT_DB_PREFIX}liberty_comments` AS lcom
-INNER JOIN `${BIT_DB_PREFIX}liberty_content` AS lc ON( lc.`content_id` = lcom.`content_id` )
+FROM `${BIT_DB_PREFIX}liberty_comments` lcom
+INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
 LEFT JOIN `${BIT_DB_PREFIX}boards_topic` th ON (th.`parent_id`=lcom.`comment_id`)
-LEFT JOIN `${BIT_DB_PREFIX}boards_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
+LEFT JOIN `${BIT_DB_PREFIX}boards_post` post ON (post.`comment_id` = lcom.`comment_id`)
 $joinSql
 WHERE
 	lcom.`root_id`=lcom.`parent_id`
@@ -350,8 +350,8 @@ WHERE
 		$query="SELECT lc.`last_modified` AS llc_last_modified, lc.`user_id` AS llc_user_id, lc.`content_id` AS llc_content_id,  lcom.`anon_name` AS l_anon_name
 		FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 		INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
-		LEFT JOIN `${BIT_DB_PREFIX}boards_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
-	    WHERE SUBSTRING(lcom.`thread_forward_sequence`,1,10) LIKE '".sprintf("%09d.",$data['th_thread_id'])."%' $whereSql
+		LEFT JOIN `${BIT_DB_PREFIX}boards_post` post ON (post.`comment_id` = lcom.`comment_id`)
+	    WHERE SUBSTRING(lcom.`thread_forward_sequence`, 1, 10) LIKE '".sprintf("%09d.",$data['th_thread_id'])."%' $whereSql
 	    ORDER BY lc.`last_modified` DESC
 	    ";
 		$result = $this->mDb->getRow( $query);
@@ -534,7 +534,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 			$data = array(
 			'user_id' =>$gBitUser->mUserId,
 			'topic_id' =>$topic_id,
-			'date'=>time(),
+			'track_date'=>time(),
 			);
 
 			if ($c == 0) {
@@ -605,7 +605,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 		global $gBitUser, $gBitSystem;
 		if($gBitUser->isRegistered() && ($gBitSystem->isFeatureActive('bitboards_thread_track') || $gBitSystem->isFeatureActive('bitboards_thread_notify'))) {
 			$selectSql .= ", trk.`track_date`,  trk.`notify` AS track_notify, trk.`notify_date` AS track_notify_date ";
-			$joinSql .= " LEFT JOIN `".BIT_DB_PREFIX."boards_tracking` AS trk ON (trk.`topic_id`=lcom.`thread_forward_sequence` AND ( trk.`user_id` = ".$gBitUser->mUserId." OR trk.`user_id` IS NULL ) ) ";
+			$joinSql .= " LEFT JOIN `".BIT_DB_PREFIX."boards_tracking` trk ON (trk.`topic_id`=lcom.`thread_forward_sequence` AND ( trk.`user_id` = ".$gBitUser->mUserId." OR trk.`user_id` IS NULL ) ) ";
 		}
 	}
 

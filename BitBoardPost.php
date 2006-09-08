@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.7 2006/07/29 17:14:26 spiderr Exp $
-* $Id: BitBoardPost.php,v 1.7 2006/07/29 17:14:26 spiderr Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.8 2006/09/08 06:06:30 lsces Exp $
+* $Id: BitBoardPost.php,v 1.8 2006/09/08 06:06:30 lsces Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.7 $ $Date: 2006/07/29 17:14:26 $ $Author: spiderr $
+* @version $Revision: 1.8 $ $Date: 2006/09/08 06:06:30 $ $Author: lsces $
 * @class BitMBPost
 */
 
@@ -105,7 +105,7 @@ class BitBoardPost extends LibertyComment {
 						 $joinSql $join1
 						LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` ta_ava ON ( uu.`avatar_attachment_id`=ta_ava.`attachment_id` )
 						LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` )
-						LEFT JOIN `".BIT_DB_PREFIX."boards_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
+						LEFT JOIN `".BIT_DB_PREFIX."boards_post` post ON (post.`comment_id` = lcom.`comment_id`)
 				    WHERE $mid2 $whereSql $mid";
 
 			$flat_comments = array();
@@ -152,7 +152,7 @@ class BitBoardPost extends LibertyComment {
 					FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 						INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
 						INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (lc.`user_id` = uu.`user_id`) $joinSql
-						LEFT JOIN `".BIT_DB_PREFIX."boards_post` AS post ON (post.`comment_id` = lcom.`comment_id`)
+						LEFT JOIN `".BIT_DB_PREFIX."boards_post` post ON (post.`comment_id` = lcom.`comment_id`)
 					WHERE lcom.`thread_forward_sequence` LIKE '".sprintf("%09d.",$contentId)."%' $whereSql
 			";
 			$ret = $this->mDb->getOne( $sql, $bindVars );
