@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.13 2006/09/03 20:05:19 squareing Exp $
-* $Id: BitBoardTopic.php,v 1.13 2006/09/03 20:05:19 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.14 2006/09/08 05:06:41 lsces Exp $
+* $Id: BitBoardTopic.php,v 1.14 2006/09/08 05:06:41 lsces Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.13 $ $Date: 2006/09/03 20:05:19 $ $Author: squareing $
+* @version $Revision: 1.14 $ $Date: 2006/09/08 05:06:41 $ $Author: lsces $
 * @class BitBoardTopic
 */
 
@@ -241,8 +241,8 @@ WHERE
 		}
 
 		if(!empty($pParamHash['b'])) {
-			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}boards_map` AS map ON (map.`topic_content_id` = lcom.`root_id`)";
-			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}boards` AS b ON (b.`content_id` = map.`board_content_id`)";
+			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}boards_map` map ON (map.`topic_content_id` = lcom.`root_id`)";
+			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}boards` b ON (b.`content_id` = map.`board_content_id`)";
 			$whereSql .= " AND b.`board_id` = ". $pParamHash['b'] ;
 		}
 
@@ -420,7 +420,7 @@ WHERE
 			uu.email,
 			uu.login,
 			uu.real_name,
-			trk.`date` AS track_date,
+			trk.`track_date`,
 			trk.`notify` AS track_notify,
 			trk.`notify_date` AS track_notify_date
 			FROM `".BIT_DB_PREFIX."boards_tracking` trk
@@ -604,7 +604,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 	function loadTrack(&$selectSql,&$joinSql) {
 		global $gBitUser, $gBitSystem;
 		if($gBitUser->isRegistered() && ($gBitSystem->isFeatureActive('bitboards_thread_track') || $gBitSystem->isFeatureActive('bitboards_thread_notify'))) {
-			$selectSql .= ", trk.`date` AS track_date,  trk.`notify` AS track_notify, trk.`notify_date` AS track_notify_date ";
+			$selectSql .= ", trk.`track_date`,  trk.`notify` AS track_notify, trk.`notify_date` AS track_notify_date ";
 			$joinSql .= " LEFT JOIN `".BIT_DB_PREFIX."boards_tracking` AS trk ON (trk.`topic_id`=lcom.`thread_forward_sequence` AND ( trk.`user_id` = ".$gBitUser->mUserId." OR trk.`user_id` IS NULL ) ) ";
 		}
 	}

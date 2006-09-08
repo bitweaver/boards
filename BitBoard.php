@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.12 2006/09/01 13:59:25 squareing Exp $
-* $Id: BitBoard.php,v 1.12 2006/09/01 13:59:25 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.13 2006/09/08 05:06:41 lsces Exp $
+* $Id: BitBoard.php,v 1.13 2006/09/08 05:06:41 lsces Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.12 $ $Date: 2006/09/01 13:59:25 $ $Author: squareing $
+* @version $Revision: 1.13 $ $Date: 2006/09/08 05:06:41 $ $Author: lsces $
 * @class BitBoard
 */
 
@@ -400,7 +400,7 @@ class BitBoard extends LibertyAttachable {
 		if ($track) {
 			$selectSql .= ", (
 					SELECT COUNT(trk.`topic_id`)
-					FROM `".BIT_DB_PREFIX."boards_map` AS map
+					FROM `".BIT_DB_PREFIX."boards_map` map
 					INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
 					INNER JOIN `".BIT_DB_PREFIX."boards_tracking` trk ON (trk.`topic_id` = lcom.`thread_forward_sequence`)
 					WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=lc.`content_id` AND trk.`user_id`=".$gBitUser->mUserId."
@@ -413,7 +413,7 @@ class BitBoard extends LibertyAttachable {
 		}
 		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && ($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
 			$selectSql .= ", ( SELECT COUNT(*)
-			FROM `".BIT_DB_PREFIX."boards_map` AS map
+			FROM `".BIT_DB_PREFIX."boards_map` map
 			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` s_lcom ON (map.`topic_content_id` = s_lcom.`root_id`)
 			LEFT JOIN `".BIT_DB_PREFIX."boards_thread` th ON (th.`parent_id`=s_lcom.`comment_id`)
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
@@ -426,10 +426,10 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 
 		$query = "SELECT ts.*, lc.`content_id`, lc.`title`, lc.`data`, lc.`format_guid`,
 			( SELECT count(*)
-				FROM `".BIT_DB_PREFIX."boards_map` AS map
+				FROM `".BIT_DB_PREFIX."boards_map` map
 				INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
-				INNER JOIN `".BIT_DB_PREFIX."liberty_content` AS slc ON( slc.`content_id` = lcom.`content_id` )
-				LEFT JOIN `".BIT_DB_PREFIX."boards_post` AS fp ON (fp.`comment_id` = lcom.`comment_id`)
+				INNER JOIN `".BIT_DB_PREFIX."liberty_content` slc ON( slc.`content_id` = lcom.`content_id` )
+				LEFT JOIN `".BIT_DB_PREFIX."boards_post` fp ON (fp.`comment_id` = lcom.`comment_id`)
 				WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=lc.`content_id` AND ((fp.`approved` = 1) OR (slc.`user_id` >= 0))
 				) AS post_count
 			 $selectSql
@@ -473,12 +473,12 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 		$BIT_DB_PREFIX = BIT_DB_PREFIX;
 		$query="SELECT
 		slc.`last_modified`, slc.`user_id`, lcom.`anon_name` AS l_anon_name, f_lc.`title`, SUBSTRING(f_lcom.`thread_forward_sequence`,1,9) AS thread_id
-			FROM `".BIT_DB_PREFIX."boards_map` AS map
+			FROM `".BIT_DB_PREFIX."boards_map` map
 			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
-			INNER JOIN `".BIT_DB_PREFIX."liberty_content` AS slc ON( slc.`content_id` = lcom.`content_id` )
-			LEFT JOIN `".BIT_DB_PREFIX."boards_post` AS fp ON (fp.`comment_id` = lcom.`comment_id`)
+			INNER JOIN `".BIT_DB_PREFIX."liberty_content` slc ON( slc.`content_id` = lcom.`content_id` )
+			LEFT JOIN `".BIT_DB_PREFIX."boards_post` fp ON (fp.`comment_id` = lcom.`comment_id`)
 			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` f_lcom ON (SUBSTRING(lcom.`thread_forward_sequence`,1,10) = SUBSTRING(f_lcom.`thread_forward_sequence`,1,10) AND f_lcom.`root_id`=f_lcom.`parent_id`)
-			INNER JOIN `".BIT_DB_PREFIX."liberty_content` AS f_lc ON( f_lc.`content_id` = f_lcom.`content_id` )
+			INNER JOIN `".BIT_DB_PREFIX."liberty_content` f_lc ON( f_lc.`content_id` = f_lcom.`content_id` )
 			WHERE lcom.`root_id`=lcom.`parent_id` AND ".$data['content_id']."=map.`board_content_id` AND ((fp.`approved` = 1) OR (slc.`user_id` >= 0))
 	    ORDER BY slc.`last_modified` DESC
 	    ";
@@ -511,7 +511,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 		$query = "SELECT lc.`content_id` as hash_key, lc.`title` || ' ( ' || count(lcom.`comment_id`) || ' )' AS `title`
 			FROM `".BIT_DB_PREFIX."boards` b
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = b.`content_id` )
-				LEFT JOIN `".BIT_DB_PREFIX."boards_map` AS bm ON( bm.`board_content_id`=b.`content_id` )
+				LEFT JOIN `".BIT_DB_PREFIX."boards_map` bm ON( bm.`board_content_id`=b.`content_id` )
 				LEFT JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (bm.`topic_content_id` = lcom.`root_id`)
 			GROUP BY lc.`content_id`, lc.`title`
 			ORDER BY  lc.`title` ASC";

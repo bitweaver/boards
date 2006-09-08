@@ -4,7 +4,7 @@ $tables = array(
 		comment_id I4 PRIMARY,
 		approved I1 NOTNULL DEFAULT(0),
 		warned I1 NOTNULL DEFAULT(0),
-		warned_message TEXT NULL
+		warned_message X
 	",
 	'boards_topic' => "
 		parent_id I4 PRIMARY,
@@ -25,7 +25,7 @@ $tables = array(
 	'boards_tracking' => "
 		user_id I4 NOTNULL,
 		topic_id C(10),
-		date I4 NOTNULL DEFAULT(0),
+		track_date I4 NOTNULL DEFAULT(0),
 		notify I1 NOTNULL DEFAULT(0),
 		notify_date I4 NOTNULL DEFAULT(0)
 	"
