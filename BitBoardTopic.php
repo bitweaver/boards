@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.15 2006/09/08 06:06:30 lsces Exp $
-* $Id: BitBoardTopic.php,v 1.15 2006/09/08 06:06:30 lsces Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.16 2006/09/12 07:17:57 lsces Exp $
+* $Id: BitBoardTopic.php,v 1.16 2006/09/12 07:17:57 lsces Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.15 $ $Date: 2006/09/08 06:06:30 $ $Author: lsces $
+* @version $Revision: 1.16 $ $Date: 2006/09/12 07:17:57 $ $Author: lsces $
 * @class BitBoardTopic
 */
 
@@ -248,6 +248,11 @@ WHERE
 
 		BitBoardTopic::loadTrack($selectSql,$joinSql);
 
+		if ( $this->mDb->mType == 'firebird' ) {
+			$substrSql = "SUBSTRING(s_lcom.`thread_forward_sequence` FROM 1 FOR 10) LIKE SUBSTRING(lcom.`thread_forward_sequence` FROM 1 FOR 10)";
+		} else {
+			$substrSql = "SUBSTRING(s_lcom.`thread_forward_sequence`, 1, 10) LIKE SUBSTRING(lcom.`thread_forward_sequence`, 1, 10)";
+		}
 
 		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
 			$whereSql .= " AND ((post.`approved` = 1) OR (lc.`user_id` >= 0))";
@@ -257,7 +262,7 @@ WHERE
 			FROM `${BIT_DB_PREFIX}liberty_comments` AS s_lcom
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
 			LEFT JOIN  `${BIT_DB_PREFIX}boards_post` s ON( s_lcom.`comment_id` = s.`comment_id` )
-WHERE SUBSTRING(s_lcom.`thread_forward_sequence`, 1, 10) LIKE SUBSTRING(lcom.`thread_forward_sequence`, 1, 10) AND ((s_lc.`user_id` < 0) AND (s.`approved` = 0 OR s.`approved` IS NULL))
+			WHERE (".$substrSql.") AND ((s_lc.`user_id` < 0) AND (s.`approved` = 0 OR s.`approved` IS NULL))
 			) AS unreg";
 		} else {
 			$selectSql .= ", 0 AS unreg";
@@ -290,7 +295,7 @@ WHERE SUBSTRING(s_lcom.`thread_forward_sequence`, 1, 10) LIKE SUBSTRING(lcom.`th
 		SELECT COUNT(*)
 		FROM `".BIT_DB_PREFIX."liberty_comments` s_lcom
 		INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
-	    WHERE SUBSTRING(s_lcom.`thread_forward_sequence`, 1, 10) LIKE SUBSTRING(lcom.`thread_forward_sequence`, 1, 10)
+	    WHERE (".$substrSql.")
 	) AS post_count
 
 	$selectSql
@@ -342,6 +347,11 @@ WHERE
 
 	function getLastPost($data) {
 		global $gBitSystem;
+		if ( $this->mDb->mType == 'firebird' ) {
+			$substrSql = "SUBSTRING(lcom.`thread_forward_sequence` FROM 1 FOR 10)";
+		} else {
+			$substrSql = "SUBSTRING(lcom.`thread_forward_sequence`, 1, 10)";
+		}
 		$whereSql = '';
 		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation')) {
 			$whereSql = " AND ((post.`approved` = 1) OR (lc.`user_id` >= 0))";
@@ -351,7 +361,7 @@ WHERE
 		FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 		INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
 		LEFT JOIN `${BIT_DB_PREFIX}boards_post` post ON (post.`comment_id` = lcom.`comment_id`)
-	    WHERE SUBSTRING(lcom.`thread_forward_sequence`, 1, 10) LIKE '".sprintf("%09d.",$data['th_thread_id'])."%' $whereSql
+	    WHERE (".$substrSql.") LIKE '".sprintf("%09d.",$data['th_thread_id'])."%' $whereSql
 	    ORDER BY lc.`last_modified` DESC
 	    ";
 		$result = $this->mDb->getRow( $query);

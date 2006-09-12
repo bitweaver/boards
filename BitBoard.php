@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.14 2006/09/08 06:06:30 lsces Exp $
-* $Id: BitBoard.php,v 1.14 2006/09/08 06:06:30 lsces Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.15 2006/09/12 07:17:57 lsces Exp $
+* $Id: BitBoard.php,v 1.15 2006/09/12 07:17:57 lsces Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.14 $ $Date: 2006/09/08 06:06:30 $ $Author: lsces $
+* @version $Revision: 1.15 $ $Date: 2006/09/12 07:17:57 $ $Author: lsces $
 * @class BitBoard
 */
 
@@ -471,13 +471,20 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 	function getLastTopic($data) {
 		global $gBitSystem;
 		$BIT_DB_PREFIX = BIT_DB_PREFIX;
+		if ( $this->mDb->mType == 'firebird' ) {
+			$substrSql1 = "SUBSTRING(f_lcom.`thread_forward_sequence` FROM 1 FOR 9)";
+			$substrSql2 = "SUBSTRING(lcom.`thread_forward_sequence` FROM 1 FOR 10) = SUBSTRING(f_lcom.`thread_forward_sequence` FROM 1 FOR 10";
+		} else {
+			$substrSql1 = "SUBSTRING(f_lcom.`thread_forward_sequence`, 1, 9)";
+			$substrSql2 = "SUBSTRING(lcom.`thread_forward_sequence`, 1, 10) = SUBSTRING(f_lcom.`thread_forward_sequence`, 1, 10";
+		}
 		$query="SELECT
-		slc.`last_modified`, slc.`user_id`, lcom.`anon_name` AS l_anon_name, f_lc.`title`, SUBSTRING(f_lcom.`thread_forward_sequence`, 1, 9) AS thread_id
+		slc.`last_modified`, slc.`user_id`, lcom.`anon_name` AS l_anon_name, f_lc.`title`, (".$substrSql1.") AS thread_id
 			FROM `".BIT_DB_PREFIX."boards_map` map
 			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` slc ON( slc.`content_id` = lcom.`content_id` )
 			LEFT JOIN `".BIT_DB_PREFIX."boards_post` fp ON (fp.`comment_id` = lcom.`comment_id`)
-			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` f_lcom ON (SUBSTRING(lcom.`thread_forward_sequence`, 1, 10) = SUBSTRING(f_lcom.`thread_forward_sequence`, 1, 10) AND f_lcom.`root_id`=f_lcom.`parent_id`)
+			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` f_lcom ON (".$substrSql2.") AND f_lcom.`root_id`=f_lcom.`parent_id`)
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` f_lc ON( f_lc.`content_id` = f_lcom.`content_id` )
 			WHERE lcom.`root_id`=lcom.`parent_id` AND ".$data['content_id']."=map.`board_content_id` AND ((fp.`approved` = 1) OR (slc.`user_id` >= 0))
 	    ORDER BY slc.`last_modified` DESC
