@@ -9,7 +9,12 @@ $registerHash = array(
 $gBitSystem->registerPackage( $registerHash );
 
 if( $gBitSystem->isPackageActive( 'bitboards' ) ) {
-	$gBitSystem->registerAppMenu( BITBOARDS_PKG_NAME, ucfirst( BITBOARDS_PKG_DIR ), BITBOARDS_PKG_URL.'index.php', 'bitpackage:bitboards/menu_bitboards.tpl', BITBOARDS_PKG_NAME );
+	$menuHash = array(
+		'package_name'  => BITBOARDS_PKG_NAME,
+		'index_url'     => BITBOARDS_PKG_URL.'index.php',
+		'menu_template' => 'bitpackage:bitboards/menu_bitboards.tpl',
+	);
+	$gBitSystem->registerAppMenu( $menuHash );
 
 	require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 	require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );
