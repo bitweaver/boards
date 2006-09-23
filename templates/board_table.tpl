@@ -4,9 +4,9 @@
 		<tr>
 			<th style="width:1%;">{*if $boardsList.0.track.on}Status{/if*}</th>
 			<th style="width:35%;">{tr}Board{/tr}</th>
-			<th style="width:40%;">{tr}Post{/tr}</th>
 			<th style="width:5%;">{tr}Topics{/tr}</th>
-			<th style="width:18%;">{tr}Last Post{/tr}</th>
+			<th style="width:40%;">{tr}Last Post{/tr}</th>
+			<th style="width:18%;">&nbsp;</th>
 			{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
 				<th style="width:1%;"><abbr title="{tr}Number of posts by Anonymous users{/tr}">Anon</abbr></th>
 			{/if}
@@ -24,9 +24,7 @@
 		<tr class="{cycle values="even,odd"}{if $board.unreg > 0} unapproved{/if}">
 			<td style="width:1px;">{* topic tracking icons *}
 				{if $board.track.on && $board.track.mod}
-					{biticon ipackage="icons" iname="media-record" ipath="large" iexplain="New Posts"}
-				{elseif $board.track.on}
-					{biticon ipackage="icons" iname="media-playback-pause" ipath="large" iexplain="No New Posts"}
+					{biticon ipackage="icons" iname="folder-new" ipath="large" iexplain="New Posts" iforce="icon"}
 				{/if}
 			</td>
 
@@ -35,6 +33,8 @@
 				{$board.parsed_data}
 			</td>
 
+			<td style="text-align:center;">{if $board.post_count > 0}{$board.post_count}{/if}</td>
+
 			{if !empty($board.last)}
 				<td>
 					<a href="{$board.last.url}">{$board.last.title|default:"Post..."}</a>
@@ -42,8 +42,6 @@
 			{else}
 				<td> </td>
 			{/if}
-
-			<td style="text-align:center;">{if $board.post_count > 0}{$board.post_count}{/if}</td>
 
 			{if !empty($board.last)}
 				<td style="text-align:center;">

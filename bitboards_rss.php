@@ -24,12 +24,12 @@ $board = new BitBoard($_REQUEST['b']);
 $board->load();
 $board->parseData();
 
-$rss->title = $board->mInfo['title']." Feed";
+$rss->title = $board->getField( 'title' )." Feed";
 if ($gBitUser->isRegistered()) {
 	$rss->title = $rss->title. " (".$gBitUser->getDisplayName().")";
 }
 
-$rss->description = $board->mInfo['parsed_data'];
+$rss->description = $board->getField( 'parsed_data' );
 $rss->link =  'http://'.$_SERVER['HTTP_HOST'].$board->getDisplayUrl();
 
 // check if we want to use the cache file

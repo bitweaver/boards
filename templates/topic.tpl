@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.17 2006/09/03 20:05:20 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.18 2006/09/23 03:41:58 spiderr Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
@@ -122,14 +122,14 @@
 												return false;
 											');
 											return false;" title="{tr}Move Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}"
-										>{biticon ipackage=icons iname="go-jump" iexplain="Move Thread"}</a>
+										>{biticon ipackage=icons iname="go-jump" iexplain="Move Thread" iforce="icon"}</a>
 									{/if}
 								{/if}
 
 								{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_bitboards_remove' )}
-									<a title="{tr}Delete Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove_bitboard.php?thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread"}</a>
+									<a title="{tr}Delete Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove_bitboard.php?thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread" iforce="icon"}</a>
 								{else}
-									{biticon ipackage=liberty iname=spacer iforce=icon}
+									{biticon ipackage=liberty iname=spacer iforce="icon"}
 								{/if}
 
 								{if $thread.th_moved==0}
@@ -159,7 +159,7 @@
 			</table>
 
 			<div class="navbar">
-				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic"}</a>
+				<a class="button" title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic" iforce="icon"} {tr}New Topic{/tr}</a>
 			</div>
 
 			{if $gBitUser->hasPermission( 'p_bitboards_remove' )}

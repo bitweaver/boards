@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.16 2006/09/12 07:17:57 lsces Exp $
-* $Id: BitBoardTopic.php,v 1.16 2006/09/12 07:17:57 lsces Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.17 2006/09/23 03:41:58 spiderr Exp $
+* $Id: BitBoardTopic.php,v 1.17 2006/09/23 03:41:58 spiderr Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.16 $ $Date: 2006/09/12 07:17:57 $ $Author: lsces $
+* @version $Revision: 1.17 $ $Date: 2006/09/23 03:41:58 $ $Author: spiderr $
 * @class BitBoardTopic
 */
 
@@ -493,9 +493,9 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 			$flip['new']['req']=4;
 			$flip['new']['id']=$arr['th_thread_id'];
 			$flip['new']['idname']='t';
-			$flip['new']['up']='media-record';
+			$flip['new']['up']='folder-new';
 			$flip['new']['upname']='New Posts';
-			$flip['new']['down']='media-playback-stop';
+			$flip['new']['down']='folder';
 			$flip['new']['downname']='No new posts';
 			$flip['new']['perm']='p_bitboards_read';
 		}
@@ -517,7 +517,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 		$flip['locked']['idname']='t';
 		$flip['locked']['up']='emblem-readonly';
 		$flip['locked']['upname']='Thread Locked';
-		$flip['locked']['down']='media-playback-start';
+		$flip['locked']['down']='internet-group-chat';
 		$flip['locked']['downname']='Thread Unlocked';
 		$flip['locked']['perm']='p_bitboards_edit';
 
@@ -527,7 +527,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 		$flip['sticky']['idname']='t';
 		$flip['sticky']['up']='emblem-important';
 		$flip['sticky']['upname']='Sticky Thread';
-		$flip['sticky']['down']='media-eject';
+		$flip['sticky']['down']='media-playback-stop';
 		$flip['sticky']['downname']='Non Sticky Thread';
 		$flip['sticky']['perm']='p_bitboards_edit';
 

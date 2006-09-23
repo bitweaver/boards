@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.6 2006/07/29 17:14:26 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.7 2006/09/23 03:41:58 spiderr Exp $
 // Copyright (c) 2004 bitweaver Messageboards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -71,9 +71,9 @@ if($gBitSystem->isPackageActive('pigeonholes')) {
 
 $rest =array();
 if($gBitSystem->isPackageActive('pigeonholes')) {
-	$rest['data']['title']="Uncategoried Boards";
+//	$rest['data']['title']="Uncategoried Boards";
 } else {
-	$rest['data']['title']="Board List";
+//	$rest['data']['title']="Board List";
 }
 $rest['children']=array();
 $blHash = array('nboards'=>$board_all_cids,'paginationOff'=>'y');

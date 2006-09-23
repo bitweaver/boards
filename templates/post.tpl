@@ -1,36 +1,33 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.14 2006/09/03 20:05:20 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/post.tpl,v 1.15 2006/09/23 03:41:58 spiderr Exp $ *}
 {strip}
+	<div class="navbar">
 <div class="floaticon">
 	{assign var=flip value=$thread->getFlipFlop()}
 	{foreach from=$flip item=flip_s key=flip_name}
 		{include file="bitpackage:bitboards/flipswitch.tpl"}
 	{/foreach}
-	{if !$topic_locked}<a title="{tr}Post Reply{/tr}" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments"> {biticon ipackage="icons" iname="mail-reply-sender" iexplain="Post Reply"}</a>{/if}
 </div>
-
-<div class="listing bitboard">
-	<div class="header">
-		<h1>{$thread->mInfo.title|escape}</h1>
-		Back to <a href="{$board->mInfo.display_url}">{$board->mInfo.title|escape}</a>
+		&laquo;{tr}Back to{/tr} <a href="{$board->mInfo.display_url}">{$board->mInfo.title|escape}</a>
 	</div>
 
-	<div class="body">
-		{if !$topic_locked}
-			<div class="navbar">
-				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{tr}Post Reply{/tr} {biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic"}</a>
-			</div>
-		{/if}
+<div class="listing bitboard">
 
+	<div class="header">
+		<h1>{$thread->mInfo.title|escape}</h1>
+	</div>
+	
+	<div class="body">
 		{* not happy with this yet - xing *}
+		<div class="floaticon">
 		{form action="$comments_return_url" class="mb-threading"}
 			<input type="hidden" name="t" value="{$smarty.request.t}" />
 			<input type="hidden" name="comment_page" value="{$smarty.request.comment_page}" />
 			<label>
-				{tr}Threaded{/tr}: <input type="checkbox" name="comments_style" id="comments-style" value="threaded" {if $comments_style eq "threaded"}checked="checked"{/if} onchange="this.parentNode.submit()"/>
+				{tr}Threaded{/tr}: <input type="checkbox" name="comments_style" id="comments-style" value="threaded" {if $comments_style eq "threaded"}checked="checked"{/if} onchange="this.form.submit()"/>
 			</label>
 			&nbsp; &nbsp;
 			<label>
-				{tr}Messages{/tr}: <select name="comments_maxComments" id="comments-maxcomm" onchange="this.parentNode.submit()">
+				{tr}Messages{/tr}: <select name="comments_maxComments" id="comments-maxcomm" onchange="this.form.submit()">
 					<option value="5" {if $maxComments eq 5}selected="selected"{/if}>5</option>
 					<option value="10" {if $maxComments eq 10}selected="selected"{/if}>10</option>
 					<option value="20" {if $maxComments eq 20}selected="selected"{/if}>20</option>
@@ -43,6 +40,11 @@
 				document.getElementById('set_btn').parentNode.removeChild(document.getElementById('set_btn'));
 			/*]]>*/</script>
 		{/form}
+		</div>
+
+		{if !$topic_locked}
+				<a title="{tr}Post Reply{/tr}" class="button" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
+		{/if}
 
 		{formfeedback hash=$formfeedback}
 
@@ -68,7 +70,7 @@
 
 		{if !$topic_locked}
 			<div class="navbar">
-				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{tr}Post Reply{/tr} {biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic"}</a>
+				<a title="{tr}Post Reply{/tr}" class="button" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
 			</div>
 		{/if}
 
