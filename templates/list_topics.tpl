@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/Attic/topic.tpl,v 1.18 2006/09/23 03:41:58 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.1 2006/09/23 03:47:27 spiderr Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">

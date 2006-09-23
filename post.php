@@ -89,7 +89,7 @@ if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
 // WYSIWYG and Quicktag variable
 $gBitSmarty->assign( 'textarea_id', 'editbitboards' );
 
-$gBitSystem->display('bitpackage:bitboards/post.tpl', "Show Thread" );
+$gBitSystem->display('bitpackage:bitboards/list_posts.tpl', "Show Thread" );
 
 
 ?>
