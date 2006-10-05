@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.1 2006/09/23 03:47:27 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.2 2006/10/05 14:18:52 spiderr Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
@@ -39,7 +39,7 @@
 						<th style="width:40%;">{tr}Title{/tr}</th>
 						<th style="width:5%;">{tr}Replies{/tr}</th>
 						<th style="width:20%;">{tr}Started{/tr}</th>
-						<th style="width:20%;">{tr}Last Post{/tr}</th>
+						<th style="width:20%;">{tr}Last Reply{/tr}</th>
 						{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
 							<th style="width:1%;"><abbr title="{tr}Number of posts by Anonymous users{/tr}">Anon</abbr></th>
 						{/if}
@@ -93,10 +93,10 @@
 							<td class="actionicon">
 								{if $thread.flc_user_id<0 && $thread.first_approved==0}
 									<a title="{tr}Approve First Post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic.php?b={$board->mInfo.board_id}&amp;action=1&amp;comment_id={$thread.th_thread_id}">
-										{biticon ipackage="icons" iname="list-add" iexplain="Approve First Post"}
+										{biticon ipackage="icons" iname="list-add" iexplain="Approve First Post" iforce="icon"}
 									</a>
 									<a title="{tr}Reject First Post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic.php?b={$board->mInfo.board_id}&amp;action=2&amp;comment_id={$thread.th_thread_id}">
-										{biticon ipackage="icons" iname="list-remove" iexplain="Reject First Post"}
+										{biticon ipackage="icons" iname="list-remove" iexplain="Reject First Post" iforce="icon"}
 									</a>
 								{/if}
 
@@ -127,7 +127,7 @@
 								{/if}
 
 								{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_bitboards_remove' )}
-									<a title="{tr}Delete Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove_bitboard.php?thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread" iforce="icon"}</a>
+									<a title="{tr}Delete Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic.php?remove=1&amp;thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread" iforce="icon"}</a>
 								{else}
 									{biticon ipackage=liberty iname=spacer iforce="icon"}
 								{/if}
