@@ -15,6 +15,7 @@ $tables = array(
 	'boards' => "
 		board_id I4 PRIMARY,
 		content_id I4 NOTNULL
+		CONSTRAINT ', CONSTRAINT `bitboards_content_ref` FOREIGN KEY (`content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
 	",
 	'boards_map' => "
 		board_content_id I4 NOTNULL,
