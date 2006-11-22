@@ -59,11 +59,11 @@ $gBitInstaller->registerSchemaSequences( BITBOARDS_PKG_NAME, $sequences );
 
 // ### Default UserPermissions
 $gBitInstaller->registerUserPermissions( BITBOARDS_PKG_NAME, array(
-	array( 'p_bitboards_admin', 'Can admin message boards', 'admin', BITBOARDS_PKG_NAME ),
-	array( 'p_bitboards_create', 'Can create a message board', 'admin', BITBOARDS_PKG_NAME ),
-	array( 'p_bitboards_edit', 'Can edit any message board', 'admin', BITBOARDS_PKG_NAME ),
-	array( 'p_bitboards_read', 'Can read message boards', 'basic',  BITBOARDS_PKG_NAME ),
-	array( 'p_bitboards_remove', 'Can delete message boards', 'admin',  BITBOARDS_PKG_NAME ),
+	array( 'p_bitboards_admin' , 'Can admin message boards'  , 'admin'  , BITBOARDS_PKG_NAME ),
+	array( 'p_bitboards_create', 'Can create a message board', 'editors', BITBOARDS_PKG_NAME ),
+	array( 'p_bitboards_edit'  , 'Can edit any message board', 'editors', BITBOARDS_PKG_NAME ),
+	array( 'p_bitboards_read'  , 'Can read message boards'   , 'basic'  , BITBOARDS_PKG_NAME ),
+	array( 'p_bitboards_remove', 'Can delete message boards' , 'editors', BITBOARDS_PKG_NAME ),
 ) );
 
 // ### Default Preferences
