@@ -1,8 +1,8 @@
 {strip}
 {assign var='gContent' value=$comment}
 
-<div class="body" id="{$comment.comment_id|escape}" {if $comments_style eq 'threaded'}style="padding-left:{math equation="level * marginIncrement +3 " level=$comment.level marginIncrement=20}px"{/if}>
-	<div class="content">
+<div class="body" id="{$comment.comment_id|escape}">
+	<div class="content" {if $comments_style eq 'threaded'}style="padding-left:{math equation="level * marginIncrement +3 " level=$comment.level marginIncrement=20}px"{/if}>
 		{if !$post_is_preview}
 			<div class="floaticon">
 				{if $print_page ne 'y' && $comment.deleted==0 }
