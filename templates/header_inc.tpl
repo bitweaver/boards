@@ -33,7 +33,7 @@
 	/* ]]> */</script>
 
 	{if $gBitSystem->isPackageActive( 'rss' ) && !empty($board)}
-		<link rel="alternate" type="application/rss+xml" title="Board {$board->mInfo.title} RSS" href="{$smarty.const.BITBOARDS_PKG_URL}bitboards_rss.php?version=rss20&b={$smarty.request.b}" />
-		<link rel="alternate" type="application/rss+xml" title="Board {$board->mInfo.title} ATOM" href="{$smarty.const.BITBOARDS_PKG_URL}bitboards_rss.php?version=atom&b={$smarty.request.b}" />
+		<link rel="alternate" type="application/rss+xml" title="Board {$board->mInfo.title} RSS" href="{$smarty.const.BITBOARDS_PKG_URL}bitboards_rss.php?version=rss20&amp;b={$smarty.request.b}" />
+		<link rel="alternate" type="application/rss+xml" title="Board {$board->mInfo.title} ATOM" href="{$smarty.const.BITBOARDS_PKG_URL}bitboards_rss.php?version=atom&amp;b={$smarty.request.b}" />
 	{/if}
 {/if}

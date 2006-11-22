@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.2 2006/10/05 14:18:52 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.3 2006/11/22 12:33:57 squareing Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
@@ -105,7 +105,7 @@
 										{*smartlink ititle="Edit" ifile="edit.php" ibiticon="liberty/edit" board_id=$thread.board_id*}
 										<a onclick="
 											document.getElementById('move_block_{$thread.th_thread_id|escape:"url"}').style['display']='inline';
-											var url = '{$smarty.const.BITBOARDS_PKG_URL}ajax.php?req=1&seq=' + new Date().getTime();
+											var url = '{$smarty.const.BITBOARDS_PKG_URL}ajax.php?req=1&amp;seq=' + new Date().getTime();
 											var element = 'move_{$thread.th_thread_id|escape:"url"}';
 											var params = null;
 											{literal}
@@ -136,8 +136,9 @@
 									{if $gBitUser->hasPermission( 'p_bitboards_edit' )}
 										<br />
 										<div style="display:none;" id="move_block_{$thread.th_thread_id|escape:"url"}">
-											Move to: <select onchange="window.location=('{$smarty.const.BITBOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}&target='+
+											Move&nbsp;to:&nbsp;<select onchange="window.location=('{$smarty.const.BITBOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}&amp;target='+
 												document.getElementById('move_{$thread.th_thread_id|escape:"url"}').value);" id="move_{$thread.th_thread_id|escape:"url"}">
+												<option></option>
 											</select>
 										</div>
 									{/if}

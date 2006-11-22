@@ -15,16 +15,16 @@ if (!empty($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
 		case 1:
 			// Aprove
-			$comment->mod_approve();
+			$comment->modApprove();
 			break;
 		case 2:
 			// Reject
-			$comment->mod_reject();
+			$comment->modReject();
 			break;
 		case 3:
 			//Moderate
 			$comment->loadMetaData();
-			$comment->mod_warn($_REQUEST['warning_message']);
+			$comment->modWarn($_REQUEST['warning_message']);
 		default:
 			break;
 	}

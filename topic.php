@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.8 2006/09/23 03:47:27 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.9 2006/11/22 12:33:57 squareing Exp $
 // Copyright (c) 2004 bitweaver Messageboards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -60,11 +60,11 @@ if (isset($_REQUEST["new"])) {
 	switch ($_REQUEST['action']) {
 		case 1:
 			// Aprove
-			$comment->mod_approve();
+			$comment->modApprove();
 			break;
 		case 2:
 			// Reject
-			$comment->mod_reject();
+			$comment->modReject();
 			break;
 		default:
 			break;

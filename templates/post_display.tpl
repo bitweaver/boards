@@ -81,7 +81,7 @@
 				{assign var=comment_id value=$comment.comment_id}
 				<a onclick="
 					var e = document.getElementById('warned_message_{$comment.comment_id|escape:"url"}');
-					var url = '{$smarty.const.BITBOARDS_PKG_URL}ajax.php?req=10&comment_id={$comment_id}&seq=' + new Date().getTime();
+					var url = '{$smarty.const.BITBOARDS_PKG_URL}ajax.php?req=10&comment_id={$comment_id}&amp;seq=' + new Date().getTime();
 					var element = 'warned_message_{$comment.comment_id|escape:"url"}';
 					var params = null;
 					{literal}

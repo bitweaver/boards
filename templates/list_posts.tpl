@@ -1,21 +1,21 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.1 2006/09/23 03:47:27 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.2 2006/11/22 12:33:57 squareing Exp $ *}
 {strip}
-	<div class="navbar">
-<div class="floaticon">
-	{assign var=flip value=$thread->getFlipFlop()}
-	{foreach from=$flip item=flip_s key=flip_name}
-		{include file="bitpackage:bitboards/flipswitch.tpl"}
-	{/foreach}
-</div>
-		&laquo;{tr}Back to{/tr} <a href="{$board->mInfo.display_url}">{$board->mInfo.title|escape}</a>
+	<div class="boards breadcrumb">
+		&laquo; {tr}Back to{/tr} <a href="{$board->mInfo.display_url}">{$board->mInfo.title|escape}</a>
 	</div>
 
 <div class="listing bitboard">
+	<div class="floaticon">
+		{assign var=flip value=$thread->getFlipFlop()}
+		{foreach from=$flip item=flip_s key=flip_name}
+			{include file="bitpackage:bitboards/flipswitch.tpl"}
+		{/foreach}
+	</div>
 
 	<div class="header">
 		<h1>{$thread->mInfo.title|escape}</h1>
 	</div>
-	
+
 	<div class="body">
 		{* not happy with this yet - xing *}
 		<div class="floaticon">
@@ -43,7 +43,7 @@
 		</div>
 
 		{if !$topic_locked}
-				<a title="{tr}Post Reply{/tr}" class="button" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
+			<a title="{tr}Post Reply{/tr}" class="button" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
 		{/if}
 
 		{formfeedback hash=$formfeedback}

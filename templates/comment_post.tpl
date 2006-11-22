@@ -1,7 +1,7 @@
 {if $smarty.request.post_comment_request}
 {strip}
 <br />
-<div class="display comment">
+<div class="edit comment">
 	{if ( $smarty.request.post_comment_request || $post_comment_preview )}
 		<a name="editcomments"></a>
 	{/if}
@@ -62,7 +62,6 @@
 				{/legend}
 			{/if}
 		{/form}
-
 
 		{libertypagination hash=$commentsPgnHash}
 	</div><!-- end .body -->

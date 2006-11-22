@@ -11,7 +11,7 @@ span.quote-title		--> p.quotetitle {}
 
 unregistered user post highlight
 						--> .bitboard a.highlight {}
-*/
+* /
 
 .bitboard .mb-threading			{}
 
@@ -25,13 +25,13 @@ unregistered user post highlight
 
 /* post layout */
 .bitboard .mb-post 				{clear:both;}
-.bitboard .mb-post .body		{float:right;width:100%; margin-left:-200px;}
+.bitboard .mb-post .body		{float:right;width:98%; margin-left:-200px;}
 .bitboard .mb-post .content		{margin-left:200px;}
 .bitboard .mb-post .header		{}
 .bitboard .mb-post .userinfo	{float:left;width:200px;}
 .bitboard .mb-post .signature	{clear:both;}
 
-/* debugging and testing */
+/* debugging and testing * /
 .bitboard .mb-post 	 			{background:#ffc; padding-bottom:1em; margin:1em;}
 .bitboard .mb-post .body		{background:#ccc;}
 .bitboard .mb-post .header		{background:#cfc; padding:1em;}
@@ -47,3 +47,4 @@ blockquote						{padding:0.5em; border:1px #aaa solid; background:#f7f7f7;}
 ul.iconlegend					{list-style:none; clear:both;}
 ul.iconlegend li				{list-style:none; width:200px;}
 ul.iconlegend li img			{vertical-align:middle;}
+/* */

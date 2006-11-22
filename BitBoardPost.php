@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.8 2006/09/08 06:06:30 lsces Exp $
-* $Id: BitBoardPost.php,v 1.8 2006/09/08 06:06:30 lsces Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.9 2006/11/22 12:33:57 squareing Exp $
+* $Id: BitBoardPost.php,v 1.9 2006/11/22 12:33:57 squareing Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.8 $ $Date: 2006/09/08 06:06:30 $ $Author: lsces $
+* @version $Revision: 1.9 $ $Date: 2006/11/22 12:33:57 $ $Author: squareing $
 * @class BitMBPost
 */
 
@@ -177,16 +177,16 @@ class BitBoardPost extends LibertyComment {
 		return intval(substr($this->mInfo['thread_forward_sequence'],0,9));
 	}
 
-	function mod_approve() {
+	function modApprove() {
 		$data['approved'] = 1;
 		$this->setMetaData($data);
 	}
 
-	function mod_reject() {
+	function modReject() {
 		$this->deleteComment();
 	}
 
-	function mod_warn($message) {
+	function modWarn($message) {
 		global $gBitSystem, $gBitUser;
 
 		if (empty($message)) {
