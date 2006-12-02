@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.15 2006/09/12 07:17:57 lsces Exp $
-* $Id: BitBoard.php,v 1.15 2006/09/12 07:17:57 lsces Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.16 2006/12/02 02:42:55 nickpalmer Exp $
+* $Id: BitBoard.php,v 1.16 2006/12/02 02:42:55 nickpalmer Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.15 $ $Date: 2006/09/12 07:17:57 $ $Author: lsces $
+* @version $Revision: 1.16 $ $Date: 2006/12/02 02:42:55 $ $Author: nickpalmer $
 * @class BitBoard
 */
 
@@ -415,10 +415,9 @@ class BitBoard extends LibertyAttachable {
 			$selectSql .= ", ( SELECT COUNT(*)
 			FROM `".BIT_DB_PREFIX."boards_map` map
 			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` s_lcom ON (map.`topic_content_id` = s_lcom.`root_id`)
-			LEFT JOIN `".BIT_DB_PREFIX."boards_thread` th ON (th.`parent_id`=s_lcom.`comment_id`)
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
 			LEFT JOIN  `".BIT_DB_PREFIX."boards_post` s ON( s_lcom.`comment_id` = s.`comment_id` )
-WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`approved` = 0 OR s.`approved` IS NULL) AND (th.`moved` = 0 OR th.`moved` IS NULL))
+WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`approved` = 0 OR s.`approved` IS NULL) )
 			) AS unreg";
 		} else {
 			$selectSql .= ", 0 AS unreg";
