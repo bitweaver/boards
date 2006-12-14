@@ -1,5 +1,5 @@
 {if $gBitUser->hasPermission('p_bitboards_link_content') && $gContent->mContentTypeGuid != $smarty.const.BITBOARD_CONTENT_TYPE_GUID}
-{$gContent->mContentTypeGuid}
+{* {$gContent->mContentTypeGuid} *}
 <div class="row">
 	{formlabel label="Linked Board"}
 	{forminput}
