@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.9 2006/11/22 12:33:57 squareing Exp $
-* $Id: BitBoardPost.php,v 1.9 2006/11/22 12:33:57 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.10 2006/12/20 20:51:59 squareing Exp $
+* $Id: BitBoardPost.php,v 1.10 2006/12/20 20:51:59 squareing Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.9 $ $Date: 2006/11/22 12:33:57 $ $Author: squareing $
+* @version $Revision: 1.10 $ $Date: 2006/12/20 20:51:59 $ $Author: squareing $
 * @class BitMBPost
 */
 
@@ -190,7 +190,7 @@ class BitBoardPost extends LibertyComment {
 		global $gBitSystem, $gBitUser;
 
 		if (empty($message)) {
-			$gBitSystem->fatalError("No Warning Message Given. <br>\nA post cannot be warned without a message");
+			$gBitSystem->fatalError("No Warning Message Given. <br />A post cannot be warned without a message");
 		}
 		$data['warned']=1;
 		$data['warned_message']=$message;
@@ -205,7 +205,13 @@ class BitBoardPost extends LibertyComment {
 
 			$pm = new Messages();
 			$message = "Your post \"".$this->mInfo['title']."\" [http://".$_SERVER['HTTP_HOST'].$this->getDisplayUrl()."] has been warned with the following message:\n$message\n";
-			$pm->post_message($userInfo['login'],$userInfo['real_name'],null,null,"Warned Post \"".$this->mInfo['title']."\"",$message,4);
+			$msgHash = array(
+				'to_login' => $userInfo['login'],
+				'to'       => $userInfo['real_name'],
+				'subject'  => tra( 'Warned Post' ).': '.$this->mInfo['title'],
+				'priority' => 4,
+			);
+			$pm->postMessage( $msgHash );
 		}
 	}
 
