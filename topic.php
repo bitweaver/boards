@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.9 2006/11/22 12:33:57 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.10 2006/12/23 09:29:04 squareing Exp $
 // Copyright (c) 2004 bitweaver Messageboards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -9,7 +9,7 @@ require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 
-$gBitSmarty->assign( 'loadAjax', TRUE );
+$gBitSmarty->assign( 'loadAjax', 'prototype' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'bitboards' );

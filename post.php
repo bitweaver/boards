@@ -34,7 +34,7 @@ if (!empty($_REQUEST['action'])) {
 
 $gBitSystem->verifyPermission( 'p_bitboards_read' );
 
-$gBitSmarty->assign( 'loadAjax', TRUE );
+$gBitSmarty->assign( 'loadAjax', 'prototype' );
 
 $thread = new BitBoardTopic($_REQUEST['t']);
 $thread->load();
