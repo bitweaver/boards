@@ -6,7 +6,7 @@ $tables = array(
 		warned I1 NOTNULL DEFAULT(0),
 		warned_message X
 	",
-	'boards_topic' => "
+	'boards_topics' => "
 		parent_id I4 PRIMARY,
 		locked I1 NOTNULL DEFAULT(0),
 		moved I4 NOTNULL DEFAULT(0),
@@ -20,8 +20,8 @@ $tables = array(
 	'boards_map' => "
 		board_content_id I4 NOTNULL,
 		topic_content_id I4 PRIMARY
-		CONSTRAINT ', CONSTRAINT `bitboards_topics_boards_ref` FOREIGN KEY (`board_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)
-					, CONSTRAINT `bitboards_topics_related_ref` FOREIGN KEY (`topic_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
+		CONSTRAINT ', CONSTRAINT `bitboards_topicss_boards_ref` FOREIGN KEY (`board_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)
+					, CONSTRAINT `bitboards_topicss_related_ref` FOREIGN KEY (`topic_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
 	",
 	'boards_tracking' => "
 		user_id I4 NOTNULL,
@@ -53,7 +53,7 @@ $gBitInstaller->registerSchemaIndexes( BITBOARDS_PKG_NAME, $indices );
 $sequences = array (
 	'boards_board_id_seq' => array( 'start' => 1 ),
 	'bitboards_id_seq' => array( 'start' => 1 ),
-	'bitboards_topic_id_seq' => array( 'start' => 1 ),
+	'bitboards_topics_id_seq' => array( 'start' => 1 ),
 );
 $gBitInstaller->registerSchemaSequences( BITBOARDS_PKG_NAME, $sequences );
 

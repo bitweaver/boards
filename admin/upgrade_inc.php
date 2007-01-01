@@ -15,71 +15,7 @@ INSERT INTO boards_map (board_content_id, topic_content_id) (SELECT content_id, 
 */
 
 require_once( '../../bit_setup_inc.php' );
+require_once( BITBOARDS_PKG_PATH.'admin/phpbb_upgrade.php' );
 
-global $db;
-
-if( file_exists( PHPBB_PKG_PATH.'config.php' ) ) {
-	require_once( PHPBB_PKG_PATH.'config.php' );
-}
-
-chdir( PHPBB_PKG_PATH );
-define('IN_PHPBB', true);
-$phpbb_root_path = './';
-include($phpbb_root_path . 'extension.inc');
-include($phpbb_root_path . 'common.'.$phpEx);
-include($phpbb_root_path . 'includes/bbcode.'.$phpEx);
-
-migrate_phpbb();
-
-function migrate_phpbb() {
-	global $gBitDb, $db;
-
-	if( $forumIds = $gBitDb->getAssoc( "SELECT `forum_id`,`content_id` FROM " . FORUMS_TABLE . " bbf INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lc.`content_type_guid`='bitboard' AND bbf.`forum_name`=lc.`title`) ORDER BY bbf.forum_id" ) ) {
-		foreach( $forumIds as $forumId => $contentId ) {
-			migrate_phpbb_forum( $forumId, $contentId );
-		}
-		die;
-	}
-}
-
-function migrate_phpbb_forum( $pForumId, $pForumContentId  ) {
-	global $db;
-	$sql = "SELECT * FROM " . TOPICS_TABLE . " bbt 
-				INNER JOIN " . POSTS_TABLE . " bbp ON(bbt.topic_first_post_id=bbp.post_id)  
-				INNER JOIN " . POSTS_TEXT_TABLE . " bbpt ON(bbpt.post_id=bbp.post_id)  
-			WHERE bbt.forum_id=$pForumId
-			ORDER BY bbt.topic_id LIMIT 10";
-	if ( !($result = $db->sql_query($sql)) ) {
-		message_die(GENERAL_ERROR, "Could not obtain topic/post information.", '', __LINE__, __FILE__, $sql);
-	}
-	while ( $row = $db->sql_fetchrow($result) ) {
-		$commentHash = array();
-		$commentHash['root_id'] = $pForumContentId;
-		$commentHash['anon_name'] = $row['post_username'];
-		$commentHash['title'] = $row['post_subject'];
-		$commentHash['edit'] = $row['post_text'];
-		$commentHash['format_guid'] = 'bbcode';
-		$commentHash['created'] = $row['post_time'];
-		$commentHash['last_modified'] = $row['post_edit_time'];
-		$commentHash['user_id'] = $row['poster_id'];
-		$commentHash['ip'] = decode_ip( $row['poster_ip'] );
-		vd( $commentHash );
-//		migrate_phpp_topic( $row['topic_id'], $newComment->mContentId );
-	}
-	$db->sql_freeresult($result);
-}
-
-function migrate_phpbb_topic( $pTopicId, &$pRootComment ) {
-	$sql = "SELECT * FROM " . TOPICS_TABLE . " bbt 
-				INNER JOIN " . POSTS_TABLE . " bbp ON(bbt.topic_first_post_id=bbp.post_id)  
-				INNER JOIN " . POSTS_TEXT_TABLE . " bbpt ON(bbpt.post_id=bbp.post_id)  
-			WHERE bbt.forum_id=$pForumId
-			ORDER BY bbt.topic_id LIMIT 10";
-	if ( !($result = $db->sql_query($sql)) ) {
-		message_die(GENERAL_ERROR, "Could not obtain topic/post information.", '', __LINE__, __FILE__, $sql);
-	}
-	while ( $row = $db->sql_fetchrow($result) ) {
-	}
-}
 
 ?>
