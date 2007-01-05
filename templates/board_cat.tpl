@@ -1,7 +1,7 @@
 {strip}
 	<div class="indent">
 		{if $child.data.title}
-		<h{$heading|default:2}>{$child.data.title}</h{$heading|default:2}>
+		<h{$heading|default:2}>{$child.data.title|escape}</h{$heading|default:2}>
 		{/if}
 
 		{if count($child.members) > 0}

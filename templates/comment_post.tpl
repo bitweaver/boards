@@ -49,7 +49,7 @@
 					<div class="row">
 						{formlabel label="Comment" for="commentpost"}
 						{forminput}
-							<textarea {spellchecker} id="commentpost" name="comment_data" rows="6" cols="50">{$postComment.data}</textarea>
+							<textarea {spellchecker} id="commentpost" name="comment_data" rows="6" cols="50">{$postComment.data|escape}</textarea>
 							{formhelp note="Use [http://www.foo.com] or [http://www.foo.com|description] for links.<br />HTML tags are not allowed inside comments."}
 						{/forminput}
 					</div>

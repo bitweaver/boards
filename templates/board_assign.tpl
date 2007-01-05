@@ -28,7 +28,7 @@
 					{forminput}
 						<select name="to_board_id" id="to_board_id">
 							{foreach item=board from=$data.map name='board_loop'}
-								<option value="{$board.board_id}">{$board.title}</option>
+								<option value="{$board.board_id}">{$board.title|escape}</option>
 							{/foreach}
 						</select>
 						{formhelp note="All comments posted to the selected content will show up on this board."}
@@ -49,7 +49,7 @@
 					{if ! $board.integrity}
 						<img src="{$smarty.const.LIBERTY_PKG_URL}/icons/warning.png" alt="Integrity Check Failed" title="Integrity Check Failed" class="icon" />
 					{/if}
-					{$board.title}
+					{$board.title|escape}
 				{/capture}
 
 				{form legend="<a href=\"`$board.url`\">`$board.title`</a>" id="board`$smarty.foreach.board_loop.iteration`"}
@@ -74,7 +74,7 @@
 						{foreach item=mapping from=$board.map}
 							<tr class="{cycle values="odd,even"}">
 								<td>{$mapping.t_content_description}</td>
-								<td>{$mapping.t_title}</td>
+								<td>{$mapping.t_title|escape}</td>
 								<td style="text-align:right">{$mapping.thread_count}</td>
 								<td class="actionicon">
 									<input type="checkbox" name="remove[{$board.board_id}][{$mapping.t_content_id}]" value="1" />
