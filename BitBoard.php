@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.16 2006/12/02 02:42:55 nickpalmer Exp $
-* $Id: BitBoard.php,v 1.16 2006/12/02 02:42:55 nickpalmer Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.17 2007/01/06 09:46:11 squareing Exp $
+* $Id: BitBoard.php,v 1.17 2007/01/06 09:46:11 squareing Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.16 $ $Date: 2006/12/02 02:42:55 $ $Author: nickpalmer $
+* @version $Revision: 1.17 $ $Date: 2007/01/06 09:46:11 $ $Author: squareing $
 * @class BitBoard
 */
 
@@ -434,7 +434,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 			 $selectSql
 			FROM `".BIT_DB_PREFIX."boards` ts INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
-			ORDER BY ".$this->mDb->convert_sortmode( $sort_mode );
+			ORDER BY ".$this->mDb->convertSortmode( $sort_mode );
 		$query_cant = "select count(*)
 				FROM `".BIT_DB_PREFIX."boards` ts INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql";

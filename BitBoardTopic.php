@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.18 2007/01/01 01:29:00 spiderr Exp $
-* $Id: BitBoardTopic.php,v 1.18 2007/01/01 01:29:00 spiderr Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.19 2007/01/06 09:46:11 squareing Exp $
+* $Id: BitBoardTopic.php,v 1.19 2007/01/06 09:46:11 squareing Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.18 $ $Date: 2007/01/01 01:29:00 $ $Author: spiderr $
+* @version $Revision: 1.19 $ $Date: 2007/01/06 09:46:11 $ $Author: squareing $
 * @class BitBoardTopic
 */
 
@@ -267,7 +267,7 @@ WHERE
 			$selectSql .= ", 0 AS unreg";
 		}
 
-		$sort_sql = "flc.".$this->mDb->convert_sortmode( $sort_mode );
+		$sort_sql = "flc.".$this->mDb->convertSortmode( $sort_mode );
 
 		$query = "SELECT
 	lc.`user_id` AS flc_user_id,
