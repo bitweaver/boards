@@ -69,5 +69,10 @@ $gBitInstaller->registerUserPermissions( BITBOARDS_PKG_NAME, array(
 // ### Default Preferences
 $gBitInstaller->registerPreferences( BITBOARDS_PKG_NAME, array(
 	array( BITBOARDS_PKG_NAME, 'bitboards_thread_track', 'y' ),
-) );
+));
+if(defined('RSS_PKG_NAME')) {
+	$gBitInstaller->registerPreferences( BITBOARDS_PKG_NAME, array(
+		array( RSS_PKG_NAME, BITBOARDS_PKG_NAME.'_rss', 'y'),
+	));
+}
 ?>

@@ -34,7 +34,7 @@ $rss->link =  'http://'.$_SERVER['HTTP_HOST'].$board->getDisplayUrl();
 
 // check if we want to use the cache file
 $cacheFile = TEMP_PKG_PATH.RSS_PKG_NAME.'/'.BITBOARDS_PKG_NAME.'_'.$version.'.xml';
-$rss->useCached( $cacheFile ); // use cached version if age < 1 hour
+$rss->useCached( $rss_version_name, $cacheFile, $gBitSystem->getConfig( 'rssfeed_cache_time' ));
 
 $topic = new BitBoardTopic();
 $pParamHash = array();
