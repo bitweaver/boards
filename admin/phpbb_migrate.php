@@ -45,7 +45,7 @@ function migrate_phpbb() {
 }
 
 function migrate_phpbb_forum( $pForumId, $pForumContentId  ) {
-	global $db;
+	global $db, $gBitDb;
 	$sql = "SELECT * FROM " . TOPICS_TABLE . " bbt 
 				INNER JOIN " . POSTS_TABLE . " bbp ON(bbt.topic_first_post_id=bbp.post_id)  
 				INNER JOIN " . POSTS_TEXT_TABLE . " bbpt ON(bbpt.post_id=bbp.post_id)  
@@ -54,6 +54,7 @@ function migrate_phpbb_forum( $pForumId, $pForumContentId  ) {
 	if ( !($result = $db->sql_query($sql)) ) {
 		message_die(GENERAL_ERROR, "Could not obtain topic/post information.", '', __LINE__, __FILE__, $sql);
 	}
+$gBitDb->StartTrans();
 	while ( $row = $db->sql_fetchrow($result) ) {
 		$commentHash = array();
 		$commentHash['root_id'] = $pForumContentId;
@@ -67,7 +68,6 @@ function migrate_phpbb_forum( $pForumId, $pForumContentId  ) {
 		$commentHash['user_id'] = $row['poster_id'];
 		$commentHash['ip'] = decode_ip( $row['poster_ip'] );
 		$rootComment = new LibertyComment();
-//$rootComment->mDb->StartTrans();
 		print "Migrating Topic $row[topic_id]<br/>\n";
 		if( $rootComment->storeComment( $commentHash ) ) {
 print "Migrating Post $row[post_id]<br/>\n";
@@ -83,8 +83,8 @@ print "Migrating Post $row[post_id]<br/>\n";
 			vd( $commentHash );
 			vd( $rootComment->mErrors );
 		}
-die;
 	}
+$gBitDb->CompleteTrans();
 	$db->sql_freeresult($result);
 }
 
@@ -92,7 +92,8 @@ function migrate_phpbb_topic( $pTopicId, &$pRootComment ) {
 	global $db;
 	$sql = "SELECT * FROM " . POSTS_TABLE . " bbp
 				INNER JOIN " . POSTS_TEXT_TABLE . " bbpt ON(bbpt.post_id=bbp.post_id)  
-			WHERE bbp.topic_id=$pTopicId
+				INNER JOIN " . TOPICS_TABLE . " bbt ON(bbt.topic_id=bbp.topic_id)  
+			WHERE bbp.topic_id=$pTopicId AND bbp.post_id != bbt.topic_first_post_id
 			ORDER BY bbp.post_time ";
 	if ( !($result = $db->sql_query($sql)) ) {
 		message_die(GENERAL_ERROR, "Could not obtain topic/post information.", '', __LINE__, __FILE__, $sql);
@@ -101,7 +102,7 @@ function migrate_phpbb_topic( $pTopicId, &$pRootComment ) {
 print "Migrating Post $row[post_id]<br/>\n";
 		$commentHash = array();
 		$commentHash['root_id'] = $pRootComment->getField( 'root_id' );
-		$commentHash['parent_id'] = $pRootComment->getField( 'parent_id' );
+		$commentHash['parent_id'] = $pRootComment->getField( 'content_id' );
 		$commentHash['anon_name'] = $row['post_username'];
 		$commentHash['title'] = $row['post_subject'];
 		$commentHash['edit'] = $row['post_text'];
@@ -111,16 +112,14 @@ print "Migrating Post $row[post_id]<br/>\n";
 		$commentHash['user_id'] = $row['poster_id'];
 		$commentHash['ip'] = decode_ip( $row['poster_ip'] );
 		$newComment = new LibertyComment();
-$newComment->mDb->StartTrans();
 		if( $newComment->storeComment( $commentHash ) ) {
-			$postHash['migrate_topic_id'] = $row['post_id'];
+			$postHash['migrate_post_id'] = $row['post_id'];
 			$newPost = new BitBoardPost( $newComment->mCommentId );
 			$newPost->store( $postHash );
 		} else {
 			vd( $commentHash );
 			vd( $newComment->mErrors );
 		}
-$newComment->mDb->CompleteTrans();
 	}
 }
 

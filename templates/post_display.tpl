@@ -18,7 +18,7 @@
 					{if $gBitUser->isAdmin()}
 						<a href="{$comments_return_url}&amp;delete_comment_id={$comment.comment_id}" rel="nofollow">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove"}</a>
 					{/if}
-					{if $gBitUser->hasPermission( 'p_bitboards_edit' ) && (($comment.user_id<0 && $comment.is_approved==0)||$comment.user_id>=0) && !$comment.warned}
+					{if $gBitUser->hasPermission( 'p_bitboards_edit' ) && (($comment.user_id<0 && $comment.is_approved==0)||$comment.user_id>=0) && !$comment.is_warned}
 						{if $comment.user_id<0 && $comment.is_approved==0}
 							<a title="{tr}Approve this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=1&amp;comment_id={$comment.comment_id}">
 								{biticon ipackage="icons" iname="list-add" iexplain="Approve Post"}
@@ -27,7 +27,7 @@
 							<a title="{tr}Reject this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=2&amp;comment_id={$comment.comment_id}">
 								{biticon ipackage="icons" iname="list-remove" iexplain="Reject Post"}
 							</a>
-						{elseif !$comment.warned && $comment.user_id>=0}
+						{elseif !$comment.is_warned && $comment.user_id>=0}
 							<a onclick="
 									this.oldonclick=this.onclick;
 									document.getElementById('warn_block_{$comment.comment_id|escape:"url"}').style['display']='inline';
@@ -76,7 +76,7 @@
 
 		{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$comment}
 
-		{if $gBitUser->isRegistered() and $comment.warned}
+		{if $gBitUser->isRegistered() and $comment.is_warned}
 			<div class="warning">
 				{assign var=comment_id value=$comment.comment_id}
 				<a onclick="
@@ -102,7 +102,7 @@
 				>{biticon ipackage="icons" iname="dialog-error" iexplain="Warned Post"}</a>
 
 				<div id="warned_message_{$comment.comment_id|escape:"url"}">
-					{if !empty($warnings.$comment_id)}{$comment.warned_message}{/if}
+					{if !empty($warnings.$comment_id)}{$comment.is_warned_message}{/if}
 				</div>
 
 				{if empty($warnings.$comment_id)}

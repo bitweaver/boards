@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.11 2007/01/08 04:58:37 spiderr Exp $
-* $Id: BitBoardPost.php,v 1.11 2007/01/08 04:58:37 spiderr Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.12 2007/01/08 07:57:21 spiderr Exp $
+* $Id: BitBoardPost.php,v 1.12 2007/01/08 07:57:21 spiderr Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.11 $ $Date: 2007/01/08 04:58:37 $ $Author: spiderr $
+* @version $Revision: 1.12 $ $Date: 2007/01/08 07:57:21 $ $Author: spiderr $
 * @class BitMBPost
 */
 
@@ -43,26 +43,32 @@ class BitBoardPost extends LibertyComment {
 		if( !empty( $pParamHash['warned_message'] ) ) {
 			$pParamHash['post_store']['warned_message'] = $pParamHash['warned_message'];
 		}
+		if( !empty( $pParamHash['warned_message'] ) ) {
+			$pParamHash['post_store']['warned_message'] = $pParamHash['warned_message'];
+		}
+		if( !empty( $pParamHash['migrate_post_id'] ) ) {
+			$pParamHash['post_store']['migrate_post_id'] = $pParamHash['migrate_post_id'];
+		}
 
 		return( count( $this->mErrors ) == 0 && !empty( $pParamHash['post_store'] ) );
 	}
 
 	/**
-	* This function stickies a topic
+	* This function stores a post
 	**/
 	function store( &$pParamHash ) {
 		global $gBitSystem;
 		$ret = FALSE;
-		if( $this->mRootId && $this->verify( $pParamHash ) ) {
+		if( $this->mCommentId && $this->verify( $pParamHash ) ) {
 			//$gBitSystem->verifyPermission('p_bitboards_edit');
 			//$pParamHash = (($pParamHash + 1)%2);
-			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_postss` WHERE `comment_id` = ?";
+			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_posts` WHERE `comment_id` = ?";
 			$isStored = $this->mDb->getOne( $query_sel, array( $this->mCommentId ) );
 			if( $isStored ) {
-				$result = $this->mDb->associateUpdate( 'boards_postss', $pParamHash['post_store'], array( 'comment_id' => $this->mCommentId ) );
+				$result = $this->mDb->associateUpdate( 'boards_posts', $pParamHash['post_store'], array( 'comment_id' => $this->mCommentId ) );
 			} else {
-				$pParamHash['post_store']['parent_id'] = $this->mRootId;
-				$result = $this->mDb->associateInsert( 'boards_postss', $pParamHash['post_store'] );
+				$pParamHash['post_store']['comment_id'] = $this->mCommentId;
+				$result = $this->mDb->associateInsert( 'boards_posts', $pParamHash['post_store'] );
 			}
 			$ret = TRUE;
 		}
@@ -75,8 +81,8 @@ class BitBoardPost extends LibertyComment {
 				$key = array('comment_id' => $this->mCommentId);
 				$query_sel = "SELECT
 				post.is_approved,
-				post.warned,
-				post.warned_message
+				post.is_warned,
+				post.is_warned_message
 				FROM `".BIT_DB_PREFIX."boards_posts` post WHERE comment_id=?";
 				$data = $this->mDb->getRow( $query_sel , array_values($key));
 				if ($data) {
@@ -138,7 +144,7 @@ class BitBoardPost extends LibertyComment {
 			$sql = "SELECT lcom.`comment_id`, lcom.`parent_id`, lcom.`root_id`,
 			lcom.`thread_forward_sequence`, lcom.`thread_reverse_sequence`, lcom.`anon_name`, lc.*, uu.`email`, uu.`real_name`, uu.`login`,
 				post.is_approved,
-				post.warned,
+				post.is_warned,
 				post.warned_message,
 				uu.registration_date AS registration_date,
 				tf_ava.`storage_path` AS `avatar_storage_path`
