@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.19 2007/01/06 09:46:11 squareing Exp $
-* $Id: BitBoardTopic.php,v 1.19 2007/01/06 09:46:11 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.20 2007/01/08 04:58:37 spiderr Exp $
+* $Id: BitBoardTopic.php,v 1.20 2007/01/08 04:58:37 spiderr Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.19 $ $Date: 2007/01/06 09:46:11 $ $Author: squareing $
+* @version $Revision: 1.20 $ $Date: 2007/01/08 04:58:37 $ $Author: spiderr $
 * @class BitBoardTopic
 */
 
@@ -52,8 +52,8 @@ class BitBoardTopic extends LibertyAttachable {
 			array_push( $bindVars, $lookupId = @BitBase::verifyId( $this->mRootId ) ? $this->mRootId : $this->mContentId );
 			$this->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
-			if (!($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
-				//$whereSql .= " AND ((first.`approved` = 1) OR (flc.`user_id` >= 0))";
+			if (!($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_posts_edit'))) {
+				//$whereSql .= " AND ((first.`is_approved` = 1) OR (flc.`user_id` >= 0))";
 			}
 
 			BitBoardTopic::loadTrack($selectSql, $joinSql);
@@ -67,7 +67,7 @@ SELECT
 	lc.`title` AS title,
 	lc.`content_id` AS flc_content_id,
 
-	COALESCE(post.`approved`,0) AS first_approved,
+	COALESCE(post.`is_approved`,0) AS first_approved,
 	lcom.`anon_name`,
 
 	th.`parent_id` AS th_first_id,
@@ -87,7 +87,7 @@ FROM `${BIT_DB_PREFIX}liberty_comments` lcom
 	INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
 	INNER JOIN `${BIT_DB_PREFIX}boards_map` map ON (map.`topic_content_id`=lcom.`root_id` )
 	LEFT JOIN `${BIT_DB_PREFIX}boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
-	LEFT JOIN `${BIT_DB_PREFIX}boards_post` post ON(post.`comment_id`=lcom.`comment_id`)
+	LEFT JOIN `${BIT_DB_PREFIX}boards_posts` post ON(post.`comment_id`=lcom.`comment_id`)
 	$joinSql
 WHERE
 	lcom.`root_id`=lcom.`parent_id` AND	$lookupColumn=?
@@ -253,15 +253,15 @@ WHERE
 			$substrSql = "SUBSTRING(s_lcom.`thread_forward_sequence`, 1, 10) LIKE SUBSTRING(lcom.`thread_forward_sequence`, 1, 10)";
 		}
 
-		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
-			$whereSql .= " AND ((post.`approved` = 1) OR (lc.`user_id` >= 0))";
+		if ($gBitSystem->isFeatureActive('bitboards_posts_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
+			$whereSql .= " AND ((post.`is_approved` = 1) OR (lc.`user_id` >= 0))";
 		}
-		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && ($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
+		if ($gBitSystem->isFeatureActive('bitboards_posts_anon_moderation') && ($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
 			$selectSql .= ", ( SELECT COUNT(*)
 			FROM `${BIT_DB_PREFIX}liberty_comments` AS s_lcom
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
-			LEFT JOIN  `${BIT_DB_PREFIX}boards_post` s ON( s_lcom.`comment_id` = s.`comment_id` )
-			WHERE (".$substrSql.") AND ((s_lc.`user_id` < 0) AND (s.`approved` = 0 OR s.`approved` IS NULL))
+			LEFT JOIN  `${BIT_DB_PREFIX}boards_posts` s ON( s_lcom.`comment_id` = s.`comment_id` )
+			WHERE (".$substrSql.") AND ((s_lc.`user_id` < 0) AND (s.`is_approved` = 0 OR s.`approved` IS NULL))
 			) AS unreg";
 		} else {
 			$selectSql .= ", 0 AS unreg";
@@ -276,7 +276,7 @@ WHERE
 	lc.`title` AS title,
 	lc.`content_id` AS flc_content_id,
 
-	COALESCE(post.`approved`,0) AS first_approved,
+	COALESCE(post.`is_approved`,0) AS first_approved,
 	lcom.`anon_name`,
 
 	th.`parent_id` AS th_first_id,
@@ -301,7 +301,7 @@ WHERE
 		FROM `${BIT_DB_PREFIX}liberty_comments` lcom
 		INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
 		LEFT JOIN `${BIT_DB_PREFIX}boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
-		LEFT JOIN `${BIT_DB_PREFIX}boards_post` post ON (post.`comment_id` = lcom.`comment_id`)
+		LEFT JOIN `${BIT_DB_PREFIX}boards_posts` post ON (post.`comment_id` = lcom.`comment_id`)
 		$joinSql
 WHERE
 	lcom.`root_id`=lcom.`parent_id`
@@ -315,7 +315,7 @@ ORDER BY
 FROM `${BIT_DB_PREFIX}liberty_comments` lcom
 INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
 LEFT JOIN `${BIT_DB_PREFIX}boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
-LEFT JOIN `${BIT_DB_PREFIX}boards_post` post ON (post.`comment_id` = lcom.`comment_id`)
+LEFT JOIN `${BIT_DB_PREFIX}boards_posts` post ON (post.`comment_id` = lcom.`comment_id`)
 $joinSql
 WHERE
 	lcom.`root_id`=lcom.`parent_id`
@@ -352,14 +352,14 @@ WHERE
 			$substrSql = "SUBSTRING(lcom.`thread_forward_sequence`, 1, 10)";
 		}
 		$whereSql = '';
-		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation')) {
-			$whereSql = " AND ((post.`approved` = 1) OR (lc.`user_id` >= 0))";
+		if ($gBitSystem->isFeatureActive('bitboards_posts_anon_moderation')) {
+			$whereSql = " AND ((post.`is_approved` = 1) OR (lc.`user_id` >= 0))";
 		}
 		$BIT_DB_PREFIX = BIT_DB_PREFIX;
 		$query="SELECT lc.`last_modified` AS llc_last_modified, lc.`user_id` AS llc_user_id, lc.`content_id` AS llc_content_id,  lcom.`anon_name` AS l_anon_name
 				FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
-					LEFT JOIN `${BIT_DB_PREFIX}boards_post` post ON (post.`comment_id` = lcom.`comment_id`)
+					LEFT JOIN `${BIT_DB_PREFIX}boards_posts` post ON (post.`comment_id` = lcom.`comment_id`)
 				WHERE (".$substrSql.") LIKE '".sprintf("%09d.",$data['th_thread_id'])."%' $whereSql
 				ORDER BY lc.`last_modified` DESC
 	    ";

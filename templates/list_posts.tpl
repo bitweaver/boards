@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.2 2006/11/22 12:33:57 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.3 2007/01/08 04:58:38 spiderr Exp $ *}
 {strip}
 	<div class="boards breadcrumb">
 		&laquo; {tr}Back to{/tr} <a href="{$board->mInfo.display_url}">{$board->mInfo.title|escape}</a>
@@ -49,7 +49,7 @@
 		{formfeedback hash=$formfeedback}
 
 		{foreach item=comment from=$comments}
-			<div class="mb-post {cycle values="even,odd"}{if $gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && $comment.user_id<0 and $comment.approved==0} unapproved{/if}">
+			<div class="mb-post {cycle values="even,odd"}{if $gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && $comment.user_id<0 and $comment.is_approved==0} unapproved{/if}">
 				{assign var=thread_mInfo value=$thread->mInfo}
 				{displaycomment comment=$comment template=$comment_template}
 			</div>

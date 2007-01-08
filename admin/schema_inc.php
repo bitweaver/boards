@@ -1,16 +1,18 @@
 <?php
 $tables = array(
-	'boards_post' => "
+	'boards_posts' => "
 		comment_id I4 PRIMARY,
-		approved I1 NOTNULL DEFAULT(0),
-		warned I1 NOTNULL DEFAULT(0),
-		warned_message X
+		is_approved I1 NOTNULL DEFAULT(0),
+		is_warned I1 NOTNULL DEFAULT(0),
+		warned_message X.
+		migrate_post_id INT
 	",
 	'boards_topics' => "
 		parent_id I4 PRIMARY,
-		locked I1 NOTNULL DEFAULT(0),
-		moved I4 NOTNULL DEFAULT(0),
-		sticky I1 NOTNULL DEFAULT(0)
+		is_locked I1 NOTNULL DEFAULT(0),
+		is_moved I4 NOTNULL DEFAULT(0),
+		is_sticky I1 NOTNULL DEFAULT(0),
+		migrate_topic_id INT
 	",
 	'boards' => "
 		board_id I4 PRIMARY,

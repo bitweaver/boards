@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.4 2007/01/05 08:31:21 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.5 2007/01/08 04:58:38 spiderr Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
@@ -50,14 +50,7 @@
 				{/if}
 
 				{foreach item=thread from=$threadList}
-					<tr class="{cycle values="even,odd"} {
-						if $gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && $thread.unreg > 0
-							}unapproved{
-						elseif $thread.th_moved>0
-							}moved{
-						/if}
-						{if $thread.th_sticky==1} highlight{/if}"
-					>
+					<tr class="{cycle values="even,odd"} {if $gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && $thread.unreg > 0}unapproved{elseif $thread.th_moved>0}moved{/if} {if $thread.th_sticky==1} highlight{/if}" >
 						<td style="white-space:nowrap;">{* topic status icons *}
 							{if $thread.th_moved>0}
 								{biticon ipackage="icons" iname="go-jump" iexplain="Moved Topic"}

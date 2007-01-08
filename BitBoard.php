@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.17 2007/01/06 09:46:11 squareing Exp $
-* $Id: BitBoard.php,v 1.17 2007/01/06 09:46:11 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.18 2007/01/08 04:58:37 spiderr Exp $
+* $Id: BitBoard.php,v 1.18 2007/01/08 04:58:37 spiderr Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.17 $ $Date: 2007/01/06 09:46:11 $ $Author: squareing $
+* @version $Revision: 1.18 $ $Date: 2007/01/08 04:58:37 $ $Author: spiderr $
 * @class BitBoard
 */
 
@@ -408,16 +408,16 @@ class BitBoard extends LibertyAttachable {
 
 		}
 
-		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
+		if ($gBitSystem->isFeatureActive('bitboards_posts_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
 
 		}
-		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && ($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
+		if ($gBitSystem->isFeatureActive('bitboards_posts_anon_moderation') && ($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
 			$selectSql .= ", ( SELECT COUNT(*)
 			FROM `".BIT_DB_PREFIX."boards_map` map
 			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` s_lcom ON (map.`topic_content_id` = s_lcom.`root_id`)
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
-			LEFT JOIN  `".BIT_DB_PREFIX."boards_post` s ON( s_lcom.`comment_id` = s.`comment_id` )
-WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`approved` = 0 OR s.`approved` IS NULL) )
+			LEFT JOIN  `".BIT_DB_PREFIX."boards_posts` s ON( s_lcom.`comment_id` = s.`comment_id` )
+WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`is_approved` = 0 OR s.`approved` IS NULL) )
 			) AS unreg";
 		} else {
 			$selectSql .= ", 0 AS unreg";
@@ -428,8 +428,8 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 				FROM `".BIT_DB_PREFIX."boards_map` map
 				INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` slc ON( slc.`content_id` = lcom.`content_id` )
-				LEFT JOIN `".BIT_DB_PREFIX."boards_post` fp ON (fp.`comment_id` = lcom.`comment_id`)
-				WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=lc.`content_id` AND ((fp.`approved` = 1) OR (slc.`user_id` >= 0))
+				LEFT JOIN `".BIT_DB_PREFIX."boards_posts` fp ON (fp.`comment_id` = lcom.`comment_id`)
+				WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=lc.`content_id` AND ((fp.`is_approved` = 1) OR (slc.`user_id` >= 0))
 				) AS post_count
 			 $selectSql
 			FROM `".BIT_DB_PREFIX."boards` ts INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
@@ -482,10 +482,10 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`a
 			FROM `".BIT_DB_PREFIX."boards_map` map
 			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` slc ON( slc.`content_id` = lcom.`content_id` )
-			LEFT JOIN `".BIT_DB_PREFIX."boards_post` fp ON (fp.`comment_id` = lcom.`comment_id`)
+			LEFT JOIN `".BIT_DB_PREFIX."boards_posts` fp ON (fp.`comment_id` = lcom.`comment_id`)
 			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` f_lcom ON (".$substrSql2.") AND f_lcom.`root_id`=f_lcom.`parent_id`)
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` f_lc ON( f_lc.`content_id` = f_lcom.`content_id` )
-			WHERE lcom.`root_id`=lcom.`parent_id` AND ".$data['content_id']."=map.`board_content_id` AND ((fp.`approved` = 1) OR (slc.`user_id` >= 0))
+			WHERE lcom.`root_id`=lcom.`parent_id` AND ".$data['content_id']."=map.`board_content_id` AND ((fp.`is_approved` = 1) OR (slc.`user_id` >= 0))
 	    ORDER BY slc.`last_modified` DESC
 	    ";
 		$result = $this->mDb->getRow( $query);

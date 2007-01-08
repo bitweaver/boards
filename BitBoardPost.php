@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.10 2006/12/20 20:51:59 squareing Exp $
-* $Id: BitBoardPost.php,v 1.10 2006/12/20 20:51:59 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.11 2007/01/08 04:58:37 spiderr Exp $
+* $Id: BitBoardPost.php,v 1.11 2007/01/08 04:58:37 spiderr Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.10 $ $Date: 2006/12/20 20:51:59 $ $Author: squareing $
+* @version $Revision: 1.11 $ $Date: 2007/01/08 04:58:37 $ $Author: spiderr $
 * @class BitMBPost
 */
 
@@ -25,15 +25,59 @@ class BitBoardPost extends LibertyComment {
 		LibertyComment::LibertyComment($pCommentId,$pContentId,$pInfo);
 	}
 
+	function verify( &$pParamHash ) {
+		if( isset( $pParamHash['is_approved'] ) ) {
+			if( !is_numeric( $pParamHash['is_approved'] ) || $pParamHash['is_approved'] > 1 || $pParamHash['is_approved'] < 0 ) {
+				$this->mErrors[]=("Invalid post approved state");
+			} else {
+				$pParamHash['post_store']['is_approved'] = $pParamHash['is_approved'];
+			}
+		}
+		if( isset( $pParamHash['is_warned'] ) ) {
+			if( !is_numeric( $pParamHash['warned'] ) || $pParamHash['is_warned'] > 1 || $pParamHash['is_warned'] < 0 ) {
+				$this->mErrors[]=("Invalid warned state");
+			} else {
+				$pParamHash['post_store']['is_warned'] = $pParamHash['is_warned'];
+			}
+		}
+		if( !empty( $pParamHash['warned_message'] ) ) {
+			$pParamHash['post_store']['warned_message'] = $pParamHash['warned_message'];
+		}
+
+		return( count( $this->mErrors ) == 0 && !empty( $pParamHash['post_store'] ) );
+	}
+
+	/**
+	* This function stickies a topic
+	**/
+	function store( &$pParamHash ) {
+		global $gBitSystem;
+		$ret = FALSE;
+		if( $this->mRootId && $this->verify( $pParamHash ) ) {
+			//$gBitSystem->verifyPermission('p_bitboards_edit');
+			//$pParamHash = (($pParamHash + 1)%2);
+			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_postss` WHERE `comment_id` = ?";
+			$isStored = $this->mDb->getOne( $query_sel, array( $this->mCommentId ) );
+			if( $isStored ) {
+				$result = $this->mDb->associateUpdate( 'boards_postss', $pParamHash['post_store'], array( 'comment_id' => $this->mCommentId ) );
+			} else {
+				$pParamHash['post_store']['parent_id'] = $this->mRootId;
+				$result = $this->mDb->associateInsert( 'boards_postss', $pParamHash['post_store'] );
+			}
+			$ret = TRUE;
+		}
+		return $ret;
+	}	
+
 	function loadMetaData() {
 		if ($this->isValid()) {
 			if (!isset($this->mInfo['accepted'])) {
 				$key = array('comment_id' => $this->mCommentId);
 				$query_sel = "SELECT
-				post.approved,
+				post.is_approved,
 				post.warned,
 				post.warned_message
-				FROM `".BIT_DB_PREFIX."boards_post` post WHERE comment_id=?";
+				FROM `".BIT_DB_PREFIX."boards_posts` post WHERE comment_id=?";
 				$data = $this->mDb->getRow( $query_sel , array_values($key));
 				if ($data) {
 					if (!empty($data['warned_message'])) {
@@ -54,7 +98,7 @@ class BitBoardPost extends LibertyComment {
 		}
 		$ret = FALSE;
 		if( @BitBase::verifyId($comment_id) ) {
-			$query = "DELETE FROM `".BIT_DB_PREFIX."boards_post` WHERE `comment_id` = ?";
+			$query = "DELETE FROM `".BIT_DB_PREFIX."boards_posts` WHERE `comment_id` = ?";
 			$result = $this->mDb->query( $query, array( $comment_id ) );
 			$ret = TRUE;
 		}
@@ -84,8 +128,8 @@ class BitBoardPost extends LibertyComment {
 			$join1 = '';
 		}
 
-		if ($gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
-			$whereSql .= " AND ((post.`approved` = 1) OR (lc.`user_id` >= 0))";
+		if ($gBitSystem->isFeatureActive('bitboards_posts_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
+			$whereSql .= " AND ((post.`is_approved` = 1) OR (lc.`user_id` >= 0))";
 		}
 
 		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this );
@@ -93,7 +137,7 @@ class BitBoardPost extends LibertyComment {
 		if ($pContentId) {
 			$sql = "SELECT lcom.`comment_id`, lcom.`parent_id`, lcom.`root_id`,
 			lcom.`thread_forward_sequence`, lcom.`thread_reverse_sequence`, lcom.`anon_name`, lc.*, uu.`email`, uu.`real_name`, uu.`login`,
-				post.approved,
+				post.is_approved,
 				post.warned,
 				post.warned_message,
 				uu.registration_date AS registration_date,
@@ -105,7 +149,7 @@ class BitBoardPost extends LibertyComment {
 						 $joinSql $join1
 						LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` ta_ava ON ( uu.`avatar_attachment_id`=ta_ava.`attachment_id` )
 						LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` )
-						LEFT JOIN `".BIT_DB_PREFIX."boards_post` post ON (post.`comment_id` = lcom.`comment_id`)
+						LEFT JOIN `".BIT_DB_PREFIX."boards_posts` post ON (post.`comment_id` = lcom.`comment_id`)
 				    WHERE $mid2 $whereSql $mid";
 
 			$flat_comments = array();
@@ -152,7 +196,7 @@ class BitBoardPost extends LibertyComment {
 					FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 						INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
 						INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (lc.`user_id` = uu.`user_id`) $joinSql
-						LEFT JOIN `".BIT_DB_PREFIX."boards_post` post ON (post.`comment_id` = lcom.`comment_id`)
+						LEFT JOIN `".BIT_DB_PREFIX."boards_posts` post ON (post.`comment_id` = lcom.`comment_id`)
 					WHERE lcom.`thread_forward_sequence` LIKE '".sprintf("%09d.",$contentId)."%' $whereSql
 			";
 			$ret = $this->mDb->getOne( $sql, $bindVars );
@@ -178,7 +222,7 @@ class BitBoardPost extends LibertyComment {
 	}
 
 	function modApprove() {
-		$data['approved'] = 1;
+		$data['is_approved'] = 1;
 		$this->setMetaData($data);
 	}
 
@@ -218,14 +262,14 @@ class BitBoardPost extends LibertyComment {
 	function setMetaData($data) {
 		if ($this->isValid()) {
 			$key = array('comment_id' => $this->mCommentId);
-			$query_sel = "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."boards_post` WHERE comment_id=?";
+			$query_sel = "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."boards_posts` WHERE comment_id=?";
 			$c = $this->mDb->getOne( $query_sel , array_values($key));
 			if ($c == 0) {
 				$data=array_merge($data,$key);
-				$this->mDb->associateInsert(BIT_DB_PREFIX."boards_post",$data);
+				$this->mDb->associateInsert(BIT_DB_PREFIX."boards_posts",$data);
 			} else {
 
-				$this->mDb->associateUpdate(BIT_DB_PREFIX."boards_post",$data,$key);
+				$this->mDb->associateUpdate(BIT_DB_PREFIX."boards_posts",$data,$key);
 			}
 		}
 	}

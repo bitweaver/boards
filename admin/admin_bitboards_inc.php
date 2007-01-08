@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/admin/Attic/admin_bitboards_inc.php,v 1.9 2006/09/08 05:07:10 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/admin/Attic/admin_bitboards_inc.php,v 1.10 2007/01/08 04:58:37 spiderr Exp $
 // Copyright (c) 2005 bitweaver BitBoards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -21,7 +21,7 @@ $formBitBoardsLists = array(
 		'label' => 'Enable Topic Reply Notification',
 		'note' => 'Allow users to be sent emails when topics they are interested in receive replies.',
 	),
-	'bitboards_post_anon_moderation' => array(
+	'bitboards_posts_anon_moderation' => array(
 		'label' => 'Enable Forced Anon Post Moderation',
 		'note' => 'Require that ALL Anonymous posts must be validated before they are shown.',
 	),

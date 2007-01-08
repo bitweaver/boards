@@ -67,8 +67,10 @@ function migrate_phpbb_forum( $pForumId, $pForumContentId  ) {
 		$commentHash['user_id'] = $row['poster_id'];
 		$commentHash['ip'] = decode_ip( $row['poster_ip'] );
 		$rootComment = new LibertyComment();
-$rootComment->mDb->StartTrans();
+//$rootComment->mDb->StartTrans();
+		print "Migrating Topic $row[topic_id]<br/>\n";
 		if( $rootComment->storeComment( $commentHash ) ) {
+print "Migrating Post $row[post_id]<br/>\n";
 			$topicHash['root_id'] = $rootComment->mContentId;
 			$topicHash['is_moved'] = $row['topic_moved_id'];
 			$topicHash['is_sticky'] = !empty( $row['topic_type'] ) ? '1' : NULL;
@@ -76,10 +78,11 @@ $rootComment->mDb->StartTrans();
 			$topicHash['migrate_topic_id'] = $row['topic_id'];
 			$rootTopic = new BitBoardTopic( $rootComment->mContentId );
 			$rootTopic->store( $topicHash );
-			vd( $topicHash );
 			migrate_phpbb_topic( $row['topic_id'], $rootComment );
+		} else {
+			vd( $commentHash );
+			vd( $rootComment->mErrors );
 		}
-vd( $rootComment->mErrors );
 die;
 	}
 	$db->sql_freeresult($result);
@@ -95,7 +98,29 @@ function migrate_phpbb_topic( $pTopicId, &$pRootComment ) {
 		message_die(GENERAL_ERROR, "Could not obtain topic/post information.", '', __LINE__, __FILE__, $sql);
 	}
 	while ( $row = $db->sql_fetchrow($result) ) {
-vd( $row );
+print "Migrating Post $row[post_id]<br/>\n";
+		$commentHash = array();
+		$commentHash['root_id'] = $pRootComment->getField( 'root_id' );
+		$commentHash['parent_id'] = $pRootComment->getField( 'parent_id' );
+		$commentHash['anon_name'] = $row['post_username'];
+		$commentHash['title'] = $row['post_subject'];
+		$commentHash['edit'] = $row['post_text'];
+		$commentHash['format_guid'] = 'bbcode';
+		$commentHash['created'] = $row['post_time'];
+		$commentHash['last_modified'] = $row['post_edit_time'];
+		$commentHash['user_id'] = $row['poster_id'];
+		$commentHash['ip'] = decode_ip( $row['poster_ip'] );
+		$newComment = new LibertyComment();
+$newComment->mDb->StartTrans();
+		if( $newComment->storeComment( $commentHash ) ) {
+			$postHash['migrate_topic_id'] = $row['post_id'];
+			$newPost = new BitBoardPost( $newComment->mCommentId );
+			$newPost->store( $postHash );
+		} else {
+			vd( $commentHash );
+			vd( $newComment->mErrors );
+		}
+$newComment->mDb->CompleteTrans();
 	}
 }
 
