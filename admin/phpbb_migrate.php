@@ -16,6 +16,8 @@ INSERT INTO boards_map (board_content_id, topic_content_id) (SELECT content_id, 
 
 require_once( '../../bit_setup_inc.php' );
 
+$_SESSION['captcha_verified'] = TRUE;
+
 global $db;
 
 if( file_exists( PHPBB_PKG_PATH.'config.php' ) ) {
@@ -55,6 +57,7 @@ function migrate_phpbb_forum( $pForumId, $pForumContentId  ) {
 	while ( $row = $db->sql_fetchrow($result) ) {
 		$commentHash = array();
 		$commentHash['root_id'] = $pForumContentId;
+		$commentHash['parent_id'] = $pForumContentId;
 		$commentHash['anon_name'] = $row['post_username'];
 		$commentHash['title'] = $row['post_subject'];
 		$commentHash['edit'] = $row['post_text'];
@@ -63,22 +66,36 @@ function migrate_phpbb_forum( $pForumId, $pForumContentId  ) {
 		$commentHash['last_modified'] = $row['post_edit_time'];
 		$commentHash['user_id'] = $row['poster_id'];
 		$commentHash['ip'] = decode_ip( $row['poster_ip'] );
-		vd( $commentHash );
-//		migrate_phpp_topic( $row['topic_id'], $newComment->mContentId );
+		$rootComment = new LibertyComment();
+$rootComment->mDb->StartTrans();
+		if( $rootComment->storeComment( $commentHash ) ) {
+			$topicHash['root_id'] = $rootComment->mContentId;
+			$topicHash['is_moved'] = $row['topic_moved_id'];
+			$topicHash['is_sticky'] = !empty( $row['topic_type'] ) ? '1' : NULL;
+			$topicHash['is_moved'] = ($row['topic_status'] == 2 ? '1' : NULL);
+			$topicHash['migrate_topic_id'] = $row['topic_id'];
+			$rootTopic = new BitBoardTopic( $rootComment->mContentId );
+			$rootTopic->store( $topicHash );
+			vd( $topicHash );
+			migrate_phpbb_topic( $row['topic_id'], $rootComment );
+		}
+vd( $rootComment->mErrors );
+die;
 	}
 	$db->sql_freeresult($result);
 }
 
 function migrate_phpbb_topic( $pTopicId, &$pRootComment ) {
-	$sql = "SELECT * FROM " . TOPICS_TABLE . " bbt 
-				INNER JOIN " . POSTS_TABLE . " bbp ON(bbt.topic_first_post_id=bbp.post_id)  
+	global $db;
+	$sql = "SELECT * FROM " . POSTS_TABLE . " bbp
 				INNER JOIN " . POSTS_TEXT_TABLE . " bbpt ON(bbpt.post_id=bbp.post_id)  
-			WHERE bbt.forum_id=$pForumId
-			ORDER BY bbt.topic_id LIMIT 10";
+			WHERE bbp.topic_id=$pTopicId
+			ORDER BY bbp.post_time ";
 	if ( !($result = $db->sql_query($sql)) ) {
 		message_die(GENERAL_ERROR, "Could not obtain topic/post information.", '', __LINE__, __FILE__, $sql);
 	}
 	while ( $row = $db->sql_fetchrow($result) ) {
+vd( $row );
 	}
 }
 
