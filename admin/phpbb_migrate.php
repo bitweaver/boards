@@ -50,7 +50,7 @@ function migrate_phpbb_forum( $pForumId, $pForumContentId  ) {
 				INNER JOIN " . POSTS_TABLE . " bbp ON(bbt.topic_first_post_id=bbp.post_id)  
 				INNER JOIN " . POSTS_TEXT_TABLE . " bbpt ON(bbpt.post_id=bbp.post_id)  
 			WHERE bbt.forum_id=$pForumId
-			ORDER BY bbt.topic_id LIMIT 10";
+			ORDER BY bbt.topic_id";
 	if ( !($result = $db->sql_query($sql)) ) {
 		message_die(GENERAL_ERROR, "Could not obtain topic/post information.", '', __LINE__, __FILE__, $sql);
 	}
@@ -66,6 +66,7 @@ $gBitDb->StartTrans();
 		$commentHash['created'] = $row['post_time'];
 		$commentHash['last_modified'] = $row['post_edit_time'];
 		$commentHash['user_id'] = $row['poster_id'];
+		$commentHash['modifier_user_id'] = $row['poster_id'];
 		$commentHash['ip'] = decode_ip( $row['poster_ip'] );
 		$rootComment = new LibertyComment();
 		print "Migrating Topic $row[topic_id]<br/>\n";
@@ -90,7 +91,7 @@ $gBitDb->CompleteTrans();
 
 function migrate_phpbb_topic( $pTopicId, &$pRootComment ) {
 	global $db;
-	$sql = "SELECT * FROM " . POSTS_TABLE . " bbp
+	$sql = "SELECT bbp.* FROM " . POSTS_TABLE . " bbp
 				INNER JOIN " . POSTS_TEXT_TABLE . " bbpt ON(bbpt.post_id=bbp.post_id)  
 				INNER JOIN " . TOPICS_TABLE . " bbt ON(bbt.topic_id=bbp.topic_id)  
 			WHERE bbp.topic_id=$pTopicId AND bbp.post_id != bbt.topic_first_post_id
@@ -110,6 +111,7 @@ print "Migrating Post $row[post_id]<br/>\n";
 		$commentHash['created'] = $row['post_time'];
 		$commentHash['last_modified'] = $row['post_edit_time'];
 		$commentHash['user_id'] = $row['poster_id'];
+		$commentHash['modifier_user_id'] = $row['poster_id'];
 		$commentHash['ip'] = decode_ip( $row['poster_ip'] );
 		$newComment = new LibertyComment();
 		if( $newComment->storeComment( $commentHash ) ) {
