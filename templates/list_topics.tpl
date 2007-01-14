@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.5 2007/01/08 04:58:38 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.6 2007/01/14 13:10:00 squareing Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
@@ -15,7 +15,7 @@
 	<div class="header">
 		<h1>{$board->mInfo.title|escape|default:"Message Board Topic"}</h1>
 		{if $boards->mInfo.parsed_data}
-			<h2>{$board->mInfo.parsed_data}</h2>
+			<p>{$board->mInfo.parsed_data}</p>
 		{/if}
 		Back to <a href="{$cat_url}">{$board->mInfo.content_type.content_description}s</a>
 	</div>
