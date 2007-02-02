@@ -4,7 +4,7 @@ $tables = array(
 		comment_id I4 PRIMARY,
 		is_approved I1 NOTNULL DEFAULT(0),
 		is_warned I1 NOTNULL DEFAULT(0),
-		warned_message X.
+		warned_message X,
 		migrate_post_id INT
 		CONSTRAINT ', CONSTRAINT `boards_posts_comment_ref` FOREIGN KEY (`comment_id`) REFERENCES `".BIT_DB_PREFIX."liberty_comments` (`comment_id`)'
 	",
@@ -14,7 +14,7 @@ $tables = array(
 		is_moved I4 NOTNULL DEFAULT(0),
 		is_sticky I1 NOTNULL DEFAULT(0),
 		migrate_topic_id INT
-		CONSTRAINT ', CONSTRAINT `boards_topics_parent_ref` FOREIGN KEY (`parent_id`) REFERENCES `".BIT_DB_PREFIX."liberty_comments` (`content_id`)'
+		CONSTRAINT ', CONSTRAINT `boards_topics_parent_ref` FOREIGN KEY (`parent_id`) REFERENCES `".BIT_DB_PREFIX."liberty_comments` (`comment_id`)'
 	",
 	'boards' => "
 		board_id I4 PRIMARY,

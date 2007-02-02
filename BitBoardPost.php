@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.12 2007/01/08 07:57:21 spiderr Exp $
-* $Id: BitBoardPost.php,v 1.12 2007/01/08 07:57:21 spiderr Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.13 2007/02/02 20:19:39 nickpalmer Exp $
+* $Id: BitBoardPost.php,v 1.13 2007/02/02 20:19:39 nickpalmer Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.12 $ $Date: 2007/01/08 07:57:21 $ $Author: spiderr $
+* @version $Revision: 1.13 $ $Date: 2007/02/02 20:19:39 $ $Author: nickpalmer $
 * @class BitMBPost
 */
 
@@ -82,7 +82,7 @@ class BitBoardPost extends LibertyComment {
 				$query_sel = "SELECT
 				post.is_approved,
 				post.is_warned,
-				post.is_warned_message
+				post.warned_message
 				FROM `".BIT_DB_PREFIX."boards_posts` post WHERE comment_id=?";
 				$data = $this->mDb->getRow( $query_sel , array_values($key));
 				if ($data) {
@@ -242,7 +242,7 @@ class BitBoardPost extends LibertyComment {
 		if (empty($message)) {
 			$gBitSystem->fatalError("No Warning Message Given. <br />A post cannot be warned without a message");
 		}
-		$data['warned']=1;
+		$data['is_warned']=1;
 		$data['warned_message']=$message;
 		$this->setMetaData($data);
 
