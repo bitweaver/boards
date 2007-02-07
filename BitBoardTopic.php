@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.21 2007/02/02 20:19:39 nickpalmer Exp $
-* $Id: BitBoardTopic.php,v 1.21 2007/02/02 20:19:39 nickpalmer Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.22 2007/02/07 17:53:36 phoenixandy Exp $
+* $Id: BitBoardTopic.php,v 1.22 2007/02/07 17:53:36 phoenixandy Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.21 $ $Date: 2007/02/02 20:19:39 $ $Author: nickpalmer $
+* @version $Revision: 1.22 $ $Date: 2007/02/07 17:53:36 $ $Author: phoenixandy $
 * @class BitBoardTopic
 */
 
@@ -86,7 +86,7 @@ SELECT
 FROM `${BIT_DB_PREFIX}liberty_comments` lcom
 	INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
 	INNER JOIN `${BIT_DB_PREFIX}boards_map` map ON (map.`topic_content_id`=lcom.`root_id` )
-	LEFT JOIN `${BIT_DB_PREFIX}boards_topic` th ON (th.`parent_id`=lcom.`comment_id`)
+	LEFT JOIN `${BIT_DB_PREFIX}boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
 	LEFT JOIN `${BIT_DB_PREFIX}boards_posts` post ON(post.`comment_id`=lcom.`comment_id`)
 	$joinSql
 WHERE
