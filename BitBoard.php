@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.19 2007/02/07 21:18:34 phoenixandy Exp $
-* $Id: BitBoard.php,v 1.19 2007/02/07 21:18:34 phoenixandy Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.20 2007/02/08 06:27:16 spiderr Exp $
+* $Id: BitBoard.php,v 1.20 2007/02/08 06:27:16 spiderr Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.19 $ $Date: 2007/02/07 21:18:34 $ $Author: phoenixandy $
+* @version $Revision: 1.20 $ $Date: 2007/02/08 06:27:16 $ $Author: spiderr $
 * @class BitBoard
 */
 
@@ -117,7 +117,7 @@ class BitBoard extends LibertyAttachable {
 				$this->mBitBoardId = $pParamHash['board_store']['board_id'];
 
 				$result = $this->mDb->associateInsert( $table, $pParamHash['board_store'] );
-				$result = $this->mDb->associateInsert( BIT_DB_PREFIX."boards_map",array('board_content_id'=>$pParamHash['board_store']['content_id'],'topic_content_id'=>$pParamHash['board_store']['content_id']));
+//				$result = $this->mDb->associateInsert( BIT_DB_PREFIX."boards_map",array('board_content_id'=>$pParamHash['board_store']['content_id'],'topic_content_id'=>$pParamHash['board_store']['content_id']));
 			}
 
 
@@ -150,7 +150,7 @@ class BitBoard extends LibertyAttachable {
 		}
 
 		// It is possible a derived class set this to something different
-		if( @$this->verifyId( $pParamHash['content_type_guid'] ) ) {
+		if( empty( $pParamHash['content_type_guid'] ) ) {
 			$pParamHash['content_type_guid'] = $this->mContentTypeGuid;
 		}
 

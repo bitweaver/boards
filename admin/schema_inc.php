@@ -14,7 +14,7 @@ $tables = array(
 		is_moved I4 NOTNULL DEFAULT(0),
 		is_sticky I1 NOTNULL DEFAULT(0),
 		migrate_topic_id INT
-		CONSTRAINT ', CONSTRAINT `boards_topics_parent_ref` FOREIGN KEY (`parent_id`) REFERENCES `".BIT_DB_PREFIX."liberty_comments` (`comment_id`)'
+		CONSTRAINT ', CONSTRAINT `boards_topics_parent_ref` FOREIGN KEY (`parent_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
 	",
 	'boards' => "
 		board_id I4 PRIMARY,
