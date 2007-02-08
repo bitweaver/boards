@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.20 2007/02/08 06:27:16 spiderr Exp $
-* $Id: BitBoard.php,v 1.20 2007/02/08 06:27:16 spiderr Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.21 2007/02/08 06:55:48 spiderr Exp $
+* $Id: BitBoard.php,v 1.21 2007/02/08 06:55:48 spiderr Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.20 $ $Date: 2007/02/08 06:27:16 $ $Author: spiderr $
+* @version $Revision: 1.21 $ $Date: 2007/02/08 06:55:48 $ $Author: spiderr $
 * @class BitBoard
 */
 
@@ -117,7 +117,7 @@ class BitBoard extends LibertyAttachable {
 				$this->mBitBoardId = $pParamHash['board_store']['board_id'];
 
 				$result = $this->mDb->associateInsert( $table, $pParamHash['board_store'] );
-//				$result = $this->mDb->associateInsert( BIT_DB_PREFIX."boards_map",array('board_content_id'=>$pParamHash['board_store']['content_id'],'topic_content_id'=>$pParamHash['board_store']['content_id']));
+				$result = $this->mDb->associateInsert( BIT_DB_PREFIX."boards_map",array('board_content_id'=>$pParamHash['board_store']['content_id'],'topic_content_id'=>$pParamHash['board_store']['content_id']));
 			}
 
 
@@ -603,7 +603,7 @@ function bitboards_content_store( $pContent, $pParamHash ) {
 
 	require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );
 	// do not allow unassigning topics. the UI should prevent this, but just to make sure...
-	if( $pContent->isValid() && !$pContent->isContentType( BITBOARDTOPIC_CONTENT_TYPE_GUID ) ) {
+	if( $pContent->isValid() && !$pContent->isContentType( BITBOARDTOPIC_CONTENT_TYPE_GUID ) && !$pContent->isContentType( BITBOARD_CONTENT_TYPE_GUID ) ) {
 		// wipe out all previous assignments for good measure. Not the sanest thing to do, but edits are infrequent - at least for now
 		$pContent->mDb->query( "DELETE FROM `".BIT_DB_PREFIX."boards_map` WHERE `topic_content_id`=?", array( $pContent->mContentId ) );
 		if( @BitBase::verifyId( $pParamHash['linked_board_cid'] ) ) {
