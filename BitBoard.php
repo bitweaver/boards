@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.21 2007/02/08 06:55:48 spiderr Exp $
-* $Id: BitBoard.php,v 1.21 2007/02/08 06:55:48 spiderr Exp $
+* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.22 2007/02/14 08:19:27 bitweaver Exp $
+* $Id: BitBoard.php,v 1.22 2007/02/14 08:19:27 bitweaver Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * @date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.21 $ $Date: 2007/02/08 06:55:48 $ $Author: spiderr $
+* @version $Revision: 1.22 $ $Date: 2007/02/14 08:19:27 $ $Author: bitweaver $
 * @class BitBoard
 */
 
@@ -514,12 +514,12 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 	function getBoardSelectList( $pBlankFirst=FALSE ) {
 		global $gBitDb;
 		$ret = array();
-		$query = "SELECT lc.`content_id` as hash_key, concat(lc.`title` , ' ( ' , count(lcom.`comment_id`) , ' )') AS `title`
+		$query = "SELECT lc.`content_id` as hash_key, lc.`title` || ' ( ' || lcom.`comment_id` || ' )' AS `title`
 			FROM `".BIT_DB_PREFIX."boards` b
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = b.`content_id` )
 				LEFT JOIN `".BIT_DB_PREFIX."boards_map` bm ON( bm.`board_content_id`=b.`content_id` )
 				LEFT JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (bm.`topic_content_id` = lcom.`root_id`)
-			GROUP BY lc.`content_id`, lc.`title`
+			GROUP BY lc.`content_id`, lc.`title`, lcom.`comment_id`
 			ORDER BY lc.`title` ASC";
 		if( $pBlankFirst ) {
 			if( $rs = $gBitDb->query( $query ) ) {
