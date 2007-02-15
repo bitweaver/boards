@@ -1,7 +1,7 @@
 <?php
 /**
  * @version $Header: /cvsroot/bitweaver/_bit_bitboards/bitboards_rss.php,v 1.3 2006/05/04 18:43:22 squareing Exp $
- * @package wiki
+ * @package boards
  * @subpackage functions
  */
 

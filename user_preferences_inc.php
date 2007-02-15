@@ -1,4 +1,9 @@
 <?php
+/**
+ * @package boards
+ * @subpackage functions
+ */
+
 $boardsSettings = array(
 'boards_show_avatars' => array(
 'pref' => 'boards_show_avatars',
@@ -57,7 +62,9 @@ if( !empty( $_REQUEST["save_bitboarduprefs"] ) ) {
 	$gBitUser->storePreference('signiture_content_data',$signatureContent->mInfo['data'], 'users');
 }
 
-// Configure quicktags list
+/**
+ * Configure quicktags list
+ */ 
 if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
 	include_once( QUICKTAGS_PKG_PATH.'quicktags_inc.php' );
 }

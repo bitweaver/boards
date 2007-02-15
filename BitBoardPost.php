@@ -1,22 +1,25 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.13 2007/02/02 20:19:39 nickpalmer Exp $
-* $Id: BitBoardPost.php,v 1.13 2007/02/02 20:19:39 nickpalmer Exp $
-*/
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.14 2007/02/15 19:36:12 lsces Exp $
+ * $Id: BitBoardPost.php,v 1.14 2007/02/15 19:36:12 lsces Exp $
+ *
+ * Messageboards class to illustrate best practices when creating a new bitweaver package that
+ * builds on core bitweaver functionality, such as the Liberty CMS engine
+ *
+ * @author spider <spider@steelsun.com>
+ * @version $Revision: 1.14 $ $Date: 2007/02/15 19:36:12 $ $Author: lsces $
+ * @package boards
+ */
 
 /**
-* Messageboards class to illustrate best practices when creating a new bitweaver package that
-* builds on core bitweaver functionality, such as the Liberty CMS engine
-*
-* @date created 2004/8/15
-* @author spider <spider@steelsun.com>
-* @version $Revision: 1.13 $ $Date: 2007/02/02 20:19:39 $ $Author: nickpalmer $
-* @class BitMBPost
-*/
-
+ * required setup
+ */
 require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );
 
+/**
+ * @package boards
+ */
 class BitBoardPost extends LibertyComment {
 	/**
 	* During initialisation, be sure to call our base constructors

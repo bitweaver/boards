@@ -1,19 +1,19 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.22 2007/02/14 08:19:27 bitweaver Exp $
-* $Id: BitBoard.php,v 1.22 2007/02/14 08:19:27 bitweaver Exp $
-*/
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.23 2007/02/15 19:36:12 lsces Exp $
+ * $Id: BitBoard.php,v 1.23 2007/02/15 19:36:12 lsces Exp $
+ *
+ * BitBoard class to illustrate best practices when creating a new bitweaver package that
+ * builds on core bitweaver functionality, such as the Liberty CMS engine
+ *
+ * @author spider <spider@steelsun.com>
+ * @version $Revision: 1.23 $ $Date: 2007/02/15 19:36:12 $ $Author: lsces $
+ * @package boards
+ */
 
 /**
-* BitBoard class to illustrate best practices when creating a new bitweaver package that
-* builds on core bitweaver functionality, such as the Liberty CMS engine
-*
-* @date created 2004/8/15
-* @author spider <spider@steelsun.com>
-* @version $Revision: 1.22 $ $Date: 2007/02/14 08:19:27 $ $Author: bitweaver $
-* @class BitBoard
-*/
-
+ * required setup
+ */
 require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 
 /**
@@ -21,6 +21,9 @@ require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 */
 define( 'BITBOARD_CONTENT_TYPE_GUID', 'bitboard' );
 
+/**
+ * @package boards
+ */
 class BitBoard extends LibertyAttachable {
 	/**
 	* Primary key for our mythical BitBoard class object & table

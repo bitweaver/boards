@@ -6,8 +6,13 @@
  *   1 - list all boards
  *   2 - switch lock state on a given topic
  *   3 - switch sticky state on a given topic
+ * @package boards
+ * @subpackage functions
  */
 
+/**
+ * required setup
+ */
 require_once( '../bit_setup_inc.php' );
 
 require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );

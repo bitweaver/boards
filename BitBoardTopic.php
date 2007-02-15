@@ -1,19 +1,19 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.22 2007/02/07 17:53:36 phoenixandy Exp $
-* $Id: BitBoardTopic.php,v 1.22 2007/02/07 17:53:36 phoenixandy Exp $
-*/
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.23 2007/02/15 19:36:12 lsces Exp $
+ * $Id: BitBoardTopic.php,v 1.23 2007/02/15 19:36:12 lsces Exp $
+ * 
+ * Messageboards class to illustrate best practices when creating a new bitweaver package that
+ * builds on core bitweaver functionality, such as the Liberty CMS engine
+ *
+ * @author spider <spider@steelsun.com> 
+ * @version $Revision: 1.23 $ $Date: 2007/02/15 19:36:12 $ $Author: lsces $
+ * @package boards
+ */
 
 /**
-* Messageboards class to illustrate best practices when creating a new bitweaver package that
-* builds on core bitweaver functionality, such as the Liberty CMS engine
-*
-* @date created 2004/8/15
-* @author spider <spider@steelsun.com>
-* @version $Revision: 1.22 $ $Date: 2007/02/07 17:53:36 $ $Author: phoenixandy $
-* @class BitBoardTopic
-*/
-
+ * required setup
+ */
 require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
 
@@ -22,6 +22,9 @@ require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
 */
 define( 'BITBOARDTOPIC_CONTENT_TYPE_GUID', 'bitboardtopic' );
 
+/**
+ * @package boards
+ */
 class BitBoardTopic extends LibertyAttachable {
 	/**
 	* Primary key for our mythical Messageboards class object & table

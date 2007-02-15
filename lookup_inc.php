@@ -1,4 +1,12 @@
 <?php
+/**
+ * @package boards
+ * @subpackage functions
+ */
+
+/**
+ * required setup
+ */
 require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php');
 require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
