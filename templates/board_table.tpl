@@ -25,6 +25,8 @@
 			<td style="width:1px;">{* topic tracking icons *}
 				{if $board.track.on && $board.track.mod}
 					{biticon ipackage="icons" iname="folder-new" ipath="large" iexplain="New Posts" iforce="icon"}
+				{else}
+					{biticon ipackage="icons" iname="folder" ipath="large" iexplain="New Posts" iforce="icon"}
 				{/if}
 			</td>
 

@@ -2,7 +2,7 @@
 <ul class="iconlegend">
 	{if $boardicons}
 		<li>{biticon ipackage="icons" iname="folder-new"         ipath=large iexplain="New Posts" iforce="icon"} {tr}New Posts{/tr}</li>
-		<li>{biticon ipackage="icons" iname="media-playback-pause" ipath=large iexplain="No New Posts" iforce="icon"} {tr}No New Posts{/tr}</li>
+		<li>{biticon ipackage="icons" iname="folder" ipath=large iexplain="No New Posts" iforce="icon"} {tr}No New Posts{/tr}</li>
 	{/if}
 	{if $topicicons}
 		<li>{biticon ipackage="icons" iname="emblem-readonly"      ipath=large iexplain="Thread Closed" iforce="icon"} {tr}Thread Closed{/tr}</li>

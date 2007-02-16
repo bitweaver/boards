@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.23 2007/02/15 19:36:12 lsces Exp $
- * $Id: BitBoardTopic.php,v 1.23 2007/02/15 19:36:12 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.24 2007/02/16 21:05:41 nickpalmer Exp $
+ * $Id: BitBoardTopic.php,v 1.24 2007/02/16 21:05:41 nickpalmer Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.23 $ $Date: 2007/02/15 19:36:12 $ $Author: lsces $
+ * @version $Revision: 1.24 $ $Date: 2007/02/16 21:05:41 $ $Author: nickpalmer $
  * @package boards
  */
 
@@ -506,7 +506,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 			$flip['notify']['req']=5;
 			$flip['notify']['id']=$arr['th_thread_id'];
 			$flip['notify']['idname']='t';
-			$flip['notify']['up']='mail-send-receive';
+			$flip['notify']['up']='mail-forward';
 			$flip['notify']['upname']='Reply Notification';
 			$flip['notify']['down']='internet-mail';
 			$flip['notify']['downname']='Reply Notification Disabled';

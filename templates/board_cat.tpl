@@ -12,7 +12,7 @@
 
 		{if !empty($child.sub_count) && count($child.children)>0}
 			{foreach from=$child.children item=schild}
-				{include file="bitpackage:bitboards/board_cat.tpl" child=$schild color=$scolor}
+				{include file="bitpackage:bitboards/board_cat.tpl" child=$schild color=$color}
 			{/foreach}
 		{/if}
 	</div>
