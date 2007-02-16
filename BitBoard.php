@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.23 2007/02/15 19:36:12 lsces Exp $
- * $Id: BitBoard.php,v 1.23 2007/02/15 19:36:12 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.24 2007/02/16 15:30:16 phoenixandy Exp $
+ * $Id: BitBoard.php,v 1.24 2007/02/16 15:30:16 phoenixandy Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.23 $ $Date: 2007/02/15 19:36:12 $ $Author: lsces $
+ * @version $Revision: 1.24 $ $Date: 2007/02/16 15:30:16 $ $Author: phoenixandy $
  * @package boards
  */
 
@@ -517,7 +517,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 	function getBoardSelectList( $pBlankFirst=FALSE ) {
 		global $gBitDb;
 		$ret = array();
-		$query = "SELECT lc.`content_id` as hash_key, lc.`title` || ' ( ' || lcom.`comment_id` || ' )' AS `title`
+		$query = "SELECT lc.`content_id` as hash_key, lc.`title` AS `title`
 			FROM `".BIT_DB_PREFIX."boards` b
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = b.`content_id` )
 				LEFT JOIN `".BIT_DB_PREFIX."boards_map` bm ON( bm.`board_content_id`=b.`content_id` )
