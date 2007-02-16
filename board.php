@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.9 2007/02/15 19:36:12 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.10 2007/02/16 18:08:29 nickpalmer Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -93,19 +93,28 @@ if (count($rest['members'])>0) {
 $gBitSmarty->assign_by_ref('ns',$ns);
 
 function countBoards(&$a) {
-	$s = 0;
-	if (count($a['children'])==0) {
-		return 1;
+	$s = count($a['members']);
+	foreach ($a['children'] as $k=>$c) {
+		$n = countBoards($a['children'][$k]);
+		if ($n == 0) {
+			unset($a['children'][$k]);
+		}
+		else {
+			$a['children'][$k]['sub_count'] = $n;
+			$s += $n;
+		}
 	}
-	foreach ($a['children'] as $c) {
-		$s += countBoards($c);
-	}
-	$a['sub_count']= $s;
 	return $s;
 }
 
 foreach ($ns as $k=> $a) {
-	$ns[$k]['sub_count']= countBoards($ns[$k]);
+	$n = countBoards($ns[$k]);
+	if ($n == 0) {
+		unset($ns[$k]);
+	}
+	else {
+		$ns[$k]['sub_count'] = $n;
+	}
 }
 
 //$gBitSmarty->display( 'bitpackage:bitboards/cat_display.tpl');
