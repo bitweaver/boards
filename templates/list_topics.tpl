@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.6 2007/01/14 13:10:00 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.7 2007/02/16 22:38:20 nickpalmer Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
@@ -23,9 +23,11 @@
 	<div class="body">
 		{minifind sort_mode=$sort_mode b=$smarty.request.b}
 		{* looks horrible, but leave for now - xing *}
-		<div class="navbar">
-			<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic"}</a>
-		</div>
+		{if $gBitUser->hasPermission( 'p_liberty_post_comments' )}
+			<div class="navbar">
+				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic"}</a>
+			</div>
+		{/if}
 
 		{form id="checkform"}
 			<input type="hidden" name="board_id" value="{$smarty.request.board_id}" />
@@ -152,9 +154,11 @@
 				{/foreach}
 			</table>
 
-			<div class="navbar">
-				<a class="button" title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic" iforce="icon"} {tr}New Topic{/tr}</a>
-			</div>
+			{if $gBitUser->hasPermission( 'p_liberty_post_comments' )}
+				<div class="navbar">
+					<a class="button" title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic" iforce="icon"} {tr}New Topic{/tr}</a>
+				</div>
+			{/if}
 
 			{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
 				<div style="text-align:right;">

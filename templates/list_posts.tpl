@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.3 2007/01/08 04:58:38 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.4 2007/02/16 22:38:20 nickpalmer Exp $ *}
 {strip}
 	<div class="boards breadcrumb">
 		&laquo; {tr}Back to{/tr} <a href="{$board->mInfo.display_url}">{$board->mInfo.title|escape}</a>
@@ -42,8 +42,8 @@
 		{/form}
 		</div>
 
-		{if !$topic_locked}
-			<a title="{tr}Post Reply{/tr}" class="button" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
+		{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
+				<a title="{tr}Post Reply{/tr}" class="button" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
 		{/if}
 
 		{formfeedback hash=$formfeedback}
@@ -68,7 +68,7 @@
 			</div><!-- end .preview -->
 		{/if}
 
-		{if !$topic_locked}
+		{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
 			<div class="navbar">
 				<a title="{tr}Post Reply{/tr}" class="button" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
 			</div>

@@ -1,5 +1,6 @@
 {strip}
 {form}
+{*
 	{legend legend="Home Message Board"}
 		<input type="hidden" name="page" value="{$page}" />
 		<div class="row">
@@ -19,7 +20,7 @@
 			<input type="submit" name="homeTabSubmit" value="{tr}Change preferences{/tr}" />
 		</div>
 	{/legend}
-
+*}
 	{legend legend="List Settings"}
 		<input type="hidden" name="page" value="{$page}" />
 		{foreach from=$formBitBoardsLists key=item item=output}

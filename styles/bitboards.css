@@ -26,7 +26,7 @@ unregistered user post highlight
 /* post layout */
 .bitboard .mb-post 				{clear:both;}
 .bitboard .mb-post .body		{float:right;width:98%; margin-left:-200px;}
-.bitboard .mb-post .content		{margin-left:200px;}
+.bitboard .mb-post .content		{width:auto}
 .bitboard .mb-post .header		{}
 .bitboard .mb-post .userinfo	{float:left;width:200px;}
 .bitboard .mb-post .signature	{clear:both;}

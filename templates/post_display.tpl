@@ -2,7 +2,7 @@
 {assign var='gContent' value=$comment}
 
 <div class="body" id="{$comment.comment_id|escape}">
-	<div class="content" {if $comments_style eq 'threaded'}style="padding-left:{math equation="level * marginIncrement +3 " level=$comment.level marginIncrement=20}px"{/if}>
+	<div class="content" {if $comments_style eq 'threaded' || $gBitUser->getPreference('boards_show_avatars','y') == y}style="{if $comments_style eq 'threaded'}padding-left:{math equation="level * marginIncrement +3 " level=$comment.level marginIncrement=20}px;{/if}{if $gBitUser->getPreference('boards_show_avatars','y') == y}margin-left: 200px;b{/if}"{/if}>
 		{if !$post_is_preview}
 			<div class="floaticon">
 				{if $print_page ne 'y' && $comment.deleted==0 }
@@ -118,8 +118,8 @@
 	</div><!-- end .content -->
 </div>
 
+{if $gBitUser->getPreference('boards_show_avatars','y') == y}
 <div class="userinfo">
-	{if $gBitUser->getPreference('boards_show_avatars','y') == y}
 		<strong>{if $comment.user_id < 0}{$comment.anon_name|escape}{else}{displayname hash=$comment}{/if}</strong>
 		<br />
 		{if $comment.user_id >= 0 && !empty($comment.user_avatar_url)}
@@ -129,8 +129,8 @@
 		{else}
 			<small>{tr}Anonymous User{/tr}</small><br />
 		{/if}
-	{/if}
 </div>
+{/if}
 
 <div class="signature"> </div>
 {/strip}

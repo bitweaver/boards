@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.11 2007/02/15 19:36:12 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.12 2007/02/16 22:38:20 nickpalmer Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -144,5 +144,5 @@ if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
 	include_once( QUICKTAGS_PKG_PATH.'quicktags_inc.php' );
 }
 // Display the template
-$gBitSystem->display( 'bitpackage:bitboards/list_topics.tpl', tra( 'Message Boards - Threads' ) );
+$gBitSystem->display( 'bitpackage:bitboards/list_topics.tpl', tra( 'Message Board Threads: ' . $board->getField('title') ) );
 ?>
