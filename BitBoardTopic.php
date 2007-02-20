@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.24 2007/02/16 21:05:41 nickpalmer Exp $
- * $Id: BitBoardTopic.php,v 1.24 2007/02/16 21:05:41 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.25 2007/02/20 16:03:10 phoenixandy Exp $
+ * $Id: BitBoardTopic.php,v 1.25 2007/02/20 16:03:10 phoenixandy Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.24 $ $Date: 2007/02/16 21:05:41 $ $Author: nickpalmer $
+ * @version $Revision: 1.25 $ $Date: 2007/02/20 16:03:10 $ $Author: phoenixandy $
  * @package boards
  */
 
@@ -520,7 +520,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 		$flip['is_locked']['up']='emblem-readonly';
 		$flip['is_locked']['upname']='Thread Locked';
 		$flip['is_locked']['down']='internet-group-chat';
-		$flip['is_locked']['downname']='Thread Unis_locked';
+		$flip['is_locked']['downname']='Thread Unlocked';
 		$flip['is_locked']['perm']='p_bitboards_edit';
 
 		$flip['is_sticky']['state']=$arr['th_is_sticky'];
