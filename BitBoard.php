@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.24 2007/02/16 15:30:16 phoenixandy Exp $
- * $Id: BitBoard.php,v 1.24 2007/02/16 15:30:16 phoenixandy Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.25 2007/03/05 05:47:53 spiderr Exp $
+ * $Id: BitBoard.php,v 1.25 2007/03/05 05:47:53 spiderr Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.24 $ $Date: 2007/02/16 15:30:16 $ $Author: phoenixandy $
+ * @version $Revision: 1.25 $ $Date: 2007/03/05 05:47:53 $ $Author: spiderr $
  * @package boards
  */
 
@@ -358,13 +358,21 @@ class BitBoard extends LibertyAttachable {
 		return $ret;
 	}
 
+	function prepGetList( &$pParamHash ) {
+		if( empty( $pParamHash['sort_mode'] ) ) {
+			// default sort_mode for boards is alphabetical
+			$pParamHash['sort_mode'] = 'title_asc';
+		}
+		LibertyContent::prepGetList( $pParamHash );
+	}
+
 	/**
 	* This function generates a list of records from the liberty_content database for use in a list page
 	**/
 	function getList( &$pParamHash ) {
 		global $gBitSystem, $gBitUser;
 		// this makes sure parameters used later on are set
-		LibertyContent::prepGetList( $pParamHash );
+		$this->prepGetList( $pParamHash );
 
 		$selectSql = $joinSql = $whereSql = '';
 		$bindVars = array();
@@ -426,25 +434,25 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 			$selectSql .= ", 0 AS unreg";
 		}
 
-		$query = "SELECT ts.*, lc.`content_id`, lc.`title`, lc.`data`, lc.`format_guid`,
-			( SELECT count(*)
-				FROM `".BIT_DB_PREFIX."boards_map` map
-				INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
-				INNER JOIN `".BIT_DB_PREFIX."liberty_content` slc ON( slc.`content_id` = lcom.`content_id` )
-				LEFT JOIN `".BIT_DB_PREFIX."boards_posts` fp ON (fp.`comment_id` = lcom.`comment_id`)
-				WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=lc.`content_id` AND ((fp.`is_approved` = 1) OR (slc.`user_id` >= 0))
-				) AS post_count
+		$query = "SELECT ts.*, lc.`content_id`, lc.`title`, lc.`data`, lc.`format_guid`
 			 $selectSql
-			FROM `".BIT_DB_PREFIX."boards` ts INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
+			FROM `".BIT_DB_PREFIX."boards` ts 
+				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
 			ORDER BY ".$this->mDb->convertSortmode( $sort_mode );
 		$query_cant = "select count(*)
-				FROM `".BIT_DB_PREFIX."boards` ts INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
+			FROM `".BIT_DB_PREFIX."boards` ts INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql";
 		$result = $this->mDb->query( $query, $bindVars );
 		$ret = array();
 		while( $res = $result->fetchRow() ) {
 			$res['url']= BITBOARDS_PKG_URL."index.php?b={$res['board_id']}";
+			$res['post_count'] = $this->mDb->getOne( "SELECT count(*)
+				FROM `".BIT_DB_PREFIX."boards_map` map
+					INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content` slc ON( slc.`content_id` = lcom.`content_id` )
+					LEFT JOIN `".BIT_DB_PREFIX."boards_posts` fp ON (fp.`comment_id` = lcom.`comment_id`)
+				WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=? AND ((fp.`is_approved` = 1) OR (fp.`is_approved` IS NULL))", array( $res['content_id'] ) );
 			if($track) {
 				if ($gBitUser->isRegistered()) {
 					$res['track']['on'] = true;
@@ -473,23 +481,13 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 	function getLastTopic($data) {
 		global $gBitSystem;
 		$BIT_DB_PREFIX = BIT_DB_PREFIX;
-		if ( $this->mDb->mType == 'firebird' ) {
-			$substrSql1 = "SUBSTRING(f_lcom.`thread_forward_sequence` FROM 1 FOR 9)";
-			$substrSql2 = "SUBSTRING(lcom.`thread_forward_sequence` FROM 1 FOR 10) = SUBSTRING(f_lcom.`thread_forward_sequence` FROM 1 FOR 10";
-		} else {
-			$substrSql1 = "SUBSTRING(f_lcom.`thread_forward_sequence`, 1, 9)";
-			$substrSql2 = "SUBSTRING(lcom.`thread_forward_sequence`, 1, 10) = SUBSTRING(f_lcom.`thread_forward_sequence`, 1, 10";
-		}
-		$query="SELECT
-		slc.`last_modified`, slc.`user_id`, lcom.`anon_name` AS l_anon_name, f_lc.`title`, (".$substrSql1.") AS thread_id
+		$query="SELECT slc.`last_modified`, slc.`user_id`, lcom.`anon_name` AS l_anon_name, slc.`title`, lcom.comment_id AS thread_id
 			FROM `".BIT_DB_PREFIX."boards_map` map
-			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
-			INNER JOIN `".BIT_DB_PREFIX."liberty_content` slc ON( slc.`content_id` = lcom.`content_id` )
-			LEFT JOIN `".BIT_DB_PREFIX."boards_posts` fp ON (fp.`comment_id` = lcom.`comment_id`)
-			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` f_lcom ON (".$substrSql2.") AND f_lcom.`root_id`=f_lcom.`parent_id`)
-			INNER JOIN `".BIT_DB_PREFIX."liberty_content` f_lc ON( f_lc.`content_id` = f_lcom.`content_id` )
+				INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
+				INNER JOIN `".BIT_DB_PREFIX."liberty_content` slc ON( slc.`content_id` = lcom.`content_id` )
+				LEFT JOIN `".BIT_DB_PREFIX."boards_posts` fp ON (fp.`comment_id` = lcom.`comment_id`)
 			WHERE lcom.`root_id`=lcom.`parent_id` AND ".$data['content_id']."=map.`board_content_id` AND ((fp.`is_approved` = 1) OR (slc.`user_id` >= 0))
-	    ORDER BY slc.`last_modified` DESC
+		    ORDER BY slc.`last_modified` DESC
 	    ";
 		$result = $this->mDb->getRow( $query);
 		if (!empty($result['thread_id'])) {
