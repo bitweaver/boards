@@ -21,7 +21,7 @@
 				<span class="title">
 					<h3><a href="{$board.url}" title="{$board_title}">{$board_title}</a>
 					<span class="count">
-						&nbsp;(Posts: {$board.post_count})
+						&nbsp;({tr}Posts{/tr}: {$board.post_count})
 					</span>
 					</h3>
 				</span>
