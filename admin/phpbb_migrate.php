@@ -34,7 +34,19 @@ include($phpbb_root_path . 'includes/bbcode.'.$phpEx);
 migrate_phpbb();
 
 function migrate_phpbb() {
-	global $gBitDb, $db;
+	global $gBitDb, $gLibertySystem, $db;
+
+	if( !$gLibertySystem->isPluginActive( 'bbcode' ) ) {
+		$gLibertySystem->setActivePlugin( 'bbcode' );
+		$gLibertySystem->scanAllPlugins();
+
+		if( !class_exists( 'HTML_BBCodeParser' ) ) {
+			print( "bbcode format plugin is not active. make sure you have installed Pear Text_Wiki_BBCode with: <br/><code>pear install Text_Wiki_BBCode-alpha</code>" ); die;
+		}
+	}
+
+	require_once( LIBERTY_PKG_PATH.'plugins/format.bithtml.php' );
+
 
 $gBitDb->StartTrans();
 	if( $forumList = $gBitDb->getAssoc( "SELECT `forum_id`,`forum_name`, `forum_desc`,`content_id` FROM " . FORUMS_TABLE . " bbf LEFT JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lc.`content_type_guid`='bitboard' AND bbf.`forum_name`=lc.`title`) ORDER BY bbf.forum_id" ) ) {
@@ -86,7 +98,7 @@ $gBitDb->StartTrans();
 		$commentHash['edit'] = $row['post_text'];
 		$commentHash['format_guid'] = 'bbcode';
 		$commentHash['created'] = $row['post_time'];
-		$commentHash['last_modified'] = $row['post_edit_time'];
+		$commentHash['last_modified'] = !empty( $row['post_edit_time'] ) ? $row['post_edit_time'] : $row['post_time'];
 		$commentHash['user_id'] = $row['poster_id'];
 		$commentHash['modifier_user_id'] = $row['poster_id'];
 		$commentHash['ip'] = decode_ip( $row['poster_ip'] );
