@@ -120,14 +120,16 @@
 
 {if $gBitUser->getPreference('boards_show_avatars','y') == y}
 <div class="userinfo">
-		<strong>{if $comment.user_id < 0}{$comment.anon_name|escape}{else}{displayname hash=$comment}{/if}</strong>
-		<br />
-		{if $comment.user_id >= 0 && !empty($comment.user_avatar_url)}
-			<a href="{$comment.user_url}"><img src="{$comment.user_avatar_url}" title="{tr}Avatar{/tr}" alt="{tr}Avatar{/tr}" /></a>
-			<br />
-			<small>{tr}Joined: {/tr}{$comment.registration_date|bit_short_date}</small><br />
+		{if $comment.user_id < 0}
+			<strong>{$comment.anon_name|escape}</strong>
 		{else}
-			<small>{tr}Anonymous User{/tr}</small><br />
+			<strong>{displayname hash=$comment}</strong>
+			<br />
+			{if $comment.user_id >= 0 && !empty($comment.user_avatar_url)}
+				<a href="{$comment.user_url}"><img src="{$comment.user_avatar_url}" title="{tr}Avatar{/tr}" alt="{tr}Avatar{/tr}" /></a>
+				<br />
+			{/if}
+			<small>{tr}Joined: {/tr}{$comment.registration_date|bit_short_date}</small><br />
 		{/if}
 </div>
 {/if}
