@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.26 2007/03/07 20:08:29 spiderr Exp $
- * $Id: BitBoardTopic.php,v 1.26 2007/03/07 20:08:29 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.27 2007/03/07 21:02:28 spiderr Exp $
+ * $Id: BitBoardTopic.php,v 1.27 2007/03/07 21:02:28 spiderr Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.26 $ $Date: 2007/03/07 20:08:29 $ $Author: spiderr $
+ * @version $Revision: 1.27 $ $Date: 2007/03/07 21:02:28 $ $Author: spiderr $
  * @package boards
  */
 
@@ -111,7 +111,19 @@ WHERE
 		return( count( $this->mInfo ) );
 	}
 
-	function lookupByMigrateId( $pMigrateTopicId ) {
+	function lookupByMigratePost( $pMigratePostId ) {
+		global $gBitDb;
+		$ret = NULL;
+		if( BitBase::verifyId( $pMigratePostId ) ) {
+			$path = $gBitDb->getOne( "SELECT lcom.`thread_forward_sequence`  FROM `boards_posts` bp INNER JOIN `liberty_comments` lcom ON(bp.`comment_id`=lcom.`comment_id`) WHERE bp.`migrate_post_id`=?", array( $pMigratePostId ) );
+			if( $path ) {
+				$ret = (int)(substr( $path, 0, strpos( $path, '.' ) ));
+			}
+		}
+		return $ret;
+	}
+
+	function lookupByMigrateTopic( $pMigrateTopicId ) {
 		global $gBitDb;
 		$ret = NULL;
 		if( BitBase::verifyId( $pMigrateTopicId ) ) {

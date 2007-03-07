@@ -21,7 +21,7 @@ if( @BitBase::verifyId( $_REQUEST['t'] ) ) {
 } elseif (isset($_REQUEST['p'])) {
 	$gContent = new BitBoardPost();
 	// otherwise create new object
-} elseif( isset( $_REQUEST['t'] ) || isset( $_REQUEST['migrate_topic_id'] ) ) {
+} elseif( isset( $_REQUEST['t'] ) || isset( $_REQUEST['migrate_topic_id'] ) || isset( $_REQUEST['migrate_post_id'] ) ) {
 	$gContent = new BitBoardTopic();
 } else {
 	$gContent = new BitBoard();

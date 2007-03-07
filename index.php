@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/index.php,v 1.4 2007/03/07 20:08:29 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/index.php,v 1.5 2007/03/07 21:02:28 spiderr Exp $
 // Copyright (c) 2004 bitweaver Messageboards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -9,7 +9,7 @@ require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 
-if( !empty( $_REQUEST['t'] ) || !empty( $_REQUEST['migrate_topic_id'] ) ) {
+if( !empty( $_REQUEST['t'] ) || !empty( $_REQUEST['migrate_topic_id'] ) || !empty( $_REQUEST['migrate_post_id'] ) ) {
 	require( BITBOARDS_PKG_PATH.'post.php' );
 } elseif (!empty($_REQUEST['b'])) {
 	require( BITBOARDS_PKG_PATH.'topic.php' );

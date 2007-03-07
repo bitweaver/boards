@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine  on
+#	Uncomment this if mod_rewrites are not working for you. some hosting services have cranky mod_rewrite
+#    RewriteBase     /boards/
+    RewriteCond %{SCRIPT_FILENAME}  -f [OR]
+    RewriteCond %{SCRIPT_FILENAME}/index.php    -f
+    RewriteRule ^(.*)$            - [L]
+
+    # old phpBB posts
+    RewriteCond %{REQUEST_URI} viewtopic.php
+    RewriteCond %{QUERY_STRING} .*p=([0-9]*).*
+    RewriteRule .* /forums/index.php?migrate_post_id=%1   [R]
+
+    # old phpBB topics
+    RewriteCond %{REQUEST_URI} viewtopic.php
+    RewriteCond %{QUERY_STRING} .*t=([0-9]*).*
+    RewriteRule .* /forums/index.php?migrate_topic_id=%1   [R]
+</IfModule>
