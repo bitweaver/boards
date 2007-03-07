@@ -34,7 +34,7 @@ include($phpbb_root_path . 'includes/bbcode.'.$phpEx);
 migrate_phpbb();
 
 function migrate_phpbb() {
-	global $gBitDb, $gLibertySystem, $db;
+	global $gBitDb, $gBitSystem, $gLibertySystem, $db;
 
 	if( !$gLibertySystem->isPluginActive( 'bbcode' ) ) {
 		$gLibertySystem->setActivePlugin( 'bbcode' );
