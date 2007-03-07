@@ -36,8 +36,14 @@ if (!empty($_REQUEST['action'])) {
 		default:
 			break;
 	}
-} elseif (empty($_REQUEST['t'])) {
-	$gBitSystem->fatalError("Thread id not given");
+}
+
+if( @BitBase::verifyId( $_REQUEST['t'] ) ) {
+	$topicId = $_REQUEST['t'];
+} elseif( BitBase::verifyId( $_REQUEST['migrate_topic_id'] ) ) {
+	if( $_REQUEST['t'] = BitBoardTopic::lookupByMigrateId( $_REQUEST['migrate_topic_id'] ) ) {
+		bit_redirect( BITBOARDS_PKG_URL.'index.php?t='. $_REQUEST['t'] );
+	}
 }
 
 $gBitSystem->verifyPermission( 'p_bitboards_read' );
@@ -45,7 +51,10 @@ $gBitSystem->verifyPermission( 'p_bitboards_read' );
 $gBitSmarty->assign( 'loadAjax', 'prototype' );
 
 $thread = new BitBoardTopic($_REQUEST['t']);
-$thread->load();
+if( !$thread->load() ) {
+	$gBitSystem->fatalError("Thread id not given");
+}
+
 if (empty($thread->mInfo['th_root_id'])) {
 	if ($_REQUEST['action']==3) {
 		//Invalid as a result of rejecting the post, redirect to the board

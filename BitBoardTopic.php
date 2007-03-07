@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.25 2007/02/20 16:03:10 phoenixandy Exp $
- * $Id: BitBoardTopic.php,v 1.25 2007/02/20 16:03:10 phoenixandy Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.26 2007/03/07 20:08:29 spiderr Exp $
+ * $Id: BitBoardTopic.php,v 1.26 2007/03/07 20:08:29 spiderr Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.25 $ $Date: 2007/02/20 16:03:10 $ $Author: phoenixandy $
+ * @version $Revision: 1.26 $ $Date: 2007/03/07 20:08:29 $ $Author: spiderr $
  * @package boards
  */
 
@@ -109,6 +109,15 @@ WHERE
 			}
 		}
 		return( count( $this->mInfo ) );
+	}
+
+	function lookupByMigrateId( $pMigrateTopicId ) {
+		global $gBitDb;
+		$ret = NULL;
+		if( BitBase::verifyId( $pMigrateTopicId ) ) {
+			$ret = $gBitDb->getOne( "SELECT lcom.`comment_id`  FROM `boards_topics` bt INNER JOIN `liberty_comments` lcom ON(bt.`parent_id`=lcom.`content_id`) WHERE `migrate_topic_id`=?", array( $pMigrateTopicId ) );
+		}
+		return $ret;
 	}
 
 	/**

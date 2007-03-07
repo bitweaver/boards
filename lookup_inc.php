@@ -17,12 +17,11 @@ if( @BitBase::verifyId( $_REQUEST['t'] ) ) {
 } elseif( @BitBase::verifyId( $_REQUEST['p'] ) ) {
 	$gContent = new BitBoardPost( $_REQUEST['p'] );
 } elseif( @BitBase::verifyId( $_REQUEST['b'] ) ) {
-
 	$gContent = new BitBoard( $_REQUEST['b'] );
 } elseif (isset($_REQUEST['p'])) {
 	$gContent = new BitBoardPost();
 	// otherwise create new object
-} elseif (isset($_REQUEST['t'])) {
+} elseif( isset( $_REQUEST['t'] ) || isset( $_REQUEST['migrate_topic_id'] ) ) {
 	$gContent = new BitBoardTopic();
 } else {
 	$gContent = new BitBoard();
