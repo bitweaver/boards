@@ -18,7 +18,7 @@ $tables = array(
 	",
 	'boards' => "
 		board_id I4 PRIMARY,
-		content_id I4 NOTNULL
+		content_id I4 NOTNULL,
 		migrate_board_id INT
 		CONSTRAINT ', CONSTRAINT `bitboards_content_ref` FOREIGN KEY (`content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
 	",

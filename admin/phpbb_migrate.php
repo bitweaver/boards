@@ -58,6 +58,7 @@ print "Migrating forum $forumId<br/>\n";
 				$forumStore['user_id'] = ROOT_USER_ID;
 				$forumStore['title'] = $forumList[$forumId]['forum_name'];
 				$forumStore['edit'] = $forumList[$forumId]['forum_desc'];
+				$forumStore['migrate_board_id'] = $forumId;
 				$forumStore['format_guid'] = 'bbcode';
 				$newBoard = new BitBoard();
 				if( $newBoard->store( $forumStore ) ) {

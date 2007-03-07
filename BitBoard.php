@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.25 2007/03/05 05:47:53 spiderr Exp $
- * $Id: BitBoard.php,v 1.25 2007/03/05 05:47:53 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.26 2007/03/07 21:19:16 spiderr Exp $
+ * $Id: BitBoard.php,v 1.26 2007/03/07 21:19:16 spiderr Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.25 $ $Date: 2007/03/05 05:47:53 $ $Author: spiderr $
+ * @version $Revision: 1.26 $ $Date: 2007/03/07 21:19:16 $ $Author: spiderr $
  * @package boards
  */
 
@@ -161,6 +161,10 @@ class BitBoard extends LibertyAttachable {
 			$pParamHash['board_store']['content_id'] = $pParamHash['content_id'];
 		}
 
+		if( @$this->verifyId( $pParamHash['migrate_board_id'] ) ) {
+			$pParamHash['board_store']['migrate_board_id'] = $pParamHash['migrate_board_id'];
+		}
+/* board description seems to have been removed in favor of liberty_content data
 		// check some lengths, if too long, then truncate
 		if( $this->isValid() && !empty( $this->mInfo['description'] ) && empty( $pParamHash['description'] ) ) {
 			// someone has deleted the description, we need to null it out
@@ -170,7 +174,7 @@ class BitBoard extends LibertyAttachable {
 		} else {
 			$pParamHash['board_store']['description'] = substr( $pParamHash['description'], 0, 200 );
 		}
-
+*/
 		if( !empty( $pParamHash['data'] ) ) {
 			$pParamHash['edit'] = $pParamHash['data'];
 		}
