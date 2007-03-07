@@ -63,6 +63,9 @@ print "Migrating forum $forumId<br/>\n";
 				$newBoard = new BitBoard();
 				if( $newBoard->store( $forumStore ) ) {
 					$contentId = $newBoard->mContentId;
+					if( $gBitSystem->isPackageActive( 'pigeonholes' ) ) {
+						// add board to pigeonhole category that should already be created...
+					}
 				} else {
 					vd( $newBoard->mErrors );
 				}
