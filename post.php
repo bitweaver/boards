@@ -39,7 +39,7 @@ if (!empty($_REQUEST['action'])) {
 }
 
 if( @BitBase::verifyId( $_REQUEST['t'] ) ) {
-	$topicId = $_REQUEST['t'];
+	// nothing for now
 } elseif( @BitBase::verifyId( $_REQUEST['migrate_topic_id'] ) ) {
 	if( $_REQUEST['t'] = BitBoardTopic::lookupByMigrateTopic( $_REQUEST['migrate_topic_id'] ) ) {
 		bit_redirect( BITBOARDS_PKG_URL.'index.php?t='. $_REQUEST['t'] );

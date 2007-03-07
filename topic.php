@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.12 2007/02/16 22:38:20 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.13 2007/03/07 21:40:29 spiderr Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -76,10 +76,15 @@ if (isset($_REQUEST["new"])) {
 		default:
 			break;
 	}
-} elseif (empty($_REQUEST['b'])) {
-	$gBitSystem->fatalError("board id not given");
 }
 
+if( @BitBase::verifyId( $_REQUEST['t'] ) ) {
+	// nothing for now
+} elseif( @BitBase::verifyId( $_REQUEST['migrate_board_id'] ) ) {
+	if( $_REQUEST['b'] = BitBoard::lookupByMigrateBoard( $_REQUEST['migrate_board_id'] ) ) {
+		bit_redirect( BITBOARDS_PKG_URL.'index.php?b='. $_REQUEST['b'] );
+	}
+}
 
 /* mass-remove:
 the checkboxes are sent as the array $_REQUEST["checked[]"], values are the wiki-PageNames,
@@ -116,12 +121,13 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 	}
 }
 
-$board = new BitBoard($_REQUEST['b']);
-$board->load();
-$gContent = $board;
+$gContent = new BitBoard($_REQUEST['b']);
+if( !$gContent->load() ) {
+	$gBitSystem->fatalError("board id not given");
+}
 
-$commentsParentId=$board->mContentId;
-$comments_return_url=  BITBOARDS_PKG_URL."index.php?b=".urlencode($board->mBitBoardId);
+$commentsParentId=$gContent->mContentId;
+$comments_return_url=  BITBOARDS_PKG_URL."index.php?b=".urlencode($gContent->mBitBoardId);
 
 require_once (LIBERTY_PKG_PATH.'comments_inc.php');
 
@@ -134,8 +140,8 @@ $gBitSmarty->assign_by_ref( 'threadList', $threadList );
 // getList() has now placed all the pagination information in $_REQUEST['listInfo']
 $gBitSmarty->assign_by_ref( 'listInfo', $_REQUEST['listInfo'] );
 
-$gBitSmarty->assign_by_ref( 'board', $board );
-$gBitSmarty->assign( 'cat_url', BITBOARDS_PKG_URL."index.php"); //?ct=".urlencode($board->mInfo['content_type_guid']));
+$gBitSmarty->assign_by_ref( 'board', $gContent );
+$gBitSmarty->assign( 'cat_url', BITBOARDS_PKG_URL."index.php"); //?ct=".urlencode($gContent->mInfo['content_type_guid']));
 
 
 
@@ -144,5 +150,5 @@ if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
 	include_once( QUICKTAGS_PKG_PATH.'quicktags_inc.php' );
 }
 // Display the template
-$gBitSystem->display( 'bitpackage:bitboards/list_topics.tpl', tra( 'Message Board Threads: ' . $board->getField('title') ) );
+$gBitSystem->display( 'bitpackage:bitboards/list_topics.tpl', tra( 'Message Board Threads: ' . $gContent->getField('title') ) );
 ?>
