@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/modules/Attic/mod_last_boards_posts.tpl,v 1.3 2007/03/08 03:26:08 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.tpl,v 1.1 2007/03/08 03:27:56 spiderr Exp $ *}
 {strip}
 {if $gBitSystem->isPackageActive('bitboards') && {$modLastBoardPosts}
 	{bitmodule title="$moduleTitle" name="last_board_posts"}

@@ -3,7 +3,7 @@
  * Params: 
  * - title : if is "title", show the title of the post, else show the date of creation
  *
- * @version $Header: /cvsroot/bitweaver/_bit_boards/modules/Attic/mod_last_boards_posts.php,v 1.2 2007/03/08 03:09:59 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.php,v 1.1 2007/03/08 03:27:55 spiderr Exp $
  * @package boards
  * @subpackage modules
  */
