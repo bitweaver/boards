@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.14 2007/02/15 19:36:12 lsces Exp $
- * $Id: BitBoardPost.php,v 1.14 2007/02/15 19:36:12 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.15 2007/03/08 03:26:08 spiderr Exp $
+ * $Id: BitBoardPost.php,v 1.15 2007/03/08 03:26:08 spiderr Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.14 $ $Date: 2007/02/15 19:36:12 $ $Author: lsces $
+ * @version $Revision: 1.15 $ $Date: 2007/03/08 03:26:08 $ $Author: spiderr $
  * @package boards
  */
 
@@ -190,6 +190,77 @@ class BitBoardPost extends LibertyComment {
 		return $ret;
 	}
 
+	function getList( &$pListHash ) {
+		global $gBitUser, $gBitSystem;
+
+		$this->prepGetList( $pListHash );
+
+		$joinSql = $selectSql = $whereSql = '';
+
+		$ret = array();
+		$contentId = $this->mCommentId;
+
+//		$mid = 'ORDER BY `thread_forward_sequence` ASC';
+
+		$bindVars = array();
+		if( !empty( $pListHash['content_id'] ) ) {
+			if (is_array( $contentId ) ) {
+				$mid2 = 'in ('.implode(',', array_fill(0, count( $pListHash['content_id'] ), '?')).')';
+				$bindVars = $contentId;
+				$selectSql = ', lcp.content_type_guid as parent_content_type_guid, lcp.title as parent_title ';
+				$joinSql .= " LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content` lcp ON (lcp.content_id = lcom.parent_id) ";
+			} elseif( is_numeric( $contentId ) ) {
+				$whereSql .= "`thread_forward_sequence` LIKE '".sprintf("%09d.",$contentId)."%'";
+			}
+		}
+
+		if ($gBitSystem->isFeatureActive('bitboards_posts_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
+			$whereSql .= " AND ((post.`is_approved` = 1) OR (lc.`user_id` >= 0))";
+		}
+
+		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this );
+
+		if( !empty( $whereSql ) ) {
+			$whereSql = ' WHERE '.$whereSql;
+		}
+
+		$sql = "SELECT lcom.`comment_id`, lcom.`parent_id`, lcom.`root_id`, lcom.`thread_forward_sequence`, lcom.`thread_reverse_sequence`, lcom.`anon_name`, lc.*, uu.`email`, uu.`real_name`, uu.`login`, post.is_approved, post.is_warned, post.warned_message, uu.registration_date AS registration_date, tf_ava.`storage_path` AS `avatar_storage_path` $selectSql
+				FROM `".BIT_DB_PREFIX."liberty_comments` lcom
+					INNER JOIN `".BIT_DB_PREFIX."boards_map` bm ON (lcom.`root_id` = bm.`topic_content_id`)
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
+					INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (lc.`user_id` = uu.`user_id`)
+					 $joinSql
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` ta_ava ON ( uu.`avatar_attachment_id`=ta_ava.`attachment_id` )
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` )
+					LEFT JOIN `".BIT_DB_PREFIX."boards_posts` post ON (post.`comment_id` = lcom.`comment_id`)
+				$whereSql ORDER BY ".$this->mDb->convertSortmode( $pListHash['sort_mode'] );
+
+		$ret = array();
+
+		if( $result = $this->mDb->query( $sql, $bindVars, $pListHash['max_records'], $pListHash['offset'] ) ) {
+			while( $row = $result->FetchRow() ) {
+				if (empty($row['anon_name'])) $row['anon_name'] = "Anonymous";
+				$row['user_avatar_url'] = (!empty($row['avatar_storage_path']) ? BIT_ROOT_URL . dirname( $row['avatar_storage_path'] ).'/avatar.jpg' : NULL);
+				unset($row['avatar_storage_path']);
+				if (!empty($row['warned_message'])) {
+					$row['warned_message'] = str_replace("\n","<br />\n",$row['warned_message']);
+				}
+				$row['data'] = trim($row['data']);
+				$row['user_url']=BitUser::getDisplayUrl($row['login'],$row);
+				$row['parsed_data'] = $this->parseData( $row );
+				$row['level'] = substr_count ( $row['thread_forward_sequence'], '.' ) - 1;
+				$row['display_url'] = $this->getDisplayUrl( $row['comment_id'], boards_get_topic_comment( $row['thread_forward_sequence'] ) );
+				$c = new LibertyComment();
+				$c->mInfo=$row;
+				$row['editable'] = $c->userCanEdit();
+				$ret[] = $row;
+				//va($row);
+			}
+		}
+
+		return $ret;
+	}
+
 	function getNumComments($pContentId = NULL) {
 		$ret = 0;
 
@@ -218,16 +289,24 @@ class BitBoardPost extends LibertyComment {
 	* @param pExistsHash the hash that was returned by LibertyAttachable::pageExists
 	* @return the link to display the page.
 	*/
-	function getDisplayUrl() {
+	function getDisplayUrl( $pCommentId=NULL, $pTopicId=NULL ) {
+
+		if( empty( $pCommentId ) || empty( $pTopicId ) ) {
+			$pCommentId = $this->mCommentId;
+			$pTopicId = $this->getTopicId();
+		}
 		$ret = NULL;
-		if( @$this->verifyId( $this->mCommentId ) ) {
-			$ret = BITBOARDS_PKG_URL."index.php?t=".$this->getTopicId()."#".$this->mCommentId;
+		if( @$this->verifyId( $pCommentId ) ) {
+			$ret = BITBOARDS_PKG_URL."index.php?t=".$pTopicId;
+			if( $pCommentId != $pTopicId ) {
+				$ret .= '#'.$pCommentId;
+			}
 		}
 		return $ret;
 	}
 
 	function getTopicId() {
-		return intval(substr($this->mInfo['thread_forward_sequence'],0,9));
+		return bitboards_get_topic_comment( $this->getField( 'thread_forward_sequence') );
 	}
 
 	function modApprove() {

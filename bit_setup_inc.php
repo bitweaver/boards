@@ -30,5 +30,9 @@ if( $gBitSystem->isPackageActive( 'bitboards' ) ) {
 		'content_icon_tpl' => 'bitpackage:bitboards/bitboards_service_icons.tpl',
 		'content_list_sql_function' => 'bitboards_content_list_sql',
 	) );
+
+	function boards_get_topic_comment( $pThreadForwardSequence ) {
+		return( intval( substr( $pThreadForwardSequence, 0, 9 ) ) );
+	}
 }
 ?>
