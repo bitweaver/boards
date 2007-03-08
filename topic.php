@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.13 2007/03/07 21:40:29 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.14 2007/03/08 01:20:50 spiderr Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -78,7 +78,7 @@ if (isset($_REQUEST["new"])) {
 	}
 }
 
-if( @BitBase::verifyId( $_REQUEST['t'] ) ) {
+if( @BitBase::verifyId( $_REQUEST['b'] ) ) {
 	// nothing for now
 } elseif( @BitBase::verifyId( $_REQUEST['migrate_board_id'] ) ) {
 	if( $_REQUEST['b'] = BitBoard::lookupByMigrateBoard( $_REQUEST['migrate_board_id'] ) ) {
