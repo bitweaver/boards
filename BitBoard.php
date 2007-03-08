@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.27 2007/03/07 21:40:28 spiderr Exp $
- * $Id: BitBoard.php,v 1.27 2007/03/07 21:40:28 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.28 2007/03/08 05:29:11 spiderr Exp $
+ * $Id: BitBoard.php,v 1.28 2007/03/08 05:29:11 spiderr Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.27 $ $Date: 2007/03/07 21:40:28 $ $Author: spiderr $
+ * @version $Revision: 1.28 $ $Date: 2007/03/08 05:29:11 $ $Author: spiderr $
  * @package boards
  */
 
@@ -499,10 +499,10 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 				INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` slc ON( slc.`content_id` = lcom.`content_id` )
 				LEFT JOIN `".BIT_DB_PREFIX."boards_posts` fp ON (fp.`comment_id` = lcom.`comment_id`)
-			WHERE lcom.`root_id`=lcom.`parent_id` AND ".$data['content_id']."=map.`board_content_id` AND ((fp.`is_approved` = 1) OR (slc.`user_id` >= 0))
+			WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=? AND ((fp.`is_approved` IS NULL OR fp.`is_approved` = 1) OR (slc.`user_id` >= 0))
 		    ORDER BY slc.`last_modified` DESC
 	    ";
-		$result = $this->mDb->getRow( $query);
+		$result = $this->mDb->getRow( $query, array( $data['content_id'] ) );
 		if (!empty($result['thread_id'])) {
 			if (empty($result['l_anon_name'])) $result['l_anon_name'] = "Anonymous";
 			$result['thread_id']=intval($result['thread_id']);
