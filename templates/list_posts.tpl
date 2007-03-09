@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.4 2007/02/16 22:38:20 nickpalmer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.5 2007/03/09 02:03:22 spiderr Exp $ *}
 {strip}
 	<div class="boards breadcrumb">
 		&laquo; {tr}Back to{/tr} <a href="{$board->mInfo.display_url}">{$board->mInfo.title|escape}</a>
@@ -13,7 +13,10 @@
 	</div>
 
 	<div class="header">
-		<h1>{$thread->mInfo.title|escape}</h1>
+		<h1>{$thread->getTitle()|escape}</h1>
+		{if $thread->getField('root_content_id') != $smarty.const.BITBOARD_CONTENT_TYPE_GUID}
+			{tr}Comment on{/tr} <a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$thread->getField('root_content_id')}">{$thread->getField('root_title')|default:$thread->getField('root_content_id')|escape}</a>
+		{/if}
 	</div>
 
 	<div class="body">

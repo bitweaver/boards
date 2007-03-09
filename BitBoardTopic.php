@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.28 2007/03/08 03:26:08 spiderr Exp $
- * $Id: BitBoardTopic.php,v 1.28 2007/03/08 03:26:08 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.29 2007/03/09 02:03:22 spiderr Exp $
+ * $Id: BitBoardTopic.php,v 1.29 2007/03/09 02:03:22 spiderr Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.28 $ $Date: 2007/03/08 03:26:08 $ $Author: spiderr $
+ * @version $Revision: 1.29 $ $Date: 2007/03/09 02:03:22 $ $Author: spiderr $
  * @package boards
  */
 
@@ -83,15 +83,18 @@ SELECT
 	lcom.`root_id` AS content_id,
 	lc.`content_type_guid` AS content_type_guid,
 
+	rlc.content_id AS root_content_id, rlc.title AS root_title, rlc.content_type_guid AS `root_content_type_guid`,
+
 	map.`board_content_id` AS board_content_id
 
 	$selectSql
 FROM `${BIT_DB_PREFIX}liberty_comments` lcom
 	INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
 	INNER JOIN `${BIT_DB_PREFIX}boards_map` map ON (map.`topic_content_id`=lcom.`root_id` )
+	INNER JOIN `".BIT_DB_PREFIX."liberty_content` rlc ON (rlc.`content_id` = lcom.`root_id`)
+	$joinSql
 	LEFT JOIN `${BIT_DB_PREFIX}boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
 	LEFT JOIN `${BIT_DB_PREFIX}boards_posts` post ON(post.`comment_id`=lcom.`comment_id`)
-	$joinSql
 WHERE
 	lcom.`root_id`=lcom.`parent_id` AND	$lookupColumn=?
 	$whereSql";
