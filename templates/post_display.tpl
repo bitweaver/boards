@@ -1,31 +1,46 @@
 {strip}
 {assign var='gContent' value=$comment}
 
+{if $gBitUser->getPreference('boards_show_avatars','y') == y}
+<div class="userinfo">
+		{if $comment.user_id == $smarty.const.ANONYMOUS_USER_ID}
+			<strong>{$comment.anon_name|escape}</strong>
+		{else}
+			<strong>{displayname hash=$comment}</strong>
+			<br />
+			{if $comment.user_id != $smarty.const.ANONYMOUS_USER_ID && !empty($comment.user_avatar_url)}
+				<a href="{$comment.user_url}"><img src="{$comment.user_avatar_url}" title="{tr}Avatar{/tr}" alt="{tr}Avatar{/tr}" /></a>
+				<br />
+			{/if}
+			<small>{tr}Joined: {/tr}{$comment.registration_date|bit_short_date}</small><br />
+		{/if}
+</div>
+{/if}
 <div class="body" id="{$comment.comment_id|escape}">
-	<div class="content" {if $comments_style eq 'threaded' || $gBitUser->getPreference('boards_show_avatars','y') == y}style="{if $comments_style eq 'threaded'}padding-left:{math equation="level * marginIncrement +3 " level=$comment.level marginIncrement=20}px;{/if}{if $gBitUser->getPreference('boards_show_avatars','y') == y}margin-left: 200px;b{/if}"{/if}>
+	<div class="content" {if $comments_style eq 'threaded' || $gBitUser->getPreference('boards_show_avatars','y') == y}style="{if $comments_style eq 'threaded'}padding-left:{math equation="level * marginIncrement +3 " level=$comment.level marginIncrement=20}px;{/if}{if $gBitUser->getPreference('boards_show_avatars','y') == y}margin-left: 14.5em;{/if}"{/if}>
 		{if !$post_is_preview}
 			<div class="floaticon">
 				{if $print_page ne 'y' && $comment.deleted==0 }
 					{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
-						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Reply to this Post"}</a>
+						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Reply to this Post" iforce="icon"}</a>
 					{/if}
 					{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
-						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1&amp;quote=y#editcomments" rel="nofollow">{biticon ipackage="icons" iname="mail-reply-all" iexplain="Reply with Quote to this Post"}</a>
+						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1&amp;quote=y#editcomments" rel="nofollow">{biticon ipackage="icons" iname="mail-reply-all" iexplain="Reply with Quote to this Post" iforce="icon"}</a>
 					{/if}
 					{if $comment.editable}
-						<a href="{$comments_return_url}&amp;post_comment_id={$comment.comment_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit"}</a>
+						<a href="{$comments_return_url}&amp;post_comment_id={$comment.comment_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit" iforce="icon"}</a>
 					{/if}
 					{if $gBitUser->isAdmin()}
-						<a href="{$comments_return_url}&amp;delete_comment_id={$comment.comment_id}" rel="nofollow">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove"}</a>
+						<a href="{$comments_return_url}&amp;delete_comment_id={$comment.comment_id}" rel="nofollow">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove" iforce="icon"}</a>
 					{/if}
 					{if $gBitUser->hasPermission( 'p_bitboards_edit' ) && (($comment.user_id<0 && $comment.is_approved==0)||$comment.user_id>=0) && !$comment.is_warned}
 						{if $comment.user_id<0 && $comment.is_approved==0}
 							<a title="{tr}Approve this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=1&amp;comment_id={$comment.comment_id}">
-								{biticon ipackage="icons" iname="list-add" iexplain="Approve Post"}
+								{biticon ipackage="icons" iname="list-add" iexplain="Approve Post" iforce="icon"}
 							</a>
 
 							<a title="{tr}Reject this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=2&amp;comment_id={$comment.comment_id}">
-								{biticon ipackage="icons" iname="list-remove" iexplain="Reject Post"}
+								{biticon ipackage="icons" iname="list-remove" iexplain="Reject Post" iforce="icon"}
 							</a>
 						{elseif !$comment.is_warned && $comment.user_id>=0}
 							<a onclick="
@@ -38,7 +53,7 @@
 									');
 									return false;
 								" title="{tr}Warn the poster about this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=3&amp;comment_id={$comment.comment_id}"
-							>{biticon ipackage="icons" iname="dialog-warning" iexplain="Warn Post"}</a>
+							>{biticon ipackage="icons" iname="dialog-warning" iexplain="Warn Post" iforce="icon"}</a>
 
 							<div style="display:none;" id="warn_block_{$comment.comment_id|escape:"url"}">
 								{form action="`$thread_mInfo.display_url`"}
@@ -118,21 +133,6 @@
 	</div><!-- end .content -->
 </div>
 
-{if $gBitUser->getPreference('boards_show_avatars','y') == y}
-<div class="userinfo">
-		{if $comment.user_id < 0}
-			<strong>{$comment.anon_name|escape}</strong>
-		{else}
-			<strong>{displayname hash=$comment}</strong>
-			<br />
-			{if $comment.user_id >= 0 && !empty($comment.user_avatar_url)}
-				<a href="{$comment.user_url}"><img src="{$comment.user_avatar_url}" title="{tr}Avatar{/tr}" alt="{tr}Avatar{/tr}" /></a>
-				<br />
-			{/if}
-			<small>{tr}Joined: {/tr}{$comment.registration_date|bit_short_date}</small><br />
-		{/if}
-</div>
-{/if}
 
 <div class="signature"> </div>
 {/strip}

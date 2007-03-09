@@ -28,7 +28,6 @@ $flip_downname=>$flip.$flip_name.downname
 		" href="{$smarty.const.BITBOARDS_PKG_URL}topic.php?
 			{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}
 			&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}">
-{/if}
 
 {if $flip.$flip_name.state==1}
 		{biticon ipackage=icons iname=$flip.$flip_name.up iexplain=$flip.$flip_name.upname iforce="icon"}
@@ -38,7 +37,6 @@ $flip_downname=>$flip.$flip_name.downname
 		{/if}
 {/if}
 
-{if $gBitUser->hasPermission( 'p_bitboards_edit' )}
 		</a>
 	</span>
 {/if}

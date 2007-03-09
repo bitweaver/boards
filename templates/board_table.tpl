@@ -16,23 +16,15 @@
 				{else}
 					{biticon ipackage="icons" iname="folder" ipath="large" iexplain="New Posts" iforce="icon"}
 				{/if}
+					<strong class="count">{$board.post_count}</strong>
 			</td>
 			<td>
-				<span class="title">
-					<h3><a href="{$board.url}" title="{$board_title}">{$board_title}</a>
-					<span class="count">
-						&nbsp;({tr}Posts{/tr}: {$board.post_count})
-					</span>
-					</h3>
-				</span>
-				<div class="desc">
-					{$board.parsed_data}
-				</div>
-				<span class="topic">
+				<h2 class="title"><a href="{$board.url}" title="{$board_title}">{$board_title}</a></h2>
+				<span style="float:right; text-align:right">
 					{if !empty($board.last)}
 						Last Post:&nbsp;
-						<a href="{$board.last.url}" title="{$board.last.title|default:"Post..."}">{$board.last.title|default:"Post..."}</a>&nbsp;
-						{if $board.last.last_modified > 0}{$board.last.last_modified|reltime}{/if}
+						"<a href="{$board.last.url}" title="{$board.last.title|default:"Post..."}">{$board.last.title|default:"Post..."}</a>"&nbsp;
+						<br/>{if $board.last.last_modified > 0}{$board.last.last_modified|reltime}{/if}
 						&nbsp;by&nbsp;
 						{if $board.last.user_id < 0}{$board.last.l_anon_name|escape}{else}{displayname user_id=$board.last.user_id}{/if}
 					{/if}
@@ -40,6 +32,9 @@
 						{if $board.unreg > 0}<a class="highlight" href="{$board.url}" title="{$board.title|escape}">{$board.unreg}</a>{/if}
 					{/if}
 				</span>
+				<div class="desc">
+					{$board.parsed_data}
+				</div>
 			</td>
 		</tr>
 	{/foreach}

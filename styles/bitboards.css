@@ -25,11 +25,13 @@ unregistered user post highlight
 
 /* post layout */
 .bitboard .mb-post 				{clear:both;}
-.bitboard .mb-post .body		{float:right;width:98%; margin-left:-200px;}
+.bitboard .mb-post .body		{margin-left:-14.5em; padding-left:14.5em}
 .bitboard .mb-post .content		{width:auto}
 .bitboard .mb-post .header		{}
-.bitboard .mb-post .userinfo	{float:left;width:200px;}
+.bitboard .mb-post .userinfo	{float:left;width:14em;}
 .bitboard .mb-post .signature	{clear:both;}
+
+form.mb-threading div { display:inline }
 
 /* debugging and testing * /
 .bitboard .mb-post 	 			{background:#ffc; padding-bottom:1em; margin:1em;}
