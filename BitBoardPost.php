@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.15 2007/03/08 03:26:08 spiderr Exp $
- * $Id: BitBoardPost.php,v 1.15 2007/03/08 03:26:08 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.16 2007/03/09 21:26:48 spiderr Exp $
+ * $Id: BitBoardPost.php,v 1.16 2007/03/09 21:26:48 spiderr Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.15 $ $Date: 2007/03/08 03:26:08 $ $Author: spiderr $
+ * @version $Revision: 1.16 $ $Date: 2007/03/09 21:26:48 $ $Author: spiderr $
  * @package boards
  */
 
@@ -210,7 +210,7 @@ class BitBoardPost extends LibertyComment {
 				$selectSql = ', lcp.content_type_guid as parent_content_type_guid, lcp.title as parent_title ';
 				$joinSql .= " LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content` lcp ON (lcp.content_id = lcom.parent_id) ";
 			} elseif( is_numeric( $contentId ) ) {
-				$whereSql .= "`thread_forward_sequence` LIKE '".sprintf("%09d.",$contentId)."%'";
+				$whereSql .= " AND `thread_forward_sequence` LIKE '".sprintf("%09d.",$contentId)."%'";
 			}
 		}
 
@@ -220,8 +220,19 @@ class BitBoardPost extends LibertyComment {
 
 		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this );
 
+		if( !empty( $pListHash['board_id'] ) ) {
+			$joinSql .= "INNER JOIN `".BIT_DB_PREFIX."boards` b ON (b.`content_id` = bm.`board_content_id`)";
+			$whereSql .= ' AND b.`board_id`=? ';
+			array_push( $bindVars, $pListHash['board_id'] );
+		}
+
+		if( BitBase::verifyId( $pListHash['user_id'] ) ) {
+			$whereSql .= ' AND lc.`user_id`=? ';
+			array_push( $bindVars, $pListHash['user_id'] );
+		}
+
 		if( !empty( $whereSql ) ) {
-			$whereSql = ' WHERE '.$whereSql;
+			$whereSql = preg_replace( '/^[\s]*AND\b/i', 'WHERE ', $whereSql );
 		}
 
 		$sql = "SELECT lcom.`comment_id`, lcom.`parent_id`, lcom.`root_id`, lcom.`thread_forward_sequence`, lcom.`thread_reverse_sequence`, lcom.`anon_name`, lc.*, uu.`email`, uu.`real_name`, uu.`login`, post.is_approved, post.is_warned, post.warned_message, uu.registration_date AS registration_date, tf_ava.`storage_path` AS `avatar_storage_path` $selectSql
