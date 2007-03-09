@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.tpl,v 1.1 2007/03/08 03:27:56 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.tpl,v 1.2 2007/03/09 22:27:35 spiderr Exp $ *}
 {strip}
 {if $gBitSystem->isPackageActive('bitboards') && {$modLastBoardPosts}
 	{bitmodule title="$moduleTitle" name="last_board_posts"}
@@ -16,6 +16,7 @@
 				<li></li>
 			{/section}
 		</ul>
+		<a href="{$smarty.const.BITBOARDS_PKG_URL}{if $modRecentPostsBoardId}index.php?b={$modRecentPostsBoardId}{/if}">View More...</a>
 	{/bitmodule}
 {/if}
 {/strip}
