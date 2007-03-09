@@ -2,8 +2,10 @@
 /**
  * Params: 
  * - title : if is "title", show the title of the post, else show the date of creation
+ * - b : numeric id of board to show posts from
+ * - all_boards : display posts from all boards. Default behavior is to auto-track to board you are in.
  *
- * @version $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.php,v 1.2 2007/03/09 21:26:49 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.php,v 1.3 2007/03/09 22:19:25 spiderr Exp $
  * @package boards
  * @subpackage modules
  */
@@ -17,7 +19,9 @@ include_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
 global $gBitSmarty, $gQueryUserId, $module_rows, $module_params, $gBitSystem;
 
 $listHash = array( 'user_id' => $gQueryUserId, 'sort_mode' => 'created_desc', 'max_records' => $module_rows );
-if( !empty( $_REQUEST['b'] ) ) {
+if( !empty( $module_params['b'] ) ) {
+	$listHash['board_id'] = $module_params['b'];
+} elseif( !empty( $_REQUEST['b'] ) && empty( $module_params['all_boards'] ) ) {
 	$listHash['board_id'] = $_REQUEST['b'];
 }
 if( BitBase::verifyId( $gQueryUserId ) ) {
