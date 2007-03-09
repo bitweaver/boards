@@ -30,7 +30,7 @@
 					{if $comment.editable}
 						<a href="{$comments_return_url}&amp;post_comment_id={$comment.comment_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit" iforce="icon"}</a>
 					{/if}
-					{if $gBitUser->isAdmin()}
+					{if $gBitUser->hasPermission( 'p_liberty_admin_comments' )}
 						<a href="{$comments_return_url}&amp;delete_comment_id={$comment.comment_id}" rel="nofollow">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove" iforce="icon"}</a>
 					{/if}
 					{if $gBitUser->hasPermission( 'p_bitboards_edit' ) && (($comment.user_id<0 && $comment.is_approved==0)||$comment.user_id>=0) && !$comment.is_warned}
