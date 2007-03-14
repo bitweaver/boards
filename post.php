@@ -11,6 +11,8 @@ require_once( '../bit_setup_inc.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
 require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
 
+$gBitSystem->verifyPermission( 'p_bitboards_read' );
+
 if (!empty($_REQUEST['action'])) {
 	// Now check permissions to access this page
 	$gBitSystem->verifyPermission( 'p_bitboards_edit' );
@@ -36,7 +38,7 @@ if (!empty($_REQUEST['action'])) {
 		default:
 			break;
 	}
-}
+} 
 
 if( @BitBase::verifyId( $_REQUEST['t'] ) ) {
 	// nothing for now
@@ -49,8 +51,6 @@ if( @BitBase::verifyId( $_REQUEST['t'] ) ) {
 		bit_redirect( BITBOARDS_PKG_URL.'index.php?t='. $_REQUEST['t'] );
 	}
 }
-
-$gBitSystem->verifyPermission( 'p_bitboards_read' );
 
 $gBitSmarty->assign( 'loadAjax', 'prototype' );
 
@@ -87,6 +87,14 @@ if( empty( $_REQUEST["comments_style"] ) ) {
 }
 
 require_once (LIBERTY_PKG_PATH.'comments_inc.php');
+
+if( !empty( $_REQUEST['remove'] ) && @BitBase::verifyId( $_REQUEST['t'] ) ) {
+	$gBitUser->verifyTicket();
+	$boardId = $thread->getField( 'board_id' );
+	if( $gComment->expunge() && $thread->expunge() ) {
+		bit_redirect( BITBOARDS_PKG_URL.'index.php?b='.$boardId );
+	}
+}
 
 $postComment['registration_date']=$gBitUser->mInfo['registration_date'];
 $postComment['user_avatar_url']=$gBitUser->mInfo['avatar_url'];

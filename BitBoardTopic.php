@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.30 2007/03/10 22:13:53 nickpalmer Exp $
- * $Id: BitBoardTopic.php,v 1.30 2007/03/10 22:13:53 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.31 2007/03/14 07:49:08 spiderr Exp $
+ * $Id: BitBoardTopic.php,v 1.31 2007/03/14 07:49:08 spiderr Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.30 $ $Date: 2007/03/10 22:13:53 $ $Author: nickpalmer $
+ * @version $Revision: 1.31 $ $Date: 2007/03/14 07:49:08 $ $Author: spiderr $
  * @package boards
  */
 
@@ -47,7 +47,6 @@ class BitBoardTopic extends LibertyAttachable {
 	function load() {
 		global $gBitUser, $gBitSystem;
 		if( $this->verifyId( $this->mRootId ) || $this->verifyId( $this->mContentId ) ) {
-			// LibertyAttachable::load()assumes you have joined already, and will not execute any sql!
 			// This is a significant performance optimization
 			$lookupColumn = $this->verifyId( $this->mRootId ) ? 'lcom.`comment_id`' : 'lc.`content_id`';
 			$bindVars = array();
@@ -85,12 +84,13 @@ SELECT
 
 	rlc.content_id AS root_content_id, rlc.title AS root_title, rlc.content_type_guid AS `root_content_type_guid`,
 
-	map.`board_content_id` AS board_content_id
+	map.`board_content_id` AS board_content_id, b.`board_id`
 
 	$selectSql
 FROM `${BIT_DB_PREFIX}liberty_comments` lcom
 	INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
 	INNER JOIN `${BIT_DB_PREFIX}boards_map` map ON (map.`topic_content_id`=lcom.`root_id` )
+	INNER JOIN `${BIT_DB_PREFIX}boards` b ON (map.`board_content_id`=b.`content_id` )
 	INNER JOIN `".BIT_DB_PREFIX."liberty_content` rlc ON (rlc.`content_id` = lcom.`root_id`)
 	$joinSql
 	LEFT JOIN `${BIT_DB_PREFIX}boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
@@ -101,14 +101,17 @@ WHERE
 			$result = $this->mDb->query( $query, $bindVars );
 			if( $result && $result->numRows() ) {
 				$this->mInfo = $result->fields;
+				$this->mContentId = $this->getField( 'content_id' );
 				$llc_data = BitBoardTopic::getLastPost($this->mInfo);
 				$this->mInfo = array_merge($this->mInfo,$llc_data);
 				$this->mRootId = $result->fields['th_thread_id'];
 				BitBoardTopic::track($this->mInfo);
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
-				if (empty($this->mInfo['anon_name'])) $this->mInfo['anon_name'] = "Anonymous";
+				if (empty($this->mInfo['anon_name'])) {
+					$this->mInfo['anon_name'] = "Anonymous";
+				}
 
-				LibertyAttachable::load();
+				parent::load(); // assumes you have joined already, and will not execute any sql!
 			}
 		}
 		return( count( $this->mInfo ) );
@@ -135,17 +138,32 @@ WHERE
 		return $ret;
 	}
 
+
+
 	/**
 	* This function removes a bitboard entry
 	**/
 	function expunge() {
+		global $gBitSystem;
+		$ret = FALSE;
 		$gBitSystem->verifyPermission('p_bitboards_edit');
-		$this->mDb->StartTrans();
-		$comment =  new LibertyComment($this->mRootId);
-		$comment->expungeComments();
-		$query = "DELETE FROM `".BIT_DB_PREFIX."boards_topics` WHERE `thread_id` = ?";
-		$result = $this->mDb->query( $query, array( $this->mRootId ) );
-		$this->mDb->CompleteTrans();
+		if( $this->isValid() ) {
+			$this->mDb->StartTrans();
+			$query = "DELETE FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = ?";
+vd( $this->mInfo );
+			$result = $this->mDb->query( $query, array( $this->getField( 'parent_id' ) ) );
+			if( parent::expunge() ) {
+				$this->mDb->CompleteTrans();
+vd( 'complete' );
+				$ret = TRUE;
+			} else {
+vd( 'rpllback' );
+				$this->mDb->RollbackTrans();
+			}
+		}
+vd(  $this->mId );
+bt();
+vd( $ret );
 		return $ret;
 	}
 

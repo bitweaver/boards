@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.16 2007/03/09 21:26:48 spiderr Exp $
- * $Id: BitBoardPost.php,v 1.16 2007/03/09 21:26:48 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.17 2007/03/14 07:49:08 spiderr Exp $
+ * $Id: BitBoardPost.php,v 1.17 2007/03/14 07:49:08 spiderr Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.16 $ $Date: 2007/03/09 21:26:48 $ $Author: spiderr $
+ * @version $Revision: 1.17 $ $Date: 2007/03/14 07:49:08 $ $Author: spiderr $
  * @package boards
  */
 
@@ -101,15 +101,17 @@ class BitBoardPost extends LibertyComment {
 	/**
 	* This function removes a bitboard entry
 	**/
-	function expungeMetaData($comment_id=false) {
-		if (isset($this)) {
-			$comment_id = $this->mCommentId;
-		}
+	function expunge() {
 		$ret = FALSE;
-		if( @BitBase::verifyId($comment_id) ) {
-			$query = "DELETE FROM `".BIT_DB_PREFIX."boards_posts` WHERE `comment_id` = ?";
-			$result = $this->mDb->query( $query, array( $comment_id ) );
-			$ret = TRUE;
+		if( $this->isValid() ) {
+			$this->mDb->StartTrans();
+			// parent actually has deletion of rows in boards for constraint reasons
+			if( parent::expunge() ) {
+				$this->mDb->CompleteTrans();
+				$ret = TRUE;
+			} else {
+				$this->mDb->RollbackTrans();
+			}
 		}
 		return $ret;
 	}

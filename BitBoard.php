@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.28 2007/03/08 05:29:11 spiderr Exp $
- * $Id: BitBoard.php,v 1.28 2007/03/08 05:29:11 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.29 2007/03/14 07:49:08 spiderr Exp $
+ * $Id: BitBoard.php,v 1.29 2007/03/14 07:49:08 spiderr Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.28 $ $Date: 2007/03/08 05:29:11 $ $Author: spiderr $
+ * @version $Revision: 1.29 $ $Date: 2007/03/14 07:49:08 $ $Author: spiderr $
  * @package boards
  */
 
@@ -446,6 +446,19 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 		} else {
 			$selectSql .= ", 0 AS unreg";
 		}
+
+		// always show our own content
+		$whereSql .= " AND ( lc.`user_id`= ? ";
+		$bindVars[] = $gBitUser->mUserId;
+		if( !empty( $pParamHash['content_status_id'] ) ) {
+			// TODO needs safety checking! - spider
+			$whereSql .= " OR lc.`content_status_id` = ? ";
+			$bindVars[] =  $pParamHash['content_status_id'];
+		} elseif( !empty( $pParamHash['min_content_status_id'] ) ) {
+			$whereSql .= " OR lc.`content_status_id` >= ? ";
+			$bindVars[] =  $pParamHash['min_content_status_id'];
+		}
+		$whereSql .= " ) ";
 
 		$query = "SELECT ts.*, lc.`content_id`, lc.`title`, lc.`data`, lc.`format_guid`
 			 $selectSql
