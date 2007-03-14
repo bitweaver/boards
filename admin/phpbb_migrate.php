@@ -16,6 +16,8 @@ INSERT INTO boards_map (board_content_id, topic_content_id) (SELECT content_id, 
 
 require_once( '../../bit_setup_inc.php' );
 
+$gBitSystem->verifyPermission( 'p_admin' );
+
 $_SESSION['captcha_verified'] = TRUE;
 
 global $db;
