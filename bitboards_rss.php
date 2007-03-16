@@ -59,10 +59,10 @@ foreach( $feeds as $feed ) {
 			$item->title = "[NEW] " .$item->title;
 		}
 	}
-	if ($feed['th_sticky']) {
+	if( !empty( $feed['th_sticky'] ) ) {
 		$item->title = "[!] " .$item->title;
 	}
-	if ($feed['th_locked']) {
+	if( !empty( $feed['th_locked'] ) ) {
 		$item->title = "[#] " .$item->title;
 	}
 	$item->link = 'http://'.$_SERVER['HTTP_HOST'].$feed['url'];
