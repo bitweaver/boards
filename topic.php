@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.14 2007/03/08 01:20:50 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.15 2007/03/31 15:54:13 squareing Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -12,22 +12,22 @@
  * required setup
  */
 require_once( '../bit_setup_inc.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
+require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
+require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
+require_once( BOARDS_PKG_PATH.'BitBoard.php' );
 
 $gBitSmarty->assign( 'loadAjax', 'prototype' );
 
 // Is package installed and enabled
-$gBitSystem->verifyPackage( 'bitboards' );
+$gBitSystem->verifyPackage( 'boards' );
 
 // Now check permissions to access this page
-$gBitSystem->verifyPermission( 'p_bitboards_read' );
+$gBitSystem->verifyPermission( 'p_boards_read' );
 
 
 if (isset($_REQUEST["new"])) {
 	$gBitSystem->verifyPermission( 'p_board_view' );
-	require_once( BITBOARDS_PKG_PATH.'lookup_inc.php' );
+	require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 	$res = true;
 	if (isset($_REQUEST["new"]) && is_numeric($_REQUEST["new"])) {
 		$res = $gContent->readTopicSet($_REQUEST["new"]);
@@ -42,7 +42,7 @@ if (isset($_REQUEST["new"])) {
 	// Now check permissions to access this page
 	$gBitSystem->verifyPermission( 'p_board_edit' );
 
-	require_once( BITBOARDS_PKG_PATH.'lookup_inc.php' );
+	require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 	$res = true;
 	if (isset($_REQUEST["locked"]) && is_numeric($_REQUEST["locked"])) {
 		$res = $gContent->lock($_REQUEST["locked"]);
@@ -57,7 +57,7 @@ if (isset($_REQUEST["new"])) {
 	die();
 } elseif (!empty($_REQUEST['action'])) {
 	// Now check permissions to access this page
-	$gBitSystem->verifyPermission( 'p_bitboards_edit' );
+	$gBitSystem->verifyPermission( 'p_boards_edit' );
 
 	$comment = new BitBoardPost($_REQUEST['comment_id']);
 	$comment->loadComment();
@@ -82,7 +82,7 @@ if( @BitBase::verifyId( $_REQUEST['b'] ) ) {
 	// nothing for now
 } elseif( @BitBase::verifyId( $_REQUEST['migrate_board_id'] ) ) {
 	if( $_REQUEST['b'] = BitBoard::lookupByMigrateBoard( $_REQUEST['migrate_board_id'] ) ) {
-		bit_redirect( BITBOARDS_PKG_URL.'index.php?b='. $_REQUEST['b'] );
+		bit_redirect( BOARDS_PKG_URL.'index.php?b='. $_REQUEST['b'] );
 	}
 }
 
@@ -90,20 +90,20 @@ if( @BitBase::verifyId( $_REQUEST['b'] ) ) {
 the checkboxes are sent as the array $_REQUEST["checked[]"], values are the wiki-PageNames,
 e.g. $_REQUEST["checked"][3]="HomePage"
 $_REQUEST["submit_mult"] holds the value of the "with selected do..."-option list
-we look if any page's checkbox is on and if remove_bitboards is selected.
-then we check permission to delete bitboards.
-if so, we call histlib's method remove_all_versions for all the checked bitboards.
+we look if any page's checkbox is on and if remove_boards is selected.
+then we check permission to delete boards.
+if so, we call histlib's method remove_all_versions for all the checked boards.
 */
-if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQUEST["submit_mult"] == "remove_bitboards" ) {
+if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQUEST["submit_mult"] == "remove_boards" ) {
 
 	// Now check permissions to remove the selected bitboard
-	$gBitSystem->verifyPermission( 'p_bitboards_remove' );
+	$gBitSystem->verifyPermission( 'p_boards_remove' );
 
 	if( !empty( $_REQUEST['cancel'] ) ) {
 		// user cancelled - just continue on, doing nothing
 	} elseif( empty( $_REQUEST['confirm'] ) ) {
 		$formHash['delete'] = TRUE;
-		$formHash['submit_mult'] = 'remove_bitboards';
+		$formHash['submit_mult'] = 'remove_boards';
 		foreach( $_REQUEST["checked"] as $del ) {
 			$formHash['input'][] = '<input type="hidden" name="checked[]" value="'.$del.'"/>';
 		}
@@ -127,7 +127,7 @@ if( !$gContent->load() ) {
 }
 
 $commentsParentId=$gContent->mContentId;
-$comments_return_url=  BITBOARDS_PKG_URL."index.php?b=".urlencode($gContent->mBitBoardId);
+$comments_return_url=  BOARDS_PKG_URL."index.php?b=".urlencode($gContent->mBitBoardId);
 
 require_once (LIBERTY_PKG_PATH.'comments_inc.php');
 
@@ -141,7 +141,7 @@ $gBitSmarty->assign_by_ref( 'threadList', $threadList );
 $gBitSmarty->assign_by_ref( 'listInfo', $_REQUEST['listInfo'] );
 
 $gBitSmarty->assign_by_ref( 'board', $gContent );
-$gBitSmarty->assign( 'cat_url', BITBOARDS_PKG_URL."index.php"); //?ct=".urlencode($gContent->mInfo['content_type_guid']));
+$gBitSmarty->assign( 'cat_url', BOARDS_PKG_URL."index.php"); //?ct=".urlencode($gContent->mInfo['content_type_guid']));
 
 
 
@@ -150,5 +150,5 @@ if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
 	include_once( QUICKTAGS_PKG_PATH.'quicktags_inc.php' );
 }
 // Display the template
-$gBitSystem->display( 'bitpackage:bitboards/list_topics.tpl', tra( 'Message Board Threads: ' . $gContent->getField('title') ) );
+$gBitSystem->display( 'bitpackage:boards/list_topics.tpl', tra( 'Message Board Threads: ' . $gContent->getField('title') ) );
 ?>

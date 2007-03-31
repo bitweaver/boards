@@ -9,17 +9,17 @@
  */
 require_once( '../bit_setup_inc.php' );
 
-require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
+require_once( BOARDS_PKG_PATH.'BitBoard.php' );
 
 // Is package installed and enabled
-$gBitSystem->verifyPackage( 'bitboards' );
+$gBitSystem->verifyPackage( 'boards' );
 
 // Now check permissions to access this page
-$gBitSystem->verifyPermission( 'p_bitboards_edit' );
+$gBitSystem->verifyPermission( 'p_boards_edit' );
 
 
 if( isset( $_REQUEST["confirm"] ) ) {
-	require_once( BITBOARDS_PKG_PATH.'lookup_inc.php' );
+	require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 	if( $gContent->moveTo($_REQUEST["target"]) ) {
 		header ("location: ".$_REQUEST["ref"] );
 		die;
@@ -31,7 +31,7 @@ if( isset( $_REQUEST["confirm"] ) ) {
 
 if( isset( $_REQUEST["target"] ) ) {
 	$_REQUEST["content_id"] = $_REQUEST["target"];
-	require_once( BITBOARDS_PKG_PATH.'lookup_inc.php' );
+	require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 	$bitThread = $gContent;
 	unset($gContent);
 	require_once( LIBERTY_PKG_PATH.'lookup_content_inc.php' );
@@ -57,7 +57,7 @@ if( isset( $_REQUEST["target"] ) ) {
 
 $board = new BitBoard();
 $gBitSmarty->assign_by_ref('boards', $board->getBoardSelectList());
-require_once( BITBOARDS_PKG_PATH .'lookup_inc.php' );
+require_once( BOARDS_PKG_PATH .'lookup_inc.php' );
 
-$gBitSystem->display( 'bitpackage:bitboards/topic_move.tpl', tra('Category') );
+$gBitSystem->display( 'bitpackage:boards/topic_move.tpl', tra('Category') );
 ?>

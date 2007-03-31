@@ -8,14 +8,14 @@
  * required setup
  */
 require_once( '../bit_setup_inc.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
+require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
+require_once( BOARDS_PKG_PATH.'BitBoard.php' );
 
-$gBitSystem->verifyPermission( 'p_bitboards_read' );
+$gBitSystem->verifyPermission( 'p_boards_read' );
 
 if (!empty($_REQUEST['action'])) {
 	// Now check permissions to access this page
-	$gBitSystem->verifyPermission( 'p_bitboards_edit' );
+	$gBitSystem->verifyPermission( 'p_boards_edit' );
 
 	$comment = new BitBoardPost($_REQUEST['comment_id']);
 	$comment->loadComment();
@@ -44,11 +44,11 @@ if( @BitBase::verifyId( $_REQUEST['t'] ) ) {
 	// nothing for now
 } elseif( @BitBase::verifyId( $_REQUEST['migrate_topic_id'] ) ) {
 	if( $_REQUEST['t'] = BitBoardTopic::lookupByMigrateTopic( $_REQUEST['migrate_topic_id'] ) ) {
-		bit_redirect( BITBOARDS_PKG_URL.'index.php?t='. $_REQUEST['t'] );
+		bit_redirect( BOARDS_PKG_URL.'index.php?t='. $_REQUEST['t'] );
 	}
 } elseif( @BitBase::verifyId( $_REQUEST['migrate_post_id'] ) ) {
 	if( $_REQUEST['t'] = BitBoardTopic::lookupByMigratePost( $_REQUEST['migrate_post_id'] ) ) {
-		bit_redirect( BITBOARDS_PKG_URL.'index.php?t='. $_REQUEST['t'] );
+		bit_redirect( BOARDS_PKG_URL.'index.php?t='. $_REQUEST['t'] );
 	}
 }
 
@@ -78,9 +78,9 @@ $board->load();
 $gBitSmarty->assign_by_ref( 'board', $board );
 
 $commentsParentId=$thread->mInfo['content_id'];
-$comments_return_url= BITBOARDS_PKG_URL."index.php?t={$thread->mRootId}";
+$comments_return_url= BOARDS_PKG_URL."index.php?t={$thread->mRootId}";
 $gComment = new BitBoardPost($_REQUEST['t']);
-$gBitSmarty->assign('comment_template','bitpackage:bitboards/post_display.tpl');
+$gBitSmarty->assign('comment_template','bitpackage:boards/post_display.tpl');
 
 if( empty( $_REQUEST["comments_style"] ) ) {
 	$_REQUEST["comments_style"] = "flats";
@@ -92,7 +92,7 @@ if( !empty( $_REQUEST['remove'] ) && @BitBase::verifyId( $_REQUEST['t'] ) ) {
 	$gBitUser->verifyTicket();
 	$boardId = $thread->getField( 'board_id' );
 	if( $gComment->expunge() && $thread->expunge() ) {
-		bit_redirect( BITBOARDS_PKG_URL.'index.php?b='.$boardId );
+		bit_redirect( BOARDS_PKG_URL.'index.php?b='.$boardId );
 	}
 }
 
@@ -116,9 +116,9 @@ if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
 }
 
 // WYSIWYG and Quicktag variable
-$gBitSmarty->assign( 'textarea_id', 'editbitboards' );
+$gBitSmarty->assign( 'textarea_id', 'editboards' );
 
-$gBitSystem->display('bitpackage:bitboards/list_posts.tpl', "Show Thread: " . $thread->getField('title') );
+$gBitSystem->display('bitpackage:boards/list_posts.tpl', "Show Thread: " . $thread->getField('title') );
 
 
 ?>

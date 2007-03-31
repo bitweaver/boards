@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_boards.tpl,v 1.2 2007/02/16 21:05:41 nickpalmer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_boards.tpl,v 1.3 2007/03/31 15:54:14 squareing Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="header">
@@ -9,11 +9,11 @@
 		{foreach from=$ns item=child}
 			{assign var=heading value=1}
 			{if $child.sub_count > 0}
-				{include file="bitpackage:bitboards/board_cat.tpl" child=$child color=$color}
+				{include file="bitpackage:boards/board_cat.tpl" child=$child color=$color}
 			{/if}
 		{/foreach}
 
-		{include file="bitpackage:bitboards/legend_inc.tpl"  boardicons=1}
+		{include file="bitpackage:boards/legend_inc.tpl"  boardicons=1}
 	</div><!-- end .body -->
 </div><!-- end .admin -->
 {/strip}

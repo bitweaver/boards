@@ -1,6 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.tpl,v 1.2 2007/03/09 22:27:35 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.tpl,v 1.3 2007/03/31 15:54:14 squareing Exp $ *}
 {strip}
-{if $gBitSystem->isPackageActive('bitboards') && {$modLastBoardPosts}
+{if $gBitSystem->isPackageActive('boards') && {$modLastBoardPosts}
 	{bitmodule title="$moduleTitle" name="last_board_posts"}
 		<ul class="boards">
 			{section name=ix loop=$modLastBoardPosts}
@@ -16,7 +16,7 @@
 				<li></li>
 			{/section}
 		</ul>
-		<a href="{$smarty.const.BITBOARDS_PKG_URL}{if $modRecentPostsBoardId}index.php?b={$modRecentPostsBoardId}{/if}">View More...</a>
+		<a href="{$smarty.const.BOARDS_PKG_URL}{if $modRecentPostsBoardId}index.php?b={$modRecentPostsBoardId}{/if}">View More...</a>
 	{/bitmodule}
 {/if}
 {/strip}

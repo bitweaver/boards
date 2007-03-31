@@ -2,33 +2,33 @@
 global $gBitSystem;
 
 $registerHash = array(
-	'package_name' => 'bitboards',
+	'package_name' => 'boards',
 	'package_path' => dirname( __FILE__ ).'/',
 	'homeable' => TRUE,
 );
 $gBitSystem->registerPackage( $registerHash );
 
-if( $gBitSystem->isPackageActive( 'bitboards' ) ) {
+if( $gBitSystem->isPackageActive( 'boards' ) ) {
 	$menuHash = array(
-		'package_name'  => BITBOARDS_PKG_NAME,
-		'index_url'     => BITBOARDS_PKG_URL.'index.php',
-		'menu_template' => 'bitpackage:bitboards/menu_bitboards.tpl',
+		'package_name'  => BOARDS_PKG_NAME,
+		'index_url'     => BOARDS_PKG_URL.'index.php',
+		'menu_template' => 'bitpackage:boards/menu_boards.tpl',
 	);
 	$gBitSystem->registerAppMenu( $menuHash );
 
-	require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
-	require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );
+	require_once( BOARDS_PKG_PATH.'BitBoard.php' );
+	require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
 
-	$gLibertySystem->registerService( LIBERTY_SERVICE_FORUMS, BITBOARDS_PKG_NAME, array(
-		'content_display_function' => 'bitboards_content_display',
-		'content_preview_function' => 'bitboards_content_preview',
-		'content_edit_function' => 'bitboards_content_edit',
-		'content_store_function' => 'bitboards_content_store',
-		'content_expunge_function' => 'bitboards_content_expunge',
-		'content_edit_mini_tpl' => 'bitpackage:bitboards/bitboards_edit_mini_inc.tpl',
-//		'content_view_tpl' => 'bitpackage:bitboards/service_view_boards.tpl',
-		'content_icon_tpl' => 'bitpackage:bitboards/bitboards_service_icons.tpl',
-		'content_list_sql_function' => 'bitboards_content_list_sql',
+	$gLibertySystem->registerService( LIBERTY_SERVICE_FORUMS, BOARDS_PKG_NAME, array(
+		'content_display_function' => 'boards_content_display',
+		'content_preview_function' => 'boards_content_preview',
+		'content_edit_function' => 'boards_content_edit',
+		'content_store_function' => 'boards_content_store',
+		'content_expunge_function' => 'boards_content_expunge',
+		'content_edit_mini_tpl' => 'bitpackage:boards/boards_edit_mini_inc.tpl',
+//		'content_view_tpl' => 'bitpackage:boards/service_view_boards.tpl',
+		'content_icon_tpl' => 'bitpackage:boards/boards_service_icons.tpl',
+		'content_list_sql_function' => 'boards_content_list_sql',
 	) );
 
 	function boards_get_topic_comment( $pThreadForwardSequence ) {

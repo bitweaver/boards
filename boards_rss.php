@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_bitboards/bitboards_rss.php,v 1.3 2006/05/04 18:43:22 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_boards/boards_rss.php,v 1.1 2007/03/31 15:54:13 squareing Exp $
  * @package boards
  * @subpackage functions
  */
@@ -10,10 +10,10 @@
  */
 require_once( "../bit_setup_inc.php" );
 require_once( RSS_PKG_PATH."rss_inc.php" );
-require_once( BITBOARDS_PKG_PATH."BitBoard.php" );
-require_once( BITBOARDS_PKG_PATH."BitBoardTopic.php" );
+require_once( BOARDS_PKG_PATH."BitBoard.php" );
+require_once( BOARDS_PKG_PATH."BitBoardTopic.php" );
 
-$gBitSystem->verifyPackage( 'bitboards' );
+$gBitSystem->verifyPackage( 'boards' );
 $gBitSystem->verifyPackage( 'rss' );
 
 if(!empty($_REQUEST['u'])) {
@@ -33,7 +33,7 @@ $rss->description = $board->getField( 'parsed_data' );
 $rss->link =  'http://'.$_SERVER['HTTP_HOST'].$board->getDisplayUrl();
 
 // check if we want to use the cache file
-$cacheFile = TEMP_PKG_PATH.RSS_PKG_NAME.'/'.BITBOARDS_PKG_NAME.'_'.$version.'.xml';
+$cacheFile = TEMP_PKG_PATH.RSS_PKG_NAME.'/'.BOARDS_PKG_NAME.'_'.$version.'.xml';
 $rss->useCached( $rss_version_name, $cacheFile, $gBitSystem->getConfig( 'rssfeed_cache_time' ));
 
 $topic = new BitBoardTopic();
@@ -42,7 +42,7 @@ $pParamHash['b'] =$_REQUEST['b'];
 $pParamHash['find'] ='';
 //TODO allow proper sort order
 $pParamHash['sort_mode'] = "llc_last_modified_desc";
-$max_records = $gBitSystem->getConfig( 'bitboards_rss_max_records', 10 );
+$max_records = $gBitSystem->getConfig( 'boards_rss_max_records', 10 );
 $pParamHash['offset'] = 0;
 $feeds = $topic->getList( $pParamHash );
 

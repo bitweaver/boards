@@ -15,15 +15,15 @@
  */
 require_once( '../bit_setup_inc.php' );
 
-require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
+require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
+require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
+require_once( BOARDS_PKG_PATH.'BitBoard.php' );
 
 // Is package installed and enabled
-$gBitSystem->verifyPackage( 'bitboards' );
+$gBitSystem->verifyPackage( 'boards' );
 
 // Now check permissions to access this page
-$gBitSystem->verifyPermission( 'p_bitboards_read' );
+$gBitSystem->verifyPermission( 'p_boards_read' );
 
 function ajax_nice_error($errno, $errstr, $errfile, $errline) {
 	$errortype = array (
@@ -94,18 +94,18 @@ switch ($_GET['req']) {
 		$board = new BitBoard();
 		$boardList=$board->getBoardSelectList();
 		$gBitSmarty->assign_by_ref('boardList',$boardList);
-		$gBitSmarty->display('bitpackage:bitboards/ajax.tpl');
+		$gBitSmarty->display('bitpackage:boards/ajax.tpl');
 		break;
 	case 2:
 		// Now check permissions to access this page
 		$gBitSystem->verifyPermission( 'p_board_edit' );
 		unset($gContent);
-		require_once( BITBOARDS_PKG_PATH.'lookup_inc.php' );
+		require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 		if($gContent->lock($_REQUEST["locked"]) ) {
 			$gContent->load();
 			$gBitSmarty->assign_by_ref('flip',$gContent->getFlipFlop());
 			$gBitSmarty->assign('flip_name','locked');
-			$gBitSmarty->display('bitpackage:bitboards/flipswitch.tpl');
+			$gBitSmarty->display('bitpackage:boards/flipswitch.tpl');
 		} else {
 			trigger_error(var_export($gContent->mErrors,true ));
 			va($gContent);
@@ -115,40 +115,40 @@ switch ($_GET['req']) {
 		// Now check permissions to access this page
 		$gBitSystem->verifyPermission( 'p_board_edit' );
 
-		require_once( BITBOARDS_PKG_PATH.'lookup_inc.php' );
+		require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 		if($gContent->sticky($_REQUEST["sticky"]) ) {
 			$gContent->load();
 			$gBitSmarty->assign_by_ref('flip',$gContent->getFlipFlop());
 			$gBitSmarty->assign('flip_name','sticky');
-			$gBitSmarty->display('bitpackage:bitboards/flipswitch.tpl');
+			$gBitSmarty->display('bitpackage:boards/flipswitch.tpl');
 		} else {
 			trigger_error(var_export($gContent->mErrors,true ));
 		}
 		break;
 	case 4:
 		// Now check permissions to access this page
-		$gBitSystem->verifyPermission( 'p_bitboards_read' );
+		$gBitSystem->verifyPermission( 'p_boards_read' );
 
-		require_once( BITBOARDS_PKG_PATH.'lookup_inc.php' );
+		require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 		if($gContent->readTopicSet($_REQUEST["new"]) ) {
 			$gContent->load();
 			$gBitSmarty->assign_by_ref('flip',$gContent->getFlipFlop());
 			$gBitSmarty->assign('flip_name','new');
-			$gBitSmarty->display('bitpackage:bitboards/flipswitch.tpl');
+			$gBitSmarty->display('bitpackage:boards/flipswitch.tpl');
 		} else {
 			trigger_error(var_export($gContent->mErrors,true ));
 		}
 		break;
 	case 5:
 		// Now check permissions to access this page
-		$gBitSystem->verifyPermission( 'p_bitboards_read' );
+		$gBitSystem->verifyPermission( 'p_boards_read' );
 
-		require_once( BITBOARDS_PKG_PATH.'lookup_inc.php' );
+		require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 		if($gContent->notify($_REQUEST["notify"]) ) {
 			$gContent->load();
 			$gBitSmarty->assign_by_ref('flip',$gContent->getFlipFlop());
 			$gBitSmarty->assign('flip_name','notify');
-			$gBitSmarty->display('bitpackage:bitboards/flipswitch.tpl');
+			$gBitSmarty->display('bitpackage:boards/flipswitch.tpl');
 		} else {
 			trigger_error(var_export($gContent->mErrors,true ));
 		}

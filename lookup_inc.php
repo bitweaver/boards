@@ -7,9 +7,9 @@
 /**
  * required setup
  */
-require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php');
-require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
+require_once( BOARDS_PKG_PATH.'BitBoardTopic.php');
+require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
+require_once( BOARDS_PKG_PATH.'BitBoard.php' );
 // if t supplied, use that
 if( @BitBase::verifyId( $_REQUEST['t'] ) ) {
 	$gContent = new BitBoardTopic( $_REQUEST['t'] );

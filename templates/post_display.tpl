@@ -33,13 +33,13 @@
 					{if $gBitUser->hasPermission( 'p_liberty_admin_comments' )}
 						<a href="{$comments_return_url}&amp;delete_comment_id={$comment.comment_id}" rel="nofollow">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove" iforce="icon"}</a>
 					{/if}
-					{if $gBitUser->hasPermission( 'p_bitboards_edit' ) && (($comment.user_id<0 && $comment.is_approved==0)||$comment.user_id>=0) && !$comment.is_warned}
+					{if $gBitUser->hasPermission( 'p_boards_edit' ) && (($comment.user_id<0 && $comment.is_approved==0)||$comment.user_id>=0) && !$comment.is_warned}
 						{if $comment.user_id<0 && $comment.is_approved==0}
-							<a title="{tr}Approve this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=1&amp;comment_id={$comment.comment_id}">
+							<a title="{tr}Approve this post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=1&amp;comment_id={$comment.comment_id}">
 								{biticon ipackage="icons" iname="list-add" iexplain="Approve Post" iforce="icon"}
 							</a>
 
-							<a title="{tr}Reject this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=2&amp;comment_id={$comment.comment_id}">
+							<a title="{tr}Reject this post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=2&amp;comment_id={$comment.comment_id}">
 								{biticon ipackage="icons" iname="list-remove" iexplain="Reject Post" iforce="icon"}
 							</a>
 						{elseif !$comment.is_warned && $comment.user_id>=0}
@@ -52,7 +52,7 @@
 										return false;
 									');
 									return false;
-								" title="{tr}Warn the poster about this post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=3&amp;comment_id={$comment.comment_id}"
+								" title="{tr}Warn the poster about this post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=3&amp;comment_id={$comment.comment_id}"
 							>{biticon ipackage="icons" iname="dialog-warning" iexplain="Warn Post" iforce="icon"}</a>
 
 							<div style="display:none;" id="warn_block_{$comment.comment_id|escape:"url"}">
@@ -96,7 +96,7 @@
 				{assign var=comment_id value=$comment.comment_id}
 				<a onclick="
 					var e = document.getElementById('warned_message_{$comment.comment_id|escape:"url"}');
-					var url = '{$smarty.const.BITBOARDS_PKG_URL}ajax.php?req=10&comment_id={$comment_id}&amp;seq=' + new Date().getTime();
+					var url = '{$smarty.const.BOARDS_PKG_URL}ajax.php?req=10&comment_id={$comment_id}&amp;seq=' + new Date().getTime();
 					var element = 'warned_message_{$comment.comment_id|escape:"url"}';
 					var params = null;
 					{literal}

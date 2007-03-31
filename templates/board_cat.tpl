@@ -7,12 +7,12 @@
 		{/if}
 		<div id="bcat{$child.data.content_id|default:none}">
 			{if count($child.members) > 0}
-				{include file="bitpackage:bitboards/board_table.tpl" boardsList=$child.members heading=$heading}
+				{include file="bitpackage:boards/board_table.tpl" boardsList=$child.members heading=$heading}
 			{/if}
 
 			{if !empty($child.sub_count) && count($child.children)>0}
 				{foreach from=$child.children item=schild}
-					{include file="bitpackage:bitboards/board_cat.tpl" child=$schild color=$color}
+					{include file="bitpackage:boards/board_cat.tpl" child=$schild color=$color}
 				{/foreach}
 			{/if}
 		</div>

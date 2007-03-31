@@ -13,7 +13,7 @@ $flip_downname=>$flip.$flip_name.downname
 {if $gBitUser->hasPermission( $flip.$flip_name.perm )}
 	<span>
 		<a onclick="
-		var url = '{$smarty.const.BITBOARDS_PKG_URL}ajax.php?req={$flip.$flip_name.req}&amp;seq='
+		var url = '{$smarty.const.BOARDS_PKG_URL}ajax.php?req={$flip.$flip_name.req}&amp;seq='
 			+ new Date().getTime()+
 			'&amp;{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}
 			&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}';
@@ -25,7 +25,7 @@ $flip_downname=>$flip.$flip_name.downname
 			{ldelim}method: 'get', parameters: params, onFailure: reportError{rdelim}
 		);
 		return false;
-		" href="{$smarty.const.BITBOARDS_PKG_URL}topic.php?
+		" href="{$smarty.const.BOARDS_PKG_URL}topic.php?
 			{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}
 			&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}">
 

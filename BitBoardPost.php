@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.17 2007/03/14 07:49:08 spiderr Exp $
- * $Id: BitBoardPost.php,v 1.17 2007/03/14 07:49:08 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.18 2007/03/31 15:54:13 squareing Exp $
+ * $Id: BitBoardPost.php,v 1.18 2007/03/31 15:54:13 squareing Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.17 $ $Date: 2007/03/14 07:49:08 $ $Author: spiderr $
+ * @version $Revision: 1.18 $ $Date: 2007/03/31 15:54:13 $ $Author: squareing $
  * @package boards
  */
 
@@ -15,7 +15,7 @@
  * required setup
  */
 require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );
+require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
 
 /**
  * @package boards
@@ -63,7 +63,7 @@ class BitBoardPost extends LibertyComment {
 		global $gBitSystem;
 		$ret = FALSE;
 		if( $this->mCommentId && $this->verify( $pParamHash ) ) {
-			//$gBitSystem->verifyPermission('p_bitboards_edit');
+			//$gBitSystem->verifyPermission('p_boards_edit');
 			//$pParamHash = (($pParamHash + 1)%2);
 			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_posts` WHERE `comment_id` = ?";
 			$isStored = $this->mDb->getOne( $query_sel, array( $this->mCommentId ) );
@@ -139,7 +139,7 @@ class BitBoardPost extends LibertyComment {
 			$join1 = '';
 		}
 
-		if ($gBitSystem->isFeatureActive('bitboards_posts_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
+		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && !($gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit'))) {
 			$whereSql .= " AND ((post.`is_approved` = 1) OR (lc.`user_id` >= 0))";
 		}
 
@@ -216,7 +216,7 @@ class BitBoardPost extends LibertyComment {
 			}
 		}
 
-		if ($gBitSystem->isFeatureActive('bitboards_posts_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
+		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && !($gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit'))) {
 			$whereSql .= " AND ((post.`is_approved` = 1) OR (lc.`user_id` >= 0))";
 		}
 
@@ -310,7 +310,7 @@ class BitBoardPost extends LibertyComment {
 		}
 		$ret = NULL;
 		if( @$this->verifyId( $pCommentId ) ) {
-			$ret = BITBOARDS_PKG_URL."index.php?t=".$pTopicId;
+			$ret = BOARDS_PKG_URL."index.php?t=".$pTopicId;
 			if( $pCommentId != $pTopicId ) {
 				$ret .= '#'.$pCommentId;
 			}
@@ -319,7 +319,7 @@ class BitBoardPost extends LibertyComment {
 	}
 
 	function getTopicId() {
-		return bitboards_get_topic_comment( $this->getField( 'thread_forward_sequence') );
+		return boards_get_topic_comment( $this->getField( 'thread_forward_sequence') );
 	}
 
 	function modApprove() {

@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.29 2007/03/14 07:49:08 spiderr Exp $
- * $Id: BitBoard.php,v 1.29 2007/03/14 07:49:08 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.30 2007/03/31 15:54:13 squareing Exp $
+ * $Id: BitBoard.php,v 1.30 2007/03/31 15:54:13 squareing Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.29 $ $Date: 2007/03/14 07:49:08 $ $Author: spiderr $
+ * @version $Revision: 1.30 $ $Date: 2007/03/31 15:54:13 $ $Author: squareing $
  * @package boards
  */
 
@@ -43,7 +43,7 @@ class BitBoard extends LibertyAttachable {
 		'content_type_guid' => BITBOARD_CONTENT_TYPE_GUID,
 		'content_description' => 'Message Board',
 		'handler_class' => 'BitBoard',
-		'handler_package' => 'bitboards',
+		'handler_package' => 'boards',
 		'handler_file' => 'BitBoard.php',
 		'maintainer_url' => 'http://www.bitweaver.org'
 		) );
@@ -419,7 +419,7 @@ class BitBoard extends LibertyAttachable {
 			$bindVars = array_merge ( $bindVars, $pParamHash['nboards'] );
 		}
 
-		$track = $gBitSystem->isFeatureActive('bitboards_thread_track');
+		$track = $gBitSystem->isFeatureActive('boards_thread_track');
 		$track = true;
 		if ($track) {
 			$selectSql .= ", (
@@ -432,10 +432,10 @@ class BitBoard extends LibertyAttachable {
 
 		}
 
-		if ($gBitSystem->isFeatureActive('bitboards_posts_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
+		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && !($gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit'))) {
 
 		}
-		if ($gBitSystem->isFeatureActive('bitboards_posts_anon_moderation') && ($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
+		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && ($gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit'))) {
 			$selectSql .= ", ( SELECT COUNT(*)
 			FROM `".BIT_DB_PREFIX."boards_map` map
 			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` s_lcom ON (map.`topic_content_id` = s_lcom.`root_id`)
@@ -472,7 +472,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 		$result = $this->mDb->query( $query, $bindVars );
 		$ret = array();
 		while( $res = $result->fetchRow() ) {
-			$res['url']= BITBOARDS_PKG_URL."index.php?b={$res['board_id']}";
+			$res['url']= BOARDS_PKG_URL."index.php?b={$res['board_id']}";
 			$res['post_count'] = $this->mDb->getOne( "SELECT count(*)
 				FROM `".BIT_DB_PREFIX."boards_map` map
 					INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
@@ -533,7 +533,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 	function getDisplayUrl() {
 		$ret = NULL;
 		if( @$this->verifyId( $this->mBitBoardId ) ) {
-			$ret = BITBOARDS_PKG_URL."index.php?b=".$this->mBitBoardId;
+			$ret = BOARDS_PKG_URL."index.php?b=".$this->mBitBoardId;
 		}
 		return $ret;
 	}
@@ -610,14 +610,14 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 	
 }
 
-function bitboards_content_display ( $pContent ) {
+function boards_content_display ( $pContent ) {
 	global $gBitSmarty;
 	if( $pContent->isValid() ) {
 		$gBitSmarty->assign( 'boardInfo', BitBoard::getLinkedBoard( $pContent->mContentId ) );
 	}
 }
 
-function bitboards_content_edit ( $pContent ) {
+function boards_content_edit ( $pContent ) {
 	global $gBitSmarty;
 	if( !$pContent->isContentType( BITBOARDTOPIC_CONTENT_TYPE_GUID ) ) {
 		$gBitSmarty->assign( 'boardInfo', BitBoard::getLinkedBoard( $pContent->mContentId ) );
@@ -625,10 +625,10 @@ function bitboards_content_edit ( $pContent ) {
 	}
 }
 
-function bitboards_content_store( $pContent, $pParamHash ) {
+function boards_content_store( $pContent, $pParamHash ) {
 	global $gBitDb, $gBitSmarty;
 
-	require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );
+	require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
 	// do not allow unassigning topics. the UI should prevent this, but just to make sure...
 	if( $pContent->isValid() && !$pContent->isContentType( BITBOARDTOPIC_CONTENT_TYPE_GUID ) && !$pContent->isContentType( BITBOARD_CONTENT_TYPE_GUID ) ) {
 		// wipe out all previous assignments for good measure. Not the sanest thing to do, but edits are infrequent - at least for now

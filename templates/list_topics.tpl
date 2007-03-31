@@ -1,13 +1,13 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.7 2007/02/16 22:38:20 nickpalmer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.8 2007/03/31 15:54:14 squareing Exp $ *}
 {strip}
 <div class="listing bitboard">
 	<div class="floaticon">
 		{if $print_page ne 'y'}
 			{if $gBitUser->hasPermission( 'p_bitboard_edit' )}
-				<a title="{tr}Remove this message board{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit Message Board"}</a>
+				<a title="{tr}Remove this message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit Message Board"}</a>
 			{/if}
 			{if $gBitUser->hasPermission( 'p_bitboard_remove' )}
-				<a title="{tr}Remove this message board{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}remove.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove Message Board"}</a>
+				<a title="{tr}Remove this message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}remove.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove Message Board"}</a>
 			{/if}
 		{/if}<!-- end print_page -->
 	</div><!-- end .floaticon -->
@@ -35,31 +35,31 @@
 			<input type="hidden" name="sort_mode" value="{$control.sort_mode|escape}" />
 
 			<table class="data">
-				{if !$gBitSystem->isFeatureActive('bitboards_thread_verbrose')}
+				{if !$gBitSystem->isFeatureActive('boards_thread_verbrose')}
 					<tr>
 						<th style="width:5%;"> </th>
 						<th style="width:40%;">{tr}Title{/tr}</th>
 						<th style="width:5%;">{tr}Replies{/tr}</th>
 						<th style="width:20%;">{tr}Started{/tr}</th>
 						<th style="width:20%;">{tr}Last Reply{/tr}</th>
-						{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
+						{if $gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit')}
 							<th style="width:1%;"><abbr title="{tr}Number of posts by Anonymous users{/tr}">Anon</abbr></th>
 						{/if}
-						{if $gBitUser->hasPermission('p_bitboards_edit')}
+						{if $gBitUser->hasPermission('p_boards_edit')}
 							<th style="width:10%;" colspan="2">Actions</th>
 						{/if}
 					</tr>
 				{/if}
 
 				{foreach item=thread from=$threadList}
-					<tr class="{cycle values="even,odd"} {if $gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && $thread.unreg > 0}unapproved{elseif $thread.th_moved>0}moved{/if} {if $thread.th_sticky==1} highlight{/if}" >
+					<tr class="{cycle values="even,odd"} {if $gBitSystem->isFeatureActive('boards_post_anon_moderation') && $thread.unreg > 0}unapproved{elseif $thread.th_moved>0}moved{/if} {if $thread.th_sticky==1} highlight{/if}" >
 						<td style="white-space:nowrap;">{* topic status icons *}
 							{if $thread.th_moved>0}
 								{biticon ipackage="icons" iname="go-jump" iexplain="Moved Topic"}
 							{else}
 								{assign var=flip value=$thread.flip}
 								{foreach from=$flip item=flip_s key=flip_name}
-									{include file="bitpackage:bitboards/flipswitch.tpl"}
+									{include file="bitpackage:boards/flipswitch.tpl"}
 								{/foreach}
 							{/if}
 						</td>
@@ -80,27 +80,27 @@
 							{if $thread.post_count > 1}{if $thread.llc_user_id < 0}{$thread.l_anon_name|escape}{else}{displayname user_id=$thread.llc_user_id}{/if}{else}{/if}
 						</td>
 
-						{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
+						{if $gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit')}
 							<td style="text-align:center;">{if $thread.unreg > 0}<a class="highlight" href="{$thread.url}" title="{$thread.title|escape}">{$thread.unreg}</a>{/if}</td>
 						{/if}
 
-						{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
+						{if $gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit')}
 							<td class="actionicon">
 								{if $thread.flc_user_id<0 && $thread.first_approved==0}
-									<a title="{tr}Approve First Post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic.php?b={$board->mInfo.board_id}&amp;action=1&amp;comment_id={$thread.th_thread_id}">
+									<a title="{tr}Approve First Post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}topic.php?b={$board->mInfo.board_id}&amp;action=1&amp;comment_id={$thread.th_thread_id}">
 										{biticon ipackage="icons" iname="list-add" iexplain="Approve First Post" iforce="icon"}
 									</a>
-									<a title="{tr}Reject First Post{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic.php?b={$board->mInfo.board_id}&amp;action=2&amp;comment_id={$thread.th_thread_id}">
+									<a title="{tr}Reject First Post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}topic.php?b={$board->mInfo.board_id}&amp;action=2&amp;comment_id={$thread.th_thread_id}">
 										{biticon ipackage="icons" iname="list-remove" iexplain="Reject First Post" iforce="icon"}
 									</a>
 								{/if}
 
 								{if $thread.th_moved==0}
-									{if $gBitUser->hasPermission( 'p_bitboards_edit' )}
+									{if $gBitUser->hasPermission( 'p_boards_edit' )}
 										{*smartlink ititle="Edit" ifile="edit.php" ibiticon="liberty/edit" board_id=$thread.board_id*}
 										<a onclick="
 											document.getElementById('move_block_{$thread.th_thread_id|escape:"url"}').style['display']='inline';
-											var url = '{$smarty.const.BITBOARDS_PKG_URL}ajax.php?req=1&amp;seq=' + new Date().getTime();
+											var url = '{$smarty.const.BOARDS_PKG_URL}ajax.php?req=1&amp;seq=' + new Date().getTime();
 											var element = 'move_{$thread.th_thread_id|escape:"url"}';
 											var params = null;
 											{literal}
@@ -116,22 +116,22 @@
 												this.onclick=this.oldonclick;
 												return false;
 											');
-											return false;" title="{tr}Move Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}"
+											return false;" title="{tr}Move Thread{/tr}" href="{$smarty.const.BOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}"
 										>{biticon ipackage=icons iname="go-jump" iexplain="Move Thread" iforce="icon"}</a>
 									{/if}
 								{/if}
 
-								{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_bitboards_remove' )}
-									<a title="{tr}Delete Thread{/tr}" href="{$smarty.const.BITBOARDS_PKG_URL}topic.php?remove=1&amp;thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread" iforce="icon"}</a>
+								{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_boards_remove' )}
+									<a title="{tr}Delete Thread{/tr}" href="{$smarty.const.BOARDS_PKG_URL}topic.php?remove=1&amp;thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread" iforce="icon"}</a>
 								{else}
 									{biticon ipackage=liberty iname=spacer iforce="icon"}
 								{/if}
 
 								{if $thread.th_moved==0}
-									{if $gBitUser->hasPermission( 'p_bitboards_edit' )}
+									{if $gBitUser->hasPermission( 'p_boards_edit' )}
 										<br />
 										<div style="display:none;" id="move_block_{$thread.th_thread_id|escape:"url"}">
-											Move&nbsp;to:&nbsp;<select onchange="window.location=('{$smarty.const.BITBOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}&amp;target='+
+											Move&nbsp;to:&nbsp;<select onchange="window.location=('{$smarty.const.BOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}&amp;target='+
 												document.getElementById('move_{$thread.th_thread_id|escape:"url"}').value);" id="move_{$thread.th_thread_id|escape:"url"}">
 												<option></option>
 											</select>
@@ -140,7 +140,7 @@
 								{/if}
 							</td>
 
-							{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_bitboards_remove' )}
+							{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_boards_remove' )}
 								<td>
 									<input type="checkbox" name="checked[]" title="{$thread.title|escape}" value="{$thread.th_thread_id}" />
 								</td>
@@ -160,7 +160,7 @@
 				</div>
 			{/if}
 
-			{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
+			{if $gBitUser->hasPermission( 'p_boards_remove' )}
 				<div style="text-align:right;">
 					<script type="text/javascript">/* <![CDATA[ check / uncheck all */
 						document.write("<label for=\"switcher\">{tr}Select All{/tr}</label> ");
@@ -169,8 +169,8 @@
 
 					<select name="submit_mult" onchange="this.form.submit();">
 						<option value="" selected="selected">{tr}with checked{/tr}:</option>
-						{if $gBitUser->hasPermission( 'p_bitboards_remove' )}
-							<option value="remove_bitboards">{tr}remove{/tr}</option>
+						{if $gBitUser->hasPermission( 'p_boards_remove' )}
+							<option value="remove_boards">{tr}remove{/tr}</option>
 						{/if}
 					</select>
 
@@ -181,11 +181,11 @@
 
 		{pagination b=$smarty.request.b}
 
-		{include file="bitpackage:bitboards/legend_inc.tpl" topicicons=1}
+		{include file="bitpackage:boards/legend_inc.tpl" topicicons=1}
 	</div><!-- end .body -->
 </div><!-- end .admin -->
 
-{if $gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && $smarty.request.post_comment_request && !$gBitUser->isRegistered()}
+{if $gBitSystem->isFeatureActive('boards_post_anon_moderation') && $smarty.request.post_comment_request && !$gBitUser->isRegistered()}
 	{formfeedback warning="Your post will not be shown immediately it will have to be approved by a moderator"}
 {/if}
 

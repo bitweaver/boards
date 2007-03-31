@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.31 2007/03/14 07:49:08 spiderr Exp $
- * $Id: BitBoardTopic.php,v 1.31 2007/03/14 07:49:08 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.32 2007/03/31 15:54:13 squareing Exp $
+ * $Id: BitBoardTopic.php,v 1.32 2007/03/31 15:54:13 squareing Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.31 $ $Date: 2007/03/14 07:49:08 $ $Author: spiderr $
+ * @version $Revision: 1.32 $ $Date: 2007/03/31 15:54:13 $ $Author: squareing $
  * @package boards
  */
 
@@ -15,7 +15,7 @@
  * required setup
  */
 require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
+require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
 
 /**
 * This is used to uniquely identify the object
@@ -54,7 +54,7 @@ class BitBoardTopic extends LibertyAttachable {
 			array_push( $bindVars, $lookupId = @BitBase::verifyId( $this->mRootId ) ? $this->mRootId : $this->mContentId );
 			$this->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
-			if (!($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_posts_edit'))) {
+			if (!($gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_posts_edit'))) {
 				//$whereSql .= " AND ((first.`is_approved` = 1) OR (flc.`user_id` >= 0))";
 			}
 
@@ -146,7 +146,7 @@ WHERE
 	function expunge() {
 		global $gBitSystem;
 		$ret = FALSE;
-		$gBitSystem->verifyPermission('p_bitboards_edit');
+		$gBitSystem->verifyPermission('p_boards_edit');
 		if( $this->isValid() ) {
 			$this->mDb->StartTrans();
 			$query = "DELETE FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = ?";
@@ -203,7 +203,7 @@ vd( $ret );
 		global $gBitSystem;
 		$ret = FALSE;
 		if( $this->mRootId && $this->verify( $pParamHash ) ) {
-			//$gBitSystem->verifyPermission('p_bitboards_edit');
+			//$gBitSystem->verifyPermission('p_boards_edit');
 			//$pParamHash = (($pParamHash + 1)%2);
 			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = ?";
 			$isStored = $this->mDb->getOne( $query_sel, array( $this->mRootId ) );
@@ -227,7 +227,7 @@ vd( $ret );
 		if ($state==null || !is_numeric($state) || $state > 1 || $state<0) {
 			$this->mErrors[]=("Invalid current state");
 		} else {
-			$gBitSystem->verifyPermission('p_bitboards_edit');
+			$gBitSystem->verifyPermission('p_boards_edit');
 			$state = (($state+1)%2);
 			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_topic` WHERE `parent_id` = ?";
 			$query_ins = "INSERT INTO `".BIT_DB_PREFIX."boards_topic` (`parent_id`,`locked`) VALUES ( ?, $state)";
@@ -252,7 +252,7 @@ vd( $ret );
 		if ($state==null || !is_numeric($state) || $state > 1 || $state<0) {
 			$this->mErrors[]=("Invalid current state");
 		} else {
-			$gBitSystem->verifyPermission('p_bitboards_edit');
+			$gBitSystem->verifyPermission('p_boards_edit');
 			$state = (($state+1)%2);
 			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_topic` WHERE `parent_id` = ?";
 			$query_ins = "INSERT INTO `".BIT_DB_PREFIX."boards_topic` (`parent_id`,`sticky`) VALUES ( ?, $state)";
@@ -348,10 +348,10 @@ vd( $ret );
 			$substrSql = "SUBSTRING(s_lcom.`thread_forward_sequence`, 1, 10) LIKE SUBSTRING(lcom.`thread_forward_sequence`, 1, 10)";
 		}
 
-		if ($gBitSystem->isFeatureActive('bitboards_posts_anon_moderation') && !($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
+		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && !($gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit'))) {
 			$whereSql .= " AND ((post.`is_approved` = 1) OR (lc.`user_id` >= 0))";
 		}
-		if ($gBitSystem->isFeatureActive('bitboards_posts_anon_moderation') && ($gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit'))) {
+		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && ($gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit'))) {
 			$selectSql .= ", ( SELECT COUNT(*)
 			FROM `${BIT_DB_PREFIX}liberty_comments` AS s_lcom
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
@@ -420,9 +420,9 @@ WHERE
 		while( $res = $result->fetchRow() ) {
 			if (empty($res['anon_name'])) $res['anon_name'] = "Anonymous";
 			if ($res['th_is_moved']>0) {
-				$res['url']=BITBOARDS_PKG_URL."index.php?t=".$res['th_is_moved'];
+				$res['url']=BOARDS_PKG_URL."index.php?t=".$res['th_is_moved'];
 			} else {
-				$res['url']=BITBOARDS_PKG_URL."index.php?t=".$res['th_thread_id'];
+				$res['url']=BOARDS_PKG_URL."index.php?t=".$res['th_thread_id'];
 			}
 			$llc_data = BitBoardTopic::getLastPost($res);
 			$res = array_merge($res,$llc_data);
@@ -447,7 +447,7 @@ WHERE
 			$substrSql = "SUBSTRING(lcom.`thread_forward_sequence`, 1, 10)";
 		}
 		$whereSql = '';
-		if ($gBitSystem->isFeatureActive('bitboards_posts_anon_moderation')) {
+		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation')) {
 			$whereSql = " AND ((post.`is_approved` = 1) OR (lc.`user_id` >= 0))";
 		}
 		$BIT_DB_PREFIX = BIT_DB_PREFIX;
@@ -471,7 +471,7 @@ WHERE
 	function getDisplayUrl() {
 		$ret = NULL;
 		if( @$this->verifyId( $this->mRootId ) ) {
-			$ret=BITBOARDS_PKG_URL."index.php?t=".$this->mRootId;
+			$ret=BOARDS_PKG_URL."index.php?t=".$this->mRootId;
 		}
 		return $ret;
 	}
@@ -498,7 +498,7 @@ WHERE
 
 	function isNotificationOn($thread_id=false) {
 		global $gBitSystem, $gBitUser;
-		if ($gBitSystem->isPackageActive('bitboards') && $gBitSystem->isFeatureActive('bitboards_thread_track')) {
+		if ($gBitSystem->isPackageActive('boards') && $gBitSystem->isFeatureActive('boards_thread_track')) {
 			if (!$thread_id) {
 				$thread_id = $this->mRootId;
 			}
@@ -512,7 +512,7 @@ WHERE
 
 	function getNotificationData($thread_id) {
 		global $gBitSystem, $gBitUser;
-		if ($gBitSystem->isPackageActive('bitboards') && $gBitSystem->isFeatureActive('bitboards_thread_track')) {
+		if ($gBitSystem->isPackageActive('boards') && $gBitSystem->isFeatureActive('boards_thread_track')) {
 			if (!$thread_id) {
 				$thread_id = $this->mRootId;
 			}
@@ -582,7 +582,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 		}
 		global $gBitSmarty, $gBitSystem, $gBitUser;
 
-		if ($gBitSystem->isFeatureActive('bitboards_thread_track') && $gBitUser->isRegistered()) {
+		if ($gBitSystem->isFeatureActive('boards_thread_track') && $gBitUser->isRegistered()) {
 			$flip['new']['state']=($arr['track']['on']&&$arr['track']['mod'])*1;
 			$flip['new']['req']=4;
 			$flip['new']['id']=$arr['th_thread_id'];
@@ -591,9 +591,9 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 			$flip['new']['upname']='New Posts';
 			$flip['new']['down']='folder';
 			$flip['new']['downname']='No new posts';
-			$flip['new']['perm']='p_bitboards_read';
+			$flip['new']['perm']='p_boards_read';
 		}
-		if ($gBitSystem->isFeatureActive('bitboards_thread_notification') && $gBitUser->isRegistered()) {
+		if ($gBitSystem->isFeatureActive('boards_thread_notification') && $gBitUser->isRegistered()) {
 			$flip['notify']['state']=($arr['notify']['on'])*1;
 			$flip['notify']['req']=5;
 			$flip['notify']['id']=$arr['th_thread_id'];
@@ -602,7 +602,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 			$flip['notify']['upname']='Reply Notification';
 			$flip['notify']['down']='internet-mail';
 			$flip['notify']['downname']='Reply Notification Disabled';
-			$flip['notify']['perm']='p_bitboards_read';
+			$flip['notify']['perm']='p_boards_read';
 		}
 
 		$flip['is_locked']['state']=$arr['th_is_locked'];
@@ -613,7 +613,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 		$flip['is_locked']['upname']='Thread Locked';
 		$flip['is_locked']['down']='internet-group-chat';
 		$flip['is_locked']['downname']='Thread Unlocked';
-		$flip['is_locked']['perm']='p_bitboards_edit';
+		$flip['is_locked']['perm']='p_boards_edit';
 
 		$flip['is_sticky']['state']=$arr['th_is_sticky'];
 		$flip['is_sticky']['req']=3;
@@ -623,14 +623,14 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 		$flip['is_sticky']['upname']='Sticky Thread';
 		$flip['is_sticky']['down']='media-playback-stop';
 		$flip['is_sticky']['downname']='Non Sticky Thread';
-		$flip['is_sticky']['perm']='p_bitboards_edit';
+		$flip['is_sticky']['perm']='p_boards_edit';
 
 		return $flip;
 	}
 
 	function readTopic() {
 		global $gBitUser, $gBitSystem;
-		if ($gBitSystem->isFeatureActive('bitboards_thread_track') && $gBitUser->isRegistered()) {
+		if ($gBitSystem->isFeatureActive('boards_thread_track') && $gBitUser->isRegistered()) {
 			$topic_id = sprintf("%09d.",$this->mRootId);
 			$BIT_DB_PREFIX = BIT_DB_PREFIX;
 			$c = $this->mDb->getOne("SELECT COUNT(*) FROM `".BIT_DB_PREFIX."boards_tracking` WHERE user_id=? AND topic_id='$topic_id'",array($gBitUser->mUserId));
@@ -656,7 +656,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 
 	function readTopicSet($pState) {
 		global $gBitUser, $gBitSystem;
-		if ($gBitSystem->isFeatureActive('bitboards_thread_track') && $gBitUser->isRegistered()) {
+		if ($gBitSystem->isFeatureActive('boards_thread_track') && $gBitUser->isRegistered()) {
 			$topic_id = sprintf("%09d.",$this->mRootId);
 			$ret = FALSE;
 			if ($pState==null || !is_numeric($pState) || $pState > 1 || $pState<0) {
@@ -676,7 +676,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 
 	function notify($pState) {
 		global $gBitUser, $gBitSystem;
-		if ($gBitSystem->isFeatureActive('bitboards_thread_track') && $gBitUser->isRegistered()) {
+		if ($gBitSystem->isFeatureActive('boards_thread_track') && $gBitUser->isRegistered()) {
 			$topic_id = sprintf("%09d.",$this->mRootId);
 			$ret = FALSE;
 			if ($pState==null || !is_numeric($pState) || $pState > 1 || $pState<0) {
@@ -707,7 +707,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 
 	function loadTrack(&$selectSql,&$joinSql) {
 		global $gBitUser, $gBitSystem;
-		if($gBitUser->isRegistered() && ($gBitSystem->isFeatureActive('bitboards_thread_track') || $gBitSystem->isFeatureActive('bitboards_thread_notify'))) {
+		if($gBitUser->isRegistered() && ($gBitSystem->isFeatureActive('boards_thread_track') || $gBitSystem->isFeatureActive('boards_thread_notify'))) {
 			$selectSql .= ", trk.`track_date`,  trk.`notify` AS track_notify, trk.`notify_date` AS track_notify_date ";
 			$joinSql .= " LEFT JOIN `".BIT_DB_PREFIX."boards_tracking` trk ON (trk.`topic_id`=lcom.`thread_forward_sequence` AND ( trk.`user_id` = ".$gBitUser->mUserId." OR trk.`user_id` IS NULL ) ) ";
 		}
@@ -715,7 +715,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 
 	function track(&$res) {
 		global $gBitUser, $gBitSystem;
-		if($gBitUser->isRegistered() && $gBitSystem->isFeatureActive('bitboards_thread_track') && $res['th_is_moved']<=0) {
+		if($gBitUser->isRegistered() && $gBitSystem->isFeatureActive('boards_thread_track') && $res['th_is_moved']<=0) {
 			$res['track']['on'] = true;
 			$res['track']['date'] = $res['track_date'];
 			if (empty($res['llc_last_modified'])) {
@@ -730,7 +730,7 @@ If you no longer wish to watch this topic you can either click the \"Stop watchi
 			$res['track']['on'] = false;
 		}
 		unset($res['track_date']);
-		if($gBitUser->isRegistered() && $gBitSystem->isFeatureActive('bitboards_thread_notification') && $res['th_is_moved']<=0) {
+		if($gBitUser->isRegistered() && $gBitSystem->isFeatureActive('boards_thread_notification') && $res['th_is_moved']<=0) {
 			$res['notify']['on'] = (!empty($res['track_notify']));
 			if ($res['notify']['on']) {
 				$res['notify']['date']=$res['track_notify_date'];

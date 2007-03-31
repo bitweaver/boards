@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.10 2007/02/16 18:08:29 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.11 2007/03/31 15:54:13 squareing Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -12,15 +12,15 @@
  * required setup
  */
 require_once("../bit_setup_inc.php");
-require_once( BITBOARDS_PKG_PATH.'BitBoardTopic.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoardPost.php' );
-require_once( BITBOARDS_PKG_PATH.'BitBoard.php' );
+require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
+require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
+require_once( BOARDS_PKG_PATH.'BitBoard.php' );
 
 // Is package installed and enabled
-$gBitSystem->verifyPackage( 'bitboards' );
+$gBitSystem->verifyPackage( 'boards' );
 
 // Now check permissions to access this page
-$gBitSystem->verifyPermission( 'p_bitboards_read' );
+$gBitSystem->verifyPermission( 'p_boards_read' );
 
 $ns = array();
 $board_all_cids =array();
@@ -117,7 +117,7 @@ foreach ($ns as $k=> $a) {
 	}
 }
 
-//$gBitSmarty->display( 'bitpackage:bitboards/cat_display.tpl');
-$gBitSystem->display( 'bitpackage:bitboards/list_boards.tpl', tra( 'Boards' ) );
+//$gBitSmarty->display( 'bitpackage:boards/cat_display.tpl');
+$gBitSystem->display( 'bitpackage:boards/list_boards.tpl', tra( 'Boards' ) );
 
 ?>

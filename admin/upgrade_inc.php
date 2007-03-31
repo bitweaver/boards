@@ -15,7 +15,7 @@ INSERT INTO boards_map (board_content_id, topic_content_id) (SELECT content_id, 
 */
 
 require_once( '../../bit_setup_inc.php' );
-require_once( BITBOARDS_PKG_PATH.'admin/phpbb_upgrade.php' );
+require_once( BOARDS_PKG_PATH.'admin/phpbb_upgrade.php' );
 
 migrate_phpbb();
 

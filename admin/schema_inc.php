@@ -20,13 +20,13 @@ $tables = array(
 		board_id I4 PRIMARY,
 		content_id I4 NOTNULL,
 		migrate_board_id INT
-		CONSTRAINT ', CONSTRAINT `bitboards_content_ref` FOREIGN KEY (`content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
+		CONSTRAINT ', CONSTRAINT `boards_content_ref` FOREIGN KEY (`content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
 	",
 	'boards_map' => "
 		board_content_id I4 NOTNULL,
 		topic_content_id I4 PRIMARY
-		CONSTRAINT ', CONSTRAINT `bitboards_topics_boards_ref` FOREIGN KEY (`board_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)
-					, CONSTRAINT `bitboards_topics_related_ref` FOREIGN KEY (`topic_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
+		CONSTRAINT ', CONSTRAINT `boards_topics_boards_ref` FOREIGN KEY (`board_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)
+					, CONSTRAINT `boards_topics_related_ref` FOREIGN KEY (`topic_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
 	",
 	'boards_tracking' => "
 		user_id I4 NOTNULL,
@@ -40,10 +40,10 @@ $tables = array(
 global $gBitInstaller;
 
 foreach( array_keys( $tables ) AS $tableName ) {
-	$gBitInstaller->registerSchemaTable( BITBOARDS_PKG_NAME, $tableName, $tables[$tableName] );
+	$gBitInstaller->registerSchemaTable( BOARDS_PKG_NAME, $tableName, $tables[$tableName] );
 }
 
-$gBitInstaller->registerPackageInfo( BITBOARDS_PKG_NAME, array(
+$gBitInstaller->registerPackageInfo( BOARDS_PKG_NAME, array(
 	'description' => "Highly integrated message boards package.",
 	'license' => '<a href="http://www.gnu.org/licenses/licenses.html#LGPL">LGPL</a>',
 ) );
@@ -52,30 +52,30 @@ $gBitInstaller->registerPackageInfo( BITBOARDS_PKG_NAME, array(
 $indices = array(
 	'boards_id_idx' => array('table' => 'boards', 'cols' => 'board_id', 'opts' => NULL ),
 );
-$gBitInstaller->registerSchemaIndexes( BITBOARDS_PKG_NAME, $indices );
+$gBitInstaller->registerSchemaIndexes( BOARDS_PKG_NAME, $indices );
 
 // ### Sequences
 $sequences = array (
 	'boards_board_id_seq' => array( 'start' => 1 ),
 );
-$gBitInstaller->registerSchemaSequences( BITBOARDS_PKG_NAME, $sequences );
+$gBitInstaller->registerSchemaSequences( BOARDS_PKG_NAME, $sequences );
 
 // ### Default UserPermissions
-$gBitInstaller->registerUserPermissions( BITBOARDS_PKG_NAME, array(
-	array( 'p_bitboards_admin' , 'Can admin message boards'  , 'admin'  , BITBOARDS_PKG_NAME ),
-	array( 'p_bitboards_create', 'Can create a message board', 'editors', BITBOARDS_PKG_NAME ),
-	array( 'p_bitboards_edit'  , 'Can edit any message board', 'editors', BITBOARDS_PKG_NAME ),
-	array( 'p_bitboards_read'  , 'Can read message boards'   , 'basic'  , BITBOARDS_PKG_NAME ),
-	array( 'p_bitboards_remove', 'Can delete message boards' , 'editors', BITBOARDS_PKG_NAME ),
+$gBitInstaller->registerUserPermissions( BOARDS_PKG_NAME, array(
+	array( 'p_boards_admin' , 'Can admin message boards'  , 'admin'  , BOARDS_PKG_NAME ),
+	array( 'p_boards_create', 'Can create a message board', 'editors', BOARDS_PKG_NAME ),
+	array( 'p_boards_edit'  , 'Can edit any message board', 'editors', BOARDS_PKG_NAME ),
+	array( 'p_boards_read'  , 'Can read message boards'   , 'basic'  , BOARDS_PKG_NAME ),
+	array( 'p_boards_remove', 'Can delete message boards' , 'editors', BOARDS_PKG_NAME ),
 ) );
 
 // ### Default Preferences
-$gBitInstaller->registerPreferences( BITBOARDS_PKG_NAME, array(
-	array( BITBOARDS_PKG_NAME, 'bitboards_thread_track', 'y' ),
+$gBitInstaller->registerPreferences( BOARDS_PKG_NAME, array(
+	array( BOARDS_PKG_NAME, 'boards_thread_track', 'y' ),
 ));
 if(defined('RSS_PKG_NAME')) {
-	$gBitInstaller->registerPreferences( BITBOARDS_PKG_NAME, array(
-		array( RSS_PKG_NAME, BITBOARDS_PKG_NAME.'_rss', 'y'),
+	$gBitInstaller->registerPreferences( BOARDS_PKG_NAME, array(
+		array( RSS_PKG_NAME, BOARDS_PKG_NAME.'_rss', 'y'),
 	));
 }
 ?>

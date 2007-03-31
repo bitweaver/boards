@@ -1,10 +1,10 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.7 2007/03/09 21:48:45 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.8 2007/03/31 15:54:14 squareing Exp $ *}
 {strip}
 <div class="listing bitboard">
 
 <div class="navbar">
 	<div class="boards breadcrumb">
-		<a href="{$smarty.const.BITBOARDS_PKG_URL}">{tr}Message Boards{/tr}</a> &raquo; <a href="{$board->mInfo.display_url}">{$board->mInfo.title|escape}</a>
+		<a href="{$smarty.const.BOARDS_PKG_URL}">{tr}Message Boards{/tr}</a> &raquo; <a href="{$board->mInfo.display_url}">{$board->mInfo.title|escape}</a>
 	</div>
 </div>
 
@@ -33,7 +33,7 @@
 		{/form}
 		{assign var=flip value=$thread->getFlipFlop()}
 		{foreach from=$flip item=flip_s key=flip_name}
-			{include file="bitpackage:bitboards/flipswitch.tpl"}
+			{include file="bitpackage:boards/flipswitch.tpl"}
 		{/foreach}
 	</div>
 
@@ -55,7 +55,7 @@
 		{formfeedback hash=$formfeedback}
 
 		{foreach item=comment from=$comments}
-			<div class="mb-post {cycle values="even,odd"}{if $gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && $comment.user_id<0 and $comment.is_approved==0} unapproved{/if}">
+			<div class="mb-post {cycle values="even,odd"}{if $gBitSystem->isFeatureActive('boards_post_anon_moderation') && $comment.user_id<0 and $comment.is_approved==0} unapproved{/if}">
 				{assign var=thread_mInfo value=$thread->mInfo}
 				{displaycomment comment=$comment template=$comment_template}
 			</div>
@@ -84,12 +84,12 @@
 	</div><!-- end .body -->
 </div><!-- end .bitboard -->
 
-{if $gBitSystem->isFeatureActive('bitboards_post_anon_moderation') && ($smarty.request.post_comment_request || !empty($smarty.request.post_comment_submit)) && !$gBitUser->isRegistered()}
+{if $gBitSystem->isFeatureActive('boards_post_anon_moderation') && ($smarty.request.post_comment_request || !empty($smarty.request.post_comment_submit)) && !$gBitUser->isRegistered()}
 	{formfeedback warning="Your post will not be shown immediately it will have to be approved by a moderator"}
 {/if}
 
 {include file="bitpackage:liberty/comments_post_inc.tpl"  post_title="Post" hide=1 preview_override=1}
 
-{include file="bitpackage:bitboards/legend_inc.tpl"  posticons=1}
+{include file="bitpackage:boards/legend_inc.tpl"  posticons=1}
 {/strip}
 

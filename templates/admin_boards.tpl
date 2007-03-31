@@ -7,8 +7,8 @@
 			{formlabel label="Home BitBoards (main bitboard)" for="homeBitBoards"}
 			{forminput}
 				<select name="homeBitBoards" id="homeBitBoards">
-					{section name=ix loop=$bitboards}
-						<option value="{$bitboards[ix].bitboards_id|escape}" {if $bitboards[ix].bitboards_id eq $home_bitboard}selected="selected"{/if}>{$bitboards[ix].title|escape|truncate:20:"...":true}</option>
+					{section name=ix loop=$boards}
+						<option value="{$boards[ix].boards_id|escape}" {if $boards[ix].boards_id eq $home_bitboard}selected="selected"{/if}>{$boards[ix].title|escape|truncate:20:"...":true}</option>
 					{sectionelse}
 						<option>{tr}No records found{/tr}</option>
 					{/section}

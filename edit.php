@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.3 2007/02/15 19:36:12 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.4 2007/03/31 15:54:13 squareing Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -14,16 +14,16 @@
 require_once( '../bit_setup_inc.php' );
 
 // Is package installed and enabled
-$gBitSystem->verifyPackage( 'bitboards' );
+$gBitSystem->verifyPackage( 'boards' );
 
 // Now check permissions to access this page
-$gBitSystem->verifyPermission('p_bitboards_edit' );
+$gBitSystem->verifyPermission('p_boards_edit' );
 
 if( isset( $_REQUEST['bitboard']['board_id'] ) ) {
 	$_REQUEST['b'] = $_REQUEST['bitboard']['board_id'];
 }
 
-require_once(BITBOARDS_PKG_PATH.'lookup_inc.php' );
+require_once(BOARDS_PKG_PATH.'lookup_inc.php' );
 
 if( isset( $_REQUEST['bitboard']["title"] ) ) {
 	$gContent->mInfo["title"] = $_REQUEST['bitboard']["title"];
@@ -73,5 +73,5 @@ if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
 $gBitSmarty->assign( 'textarea_id', 'editbitboard' );
 
 // Display the template
-$gBitSystem->display( 'bitpackage:bitboards/board_edit.tpl', tra('Board') );
+$gBitSystem->display( 'bitpackage:boards/board_edit.tpl', tra('Board') );
 ?>

@@ -28,7 +28,7 @@
 						&nbsp;by&nbsp;
 						{if $board.last.user_id < 0}{$board.last.l_anon_name|escape}{else}{displayname user_id=$board.last.user_id}{/if}
 					{/if}
-					{if $gBitUser->hasPermission('p_bitboards_edit') || $gBitUser->hasPermission('p_bitboards_post_edit')}
+					{if $gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit')}
 						{if $board.unreg > 0}<a class="highlight" href="{$board.url}" title="{$board.title|escape}">{$board.unreg}</a>{/if}
 					{/if}
 				</span>
