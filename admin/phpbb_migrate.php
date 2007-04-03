@@ -49,12 +49,21 @@ function migrate_phpbb() {
 
 	require_once( LIBERTY_PKG_PATH.'plugins/format.bithtml.php' );
 
+	if( ini_get( 'max_execution_time' ) < 300 ) {
+		print "Your max_execution_time in your php.ini is set to ". ini_get( 'max_execution_time' ) ." seconds. We recommend you increase that.";
+	}
+
+	if( empty( $_POST['Migrate'] )  ) {
+		print '<form method="POST"><input type="submit" name="Migrate" value="Migrate"/></form>';
+		die;
+	}
+
 
 $gBitDb->StartTrans();
 	if( $forumList = $gBitDb->getAssoc( "SELECT `forum_id`,`forum_name`, `forum_desc`,`content_id` FROM " . FORUMS_TABLE . " bbf LEFT JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lc.`content_type_guid`='bitboard' AND bbf.`forum_name`=lc.`title`) ORDER BY bbf.forum_id" ) ) {
-vd( $forumList );
+vd( $forumList ); flush();
 		foreach( array_keys( $forumList ) as $forumId ) {
-print "Migrating forum $forumId<br/>\n";
+print "Migrating forum $forumId<br/>\n"; flush();
 			if( empty( $forumList[$forumId]['content_id'] ) ) {
 				$forumStore = array();
 				$forumStore['user_id'] = ROOT_USER_ID;
