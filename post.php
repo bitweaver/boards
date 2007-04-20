@@ -110,14 +110,6 @@ if (!empty($_REQUEST['warning'])) {
 }
 $gBitSmarty->assign_by_ref('warnings',$warnings);
 
-// Configure quicktags list
-if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
-	include_once( QUICKTAGS_PKG_PATH.'quicktags_inc.php' );
-}
-
-// WYSIWYG and Quicktag variable
-$gBitSmarty->assign( 'textarea_id', 'editboards' );
-
 $gBitSystem->display('bitpackage:boards/list_posts.tpl', "Show Thread: " . $thread->getField('title') );
 
 

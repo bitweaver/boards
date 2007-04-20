@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.2 2006/07/29 17:14:26 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.3 2007/04/20 13:49:40 nickpalmer Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -51,21 +51,7 @@
 							{/forminput}
 						</div>
 
-						{include file="bitpackage:liberty/edit_format.tpl"}
-
-						{if $gBitSystem->isFeatureActive('package_smileys')}
-							{include file="bitpackage:smileys/smileys_full.tpl"}
-						{/if}
-
-						{if $gBitSystem->isFeatureActive('package_quicktags')}
-							{include file="bitpackage:quicktags/quicktags_full.tpl"}
-						{/if}
-
-						<div class="row">
-							{forminput}
-								<textarea {spellchecker} id="{$textarea_id}" name="bitboard[edit]" rows="{$smarty.cookies.rows|default:10}" cols="50">{$gContent->mInfo.data|escape:html}</textarea>
-							{/forminput}
-						</div>
+						{textarea name="bitboard[edit]"}{/textarea}
 
 						{* any simple service edit options *}
 						{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_mini_tpl}

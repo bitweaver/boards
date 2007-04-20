@@ -28,26 +28,10 @@
 				{/form}
 				{form enctype="multipart/form-data" id="bitboarduprefs" legend="Edit Signature"}
 					{formfeedback warning=$error}
-						{include file="bitpackage:liberty/edit_format.tpl" gContent=$signatureContent}
-
-						{if $gBitSystem->isFeatureActive('package_smileys')}
-							{include file="bitpackage:smileys/smileys_full.tpl"}
-						{/if}
-
-						{if $gBitSystem->isFeatureActive('package_quicktags')}
-							{include file="bitpackage:quicktags/quicktags_full.tpl"}
-						{/if}
-
-						<div class="row">
-							{formlabel label="Signiture"}
-							{forminput}
-								<textarea {spellchecker} id="{$textarea_id}" name="bitboarduprefs[edit]"  rows="10" cols="50">{$signatureContent->mInfo.data|escape:html}</textarea>
-							{/forminput}
-						</div>
-
-						<div class="row submit">
-							<input type="submit" name="preview" value="{tr}Preview{/tr}" /> <input type="submit" name="save_bitboarduprefs" value="{tr}Save{/tr}" />
-						</div>
+					{textarea gContent=$signatureContent name=bitboarduprefs[edit]"}{/textarea}
+					<div class="row submit">
+						<input type="submit" name="preview" value="{tr}Preview{/tr}" /> <input type="submit" name="save_bitboarduprefs" value="{tr}Save{/tr}" />
+					</div>
 				{/form}
 			{if $preview}
 				{legend legend="Preview Signature"}

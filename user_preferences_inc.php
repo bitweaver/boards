@@ -62,14 +62,4 @@ if( !empty( $_REQUEST["save_bitboarduprefs"] ) ) {
 	$gBitUser->storePreference('signiture_content_data',$signatureContent->mInfo['data'], 'users');
 }
 
-/**
- * Configure quicktags list
- */ 
-if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
-	include_once( QUICKTAGS_PKG_PATH.'quicktags_inc.php' );
-}
-
-// WYSIWYG and Quicktag variable
-$gBitSmarty->assign( 'textarea_id', 'editbitboard' );
-
 ?>

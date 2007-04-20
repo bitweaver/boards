@@ -34,25 +34,10 @@
 						{/forminput}
 					</div>
 
-					{*assign var=gContent value=$commentpost*}
-					{*include file="bitpackage:liberty/edit_format.tpl"*}
-
-					{assign var=textarea_id value="commentpost"}
-					{if $gBitSystem->isPackageActive( 'smileys' )}
-						{include file="bitpackage:smileys/smileys_full.tpl"}
-					{/if}
-
-					{if $gBitSystem->isPackageActive( 'quicktags' )}
-						{include file="bitpackage:quicktags/quicktags_full.tpl" formId="commentpost"}
-					{/if}
-
-					<div class="row">
-						{formlabel label="Comment" for="commentpost"}
-						{forminput}
-							<textarea {spellchecker} id="commentpost" name="comment_data" rows="6" cols="50">{$postComment.data|escape}</textarea>
-							{formhelp note="Use [http://www.foo.com] or [http://www.foo.com|description] for links.<br />HTML tags are not allowed inside comments."}
-						{/forminput}
-					</div>
+					{capture assign="textarea_help"}
+						{tr}Use [http://www.foo.com] or [http://www.foo.com|description] for links.<br />HTML tags are not allowed inside comments.{/tr}
+					{/capture}
+					{textarea noformat=1 label="Comment" id="commentpost" name="comment_data" rows="6" >{$postComment.data}{/textarea}
 
 					<div class="row submit">
 						<input type="submit" name="post_comment_preview" value="{tr}Preview{/tr}"/>&nbsp;

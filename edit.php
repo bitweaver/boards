@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.4 2007/03/31 15:54:13 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.5 2007/04/20 13:49:40 nickpalmer Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -63,14 +63,6 @@ if( !empty( $_REQUEST["save_bitboard"] ) ) {
 		$gBitSmarty->assign_by_ref( 'errors', $gContent->mErrors );
 	}
 }
-
-// Configure quicktags list
-if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
-	include_once( QUICKTAGS_PKG_PATH.'quicktags_inc.php' );
-}
-
-// WYSIWYG and Quicktag variable
-$gBitSmarty->assign( 'textarea_id', 'editbitboard' );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:boards/board_edit.tpl', tra('Board') );
