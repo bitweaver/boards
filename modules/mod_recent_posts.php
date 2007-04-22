@@ -5,7 +5,7 @@
  * - b : numeric id of board to show posts from
  * - all_boards : display posts from all boards. Default behavior is to auto-track to board you are in.
  *
- * @version $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.php,v 1.5 2007/03/31 15:54:14 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.php,v 1.6 2007/04/22 17:08:51 bitweaver Exp $
  * @package boards
  * @subpackage modules
  */
@@ -16,7 +16,8 @@
 
 include_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
 
-global $gBitSmarty, $gQueryUserId, $module_rows, $module_params, $gBitSystem;
+global $gBitSmarty, $gQueryUserId, $gBitSystem, $moduleParams;
+extract( $moduleParams );
 
 $listHash = array( 'user_id' => $gQueryUserId, 'sort_mode' => 'created_desc', 'max_records' => $module_rows );
 if( !empty( $module_params['b'] ) ) {
@@ -34,8 +35,5 @@ $post = new BitBoardPost();
 if( $postList = $post->getList( $listHash ) ) {
 	$gBitSmarty->assign('modLastBoardPosts', $postList );
 }
-
-$gBitThemes = new BitThemes();
-$modParams = $gBitThemes->getModuleParameters('bitpackage:boards/mod_last_boards_posts.tpl', $gQueryUserId);
 
 ?>
