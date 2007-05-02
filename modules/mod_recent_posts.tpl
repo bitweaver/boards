@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.tpl,v 1.3 2007/03/31 15:54:14 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.tpl,v 1.4 2007/05/02 16:36:47 bitweaver Exp $ *}
 {strip}
 {if $gBitSystem->isPackageActive('boards') && {$modLastBoardPosts}
 	{bitmodule title="$moduleTitle" name="last_board_posts"}
@@ -6,11 +6,10 @@
 			{section name=ix loop=$modLastBoardPosts}
 				<li class="{cycle values="odd,even"}">
 					<a href="{$modLastBoardPosts[ix].display_url}">{$modLastBoardPosts[ix].title|default:"Comment"}</a>
-					<br />
-					<div class="date">by {displayname hash=$modLastBoardPosts[ix]}<br/>
-					{$modLastBoardPosts[ix].created|bit_long_date}
-</div>
-					
+					<div class="date">
+						by {displayname hash=$modLastBoardPosts[ix]}<br />
+						{$modLastBoardPosts[ix].created|bit_long_date}
+					</div>
 				</li>
 			{sectionelse}
 				<li></li>

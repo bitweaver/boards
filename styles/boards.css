@@ -1,18 +1,3 @@
-/*
-.from					--> .to
-.mb-even-unapproved td	--> .even.uapproved {}
-.mb-odd-unapproved td	--> .odd.uapproved {}
-.mb-even-moved td		--> .even.moved {}
-.mb-odd-moved td		--> .odd.moved {}
-.mb-cat-indent			--> .indent {}
-.mb-sticky td			--> .highlight {}
-.mb-warned				--> .warning {}
-span.quote-title		--> p.quotetitle {}
-
-unregistered user post highlight
-						--> .bitboard a.highlight {}
-*/
-
 .bitboard .mb-threading			{}
 
 .bitboard tr.odd.unapproved		{background:#faa;}

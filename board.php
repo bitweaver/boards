@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.11 2007/03/31 15:54:13 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.12 2007/05/02 16:36:47 bitweaver Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -78,7 +78,7 @@ if($gBitSystem->isPackageActive('pigeonholes')) {
 
 $rest =array();
 if($gBitSystem->isPackageActive('pigeonholes')) {
-//	$rest['data']['title']="Uncategoried Boards";
+//	$rest['data']['title']="Uncategorised Boards";
 } else {
 //	$rest['data']['title']="Board List";
 }
