@@ -1,12 +1,12 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.8 2007/03/31 15:54:14 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.9 2007/05/02 18:06:32 bitweaver Exp $ *}
 {strip}
 <div class="listing bitboard">
 
-<div class="navbar">
-	<div class="boards breadcrumb">
-		<a href="{$smarty.const.BOARDS_PKG_URL}">{tr}Message Boards{/tr}</a> &raquo; <a href="{$board->mInfo.display_url}">{$board->mInfo.title|escape}</a>
+	<div class="navbar">
+		<div class="boards breadcrumb">
+			<a href="{$smarty.const.BOARDS_PKG_URL}">{tr}Message Boards{/tr}</a> &raquo; <a href="{$board->mInfo.display_url}">{$board->mInfo.title|escape}</a>
+		</div>
 	</div>
-</div>
 
 	<div class="floaticon">
 		{* not happy with this yet - xing *}
@@ -92,4 +92,3 @@
 
 {include file="bitpackage:boards/legend_inc.tpl"  posticons=1}
 {/strip}
-

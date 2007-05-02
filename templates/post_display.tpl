@@ -17,7 +17,7 @@
 </div>
 {/if}
 <div class="body" id="{$comment.comment_id|escape}">
-	<div class="content" {if $comments_style eq 'threaded' || $gBitUser->getPreference('boards_show_avatars','y') == y}style="{if $comments_style eq 'threaded'}padding-left:{math equation="level * marginIncrement +3 " level=$comment.level marginIncrement=20}px;{/if}{if $gBitUser->getPreference('boards_show_avatars','y') == y}margin-left: 14.5em;{/if}"{/if}>
+	<div class="wrapper" {if $comments_style eq 'threaded' || $gBitUser->getPreference('boards_show_avatars','y') == y}style="{if $comments_style eq 'threaded'}padding-left:{math equation="level * marginIncrement +3 " level=$comment.level marginIncrement=20}px;{/if}{if $gBitUser->getPreference('boards_show_avatars','y') == y}margin-left: 14.5em;{/if}"{/if}>
 		{if !$post_is_preview}
 			<div class="floaticon">
 				{if $print_page ne 'y' && $comment.deleted==0 }
@@ -129,8 +129,10 @@
 			</div>
 		{/if}
 
-		{$comment.parsed_data}
-	</div><!-- end .content -->
+		<div class="content">
+			{$comment.parsed_data}
+		</div><!-- end .content -->
+	</div><!-- end .wrapper -->
 </div>
 
 
