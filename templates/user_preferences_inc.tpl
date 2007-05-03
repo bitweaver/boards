@@ -1,6 +1,6 @@
 {strip}
 {jstab title="Boards"}
-<div class="admin bitboard">
+<div class="admin boards">
 	<div class="body">
 				{form legend="Simple Settings"}
 					{foreach from=$boardsSettings key=option item=output}
@@ -37,13 +37,13 @@
 				{legend legend="Preview Signature"}
 					<div class="preview">
 						{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$signatureContent->mInfo}
-						<div class="display bitboard">
+						<div class="display boards">
 							<div class="body">
 								<div class="content">
 									{$signatureContent->mInfo.parsed_data}
 								</div><!-- end .content -->
 							</div><!-- end .body -->
-						</div><!-- end .bitboard -->
+						</div><!-- end .boards -->
 						{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='view' serviceHash=$signatureContent->mInfo}
 					</div>
 				{/legend}
@@ -51,6 +51,6 @@
 			{* any service edit template tabs *}
 			{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_tab_tpl}
 	</div><!-- end .body -->
-</div><!-- end .bitboard -->
+</div><!-- end .boards -->
 {/jstab}
 {/strip}

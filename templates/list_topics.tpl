@@ -1,6 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.8 2007/03/31 15:54:14 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.9 2007/05/03 08:10:23 bitweaver Exp $ *}
 {strip}
-<div class="listing bitboard">
+<div class="listing boards">
 	<div class="floaticon">
 		{if $print_page ne 'y'}
 			{if $gBitUser->hasPermission( 'p_bitboard_edit' )}

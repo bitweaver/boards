@@ -1,8 +1,8 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/topic_move.tpl,v 1.4 2006/07/29 15:10:00 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/topic_move.tpl,v 1.5 2007/05/03 08:10:23 bitweaver Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
-<div class="admin bitboard">
+<div class="admin boards">
 	<div class="header">
 		<h1>{tr}Move Topic{/tr}: {$gContent->mInfo.title|escape}</h1>
 	</div>
@@ -29,6 +29,6 @@
 			</div>
 		{/form}
 	</div><!-- end .body -->
-</div><!-- end .bitboard -->
+</div><!-- end .boards -->
 
 {/strip}

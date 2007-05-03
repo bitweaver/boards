@@ -1,6 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.9 2007/05/02 18:06:32 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.10 2007/05/03 08:10:23 bitweaver Exp $ *}
 {strip}
-<div class="listing bitboard">
+<div class="listing boards">
 
 	<div class="navbar">
 		<div class="boards breadcrumb">
@@ -45,7 +45,6 @@
 	</div>
 
 	<div class="body">
-
 		{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
 			<div class="row submit">
 				<a title="{tr}Post Reply{/tr}" class="button" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
@@ -75,14 +74,14 @@
 		{/if}
 
 		{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
-		<div class="row submit">
+			<div class="row submit">
 				<a title="{tr}Post Reply{/tr}" class="button" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
-		</div>
+			</div>
 		{/if}
 
 		{libertypagination ihash=$commentsPgnHash}
 	</div><!-- end .body -->
-</div><!-- end .bitboard -->
+</div><!-- end .boards -->
 
 {if $gBitSystem->isFeatureActive('boards_post_anon_moderation') && ($smarty.request.post_comment_request || !empty($smarty.request.post_comment_submit)) && !$gBitUser->isRegistered()}
 	{formfeedback warning="Your post will not be shown immediately it will have to be approved by a moderator"}

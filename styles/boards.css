@@ -1,37 +1,25 @@
-.bitboard .mb-threading			{}
+#content form.mb-threading div			{display:inline;}
+#content .boards .mb-threading			{}
 
-.bitboard tr.odd.unapproved		{background:#faa;}
-.bitboard tr.even.unapproved	{background:#fac;}
-.bitboard tr.odd.moved			{background:#aaf;}
-.bitboard tr.even.moved			{background:#acf;}
-.bitboard div.indent .indent	{margin-left:2em;}
-.bitboard tr.highlight			{background:#fca;}
-.bitboard .mb-post .warning		{}
+#content .boards tr.odd.unapproved		{background:#faa;}
+#content .boards tr.even.unapproved		{background:#fac;}
+#content .boards tr.odd.moved			{background:#aaf;}
+#content .boards tr.even.moved			{background:#acf;}
+#content .boards div.indent .indent		{margin-left:2em;}
+#content .boards tr.highlight			{background:#fca;}
+#content .boards .mb-post .warning		{}
 
-/* post layout */
-.bitboard .mb-post 				{clear:both;}
-.bitboard .mb-post .body		{margin-left:-14.5em; padding-left:14.5em}
-.bitboard .mb-post .content		{width:auto}
-.bitboard .mb-post .header		{}
-.bitboard .mb-post .userinfo	{float:left;width:14em;}
-.bitboard .mb-post .signature	{clear:both;}
+#content .boards div.indent1			{margin-left:20px;}
+#content .boards div.indent2			{margin-left:35px;}
+#content .boards div.indent3			{margin-left:50px;}
+#content .boards div.indent4			{margin-left:60px;}
+#content .boards div.indent5			{margin-left:70px;}
+#content .boards div.indent6			{margin-left:80px;}
+#content .boards div.indent7			{margin-left:90px;}
 
-form.mb-threading div { display:inline }
-
-/* debugging and testing * /
-.bitboard .mb-post 	 			{background:#ffc; padding-bottom:1em; margin:1em;}
-.bitboard .mb-post .body		{background:#ccc;}
-.bitboard .mb-post .header		{background:#cfc; padding:1em;}
-.bitboard .mb-post .header h2	{padding:0 1em; display:inline;}
-.bitboard .mb-post .content		{background:#ccf; padding:1em;}
-.bitboard .mb-post .userinfo	{background:#fcf;}
-.bitboard .mb-post .signature	{background:#cff; padding-bottom:1em;}
-.bitboard .indent				{}
-.bitboard .indent				{border-left:5px solid #c64; margin-bottom:2em;}
-.quotetitle						{margin-bottom:0.5em; font-weight:bold; font-style:italic;}
-blockquote						{padding:0.5em; border:1px #aaa solid; background:#f7f7f7;}
-
-ul.iconlegend					{list-style:none; clear:both;}
-ul.iconlegend li				{list-style:none; width:200px;}
-ul.iconlegend li img			{vertical-align:middle;}
-/* */
+#content .boards .mb-post 				{clear:both;}
+#content .boards .mb-post .content		{width:auto}
+#content .boards .mb-post .header		{}
+#content .boards .mb-post .userinfo		{float:left;width:140px;}
+#content .boards .mb-post .showavatar	{margin-left:145px;}
+#content .boards .mb-post .signature	{clear:both;}

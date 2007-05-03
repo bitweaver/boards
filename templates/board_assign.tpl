@@ -1,5 +1,5 @@
 {strip}
-<div class="admin bitboard">
+<div class="admin boards">
 	<div class="header">
 		<h1>{tr}Assign Content to Boards{/tr}</h1>
 	</div>
@@ -91,5 +91,5 @@
 			{/if}
 		{/foreach}
 	</div><!-- end .body -->
-</div><!-- end .bitboard -->
+</div><!-- end .boards -->
 {/strip}

@@ -1,22 +1,23 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.3 2007/04/20 13:49:40 nickpalmer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.4 2007/05/03 08:10:23 bitweaver Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
-<div class="admin bitboard">
+<div class="admin boards">
 	{if $preview}
 		<h2>Preview {$gContent->mInfo.title|escape}</h2>
 		<div class="preview">
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$gContent->mInfo}
-				<div class="display bitboard">
+				<div class="display boards">
 					<div class="header">
 						<h1>{$gContent->mInfo.title|escape|default:"Board"}</h1>
 					</div><!-- end .header -->
+
 					<div class="body">
 						<div class="content">
 							{$gContent->mInfo.parsed_data}
 						</div><!-- end .content -->
 					</div><!-- end .body -->
-				</div><!-- end .bitboard -->
+				</div><!-- end .boards -->
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='view' serviceHash=$gContent->mInfo}
 		</div>
 	{/if}
@@ -67,6 +68,6 @@
 			{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_tab_tpl}
 		{/jstabs}
 	</div><!-- end .body -->
-</div><!-- end .bitboard -->
+</div><!-- end .boards -->
 
 {/strip}

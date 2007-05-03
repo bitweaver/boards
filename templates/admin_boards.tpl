@@ -4,7 +4,7 @@
 	{legend legend="Home Message Board"}
 		<input type="hidden" name="page" value="{$page}" />
 		<div class="row">
-			{formlabel label="Home BitBoards (main bitboard)" for="homeBitBoards"}
+			{formlabel label="Home BitBoards (main board)" for="homeBitBoards"}
 			{forminput}
 				<select name="homeBitBoards" id="homeBitBoards">
 					{section name=ix loop=$boards}

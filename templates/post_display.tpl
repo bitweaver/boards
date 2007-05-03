@@ -1,23 +1,24 @@
 {strip}
 {assign var='gContent' value=$comment}
 
-{if $gBitUser->getPreference('boards_show_avatars','y') == y}
-<div class="userinfo">
-		{if $comment.user_id == $smarty.const.ANONYMOUS_USER_ID}
-			<strong>{$comment.anon_name|escape}</strong>
-		{else}
-			<strong>{displayname hash=$comment}</strong>
-			<br />
-			{if $comment.user_id != $smarty.const.ANONYMOUS_USER_ID && !empty($comment.user_avatar_url)}
-				<a href="{$comment.user_url}"><img src="{$comment.user_avatar_url}" title="{tr}Avatar{/tr}" alt="{tr}Avatar{/tr}" /></a>
-				<br />
-			{/if}
-			<small>{tr}Joined: {/tr}{$comment.registration_date|bit_short_date}</small><br />
-		{/if}
-</div>
-{/if}
 <div class="body" id="{$comment.comment_id|escape}">
-	<div class="wrapper" {if $comments_style eq 'threaded' || $gBitUser->getPreference('boards_show_avatars','y') == y}style="{if $comments_style eq 'threaded'}padding-left:{math equation="level * marginIncrement +3 " level=$comment.level marginIncrement=20}px;{/if}{if $gBitUser->getPreference('boards_show_avatars','y') == y}margin-left: 14.5em;{/if}"{/if}>
+	{if $gBitUser->getPreference('boards_show_avatars','y') == y}
+		<div class="userinfo">
+			{if $comment.user_id == $smarty.const.ANONYMOUS_USER_ID}
+				<strong>{$comment.anon_name|escape}</strong>
+			{else}
+				<strong>{displayname hash=$comment}</strong>
+				<br />
+				{if $comment.user_id != $smarty.const.ANONYMOUS_USER_ID && !empty($comment.user_avatar_url)}
+					<a href="{$comment.user_url}"><img src="{$comment.user_avatar_url}" title="{tr}Avatar{/tr}" alt="{tr}Avatar{/tr}" /></a>
+					<br />
+				{/if}
+				<small>{tr}Joined: {/tr}{$comment.registration_date|bit_short_date}</small><br />
+			{/if}
+		</div>
+	{/if}
+
+	<div class="wrapper{if $gBitUser->getPreference('boards_show_avatars','y') == y} showavatar{/if}{if $comments_style eq 'threaded'} indent{$comment.level}{/if}">
 		{if !$post_is_preview}
 			<div class="floaticon">
 				{if $print_page ne 'y' && $comment.deleted==0 }
@@ -75,7 +76,7 @@
 		<div class="header">
 			{if $comment.title neq ""}<h2>{$comment.title|escape}</h2>{/if}
 			<span class="date">
-				{if $gBitUser->getPreference('boards_show_avatars','y')==n}
+				{if $gBitUser->getPreference('boards_show_avatars','y') == n}
 					{tr}Posted by{/tr}: {if $comment.user_id < 0}{$comment.unreg_uname|escape}{else}{displayname hash=$comment}{/if}, {else}
 					{tr}Posted{/tr}: {/if}
 						{$comment.created|reltime}, {if $comment.created != $comment.last_modified}
@@ -133,6 +134,7 @@
 			{$comment.parsed_data}
 		</div><!-- end .content -->
 	</div><!-- end .wrapper -->
+	<div class="clear"><!-- --></div>
 </div>
 
 
