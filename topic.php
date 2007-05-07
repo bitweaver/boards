@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.17 2007/05/05 04:52:27 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.18 2007/05/07 05:08:42 spiderr Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -87,6 +87,11 @@ if( @BitBase::verifyId( $_REQUEST['b'] ) ) {
 	$_REQUEST['b'] = NULL;
 }
 
+$gContent = new BitBoard($_REQUEST['b']);
+if( !$gContent->load() ) {
+	$gBitSystem->fatalError("board id not given");
+}
+
 /* mass-remove:
 the checkboxes are sent as the array $_REQUEST["checked[]"], values are the wiki-PageNames,
 e.g. $_REQUEST["checked"][3]="HomePage"
@@ -98,33 +103,53 @@ if so, we call histlib's method remove_all_versions for all the checked boards.
 if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQUEST["submit_mult"] == "remove_boards" ) {
 
 	// Now check permissions to remove the selected bitboard
-	$gBitSystem->verifyPermission( 'p_boards_remove' );
+	$gContent->verifyPermission( 'p_boards_remove' );
+	$gBitUser->verifyTicket();
 
 	if( !empty( $_REQUEST['cancel'] ) ) {
 		// user cancelled - just continue on, doing nothing
 	} elseif( empty( $_REQUEST['confirm'] ) ) {
+		$formHash['b'] = $_REQUEST['b'];
 		$formHash['delete'] = TRUE;
 		$formHash['submit_mult'] = 'remove_boards';
 		foreach( $_REQUEST["checked"] as $del ) {
 			$formHash['input'][] = '<input type="hidden" name="checked[]" value="'.$del.'"/>';
 		}
-		$gBitSystem->confirmDialog( $formHash, array( 'warning' => 'Are you sure you want to delete '.count( $_REQUEST["checked"] ).' Threads?', 'error' => 'This cannot be undone!' ) );
+		$gBitSystem->confirmDialog( $formHash, array( 'warning' => 'Are you sure you want to delete '.count( $_REQUEST["checked"] ).' Topics?', 'error' => 'This cannot be undone!' ) );
 	} else {
 		foreach( $_REQUEST["checked"] as $deleteId ) {
-			$tmpPage = new BitBoardTopic( $deleteId );
-			if( !$tmpPage->load() || !$tmpPage->expunge() ) {
-				array_merge( $errors, array_values( $tmpPage->mErrors ) );
+			$deleteComment = new LibertyComment( $deleteId );
+			if( $deleteComment->isValid() && $gBitUser->hasPermission('p_liberty_admin_comments') ) {
+				if( !$deleteComment->deleteComment() ) {
+					$gBitSmarty->assign_by_ref( 'errors', $deleteComment->mErrors );
+				}
 			}
 		}
 		if( !empty( $errors ) ) {
 			$gBitSmarty->assign_by_ref( 'errors', $errors );
 		}
 	}
-}
+} elseif( isset( $_REQUEST['remove'] ) && BitBase::verifyId( $_REQUEST['thread_id'] ) ) {
+	$gBitUser->verifyTicket();
 
-$gContent = new BitBoard($_REQUEST['b']);
-if( !$gContent->load() ) {
-	$gBitSystem->fatalError("board id not given");
+	$tmpTopic = new BitBoardTopic( $_REQUEST['thread_id'] );
+	$tmpTopic->load();
+	if( !empty( $_REQUEST['cancel'] ) ) {
+		// user cancelled - just continue on, doing nothing
+	} elseif( empty( $_REQUEST['confirm'] ) ) {
+		$formHash['b'] = $_REQUEST['b'];
+		$formHash['remove'] = TRUE;
+		$formHash['thread_id'] = $_REQUEST['thread_id'];
+		$gBitSystem->confirmDialog( $formHash, array( 'warning' => tra( 'Are you sure you want to delete the topic' ).' "'.$tmpTopic->getTitle().'" ?', 'error' => 'This cannot be undone!' ) );
+	} else {
+		$deleteComment = new LibertyComment($_REQUEST['thread_id']);
+		if( $deleteComment->isValid() && $gBitUser->hasPermission('p_liberty_admin_comments') ) {
+			if( !$deleteComment->deleteComment() ) {
+				$gBitSmarty->assign_by_ref( 'errors', $deleteComment->mErrors );
+			}
+		}
+	}
+	
 }
 
 $commentsParentId=$gContent->mContentId;

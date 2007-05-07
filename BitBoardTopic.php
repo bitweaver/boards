@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.32 2007/03/31 15:54:13 squareing Exp $
- * $Id: BitBoardTopic.php,v 1.32 2007/03/31 15:54:13 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.33 2007/05/07 05:08:42 spiderr Exp $
+ * $Id: BitBoardTopic.php,v 1.33 2007/05/07 05:08:42 spiderr Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.32 $ $Date: 2007/03/31 15:54:13 $ $Author: squareing $
+ * @version $Revision: 1.33 $ $Date: 2007/05/07 05:08:42 $ $Author: spiderr $
  * @package boards
  */
 
@@ -24,6 +24,7 @@ define( 'BITBOARDTOPIC_CONTENT_TYPE_GUID', 'bitboardtopic' );
 
 /**
  * @package boards
+ * expunge is handled explicitly in LibertyComment::expunge
  */
 class BitBoardTopic extends LibertyAttachable {
 	/**
@@ -135,35 +136,6 @@ WHERE
 		if( BitBase::verifyId( $pMigrateTopicId ) ) {
 			$ret = $gBitDb->getOne( "SELECT lcom.`comment_id`  FROM `boards_topics` bt INNER JOIN `liberty_comments` lcom ON(bt.`parent_id`=lcom.`content_id`) WHERE `migrate_topic_id`=?", array( $pMigrateTopicId ) );
 		}
-		return $ret;
-	}
-
-
-
-	/**
-	* This function removes a bitboard entry
-	**/
-	function expunge() {
-		global $gBitSystem;
-		$ret = FALSE;
-		$gBitSystem->verifyPermission('p_boards_edit');
-		if( $this->isValid() ) {
-			$this->mDb->StartTrans();
-			$query = "DELETE FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = ?";
-vd( $this->mInfo );
-			$result = $this->mDb->query( $query, array( $this->getField( 'parent_id' ) ) );
-			if( parent::expunge() ) {
-				$this->mDb->CompleteTrans();
-vd( 'complete' );
-				$ret = TRUE;
-			} else {
-vd( 'rpllback' );
-				$this->mDb->RollbackTrans();
-			}
-		}
-vd(  $this->mId );
-bt();
-vd( $ret );
 		return $ret;
 	}
 

@@ -1,12 +1,12 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.9 2007/05/03 08:10:23 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.10 2007/05/07 05:08:42 spiderr Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="floaticon">
 		{if $print_page ne 'y'}
-			{if $gBitUser->hasPermission( 'p_bitboard_edit' )}
+			{if $gBitUser->hasPermission( 'p_boards_edit' )}
 				<a title="{tr}Remove this message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit Message Board"}</a>
 			{/if}
-			{if $gBitUser->hasPermission( 'p_bitboard_remove' )}
+			{if $gBitUser->hasPermission( 'p_boards_remove' )}
 				<a title="{tr}Remove this message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}remove.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove Message Board"}</a>
 			{/if}
 		{/if}<!-- end print_page -->
@@ -122,7 +122,7 @@
 								{/if}
 
 								{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_boards_remove' )}
-									<a title="{tr}Delete Thread{/tr}" href="{$smarty.const.BOARDS_PKG_URL}topic.php?remove=1&amp;thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread" iforce="icon"}</a>
+									<a title="{tr}Delete Topic{/tr}" href="{$smarty.const.BOARDS_PKG_URL}topic.php?b={$smarty.request.b}&amp;remove=1&amp;thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread" iforce="icon"}</a>
 								{else}
 									{biticon ipackage=liberty iname=spacer iforce="icon"}
 								{/if}
@@ -166,6 +166,8 @@
 						document.write("<label for=\"switcher\">{tr}Select All{/tr}</label> ");
 						document.write("<input name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"switchCheckboxes(this.form.id,'checked[]','switcher')\" /><br />");
 					/* ]]> */</script>
+
+					<input type="hidden" name="b" value="{$smarty.request.b}" />
 
 					<select name="submit_mult" onchange="this.form.submit();">
 						<option value="" selected="selected">{tr}with checked{/tr}:</option>
