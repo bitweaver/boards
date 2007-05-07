@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.12 2007/05/02 16:36:47 bitweaver Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.13 2007/05/07 05:22:33 spiderr Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -24,6 +24,25 @@ $gBitSystem->verifyPermission( 'p_boards_read' );
 
 $ns = array();
 $board_all_cids =array();
+
+if( isset( $_REQUEST['remove'] ) && BitBase::verifyId( $_REQUEST['b'] ) ) {
+	$gBitUser->verifyTicket();
+	$tmpBoard = new BitBoard( $_REQUEST['b'] );
+	$tmpBoard->load();
+	if( !empty( $_REQUEST['cancel'] ) ) {
+		// user cancelled - just continue on, doing nothing
+	} elseif( empty( $_REQUEST['confirm'] ) ) {
+		$formHash['b'] = $_REQUEST['b'];
+		$formHash['remove'] = TRUE;
+		$gBitSystem->confirmDialog( $formHash, array( 'warning' => tra( 'Are you sure you want to remove the entire message board' ).' "'.$tmpBoard->getTitle().'" ?', 'error' => 'This cannot be undone!' ) );
+	} else {
+		if( $tmpBoard->isValid() && $gBitUser->hasPermission( 'p_boards_remove' ) ) {
+			if( !$tmpBoard->expunge() ) {
+				$gBitSmarty->assign_by_ref( 'errors', $deleteComment->mErrors );
+			}
+		}
+	}
+}
 
 if($gBitSystem->isPackageActive('pigeonholes')) {
 	require_once(PIGEONHOLES_PKG_PATH.'Pigeonholes.php');
