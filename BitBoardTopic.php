@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.33 2007/05/07 05:08:42 spiderr Exp $
- * $Id: BitBoardTopic.php,v 1.33 2007/05/07 05:08:42 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.34 2007/05/24 16:59:55 walterwoj Exp $
+ * $Id: BitBoardTopic.php,v 1.34 2007/05/24 16:59:55 walterwoj Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.33 $ $Date: 2007/05/07 05:08:42 $ $Author: spiderr $
+ * @version $Revision: 1.34 $ $Date: 2007/05/24 16:59:55 $ $Author: walterwoj $
  * @package boards
  */
 
@@ -328,7 +328,7 @@ WHERE
 			FROM `${BIT_DB_PREFIX}liberty_comments` AS s_lcom
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
 			LEFT JOIN  `${BIT_DB_PREFIX}boards_posts` s ON( s_lcom.`comment_id` = s.`comment_id` )
-			WHERE (".$substrSql.") AND ((s_lc.`user_id` < 0) AND (s.`is_approved` = 0 OR s.`approved` IS NULL))
+			WHERE (".$substrSql.") AND ((s_lc.`user_id` < 0) AND (s.`is_approved` = 0 OR s.`is_approved` IS NULL))
 			) AS unreg";
 		} else {
 			$selectSql .= ", 0 AS unreg";
