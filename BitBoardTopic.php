@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.34 2007/05/24 16:59:55 walterwoj Exp $
- * $Id: BitBoardTopic.php,v 1.34 2007/05/24 16:59:55 walterwoj Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.35 2007/05/24 18:20:44 walterwoj Exp $
+ * $Id: BitBoardTopic.php,v 1.35 2007/05/24 18:20:44 walterwoj Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.34 $ $Date: 2007/05/24 16:59:55 $ $Author: walterwoj $
+ * @version $Revision: 1.35 $ $Date: 2007/05/24 18:20:44 $ $Author: walterwoj $
  * @package boards
  */
 
@@ -405,7 +405,7 @@ WHERE
 			}
 			$ret[] = $res;
 		}
-		$pParamHash["cant"] = $this->mDb->getOne( $query_cant, null );
+		$pParamHash["cant"] = $this->mDb->getOne( $query_cant, $bindVars );
 		// add all pagination info to pParamHash
 		LibertyAttachable::postGetList( $pParamHash );
 		return $ret;
