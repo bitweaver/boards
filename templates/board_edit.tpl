@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.4 2007/05/03 08:10:23 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.5 2007/06/10 20:25:21 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -48,7 +48,7 @@
 						<div class="row">
 							{formlabel label="Title" for="title"}
 							{forminput}
-								<input type="text" size="60" maxlength="200" name="bitboard[title]" id="title" value="{$gContent->mInfo.title|escape}" />
+								<input type="text" size="50" maxlength="200" name="bitboard[title]" id="title" value="{$gContent->mInfo.title|escape}" />
 							{/forminput}
 						</div>
 
