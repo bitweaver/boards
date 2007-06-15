@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.18 2007/03/31 15:54:13 squareing Exp $
- * $Id: BitBoardPost.php,v 1.18 2007/03/31 15:54:13 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.19 2007/06/15 21:17:07 lsces Exp $
+ * $Id: BitBoardPost.php,v 1.19 2007/06/15 21:17:07 lsces Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.18 $ $Date: 2007/03/31 15:54:13 $ $Author: squareing $
+ * @version $Revision: 1.19 $ $Date: 2007/06/15 21:17:07 $ $Author: lsces $
  * @package boards
  */
 
@@ -165,10 +165,11 @@ class BitBoardPost extends LibertyComment {
 
 			$flat_comments = array();
 
+			if( $gBitSystem->isFeatureActive( 'liberty_png_thumbnails' )) { $ext = '.png'; } else { $ext = '.jpg'; }
 			if( $result = $this->mDb->query( $sql, $bindVars, $pMaxComments, $pOffset ) ) {
 				while( $row = $result->FetchRow() ) {
 					if (empty($row['anon_name'])) $row['anon_name'] = "Anonymous";
-					$row['user_avatar_url'] = (!empty($row['avatar_storage_path']) ? BIT_ROOT_URL . dirname( $row['avatar_storage_path'] ).'/avatar.jpg' : NULL);
+					$row['user_avatar_url'] = (!empty($row['avatar_storage_path']) ? BIT_ROOT_URL . dirname( $row['avatar_storage_path'] ).'/avatar'.$ext : NULL);
 					unset($row['avatar_storage_path']);
 					if (!empty($row['warned_message'])) {
 						$row['warned_message'] = str_replace("\n","<br />\n",$row['warned_message']);
@@ -250,10 +251,11 @@ class BitBoardPost extends LibertyComment {
 
 		$ret = array();
 
+		if( $gBitSystem->isFeatureActive( 'liberty_png_thumbnails' )) { $ext = '.png'; } else { $ext = '.jpg'; }
 		if( $result = $this->mDb->query( $sql, $bindVars, $pListHash['max_records'], $pListHash['offset'] ) ) {
 			while( $row = $result->FetchRow() ) {
 				if (empty($row['anon_name'])) $row['anon_name'] = "Anonymous";
-				$row['user_avatar_url'] = (!empty($row['avatar_storage_path']) ? BIT_ROOT_URL . dirname( $row['avatar_storage_path'] ).'/avatar.jpg' : NULL);
+				$row['user_avatar_url'] = (!empty($row['avatar_storage_path']) ? BIT_ROOT_URL . dirname( $row['avatar_storage_path'] ).'/avatar'.$ext : NULL);
 				unset($row['avatar_storage_path']);
 				if (!empty($row['warned_message'])) {
 					$row['warned_message'] = str_replace("\n","<br />\n",$row['warned_message']);
