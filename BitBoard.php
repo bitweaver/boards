@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.32 2007/06/20 20:44:00 lsces Exp $
- * $Id: BitBoard.php,v 1.32 2007/06/20 20:44:00 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.33 2007/06/20 21:16:20 lsces Exp $
+ * $Id: BitBoard.php,v 1.33 2007/06/20 21:16:20 lsces Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.32 $ $Date: 2007/06/20 20:44:00 $ $Author: lsces $
+ * @version $Revision: 1.33 $ $Date: 2007/06/20 21:16:20 $ $Author: lsces $
  * @package boards
  */
 
@@ -617,10 +617,15 @@ function boards_content_display ( $pContent ) {
 	}
 }
 
-function boards_content_edit ( $pContent ) {
+function boards_content_edit ( $pContent, $pParamHash ) {
 	global $gBitSmarty;
 	if( !$pContent->isContentType( BITBOARDTOPIC_CONTENT_TYPE_GUID ) ) {
-		$gBitSmarty->assign( 'boardInfo', BitBoard::getLinkedBoard( $pContent->mContentId ) );
+		if( $pContent->isValid() ) {
+			$gBitSmarty->assign( 'boardInfo', BitBoard::getLinkedBoard( $pContent->mContentId ) );
+		} else {
+			$boardInfo['board_content_id'] = $pParamHash['linked_board_cid'];
+			$gBitSmarty->assign( 'boardInfo', $boardInfo );
+		}
 		$gBitSmarty->assign( 'boardList', BitBoard::getBoardSelectList( TRUE ) );
 	}
 }
