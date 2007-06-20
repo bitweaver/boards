@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.31 2007/05/24 16:59:55 walterwoj Exp $
- * $Id: BitBoard.php,v 1.31 2007/05/24 16:59:55 walterwoj Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.32 2007/06/20 20:44:00 lsces Exp $
+ * $Id: BitBoard.php,v 1.32 2007/06/20 20:44:00 lsces Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.31 $ $Date: 2007/05/24 16:59:55 $ $Author: walterwoj $
+ * @version $Revision: 1.32 $ $Date: 2007/06/20 20:44:00 $ $Author: lsces $
  * @package boards
  */
 
@@ -637,6 +637,10 @@ function boards_content_store( $pContent, $pParamHash ) {
 			$pContent->mDb->query( "INSERT INTO `".BIT_DB_PREFIX."boards_map` (`board_content_id`,`topic_content_id`) VALUES (?,?)", array( $pParamHash['linked_board_cid'], $pContent->mContentId ) );
 		}
 		$gBitSmarty->assign( 'boardInfo', BitBoard::getLinkedBoard( $pContent->mContentId ) );
+	} else {
+		if( @BitBase::verifyId( $pParamHash['content_id'] ) && @BitBase::verifyId( $pParamHash['linked_board_cid'] ) ) {
+			$pContent->mDb->query( "INSERT INTO `".BIT_DB_PREFIX."boards_map` (`board_content_id`,`topic_content_id`) VALUES (?,?)", array( $pParamHash['linked_board_cid'], $pParamHash['content_id'] ) );
+		}
 	}
 }
 
