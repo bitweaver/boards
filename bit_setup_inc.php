@@ -21,7 +21,7 @@ if( $gBitSystem->isPackageActive( 'boards' ) ) {
 
 	$registerArray = array(
 		'content_display_function' => 'boards_content_display',
-		'content_preview_function' => 'boards_content_preview',
+		'content_preview_function' => 'boards_content_edit',
 		'content_edit_function' => 'boards_content_edit',
 		'content_store_function' => 'boards_content_store',
 		'content_expunge_function' => 'boards_content_expunge',
