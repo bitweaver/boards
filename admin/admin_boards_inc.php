@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/admin/admin_boards_inc.php,v 1.2 2007/06/20 18:56:47 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/admin/admin_boards_inc.php,v 1.3 2007/06/20 19:06:58 lsces Exp $
 // Copyright (c) 2005 bitweaver BitBoards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -26,8 +26,8 @@ $formBitBoardsLists = array(
 		'note' => 'Require that ALL Anonymous posts must be validated before they are shown.',
 	),
 	'boards_hide_edit_tpl' => array(
-		'label' => 'Enable Linked Boards service in other packages',
-		'note' => 'Provide the option to direct comments applied in other packages to be directed to board.',
+		'label' => 'Hide Linked Boards service in other packages',
+		'note' => 'Provide the option to disable the service which allows direct comments applied in other packages to be directed to a board.',
 	), 
 );
 $gBitSmarty->assign( 'formBitBoardsLists',$formBitBoardsLists );

@@ -72,7 +72,6 @@ $gBitInstaller->registerUserPermissions( BOARDS_PKG_NAME, array(
 // ### Default Preferences
 $gBitInstaller->registerPreferences( BOARDS_PKG_NAME, array(
 	array( BOARDS_PKG_NAME, 'boards_thread_track', 'y' ),
-	array( BOARDS_PKG_NAME, 'boards_hide_edit_tpl', 'y' ),
 ));
 if(defined('RSS_PKG_NAME')) {
 	$gBitInstaller->registerPreferences( BOARDS_PKG_NAME, array(
