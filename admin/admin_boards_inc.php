@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/admin/admin_boards_inc.php,v 1.3 2007/06/20 19:06:58 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/admin/admin_boards_inc.php,v 1.4 2007/06/21 09:46:35 squareing Exp $
 // Copyright (c) 2005 bitweaver BitBoards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -26,9 +26,9 @@ $formBitBoardsLists = array(
 		'note' => 'Require that ALL Anonymous posts must be validated before they are shown.',
 	),
 	'boards_hide_edit_tpl' => array(
-		'label' => 'Hide Linked Boards service in other packages',
-		'note' => 'Provide the option to disable the service which allows direct comments applied in other packages to be directed to a board.',
-	), 
+		'label' => 'Hide Linked Boards Option',
+		'note' => 'Hide the <em>Linked Boards</em> option on edit pages to link any given content to a forum thread. If you hide this, you will have to manually assign content to a forum thread if you want to make full use of the boards.',
+	),
 );
 $gBitSmarty->assign( 'formBitBoardsLists',$formBitBoardsLists );
 
