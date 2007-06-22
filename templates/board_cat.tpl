@@ -2,8 +2,8 @@
 	<div class="indent">
 		{if $child.data.title}
 			<a href="javascript:toggle('bcat{$child.data.content_id|escape}');"><h{$heading|default:2}>{$child.data.title|escape}</h{$heading|default:2}></a>
-		{elseif $gBitSystem->isPackageActive('pigeonholes')}
-			<a href="javascript:toggle('bcatnone');"><h{$heading|default:2}>Uncategorised</h{$heading|default:2}></a>
+		{elseif $gBitSystem->isPackageActive('pigeonholes') && count($ns) > 1}
+			<a href="javascript:toggle('bcatnone');"><h{$heading|default:2}>{tr}Uncategorized{/tr}</h{$heading|default:2}></a>
 		{/if}
 		<div id="bcat{$child.data.content_id|default:none}">
 			{if count($child.members) > 0}
