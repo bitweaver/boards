@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.20 2007/06/15 21:56:11 lsces Exp $
- * $Id: BitBoardPost.php,v 1.20 2007/06/15 21:56:11 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.21 2007/06/23 17:29:57 squareing Exp $
+ * $Id: BitBoardPost.php,v 1.21 2007/06/23 17:29:57 squareing Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.20 $ $Date: 2007/06/15 21:56:11 $ $Author: lsces $
+ * @version $Revision: 1.21 $ $Date: 2007/06/23 17:29:57 $ $Author: squareing $
  * @package boards
  */
 
@@ -250,10 +250,14 @@ class BitBoardPost extends LibertyComment {
 
 		$ret = array();
 
-		if( $gBitSystem->isFeatureActive( 'liberty_png_thumbnails' )) { $ext = '.png'; } else { $ext = '.jpg'; }
 		if( $result = $this->mDb->query( $sql, $bindVars, $pListHash['max_records'], $pListHash['offset'] ) ) {
 			while( $row = $result->FetchRow() ) {
 				if (empty($row['anon_name'])) $row['anon_name'] = "Anonymous";
+				if( !empty( $row['avatar_storage_path'] )) {
+					$row['user_avatar_url'] = liberty_fetch_thumbnail_url( $row['avatar_storage_path'], 'avatar' );
+				} else {
+					$row['user_avatar_url'] = FALSE;
+				}
 				$row['user_avatar_url'] = (!empty($row['avatar_storage_path']) ? BIT_ROOT_URL . dirname( $row['avatar_storage_path'] ).'/avatar'.$ext : NULL);
 				unset($row['avatar_storage_path']);
 				if (!empty($row['warned_message'])) {
