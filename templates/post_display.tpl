@@ -2,7 +2,7 @@
 {assign var='gContent' value=$comment}
 
 <div class="body" id="{$comment.comment_id|escape}">
-	{if $gBitUser->getPreference('boards_show_avatars','y') == y}
+	{if $gBitUser->getPreference('boards_show_avatars','y') == 'y'}
 		<div class="userinfo">
 			{if $comment.user_id == $smarty.const.ANONYMOUS_USER_ID}
 				<strong>{$comment.anon_name|escape}</strong>
@@ -17,8 +17,7 @@
 			{/if}
 		</div>
 	{/if}
-
-	<div class="wrapper{if $gBitUser->getPreference('boards_show_avatars','y') == y} showavatar{/if}{if $comments_style eq 'threaded'} indent{$comment.level}{/if}">
+	<div class="wrapper{if $gBitUser->getPreference('boards_show_avatars','y') == 'y'} showavatar{/if}{if $smarty.request.comments_style eq 'threaded'} indent{$comment.level}{/if}">
 		{if !$post_is_preview}
 			<div class="floaticon">
 				{if $print_page ne 'y' && $comment.deleted==0 }
@@ -133,10 +132,21 @@
 		<div class="content">
 			{$comment.parsed_data}
 		</div><!-- end .content -->
+
 	</div><!-- end .wrapper -->
 	<div class="clear"><!-- --></div>
 </div>
 
 
 <div class="signature"> </div>
+
+{if $comment.children}
+	<div id="comment_{$comment.content_id}_children">
+		{foreach key=key item=item from=$comment.children}
+			{include file="bitpackage:boards/post_display.tpl" comment=$item}
+		{/foreach}
+	</div>
+{/if}
+<div id="comment_{$comment.content_id}_footer"></div>
+
 {/strip}
