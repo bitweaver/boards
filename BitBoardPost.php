@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.21 2007/06/23 17:29:57 squareing Exp $
- * $Id: BitBoardPost.php,v 1.21 2007/06/23 17:29:57 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.22 2007/06/24 06:18:44 spiderr Exp $
+ * $Id: BitBoardPost.php,v 1.22 2007/06/24 06:18:44 spiderr Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.21 $ $Date: 2007/06/23 17:29:57 $ $Author: squareing $
+ * @version $Revision: 1.22 $ $Date: 2007/06/24 06:18:44 $ $Author: spiderr $
  * @package boards
  */
 
@@ -258,7 +258,6 @@ class BitBoardPost extends LibertyComment {
 				} else {
 					$row['user_avatar_url'] = FALSE;
 				}
-				$row['user_avatar_url'] = (!empty($row['avatar_storage_path']) ? BIT_ROOT_URL . dirname( $row['avatar_storage_path'] ).'/avatar'.$ext : NULL);
 				unset($row['avatar_storage_path']);
 				if (!empty($row['warned_message'])) {
 					$row['warned_message'] = str_replace("\n","<br />\n",$row['warned_message']);
