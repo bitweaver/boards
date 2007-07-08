@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_boards/boards_rss.php,v 1.1 2007/03/31 15:54:13 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_boards/boards_rss.php,v 1.2 2007/07/08 07:56:40 squareing Exp $
  * @package boards
  * @subpackage functions
  */
@@ -33,7 +33,7 @@ $rss->description = $board->getField( 'parsed_data' );
 $rss->link =  'http://'.$_SERVER['HTTP_HOST'].$board->getDisplayUrl();
 
 // check if we want to use the cache file
-$cacheFile = TEMP_PKG_PATH.RSS_PKG_NAME.'/'.BOARDS_PKG_NAME.'_'.$version.'.xml';
+$cacheFile = TEMP_PKG_PATH.RSS_PKG_NAME.'/'.BOARDS_PKG_NAME.'/'.$cacheFileTail;
 $rss->useCached( $rss_version_name, $cacheFile, $gBitSystem->getConfig( 'rssfeed_cache_time' ));
 
 $topic = new BitBoardTopic();
