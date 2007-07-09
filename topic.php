@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.19 2007/05/07 05:22:33 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.20 2007/07/09 22:03:18 squareing Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -15,8 +15,6 @@ require_once( '../bit_setup_inc.php' );
 require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
 require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
 require_once( BOARDS_PKG_PATH.'BitBoard.php' );
-
-$gBitSmarty->assign( 'loadAjax', 'prototype' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'boards' );
@@ -167,6 +165,8 @@ $gBitSmarty->assign_by_ref( 'listInfo', $_REQUEST['listInfo'] );
 
 $gBitSmarty->assign_by_ref( 'board', $gContent );
 $gBitSmarty->assign( 'cat_url', BOARDS_PKG_URL."index.php"); //?ct=".urlencode($gContent->mInfo['content_type_guid']));
+
+$gBitSystem->loadAjax( 'prototype' );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:boards/list_topics.tpl', tra( 'Message Board Threads: ' . $gContent->getField('title') ) );
