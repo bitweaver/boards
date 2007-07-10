@@ -52,7 +52,7 @@ if( @BitBase::verifyId( $_REQUEST['t'] ) ) {
 	}
 }
 
-$gBitSystem->loadAjax( 'prototype' );
+$gBitThemes->loadAjax( 'prototype' );
 
 $thread = new BitBoardTopic($_REQUEST['t']);
 if( !$thread->load() ) {
