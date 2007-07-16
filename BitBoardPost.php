@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.23 2007/06/24 08:39:05 spiderr Exp $
- * $Id: BitBoardPost.php,v 1.23 2007/06/24 08:39:05 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.24 2007/07/16 15:27:20 squareing Exp $
+ * $Id: BitBoardPost.php,v 1.24 2007/07/16 15:27:20 squareing Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.23 $ $Date: 2007/06/24 08:39:05 $ $Author: spiderr $
+ * @version $Revision: 1.24 $ $Date: 2007/07/16 15:27:20 $ $Author: squareing $
  * @package boards
  */
 
@@ -26,6 +26,11 @@ class BitBoardPost extends LibertyComment {
 	**/
 	function BitBoardPost($pCommentId = NULL, $pContentId = NULL, $pInfo = NULL) {
 		LibertyComment::LibertyComment($pCommentId,$pContentId,$pInfo);
+
+		// Permission setup
+		$this->mViewContentPerm  = 'p_boards_read';
+		$this->mEditContentPerm  = 'p_boards_post_edit';
+		$this->mAdminContentPerm = 'p_boards_admin';
 	}
 
 	function verify( &$pParamHash ) {

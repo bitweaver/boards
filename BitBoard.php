@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.33 2007/06/20 21:16:20 lsces Exp $
- * $Id: BitBoard.php,v 1.33 2007/06/20 21:16:20 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.34 2007/07/16 15:27:20 squareing Exp $
+ * $Id: BitBoard.php,v 1.34 2007/07/16 15:27:20 squareing Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.33 $ $Date: 2007/06/20 21:16:20 $ $Author: lsces $
+ * @version $Revision: 1.34 $ $Date: 2007/07/16 15:27:20 $ $Author: squareing $
  * @package boards
  */
 
@@ -40,13 +40,18 @@ class BitBoard extends LibertyAttachable {
 		$this->mContentId = $pContentId;
 		$this->mContentTypeGuid = BITBOARD_CONTENT_TYPE_GUID;
 		$this->registerContentType( BITBOARD_CONTENT_TYPE_GUID, array(
-		'content_type_guid' => BITBOARD_CONTENT_TYPE_GUID,
-		'content_description' => 'Message Board',
-		'handler_class' => 'BitBoard',
-		'handler_package' => 'boards',
-		'handler_file' => 'BitBoard.php',
-		'maintainer_url' => 'http://www.bitweaver.org'
-		) );
+				'content_type_guid' => BITBOARD_CONTENT_TYPE_GUID,
+				'content_description' => 'Message Board',
+				'handler_class' => 'BitBoard',
+				'handler_package' => 'boards',
+				'handler_file' => 'BitBoard.php',
+				'maintainer_url' => 'http://www.bitweaver.org'
+		));
+
+		// Permission setup
+		$this->mViewContentPerm  = 'p_boards_read';
+		$this->mEditContentPerm  = 'p_boards_edit';
+		$this->mAdminContentPerm = 'p_boards_admin';
 	}
 
 	/**

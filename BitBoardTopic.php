@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.35 2007/05/24 18:20:44 walterwoj Exp $
- * $Id: BitBoardTopic.php,v 1.35 2007/05/24 18:20:44 walterwoj Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.36 2007/07/16 15:27:20 squareing Exp $
+ * $Id: BitBoardTopic.php,v 1.36 2007/07/16 15:27:20 squareing Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.35 $ $Date: 2007/05/24 18:20:44 $ $Author: walterwoj $
+ * @version $Revision: 1.36 $ $Date: 2007/07/16 15:27:20 $ $Author: squareing $
  * @package boards
  */
 
@@ -39,6 +39,11 @@ class BitBoardTopic extends LibertyAttachable {
 	function BitBoardTopic( $pRootId=NULL ) {
 		LibertyAttachable::LibertyAttachable();
 		$this->mRootId = $pRootId;
+
+		// Permission setup
+		$this->mViewContentPerm  = 'p_boards_read';
+		$this->mEditContentPerm  = 'p_boards_edit';
+		$this->mAdminContentPerm = 'p_boards_admin';
 	}
 
 	/**
