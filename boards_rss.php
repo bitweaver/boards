@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_boards/boards_rss.php,v 1.2 2007/07/08 07:56:40 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_boards/boards_rss.php,v 1.3 2007/07/26 21:05:48 spiderr Exp $
  * @package boards
  * @subpackage functions
  */
@@ -20,7 +20,8 @@ if(!empty($_REQUEST['u'])) {
 	$gBitUser->login($_REQUEST['u'],$_REQUEST['p']);
 }
 
-$board = new BitBoard($_REQUEST['b']);
+$boardId = !empty( $_REQUEST['b'] ) ? $_REQUEST['b'] : NULL;
+$board = new BitBoard( $boardId );
 $board->load();
 $board->parseData();
 
@@ -38,7 +39,9 @@ $rss->useCached( $rss_version_name, $cacheFile, $gBitSystem->getConfig( 'rssfeed
 
 $topic = new BitBoardTopic();
 $pParamHash = array();
-$pParamHash['b'] =$_REQUEST['b'];
+if( !empty( $_REQUEST['b'] ) ) {
+	$pParamHash['b'] = $_REQUEST['b'];
+}
 $pParamHash['find'] ='';
 //TODO allow proper sort order
 $pParamHash['sort_mode'] = "llc_last_modified_desc";
