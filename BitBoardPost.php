@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.25 2007/09/10 15:17:24 squareing Exp $
- * $Id: BitBoardPost.php,v 1.25 2007/09/10 15:17:24 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.26 2007/09/10 15:53:13 spiderr Exp $
+ * $Id: BitBoardPost.php,v 1.26 2007/09/10 15:53:13 spiderr Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.25 $ $Date: 2007/09/10 15:17:24 $ $Author: squareing $
+ * @version $Revision: 1.26 $ $Date: 2007/09/10 15:53:13 $ $Author: spiderr $
  * @package boards
  */
 
@@ -312,6 +312,7 @@ class BitBoardPost extends LibertyComment {
 	* @return the link to display the page.
 	*/
 	function getDisplayUrl( $pCommentId=NULL, $pTopicId=NULL ) {
+		global $gBitSystem;
 
 		if( empty( $pCommentId ) || empty( $pTopicId ) ) {
 			$pCommentId = $this->mCommentId;
