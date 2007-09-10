@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine  on
+    RewriteCond %{SCRIPT_FILENAME}                  -f [OR]
+    RewriteCond %{SCRIPT_FILENAME}/index.php        -f
+    RewriteRule ^(.*)$                              -  [L]
+
+    RewriteRule ^board/\d+.*$    index.php?b=$1     [L,QSA]
+    RewriteRule ^topic/\d+.*$    index.php?t=$1     [L,QSA]
+</IfModule>

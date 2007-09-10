@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.34 2007/07/16 15:27:20 squareing Exp $
- * $Id: BitBoard.php,v 1.34 2007/07/16 15:27:20 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.35 2007/09/10 15:17:24 squareing Exp $
+ * $Id: BitBoard.php,v 1.35 2007/09/10 15:17:24 squareing Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.34 $ $Date: 2007/07/16 15:27:20 $ $Author: squareing $
+ * @version $Revision: 1.35 $ $Date: 2007/09/10 15:17:24 $ $Author: squareing $
  * @package boards
  */
 
@@ -467,7 +467,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 
 		$query = "SELECT ts.*, lc.`content_id`, lc.`title`, lc.`data`, lc.`format_guid`
 			 $selectSql
-			FROM `".BIT_DB_PREFIX."boards` ts 
+			FROM `".BIT_DB_PREFIX."boards` ts
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
 			ORDER BY ".$this->mDb->convertSortmode( $sort_mode );
@@ -535,14 +535,26 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 	* @param pExistsHash the hash that was returned by LibertyContent::pageExists
 	* @return the link to display the page.
 	*/
-	function getDisplayUrl() {
+	function getDisplayUrl( $pBitBoardId = NULL, $pParamHash = NULL ) {
 		$ret = NULL;
-		if( @$this->verifyId( $this->mBitBoardId ) ) {
-			$ret = BOARDS_PKG_URL."index.php?b=".$this->mBitBoardId;
+		if( empty( $pBitBoardId ) && @BitBase::verifyId( $this->mBitBoardId )) {
+			$pBitBoardId = $this->mBitBoardId;
 		}
+
+		if( @$this->verifyId( $pBitBoardId )) {
+			if( $gBitSystem->isFeatureActive( 'pretty_urls' ) || $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
+				$rewrite_tag = $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ? 'view/':'';
+				$ret = BOARDS_PKG_URL.$rewrite_tag.'board/'.$pBitBoardId;
+			} else {
+				$ret = BOARDS_PKG_URL."index.php?b=".$pBitBoardId;
+			}
+		} else {
+			$ret = LibertyContent::getDisplayUrl( NULL, $pParamHash );
+		}
+
 		return $ret;
 	}
-	
+
 	function getBoardSelectList( $pBlankFirst=FALSE ) {
 		global $gBitDb;
 		$ret = array();
@@ -603,8 +615,8 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 		$ret = NULL;
 		if( BitBase::verifyId( $pContentId ) ) {
 			$sql = "SELECT b.`board_id`, b.`content_id` AS `board_content_id`, COUNT(lcm.`comment_id`) AS `post_count`
-					FROM `".BIT_DB_PREFIX."boards_map` bm 
-						INNER JOIN `".BIT_DB_PREFIX."boards` b ON (bm.`board_content_id`=b.`content_id`) 
+					FROM `".BIT_DB_PREFIX."boards_map` bm
+						INNER JOIN `".BIT_DB_PREFIX."boards` b ON (bm.`board_content_id`=b.`content_id`)
 						LEFT JOIN `".BIT_DB_PREFIX."liberty_comments` lcm ON (lcm.`root_id`=bm.`topic_content_id`)
 					WHERE bm.`topic_content_id`=?
 					GROUP BY b.`board_id`, b.`content_id`";
@@ -612,7 +624,6 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 		}
 		return $ret;
 	}
-	
 }
 
 function boards_content_display ( $pContent ) {

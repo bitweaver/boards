@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.24 2007/07/16 15:27:20 squareing Exp $
- * $Id: BitBoardPost.php,v 1.24 2007/07/16 15:27:20 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.25 2007/09/10 15:17:24 squareing Exp $
+ * $Id: BitBoardPost.php,v 1.25 2007/09/10 15:17:24 squareing Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.24 $ $Date: 2007/07/16 15:27:20 $ $Author: squareing $
+ * @version $Revision: 1.25 $ $Date: 2007/09/10 15:17:24 $ $Author: squareing $
  * @package boards
  */
 
@@ -319,7 +319,13 @@ class BitBoardPost extends LibertyComment {
 		}
 		$ret = NULL;
 		if( @$this->verifyId( $pCommentId ) ) {
-			$ret = BOARDS_PKG_URL."index.php?t=".$pTopicId;
+			if( $gBitSystem->isFeatureActive( 'pretty_urls' ) || $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
+				$rewrite_tag = $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ? 'view/':'';
+				$ret = BOARDS_PKG_URL.$rewrite_tag."topic/".$pTopicId;
+			} else {
+				$ret = BOARDS_PKG_URL."index.php?t=".$pTopicId;
+			}
+
 			if( $pCommentId != $pTopicId ) {
 				$ret .= '#'.$pCommentId;
 			}
