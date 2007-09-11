@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.35 2007/09/10 15:17:24 squareing Exp $
- * $Id: BitBoard.php,v 1.35 2007/09/10 15:17:24 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.36 2007/09/11 19:40:03 spiderr Exp $
+ * $Id: BitBoard.php,v 1.36 2007/09/11 19:40:03 spiderr Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.35 $ $Date: 2007/09/10 15:17:24 $ $Author: squareing $
+ * @version $Revision: 1.36 $ $Date: 2007/09/11 19:40:03 $ $Author: spiderr $
  * @package boards
  */
 
@@ -536,6 +536,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 	* @return the link to display the page.
 	*/
 	function getDisplayUrl( $pBitBoardId = NULL, $pParamHash = NULL ) {
+		global $gBitSystem;
 		$ret = NULL;
 		if( empty( $pBitBoardId ) && @BitBase::verifyId( $this->mBitBoardId )) {
 			$pBitBoardId = $this->mBitBoardId;

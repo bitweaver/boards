@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.37 2007/09/10 15:17:24 squareing Exp $
- * $Id: BitBoardTopic.php,v 1.37 2007/09/10 15:17:24 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.38 2007/09/11 19:40:03 spiderr Exp $
+ * $Id: BitBoardTopic.php,v 1.38 2007/09/11 19:40:03 spiderr Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.37 $ $Date: 2007/09/10 15:17:24 $ $Author: squareing $
+ * @version $Revision: 1.38 $ $Date: 2007/09/11 19:40:03 $ $Author: spiderr $
  * @package boards
  */
 
@@ -445,14 +445,20 @@ WHERE
 	* @param pExistsHash the hash that was returned by LibertyAttachable::pageExists
 	* @return the link to display the page.
 	*/
-	function getDisplayUrl() {
+	function getDisplayUrl( $pTopicId=NULL ) {
+		global $gBitSystem;
 		$ret = NULL;
+
+		if( empty( $pTopicId ) ) {
+			$pTopicId = $this->mRootId;
+		}
+
 		if( @$this->verifyId( $this->mRootId ) ) {
 			if( $gBitSystem->isFeatureActive( 'pretty_urls' ) || $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				$rewrite_tag = $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ? 'view/':'';
 				$ret = BOARDS_PKG_URL.$rewrite_tag."topic/".$pTopicId;
 			} else {
-				$ret=BOARDS_PKG_URL."index.php?t=".$this->mRootId;
+				$ret=BOARDS_PKG_URL."index.php?t=".$pTopicId;
 			}
 		}
 		return $ret;
@@ -529,6 +535,7 @@ WHERE
 
 	function sendNotification($user) {
 		global $gBitSystem;
+return;
 		$mail_subject= "Topic Reply Notification - ".$this->mInfo['title'];
 		$host = 'http://'.$_SERVER['HTTP_HOST'];
 		//TODO: use a template for this
