@@ -1,9 +1,31 @@
 <IfModule mod_rewrite.c>
     RewriteEngine  on
-    RewriteCond %{SCRIPT_FILENAME}                  -f [OR]
-    RewriteCond %{SCRIPT_FILENAME}/index.php        -f
-    RewriteRule ^(.*)$                              -  [L]
+#	Uncomment this if mod_rewrites are not working for you. some hosting services have cranky mod_rewrite
+#    RewriteBase     /boards/
+    RewriteCond %{SCRIPT_FILENAME}  -f [OR]
+    RewriteCond %{SCRIPT_FILENAME}/index.php    -f
+    RewriteRule ^(.*)$            - [L]
 
     RewriteRule ^board/\d+.*$    index.php?b=$1     [L,QSA]
     RewriteRule ^topic/\d+.*$    index.php?t=$1     [L,QSA]
+
+    # fake out phpBB user profile page
+    RewriteCond %{REQUEST_URI} profile.php
+    RewriteCond %{QUERY_STRING} .*mode=viewprofile.*u=([0-9]*)
+    RewriteRule .*  /users/index.php?fHomepage=%1 [R,env=VV_THEME:people,QSA]
+	
+    # old phpBB posts
+    RewriteCond %{REQUEST_URI} viewtopic.php
+    RewriteCond %{QUERY_STRING} .*p=([0-9]*).*
+    RewriteRule .* /forums/index.php?migrate_post_id=%1   [R]
+
+    # old phpBB topics
+    RewriteCond %{REQUEST_URI} viewtopic.php
+    RewriteCond %{QUERY_STRING} .*t=([0-9]*).*
+    RewriteRule .* /forums/index.php?migrate_topic_id=%1   [R]
+
+    # old phpBB board
+    RewriteCond %{REQUEST_URI} viewforum.php
+    RewriteCond %{QUERY_STRING} .*f=([0-9]*).*
+    RewriteRule .* /forums/index.php?migrate_board_id=%1   [R]
 </IfModule>
