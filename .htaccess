@@ -6,8 +6,8 @@
     RewriteCond %{SCRIPT_FILENAME}/index.php    -f
     RewriteRule ^(.*)$            - [L]
 
-    RewriteRule ^board/\d+.*$    index.php?b=$1     [L,QSA]
-    RewriteRule ^topic/\d+.*$    index.php?t=$1     [L,QSA]
+    RewriteRule ^board/(\d+).*$    index.php?b=$1     [L,QSA]
+    RewriteRule ^topic/(\d+).*$    index.php?t=$1     [L,QSA]
 
     # fake out phpBB user profile page
     RewriteCond %{REQUEST_URI} profile.php
