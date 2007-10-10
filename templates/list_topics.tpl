@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.11 2007/05/07 05:22:33 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.12 2007/10/10 18:07:15 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="floaticon">
@@ -98,25 +98,7 @@
 								{if $thread.th_moved==0}
 									{if $gBitUser->hasPermission( 'p_boards_edit' )}
 										{*smartlink ititle="Edit" ifile="edit.php" ibiticon="liberty/edit" board_id=$thread.board_id*}
-										<a onclick="
-											document.getElementById('move_block_{$thread.th_thread_id|escape:"url"}').style['display']='inline';
-											var url = '{$smarty.const.BOARDS_PKG_URL}ajax.php?req=1&amp;seq=' + new Date().getTime();
-											var element = 'move_{$thread.th_thread_id|escape:"url"}';
-											var params = null;
-											{literal}
-											var ajax = new Ajax.Updater(
-												{success: element},
-												url, {method: 'get', parameters: params, onFailure: reportError}
-											);
-											{/literal}
-											this.oldonclick=this.onclick;
-											this.onclick=new Function('
-												document.getElementById(\'move_block_{$thread.th_thread_id|escape:"url"}\').style[\'display\']=\'none\';
-												document.getElementById(\'move_{$thread.th_thread_id|escape:"url"}\').innerHTML=\'\';
-												this.onclick=this.oldonclick;
-												return false;
-											');
-											return false;" title="{tr}Move Thread{/tr}" href="{$smarty.const.BOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}"
+										<a onclick="BitBoards.moveThread( 'move_block_{$thread.th_thread_id|escape:"url"}', 'move_{$thread.th_thread_id|escape:"url"}', '{$smarty.const.BOARDS_PKG_URL}ajax.php?req=1&amp;seq=' + new Date().getTime(), this );" title="{tr}Move Thread{/tr}" href="{$smarty.const.BOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}"
 										>{biticon ipackage=icons iname="go-jump" iexplain="Move Thread" iforce="icon"}</a>
 									{/if}
 								{/if}

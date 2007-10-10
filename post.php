@@ -52,7 +52,7 @@ if( @BitBase::verifyId( $_REQUEST['t'] ) ) {
 	}
 }
 
-$gBitThemes->loadAjax( 'prototype' );
+$gBitThemes->loadAjax( 'mochikit' );
 
 $thread = new BitBoardTopic($_REQUEST['t']);
 if( !$thread->load() ) {

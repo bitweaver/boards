@@ -12,22 +12,12 @@ $flip_downname=>$flip.$flip_name.downname
 *}
 {if $gBitUser->hasPermission( $flip.$flip_name.perm )}
 	<span>
-		<a onclick="
-		var url = '{$smarty.const.BOARDS_PKG_URL}ajax.php?req={$flip.$flip_name.req}&amp;seq='
-			+ new Date().getTime()+
-			'&amp;{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}
-			&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}';
-		var element = this.parentNode;
-		var params = null;
-			var ajax = new Ajax.Updater(
-			{ldelim}success: element{rdelim},
-			url,
-			{ldelim}method: 'get', parameters: params, onFailure: reportError{rdelim}
-		);
-		return false;
-		" href="{$smarty.const.BOARDS_PKG_URL}topic.php?
+		<a href="{$smarty.const.BOARDS_PKG_URL}topic.php?
 			{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}
-			&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}">
+			&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}" onclick="BitBoards.flipName( '{$smarty.const.BOARDS_PKG_URL}ajax.php?req={$flip.$flip_name.req}&amp;seq='
+				+ new Date().getTime()+
+				'&amp;{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}
+				&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}', this.parentNode )">
 
 {if $flip.$flip_name.state==1}
 		{biticon ipackage=icons iname=$flip.$flip_name.up iexplain=$flip.$flip_name.upname iforce="icon"}

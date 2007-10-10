@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.21 2007/07/10 18:58:55 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.22 2007/10/10 18:07:15 wjames5 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -166,7 +166,7 @@ $gBitSmarty->assign_by_ref( 'listInfo', $_REQUEST['listInfo'] );
 $gBitSmarty->assign_by_ref( 'board', $gContent );
 $gBitSmarty->assign( 'cat_url', BOARDS_PKG_URL."index.php"); //?ct=".urlencode($gContent->mInfo['content_type_guid']));
 
-$gBitThemes->loadAjax( 'prototype' );
+$gBitThemes->loadAjax( 'mochikit' );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:boards/list_topics.tpl', tra( 'Message Board Threads: ' . $gContent->getField('title') ) );

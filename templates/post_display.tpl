@@ -43,17 +43,9 @@
 								{biticon ipackage="icons" iname="list-remove" iexplain="Reject Post" iforce="icon"}
 							</a>
 						{elseif !$comment.is_warned && $comment.user_id>=0}
-							<a onclick="
-									this.oldonclick=this.onclick;
-									document.getElementById('warn_block_{$comment.comment_id|escape:"url"}').style['display']='inline';
-									this.onclick=new Function('
-										document.getElementById(\'warn_block_{$comment.comment_id|escape:"url"}\').style[\'display\']=\'none\';
-										this.onclick=this.oldonclick;
-										return false;
-									');
-									return false;
-								" title="{tr}Warn the poster about this post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=3&amp;comment_id={$comment.comment_id}"
-							>{biticon ipackage="icons" iname="dialog-warning" iexplain="Warn Post" iforce="icon"}</a>
+							<a onclick="BitBoards.warn( 'warn_block_{$comment.comment_id|escape:"url"}' this )" title="{tr}Warn the poster about this post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=3&amp;comment_id={$comment.comment_id}">
+								{biticon ipackage="icons" iname="dialog-warning" iexplain="Warn Post" iforce="icon"}
+							</a>
 
 							<div style="display:none;" id="warn_block_{$comment.comment_id|escape:"url"}">
 								{form action="`$thread_mInfo.display_url`"}
