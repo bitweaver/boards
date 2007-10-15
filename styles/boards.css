@@ -1,25 +1,25 @@
-#content form.mb-threading div			{display:inline;}
-#content .boards .mb-threading			{}
+form.mb-threading div			{display:inline;}
+.boards .mb-threading			{}
 
-#content .boards tr.odd.unapproved		{background:#faa;}
-#content .boards tr.even.unapproved		{background:#fac;}
-#content .boards tr.odd.moved			{background:#aaf;}
-#content .boards tr.even.moved			{background:#acf;}
-#content .boards div.indent .indent		{margin-left:2em;}
-#content .boards tr.highlight			{background:#fca;}
-#content .boards .mb-post .warning		{}
+.boards tr.odd.unapproved		{background:#faa;}
+.boards tr.even.unapproved		{background:#fac;}
+.boards tr.odd.moved			{background:#aaf;}
+.boards tr.even.moved			{background:#acf;}
+.boards div.indent .indent		{margin-left:2em;}
+.boards tr.highlight			{background:#fca;}
+.boards .mb-post .warning		{}
 
-#content .boards div.indent1			{margin-left:20px;}
-#content .boards div.indent2			{margin-left:35px;}
-#content .boards div.indent3			{margin-left:50px;}
-#content .boards div.indent4			{margin-left:60px;}
-#content .boards div.indent5			{margin-left:70px;}
-#content .boards div.indent6			{margin-left:80px;}
-#content .boards div.indent7			{margin-left:90px;}
+.boards .mb-post .indent1		{margin-left:20px;}
+.boards .mb-post .indent2		{margin-left:35px;}
+.boards .mb-post .indent3		{margin-left:50px;}
+.boards .mb-post .indent4		{margin-left:60px;}
+.boards .mb-post .indent5		{margin-left:70px;}
+.boards .mb-post .indent6		{margin-left:80px;}
+.boards .mb-post .indent7		{margin-left:90px;}
 
-#content .boards .mb-post 				{clear:both;}
-#content .boards .mb-post .content		{width:auto}
-#content .boards .mb-post .header		{}
-#content .boards .mb-post .userinfo		{float:left;width:140px;}
-#content .boards .mb-post .showavatar	{margin-left:145px;}
-#content .boards .mb-post .signature	{clear:both;}
+.boards .mb-post 				{clear:both;}
+.boards .mb-post .content		{width:auto}
+.boards .mb-post .header		{}
+.boards .mb-post .userinfo		{float:left;width:140px;}
+.boards .mb-post .showavatar	{margin-left:145px;}
+.boards .mb-post .signature	{clear:both;}
