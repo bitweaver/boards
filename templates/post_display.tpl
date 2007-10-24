@@ -17,6 +17,7 @@
 			{/if}
 		</div>
 	{/if}
+-{$gBitUser->getPreference('boards_show_avatars','y')}-
 	<div class="wrapper{if $gBitUser->getPreference('boards_show_avatars','y') == 'y'} showavatar{/if}{if $smarty.request.comments_style eq 'threaded'} indent{$comment.level}{/if}">
 		{if !$post_is_preview}
 			<div class="floaticon">

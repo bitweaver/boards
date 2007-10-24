@@ -2,6 +2,7 @@
 {jstab title="Boards"}
 <div class="admin boards">
 	<div class="body">
+		{if $boardsSettings}
 		{form legend="Simple Settings"}
 			<input type="hidden" name="view_user" value="{$view_user}" />
 			{foreach from=$boardsSettings key=option item=output}
@@ -27,6 +28,7 @@
 				<input type="submit" name="boards[submit]" value="{tr}Change Settings{/tr}" />
 			</div>
 		{/form}
+		{/if}
 
 		{form enctype="multipart/form-data" id="bitboarduprefs" legend="Edit Signature"}
 			<input type="hidden" name="view_user" value="{$view_user}" />

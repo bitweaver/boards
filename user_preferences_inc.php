@@ -4,6 +4,7 @@
  * @subpackage functions
  */
 $boardsSettings = array(
+	/*
 	'boards_show_avatars' => array(
 		'pref'    => 'boards_show_avatars',
 		'label'   => "Show Avatars",
@@ -11,6 +12,7 @@ $boardsSettings = array(
 		'default' => 'y',
 		'note'    => "",
 	),
+	 */
 );
 
 foreach( $boardsSettings as $option => $op) {
