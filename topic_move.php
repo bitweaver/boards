@@ -24,7 +24,7 @@ if( isset( $_REQUEST["confirm"] ) ) {
 		header ("location: ".$_REQUEST["ref"] );
 		die;
 	} else {
-		$gBitSystem->fatalError( "Error Moving Topic.", "There was an error moving the topic: " . vc($gContent->mErrors) );
+		$gBitSystem->fatalError( "There was an error moving the topic: ".vc( $gContent->mErrors ));
 	}
 }
 
@@ -47,9 +47,9 @@ if( isset( $_REQUEST["target"] ) ) {
 	$formHash["target"]=$_REQUEST["target"];
 	$formHash["t"]=$_REQUEST["t"];
 	$msgHash = array(
-	'label' => tra( "Move Thread" ).": ".$bitThread->mInfo['title']  ,
-	'confirm_item' => $bitThread->mInfo['title'] ,
-	'warning' => tra( "Move ".' "' .$bitThread->mInfo['title'] .'" '. tra("to Board"). ' "'.$bitBoard->mInfo['title'].'"'."<br />This cannot be undone!" ),
+		'label' => tra( "Move Thread" ).": ".$bitThread->mInfo['title']  ,
+		'confirm_item' => $bitThread->mInfo['title'] ,
+		'warning' => tra( "Move ".' "' .$bitThread->mInfo['title'] .'" '. tra("to Board"). ' "'.$bitBoard->mInfo['title'].'"'."<br />This cannot be undone!" ),
 	);
 	$gBitSystem->confirmDialog( $formHash,$msgHash );
 }
