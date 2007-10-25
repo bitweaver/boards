@@ -18,11 +18,11 @@
 			"warn":function( elmid, caller ){
 				var oldonclick = caller.onclick;
 				document.getElementById( elmid ).style['display']='inline';
-				caller.onclick = function(
+				caller.onclick = function() {
 					document.getElementById( elmid ).style['display']='none';
 					caller.onclick = oldonclick;
 					return false;
-				);
+				}
 				return false;
 			},
 			
@@ -37,12 +37,12 @@
 				return false;
 								
 				var oldonclick=caller.onclick;
-				caller.onclick=function(
+				caller.onclick=function() {
 					document.getElementById(elmid).style['display']='none';
 					document.getElementById(targetid).innerHTML='';
 					caller.onclick = oldonclick;
 					return false;
-				);
+				}
 				return false;
 			},
 			
