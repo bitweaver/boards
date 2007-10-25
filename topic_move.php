@@ -24,9 +24,8 @@ if( isset( $_REQUEST["confirm"] ) ) {
 		header ("location: ".$_REQUEST["ref"] );
 		die;
 	} else {
-		vd( $gContent->mErrors );
+		$gBitSystem->fatalError( "Error Moving Topic.", "There was an error moving the topic: " . vc($gContent->mErrors) );
 	}
-	die();
 }
 
 if( isset( $_REQUEST["target"] ) ) {
