@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.10 2007/05/03 08:10:23 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.11 2007/10/31 19:21:58 bitweaver Exp $ *}
 {strip}
 <div class="listing boards">
 
@@ -54,7 +54,7 @@
 		{formfeedback hash=$formfeedback}
 
 		{foreach item=comment from=$comments}
-			<div class="mb-post {cycle values="even,odd"}{if $gBitSystem->isFeatureActive('boards_post_anon_moderation') && $comment.user_id<0 and $comment.is_approved==0} unapproved{/if}">
+			<div class="mb-post {if $gBitSystem->isFeatureActive('boards_post_anon_moderation') && $comment.user_id<0 and $comment.is_approved==0} unapproved{/if}">
 				{assign var=thread_mInfo value=$thread->mInfo}
 				{displaycomment comment=$comment template=$comment_template}
 			</div>
