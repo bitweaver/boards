@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.38 2007/09/11 19:40:03 spiderr Exp $
- * $Id: BitBoardTopic.php,v 1.38 2007/09/11 19:40:03 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.39 2007/11/01 14:09:58 squareing Exp $
+ * $Id: BitBoardTopic.php,v 1.39 2007/11/01 14:09:58 squareing Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.38 $ $Date: 2007/09/11 19:40:03 $ $Author: spiderr $
+ * @version $Revision: 1.39 $ $Date: 2007/11/01 14:09:58 $ $Author: squareing $
  * @package boards
  */
 
@@ -93,14 +93,14 @@ SELECT
 	map.`board_content_id` AS board_content_id, b.`board_id`
 
 	$selectSql
-FROM `${BIT_DB_PREFIX}liberty_comments` lcom
-	INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
-	INNER JOIN `${BIT_DB_PREFIX}boards_map` map ON (map.`topic_content_id`=lcom.`root_id` )
-	INNER JOIN `${BIT_DB_PREFIX}boards` b ON (map.`board_content_id`=b.`content_id` )
+FROM `".BIT_DB_PREFIX."liberty_comments` lcom
+	INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
+	INNER JOIN `".BIT_DB_PREFIX."boards_map` map ON (map.`topic_content_id`=lcom.`root_id` )
+	INNER JOIN `".BIT_DB_PREFIX."boards` b ON (map.`board_content_id`=b.`content_id` )
 	INNER JOIN `".BIT_DB_PREFIX."liberty_content` rlc ON (rlc.`content_id` = lcom.`root_id`)
 	$joinSql
-	LEFT JOIN `${BIT_DB_PREFIX}boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
-	LEFT JOIN `${BIT_DB_PREFIX}boards_posts` post ON(post.`comment_id`=lcom.`comment_id`)
+	LEFT JOIN `".BIT_DB_PREFIX."boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
+	LEFT JOIN `".BIT_DB_PREFIX."boards_posts` post ON(post.`comment_id`=lcom.`comment_id`)
 WHERE
 	lcom.`root_id`=lcom.`parent_id` AND	$lookupColumn=?
 	$whereSql";
@@ -127,7 +127,7 @@ WHERE
 		global $gBitDb;
 		$ret = NULL;
 		if( BitBase::verifyId( $pMigratePostId ) ) {
-			$path = $gBitDb->getOne( "SELECT lcom.`thread_forward_sequence`  FROM `boards_posts` bp INNER JOIN `liberty_comments` lcom ON(bp.`comment_id`=lcom.`comment_id`) WHERE bp.`migrate_post_id`=?", array( $pMigratePostId ) );
+			$path = $gBitDb->getOne( "SELECT lcom.`thread_forward_sequence`  FROM `".BIT_DB_PREFIX."boards_posts` bp INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON(bp.`comment_id`=lcom.`comment_id`) WHERE bp.`migrate_post_id`=?", array( $pMigratePostId ) );
 			if( $path ) {
 				$ret = boards_get_topic_comment( $path  );
 			}
@@ -139,7 +139,7 @@ WHERE
 		global $gBitDb;
 		$ret = NULL;
 		if( BitBase::verifyId( $pMigrateTopicId ) ) {
-			$ret = $gBitDb->getOne( "SELECT lcom.`comment_id`  FROM `boards_topics` bt INNER JOIN `liberty_comments` lcom ON(bt.`parent_id`=lcom.`content_id`) WHERE `migrate_topic_id`=?", array( $pMigrateTopicId ) );
+			$ret = $gBitDb->getOne( "SELECT lcom.`comment_id`  FROM `".BIT_DB_PREFIX."boards_topics` bt INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON(bt.`parent_id`=lcom.`content_id`) WHERE `migrate_topic_id`=?", array( $pMigrateTopicId ) );
 		}
 		return $ret;
 	}

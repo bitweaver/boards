@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.36 2007/09/11 19:40:03 spiderr Exp $
- * $Id: BitBoard.php,v 1.36 2007/09/11 19:40:03 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.37 2007/11/01 14:09:58 squareing Exp $
+ * $Id: BitBoard.php,v 1.37 2007/11/01 14:09:58 squareing Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.36 $ $Date: 2007/09/11 19:40:03 $ $Author: spiderr $
+ * @version $Revision: 1.37 $ $Date: 2007/11/01 14:09:58 $ $Author: squareing $
  * @package boards
  */
 
@@ -99,7 +99,7 @@ class BitBoard extends LibertyAttachable {
 		global $gBitDb;
 		$ret = NULL;
 		if( BitBase::verifyId( $pMigrateBoardId ) ) {
-			$ret = $gBitDb->getOne( "SELECT `board_id` FROM `boards` bb WHERE `migrate_board_id`=?", array( $pMigrateBoardId ) );
+			$ret = $gBitDb->getOne( "SELECT `".BIT_DB_PREFIX."board_id` FROM `boards` bb WHERE `migrate_board_id`=?", array( $pMigrateBoardId ) );
 		}
 		return $ret;
 	}
