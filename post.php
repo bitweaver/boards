@@ -20,7 +20,8 @@ if (!empty($_REQUEST['action'])) {
 	$comment = new BitBoardPost($_REQUEST['comment_id']);
 	$comment->loadComment();
 	if (!$comment->isValid()) {
-		$gBitSystem->fatalError("Invalid Comment Id");
+		$gBitSystem->setHttpStatus( 404 );
+		$gBitSystem->fatalError("Invalid Comment");
 	}
 	switch ($_REQUEST['action']) {
 		case 1:
@@ -56,7 +57,8 @@ $gBitThemes->loadAjax( 'mochikit' );
 
 $thread = new BitBoardTopic($_REQUEST['t']);
 if( !$thread->load() ) {
-	$gBitSystem->fatalError("Thread id not given");
+	$gBitSystem->setHttpStatus( 404 );
+	$gBitSystem->fatalError("Unkown discussion");
 }
 
 if (empty($thread->mInfo['th_root_id'])) {
@@ -65,6 +67,7 @@ if (empty($thread->mInfo['th_root_id'])) {
 		$tb = new BitBoard(null,$thread->mInfo['board_content_id']);
 		header("Location: ".$tb->getDisplayUrl());
 	} else {
+		$gBitSystem->setHttpStatus( 404 );
 		$gBitSystem->fatalError(tra( "Invalid topic selection." ) );
 	}
 }
