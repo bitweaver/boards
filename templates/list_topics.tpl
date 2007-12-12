@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.12 2007/10/10 18:07:15 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.13 2007/12/12 19:05:08 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="floaticon">
@@ -98,8 +98,12 @@
 								{if $thread.th_moved==0}
 									{if $gBitUser->hasPermission( 'p_boards_edit' )}
 										{*smartlink ititle="Edit" ifile="edit.php" ibiticon="liberty/edit" board_id=$thread.board_id*}
-										<a onclick="BitBoards.moveThread( 'move_block_{$thread.th_thread_id|escape:"url"}', 'move_{$thread.th_thread_id|escape:"url"}', '{$smarty.const.BOARDS_PKG_URL}ajax.php?req=1&amp;seq=' + new Date().getTime(), this );" title="{tr}Move Thread{/tr}" href="{$smarty.const.BOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}"
-										>{biticon ipackage=icons iname="go-jump" iexplain="Move Thread" iforce="icon"}</a>
+										<a {if !$gBitThemes->isJavascriptEnabled()}
+											href="{$smarty.const.BOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}"
+											{else}
+											href="javascript:void(0);" onclick="BitBoards.moveThread( 'move_block_{$thread.th_thread_id|escape:"url"}', 'move_{$thread.th_thread_id|escape:"url"}', '{$smarty.const.BOARDS_PKG_URL}ajax.php?req=1&amp;seq=' + new Date().getTime(), this );"
+											{/if}
+											title="{tr}Move Thread{/tr}">{biticon ipackage=icons iname="go-jump" iexplain="Move Thread" iforce="icon"}</a>
 									{/if}
 								{/if}
 

@@ -12,13 +12,17 @@ $flip_downname=>$flip.$flip_name.downname
 *}
 {if $gBitUser->hasPermission( $flip.$flip_name.perm )}
 	<span>
-		<a href="{$smarty.const.BOARDS_PKG_URL}topic.php?
+		<a {if !$gBitThemes->isJavascriptEnabled()}
+			href="{$smarty.const.BOARDS_PKG_URL}topic.php?
 			{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}
-			&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}" onclick="BitBoards.flipName( '{$smarty.const.BOARDS_PKG_URL}ajax.php?req={$flip.$flip_name.req}&amp;seq='
+			&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}"
+			{else}	
+			href="javascript:void(0);" onclick="BitBoards.flipName( '{$smarty.const.BOARDS_PKG_URL}ajax.php?req={$flip.$flip_name.req}&amp;seq='
 				+ new Date().getTime()+
 				'&amp;{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}
-				&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}', this.parentNode )">
-
+				&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}', this.parentNode )"
+			{/if}
+			>
 {if $flip.$flip_name.state==1}
 		{biticon ipackage=icons iname=$flip.$flip_name.up iexplain=$flip.$flip_name.upname iforce="icon"}
 {else}
