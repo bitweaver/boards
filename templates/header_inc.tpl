@@ -1,5 +1,4 @@
 {if $smarty.const.ACTIVE_PACKAGE == 'boards'}
-	<link rel="stylesheet" title="{$style}" type="text/css" href="{$smarty.const.BOARDS_PKG_URL}styles/boards.css" media="all" />
 	<script type="text/javascript">/* <![CDATA[ */
 		{literal}
 		/* DEPENDENCIES: MochiKit Base Async, BitAjax */

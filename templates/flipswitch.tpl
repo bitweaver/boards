@@ -10,28 +10,26 @@ $flip_upname=>$flip.$flip_name.upname
 $flip_down=>$flip.$flip_name.down
 $flip_downname=>$flip.$flip_name.downname
 *}
+<span id="{$flip.$flip_name.id}-{$flip_name}">
 {if $gBitUser->hasPermission( $flip.$flip_name.perm )}
-	<span>
-		<a {if !$gBitThemes->isJavascriptEnabled()}
-			href="{$smarty.const.BOARDS_PKG_URL}topic.php?
+	{if !$gBitThemes->isJavascriptEnabled()}
+		<a href="{$smarty.const.BOARDS_PKG_URL}topic.php?t={$flip.$flip_name.id}&amp;
 			{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}
-			&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}"
-			{else}	
-			href="javascript:void(0);" onclick="BitBoards.flipName( '{$smarty.const.BOARDS_PKG_URL}ajax.php?req={$flip.$flip_name.req}&amp;seq='
-				+ new Date().getTime()+
-				'&amp;{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}
-				&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}', this.parentNode )"
-			{/if}
-			>
+			&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}" />
+	{else}	
+		<a href="javascript:void(0);" onclick="BitBoards.flipName( '{$smarty.const.BOARDS_PKG_URL}ajax.php?t={$flip.$flip_name.id}&amp;req={$flip.$flip_name.req}&amp;seq='
+			+ new Date().getTime()+
+			'&amp;{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}
+			&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}', '{$flip.$flip_name.id}-{$flip_name}' )" >
+	{/if}
+{/if}
 {if $flip.$flip_name.state==1}
-		{biticon ipackage=icons iname=$flip.$flip_name.up iexplain=$flip.$flip_name.upname iforce="icon"}
+	{biticon ipackage=icons iname=$flip.$flip_name.up iexplain=$flip.$flip_name.upname iforce="icon"}
 {else}
-		{if $gBitUser->hasPermission( $flip.$flip_name.perm )}
-			{biticon ipackage=icons iname=$flip.$flip_name.down iexplain=$flip.$flip_name.downname iforce="icon"}
-		{/if}
+	{biticon ipackage=icons iname=$flip.$flip_name.down iexplain=$flip.$flip_name.downname iforce="icon"}
 {/if}
-
-		</a>
-	</span>
+{if $gBitUser->hasPermission( $flip.$flip_name.perm )}
+	</a>
 {/if}
+</span>
 {/strip}

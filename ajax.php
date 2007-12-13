@@ -98,28 +98,25 @@ switch ($_GET['req']) {
 		break;
 	case 2:
 		// Now check permissions to access this page
-		$gBitSystem->verifyPermission( 'p_board_edit' );
-		unset($gContent);
+		$gBitSystem->verifyPermission( 'p_boards_edit' );
 		require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
-		if($gContent->lock($_REQUEST["locked"]) ) {
+		if($gContent->lock($_REQUEST["is_locked"]) ) {
 			$gContent->load();
 			$gBitSmarty->assign_by_ref('flip',$gContent->getFlipFlop());
-			$gBitSmarty->assign('flip_name','locked');
+			$gBitSmarty->assign('flip_name','is_locked');
 			$gBitSmarty->display('bitpackage:boards/flipswitch.tpl');
 		} else {
 			trigger_error(var_export($gContent->mErrors,true ));
-			va($gContent);
 		}
 		break;
 	case 3:
 		// Now check permissions to access this page
-		$gBitSystem->verifyPermission( 'p_board_edit' );
-
+		$gBitSystem->verifyPermission( 'p_boards_edit' );
 		require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
-		if($gContent->sticky($_REQUEST["sticky"]) ) {
+		if($gContent->sticky($_REQUEST["is_sticky"]) ) {
 			$gContent->load();
-			$gBitSmarty->assign_by_ref('flip',$gContent->getFlipFlop());
-			$gBitSmarty->assign('flip_name','sticky');
+			$gBitSmarty->assign('flip',$gContent->getFlipFlop());
+			$gBitSmarty->assign('flip_name','is_sticky');
 			$gBitSmarty->display('bitpackage:boards/flipswitch.tpl');
 		} else {
 			trigger_error(var_export($gContent->mErrors,true ));

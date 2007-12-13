@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.39 2007/11/01 14:09:58 squareing Exp $
- * $Id: BitBoardTopic.php,v 1.39 2007/11/01 14:09:58 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.40 2007/12/13 06:50:07 nickpalmer Exp $
+ * $Id: BitBoardTopic.php,v 1.40 2007/12/13 06:50:07 nickpalmer Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.39 $ $Date: 2007/11/01 14:09:58 $ $Author: squareing $
+ * @version $Revision: 1.40 $ $Date: 2007/12/13 06:50:07 $ $Author: nickpalmer $
  * @package boards
  */
 
@@ -206,14 +206,14 @@ WHERE
 		} else {
 			$gBitSystem->verifyPermission('p_boards_edit');
 			$state = (($state+1)%2);
-			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_topic` WHERE `parent_id` = ?";
-			$query_ins = "INSERT INTO `".BIT_DB_PREFIX."boards_topic` (`parent_id`,`locked`) VALUES ( ?, $state)";
-			$query_up = "UPDATE `".BIT_DB_PREFIX."boards_topic` SET `locked` = $state WHERE `parent_id` = ?";
+			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = ?";
 			$result = $this->mDb->query( $query_sel, array( $this->mRootId ) );
 			if($result->RowCount()==0) {
-				$result = $this->mDb->query( $query_ins, array( $this->mRootId ) );
+				$query_ins = "INSERT INTO `".BIT_DB_PREFIX."boards_topics` (`parent_id`,`is_locked`) VALUES ( ?, ?)";
+				$result = $this->mDb->query( $query_ins, array( $this->mRootId, $state ) );
 			} else {
-				$result = $this->mDb->query( $query_up, array( $this->mRootId ) );
+				$query_up = "UPDATE `".BIT_DB_PREFIX."boards_topics` SET `is_locked` = ? WHERE `parent_id` = ?";
+				$result = $this->mDb->query( $query_up, array( $state, $this->mRootId ) );
 			}
 			$ret = true;
 		}
@@ -231,14 +231,14 @@ WHERE
 		} else {
 			$gBitSystem->verifyPermission('p_boards_edit');
 			$state = (($state+1)%2);
-			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_topic` WHERE `parent_id` = ?";
-			$query_ins = "INSERT INTO `".BIT_DB_PREFIX."boards_topic` (`parent_id`,`sticky`) VALUES ( ?, $state)";
-			$query_up = "UPDATE `".BIT_DB_PREFIX."boards_topic` SET `sticky` = $state WHERE `parent_id` = ?";
+			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = ?";
 			$result = $this->mDb->query( $query_sel, array( $this->mRootId ) );
 			if($result->RowCount()==0) {
-				$result = $this->mDb->query( $query_ins, array( $this->mRootId ) );
+				$query_ins = "INSERT INTO `".BIT_DB_PREFIX."boards_topics` (`parent_id`,`is_sticky`) VALUES ( ?, ? )";
+				$result = $this->mDb->query( $query_ins, array( $this->mRootId, $state ) );
 			} else {
-				$result = $this->mDb->query( $query_up, array( $this->mRootId ) );
+				$query_up = "UPDATE `".BIT_DB_PREFIX."boards_topics` SET `is_sticky` = ? WHERE `parent_id` = ?";
+				$result = $this->mDb->query( $query_up, array( $state, $this->mRootId) );
 			}
 			$ret = TRUE;
 		}

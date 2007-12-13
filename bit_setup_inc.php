@@ -1,5 +1,5 @@
 <?php
-global $gBitSystem;
+global $gBitSystem, $gBitThemes;
 
 $registerHash = array(
 	'package_name' => 'boards',
@@ -39,5 +39,7 @@ if( $gBitSystem->isPackageActive( 'boards' ) ) {
 	function boards_get_topic_comment( $pThreadForwardSequence ) {
 		return( intval( substr( $pThreadForwardSequence, 0, 9 ) ) );
 	}
+
+	$gBitThemes->loadCss(BOARDS_PKG_PATH.'styles/boards.css');
 }
 ?>
