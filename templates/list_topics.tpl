@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.13 2007/12/12 19:05:08 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.14 2007/12/16 07:07:41 jht001 Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="floaticon">
@@ -25,7 +25,7 @@
 		{* looks horrible, but leave for now - xing *}
 		{if $gBitUser->hasPermission( 'p_liberty_post_comments' )}
 			<div class="navbar">
-				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{tr}New Topic{/tr} {biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic"}</a>
+				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic"}</a>
 			</div>
 		{/if}
 
