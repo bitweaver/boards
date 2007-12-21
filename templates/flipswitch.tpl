@@ -10,7 +10,7 @@ $flip_upname=>$flip.$flip_name.upname
 $flip_down=>$flip.$flip_name.down
 $flip_downname=>$flip.$flip_name.downname
 *}
-<span id="{$flip.$flip_name.id}-{$flip_name}">
+<span id="flip_{$flip.$flip_name.id}-{$flip_name}">
 {if $gBitUser->hasPermission( $flip.$flip_name.perm )}
 	{if !$gBitThemes->isJavascriptEnabled()}
 		<a href="{$smarty.const.BOARDS_PKG_URL}topic.php?t={$flip.$flip_name.id}&amp;
