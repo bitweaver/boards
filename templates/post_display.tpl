@@ -1,7 +1,8 @@
 {strip}
 {assign var='gContent' value=$comment}
 
-<div class="body" id="{$comment.comment_id|escape}">
+<div class="body" id="comment_{$comment.comment_id|escape}">
+
 	{if $gBitUser->getPreference('boards_show_avatars','y') == 'y'}
 		<div class="userinfo">
 			{if $comment.user_id == $smarty.const.ANONYMOUS_USER_ID}
@@ -16,6 +17,7 @@
 				<small>{tr}Joined: {/tr}{$comment.registration_date|bit_short_date}</small><br />
 			{/if}
 		</div>
+
 	{/if}
 
 	<div class="wrapper{if $gBitUser->getPreference('boards_show_avatars','y') == 'y'} showavatar{/if}{if $smarty.request.comments_style eq 'threaded'} indent{$comment.level}{/if}">
@@ -64,12 +66,12 @@
 				{/if}<!-- end print_page -->
 			</div><!-- end .floaticon -->
 		{/if}
-
 		<div class="header">
 			{if $comment.title neq ""}<h2>{$comment.title|escape}</h2>{/if}
 			<span class="date">
-				{if $gBitUser->getPreference('boards_show_avatars','y') == n}
-					{tr}Posted by{/tr}: {if $comment.user_id < 0}{$comment.unreg_uname|escape}{else}{displayname hash=$comment}{/if}, {else}
+				{if $gBitUser->getPreference('boards_show_avatars','y') != 'y'}
+					{tr}Posted by{/tr}: {if $comment.user_id < 0}{$comment.unreg_uname|escape}{else}{displayname hash=$comment}{/if}, 
+				{else}
 					{tr}Posted{/tr}: {/if}
 						{$comment.created|reltime}, {if $comment.created != $comment.last_modified}
 					{tr}Last modification by{/tr}:
@@ -114,7 +116,7 @@
 				</div>
 
 				{if empty($warnings.$comment_id)}
-					<script>/*<![CDATA[*/
+					<script type="text/javascript">/*<![CDATA[*/
 						var warned_message_{$comment.comment_id|escape:"url"} = document.getElementById('warned_message_{$comment.comment_id|escape:"url"}');
 						warned_message_{$comment.comment_id|escape:"url"}.style.display='none';
 					/*]]>*/</script>
@@ -125,10 +127,9 @@
 		<div class="content">
 			{$comment.parsed_data}
 		</div><!-- end .content -->
-
 	</div><!-- end .wrapper -->
 	<div class="clear"><!-- --></div>
-</div>
+</div> <!-- end .body -->
 
 
 <div class="signature"> </div>
