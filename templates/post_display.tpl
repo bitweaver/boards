@@ -46,7 +46,7 @@
 								{biticon ipackage="icons" iname="list-remove" iexplain="Reject Post" iforce="icon"}
 							</a>
 						{elseif !$comment.is_warned && $comment.user_id>=0}
-							<a onclick="BitBoards.warn( 'warn_block_{$comment.comment_id|escape:"url"}' this )" title="{tr}Warn the poster about this post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=3&amp;comment_id={$comment.comment_id}">
+							<a onclick="return BitBoards.warn( 'warn_block_{$comment.comment_id|escape:"url"}', this )" title="{tr}Warn the poster about this post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=3&amp;comment_id={$comment.comment_id}">
 								{biticon ipackage="icons" iname="dialog-warning" iexplain="Warn Post" iforce="icon"}
 							</a>
 
