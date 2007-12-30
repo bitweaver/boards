@@ -86,7 +86,7 @@ $gComment = new BitBoardPost($_REQUEST['t']);
 $gBitSmarty->assign('comment_template','bitpackage:boards/post_display.tpl');
 
 if( empty( $_REQUEST["comments_style"] ) ) {
-	$_REQUEST["comments_style"] = "flats";
+	$_REQUEST["comments_style"] = "flat";
 }
 
 require_once (LIBERTY_PKG_PATH.'comments_inc.php');
