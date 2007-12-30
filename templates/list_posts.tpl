@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.12 2007/12/21 09:26:51 jht001 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.13 2007/12/30 23:53:04 jht001 Exp $ *}
 {strip}
 <div class="listing boards">
 
@@ -13,6 +13,12 @@
 		{form action="$comments_return_url" class="mb-threading"}
 			<input type="hidden" name="t" value="{$smarty.request.t}" />
 			<input type="hidden" name="comment_page" value="{$smarty.request.comment_page}" />
+			<label for="comments-sort">{tr}Sort:{/tr} </label>
+			<select name="comments_sort_mode" id="comments-sort">
+				<option value="commentDate_desc" {if $comments_sort_mode eq "commentDate_desc"}selected="selected"{/if}>Newest first</option>
+				<option value="commentDate_asc" {if $comments_sort_mode eq "commentDate_asc"}selected="selected"{/if}>Oldest first</option>
+			</select>
+			&nbsp;&nbsp;
 			<label>
 				{tr}Threaded{/tr}: <input type="checkbox" name="comments_style" id="comments-style" value="threaded" {if $comments_style eq "threaded"}checked="checked"{/if} onchange="this.form.submit()"/>
 			</label>
