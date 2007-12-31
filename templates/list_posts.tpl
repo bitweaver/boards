@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.14 2007/12/31 00:01:08 jht001 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.15 2007/12/31 03:46:52 jht001 Exp $ *}
 {strip}
 <div class="listing boards">
 
@@ -12,7 +12,9 @@
 		{* not happy with this yet - xing *}
 		{form action="$comments_return_url" class="mb-threading"}
 			<input type="hidden" name="t" value="{$smarty.request.t}" />
-			<input type="hidden" name="comment_page" value="{$smarty.request.comment_page}" />
+			{* always go back to page 1 since changing any of these values
+			   repaginates and makes the current page number meaningless *}
+			<input type="hidden" name="comment_page" value="1" />
 			<label for="comments-sort">{tr}Sort:{/tr} </label>
 			<select name="comments_sort_mode" id="comments-sort">
 				<option value="commentDate_desc" {if $comments_sort_mode eq "commentDate_desc"}selected="selected"{/if}>Newest first</option>
