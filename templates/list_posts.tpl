@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.13 2007/12/30 23:53:04 jht001 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.14 2007/12/31 00:01:08 jht001 Exp $ *}
 {strip}
 <div class="listing boards">
 
@@ -33,6 +33,7 @@
 					<option value="999999" {if $maxComments eq 999999}selected="selected"{/if}>All</option>
 				</select> <input type="submit" name="comments_setOptions" value="set" id="set_btn"/>
 			</label>
+			<input type="submit" name="comments_setOptions" value="set" />
 			<script type="text/javascript">/*<![CDATA[*/
 				document.getElementById('set_btn').parentNode.removeChild(document.getElementById('set_btn'));
 			/*]]>*/</script>
