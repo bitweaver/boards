@@ -30,10 +30,10 @@ if( isset( $_REQUEST['bitboarduprefs']['board_id'] ) ) {
 }
 
 $signatureContent= new LibertyContent();
-$content_type = $gBitUser->getPreference('signiture_content_type',"");
-$content_data = $gBitUser->getPreference('signiture_content_data',"");
+$content_type = $editUser->getPreference('signature_content_type',"");
+$content_data = $editUser->getPreference('signature_content_data',"");
 if (!empty($content_type) && !empty($content_data)) {
-	$signatureContent->mInfo['format_guid']=$gBitUser->getPreference('signiture_content_type');
+	$signatureContent->mInfo['format_guid']=$editUser->getPreference('signature_content_type');
 	$signatureContent->mInfo['data']=$content_data;
 }
 $gBitSmarty->assign_by_ref( 'signatureContent', $signatureContent );
@@ -59,8 +59,8 @@ if( !empty( $_REQUEST["save_bitboarduprefs"] ) ) {
 	// Check if all Request values are delivered, and if not, set them
 	// to avoid error messages. This can happen if some features are
 	// disabled
-	$gBitUser->storePreference('signiture_content_type',$signatureContent->mInfo['format_guid'], 'users');
-	$gBitUser->storePreference('signiture_content_data',$signatureContent->mInfo['data'], 'users');
+	$editUser->storePreference('signature_content_type',$signatureContent->mInfo['format_guid'], 'users');
+	$editUser->storePreference('signature_content_data',$signatureContent->mInfo['data'], 'users');
 }
 
 ?>

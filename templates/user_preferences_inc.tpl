@@ -1,5 +1,5 @@
 {strip}
-{jstab title="Boards"}
+{jstab title=$smarty.const.BOARDS_PKG_DIR|ucfirst}
 <div class="admin boards">
 	<div class="body">
 		{if $boardsSettings}
@@ -33,7 +33,7 @@
 		{form enctype="multipart/form-data" id="bitboarduprefs" legend="Edit Signature"}
 			<input type="hidden" name="view_user" value="{$view_user}" />
 			{formfeedback warning=$error}
-			{textarea gContent=$signatureContent name=bitboarduprefs[edit]"}{/textarea}
+			{textarea gContent=$signatureContent name=bitboarduprefs[edit]" rows=4}{$editUser->getPreference('signature_content_data')}{/textarea}
 			<div class="row submit">
 				<input type="submit" name="preview" value="{tr}Preview{/tr}" /> <input type="submit" name="save_bitboarduprefs" value="{tr}Save{/tr}" />
 			</div>
@@ -55,8 +55,8 @@
 			{/legend}
 		{/if}
 		{* any service edit template tabs *}
-		{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_tab_tpl}
 	</div><!-- end .body -->
 </div><!-- end .boards -->
 {/jstab}
+{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_tab_tpl}
 {/strip}
