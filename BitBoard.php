@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.38 2007/11/06 15:46:53 spiderr Exp $
- * $Id: BitBoard.php,v 1.38 2007/11/06 15:46:53 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.39 2008/01/26 21:23:22 nickpalmer Exp $
+ * $Id: BitBoard.php,v 1.39 2008/01/26 21:23:22 nickpalmer Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.38 $ $Date: 2007/11/06 15:46:53 $ $Author: spiderr $
+ * @version $Revision: 1.39 $ $Date: 2008/01/26 21:23:22 $ $Author: nickpalmer $
  * @package boards
  */
 
@@ -648,15 +648,45 @@ function boards_content_edit ( $pContent, $pParamHash ) {
 }
 
 function boards_content_store( $pContent, $pParamHash ) {
-	global $gBitDb, $gBitSmarty;
+	global $gBitDb, $gBitSmarty, $gBitSystem;
 
 	require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
 	// do not allow unassigning topics. the UI should prevent this, but just to make sure...
 	if( $pContent->isValid() && !$pContent->isContentType( BITBOARDTOPIC_CONTENT_TYPE_GUID ) && !$pContent->isContentType( BITBOARD_CONTENT_TYPE_GUID ) ) {
 		// wipe out all previous assignments for good measure. Not the sanest thing to do, but edits are infrequent - at least for now
-		$pContent->mDb->query( "DELETE FROM `".BIT_DB_PREFIX."boards_map` WHERE `topic_content_id`=?", array( $pContent->mContentId ) );
-		if( @BitBase::verifyId( $pParamHash['linked_board_cid'] ) ) {
-			$pContent->mDb->query( "INSERT INTO `".BIT_DB_PREFIX."boards_map` (`board_content_id`,`topic_content_id`) VALUES (?,?)", array( $pParamHash['linked_board_cid'], $pContent->mContentId ) );
+		if ($gBitSystem->isFeatureActive('boards_link_by_pigeonholes') && $gBitSystem->isPackageActive('pigeonholes')) {
+			// Delete all old mappings
+			$pContent->mDb->query( "DELETE FROM `".BIT_DB_PREFIX."boards_map` WHERE `topic_content_id`=?", array( $pContent->mContentId ) );
+
+			// Get the pigeonholes this content is in
+			$p = null;
+			if ( ! empty( $_REQUEST['pigoneholes'] ) ) {
+				foreach( $_REQUEST['pigeonholes']['pigeonhole'] as $p_id ) {
+					require_once(PIGEONHOLES_PKG_PATH.'Pigeonholes.php');
+					if (empty($p)) {
+						$p = new Pigeonholes();
+					}
+
+					// What boards are in the same pigeonhole?
+					$params =
+						array('content_type_guid' => BITBOARD_CONTENT_TYPE_GUID,
+							  'content_id' => $p_id );
+					$boards = $p->getMemberList( $params );
+
+					// Insert into these boards
+					foreach ($boards as $board) {
+						if( @BitBase::verifyId( $board['content_id'] ) ) {
+							$pContent->mDb->query( "INSERT INTO `".BIT_DB_PREFIX."boards_map` (`board_content_id`,`topic_content_id`) VALUES (?,?)", array( $board['content_id'], $pContent->mContentId ) );
+						}
+					}
+				}
+			}
+		}
+		else {
+			$pContent->mDb->query( "DELETE FROM `".BIT_DB_PREFIX."boards_map` WHERE `topic_content_id`=?", array( $pContent->mContentId ) );
+			if( @BitBase::verifyId( $pParamHash['linked_board_cid'] ) ) {
+				$pContent->mDb->query( "INSERT INTO `".BIT_DB_PREFIX."boards_map` (`board_content_id`,`topic_content_id`) VALUES (?,?)", array( $pParamHash['linked_board_cid'], $pContent->mContentId ) );
+			}
 		}
 		$gBitSmarty->assign( 'boardInfo', BitBoard::getLinkedBoard( $pContent->mContentId ) );
 	} else {
