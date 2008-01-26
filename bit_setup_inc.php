@@ -30,7 +30,8 @@ if( $gBitSystem->isPackageActive( 'boards' ) ) {
 		'content_list_sql_function' => 'boards_content_list_sql',
 	);
 
-	if ( !$gBitSystem->isFeatureActive( 'boards_hide_edit_tpl' ) ) {
+	if ( !$gBitSystem->isFeatureActive( 'boards_hide_edit_tpl' ) &&
+		 !$gBitSystem->isFeatureActive( 'boards_link_by_pigeonholes' ) ) {
 		$registerArray['content_edit_mini_tpl'] = 'bitpackage:boards/boards_edit_mini_inc.tpl';
 	}
 

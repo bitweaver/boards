@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/admin/admin_boards_inc.php,v 1.4 2007/06/21 09:46:35 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/admin/admin_boards_inc.php,v 1.5 2008/01/26 21:36:20 nickpalmer Exp $
 // Copyright (c) 2005 bitweaver BitBoards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -28,6 +28,10 @@ $formBitBoardsLists = array(
 	'boards_hide_edit_tpl' => array(
 		'label' => 'Hide Linked Boards Option',
 		'note' => 'Hide the <em>Linked Boards</em> option on edit pages to link any given content to a forum thread. If you hide this, you will have to manually assign content to a forum thread if you want to make full use of the boards.',
+	),
+	'boards_link_by_pigeonholes' => array(
+		'label' => 'Link by Pigeonholes',
+		'note' => 'Link content to boards based on pigeonholes. This is useful when you have only one board in a given pigeonhole and want all content in the same pigeonhole to be shown in the board. Note that you MUST run the following SQL on your database to allow content in more than one board: "alter table boards_map drop constraint boards_map_pkey;" This is therfore a very advanced option.'
 	),
 );
 $gBitSmarty->assign( 'formBitBoardsLists',$formBitBoardsLists );
