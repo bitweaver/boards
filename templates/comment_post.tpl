@@ -48,7 +48,7 @@
 			{/if}
 		{/form}
 
-		{libertypagination hash=$commentsPgnHash}
+		{pagination}
 	</div><!-- end .body -->
 </div><!-- end .comment -->
 {/strip}
