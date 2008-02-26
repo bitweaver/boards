@@ -79,4 +79,9 @@ if(defined('RSS_PKG_NAME')) {
 		array( RSS_PKG_NAME, BOARDS_PKG_NAME.'_rss', 'y'),
 	));
 }
+
+// ### Register content types
+$gBitInstaller->registerContentObjects( BOARDS_PKG_NAME, array( 
+	'BitBoard'=>BOARDS_PKG_PATH.'BitBoard.php',
+));
 ?>
