@@ -36,7 +36,7 @@
 		<div class="row">
 			{forminput}
 		<h2>Board Sync</h2>
-		<p>{tr}Board Sync allows a bitweaver board to be synchronized with a mailing list. A single mailbox is used to archive all email messages, so you subscribe *all* email lists using the same email address as entered below. Then, configure individual boards to indicate which mailing list to which it is subscribed. The Board Sync cron script will import messages from the email inbox.{/tr}</p>
+		<p>{tr}Board Sync allows a bitweaver board to be synchronized with a mailing list. A single, master email inbox entered below is used for *all* email list subscriptions. Then, configure individual boards to indicate which mailing list to which it is subscribed. The Board Sync cron script will import messages from the master email inbox.{/tr}</p>
 			{/forminput}
 		</div>
 		{foreach from=$formBitBoardsSync key=item item=output}

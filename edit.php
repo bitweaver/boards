@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.5 2007/04/20 13:49:40 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.6 2008/03/01 23:12:57 spiderr Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -57,6 +57,7 @@ if( !empty( $_REQUEST["save_bitboard"] ) ) {
 	// to avoid error messages. This can happen if some features are
 	// disabled
 	if( $gContent->store( $_REQUEST['bitboard'] ) ) {
+		$gContent->storePreference( 'board_sync_list_address', (!empty( $_REQUEST['bitboardconfig']['board_sync_list_address'] ) ?  $_REQUEST['bitboardconfig']['board_sync_list_address'] : NULL) );
 		header( "Location: ".$gContent->getDisplayUrl() );
 		die;
 	} else {

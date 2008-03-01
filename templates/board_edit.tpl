@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.5 2007/06/10 20:25:21 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.6 2008/03/01 23:12:57 spiderr Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -48,7 +48,7 @@
 						<div class="row">
 							{formlabel label="Title" for="title"}
 							{forminput}
-								<input type="text" size="50" maxlength="200" name="bitboard[title]" id="title" value="{$gContent->mInfo.title|escape}" />
+								<input type="text" size="50" maxlength="200" name="bitboard[title]" id="title" value="{$gContent->getTitle()|escape}" />
 							{/forminput}
 						</div>
 
@@ -56,6 +56,19 @@
 
 						{* any simple service edit options *}
 						{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_mini_tpl}
+
+						<div class="row">
+							{formlabel label="Board Sync" for="boardsync"}
+							{forminput}
+						{if $gBitSystem->getConfig('boards_sync_mailserver')}
+								<input type="text" size="50" maxlength="200" name="bitboardconfig[board_sync_list_address]" id="board_sync_list_address" value="{$gContent->getPreference('board_sync_list_address')|escape}" />
+								{formhelp note="Messages will be sent and recieved to the email address above."}
+						{else}
+							{tr}Board Sync is not available since the Board Sync master email box has not been configured.{/tr} {if !$gBitUser->isAdmin()}{tr}Check with your site administrator.{/tr}{/if}
+						{/if}
+								{if $gBitUser->isAdmin()}{tr}See the global <a href="{$smarty.const.KERNEL_PKG_URL}admin/index.php?page=boards">Board Settings</a> for master email box configuration.{/tr}{/if}
+							{/forminput}
+						</div>
 
 						<div class="row submit">
 							<input type="submit" name="preview" value="{tr}Preview{/tr}" />
