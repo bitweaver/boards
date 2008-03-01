@@ -33,6 +33,22 @@
 			</div>
 		{/foreach}
 
+		<div class="row">
+			{forminput}
+		<h2>Board Sync</h2>
+		<p>{tr}Board Sync allows a bitweaver board to be synchronized with a mailing list. A single mailbox is used to archive all email messages, so you subscribe *all* email lists using the same email address as entered below. Then, configure individual boards to indicate which mailing list to which it is subscribed. The Board Sync cron script will import messages from the email inbox.{/tr}</p>
+			{/forminput}
+		</div>
+		{foreach from=$formBitBoardsSync key=item item=output}
+			<div class="row">
+				{formlabel label=`$output.label` for=$item}
+				{forminput}
+					<input type="text" name="{$item}" value="{$gBitSystem->getConfig($item)}" id={$item}" />
+					{formhelp note=`$output.note` page=`$output.page`}
+				{/forminput}
+			</div>
+		{/foreach}
+
 		<div class="row submit">
 			<input type="submit" name="listTabSubmit" value="{tr}Change preferences{/tr}" />
 		</div>
