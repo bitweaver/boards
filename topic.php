@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.23 2008/03/05 08:25:11 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.24 2008/03/05 15:45:04 wjames5 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -24,7 +24,6 @@ $gBitSystem->verifyPermission( 'p_boards_read' );
 
 
 if (isset($_REQUEST["new"])) {
-	$gBitSystem->verifyPermission( 'p_board_view' );
 	require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 	$res = true;
 	if (isset($_REQUEST["new"]) && is_numeric($_REQUEST["new"])) {
@@ -38,7 +37,7 @@ if (isset($_REQUEST["new"])) {
 	die();
 } elseif (isset($_REQUEST["locked"]) || isset($_REQUEST["sticky"])) {
 	// Now check permissions to access this page
-	$gBitSystem->verifyPermission( 'p_board_edit' );
+	$gBitSystem->verifyPermission( 'p_boards_edit' );
 
 	require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 	$res = true;
