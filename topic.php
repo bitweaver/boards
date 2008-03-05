@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.22 2007/10/10 18:07:15 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.23 2008/03/05 08:25:11 wjames5 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -90,6 +90,7 @@ if( !$gContent->load() ) {
 	$gBitSystem->fatalError("board id not given");
 }
 
+$gContent->verifyViewPermission();
 /* mass-remove:
 the checkboxes are sent as the array $_REQUEST["checked[]"], values are the wiki-PageNames,
 e.g. $_REQUEST["checked"][3]="HomePage"
