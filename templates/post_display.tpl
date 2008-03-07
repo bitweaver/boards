@@ -24,10 +24,10 @@
 		{if !$post_is_preview}
 			<div class="floaticon">
 				{if $print_page ne 'y' && $comment.deleted==0 }
-					{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
+					{if !$topic_locked && $board->hasPostCommentsPermission()}
 						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Reply to this Post" iforce="icon"}</a>
 					{/if}
-					{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
+					{if !$topic_locked && $board->hasPostCommentsPermission()}
 						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1&amp;quote=y#editcomments" rel="nofollow">{biticon ipackage="icons" iname="mail-reply-all" iexplain="Reply with Quote to this Post" iforce="icon"}</a>
 					{/if}
 					{if $comment.editable}

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.14 2007/12/16 07:07:41 jht001 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.15 2008/03/07 04:30:33 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="floaticon">
@@ -14,7 +14,7 @@
 
 	<div class="header">
 		<h1>{$board->mInfo.title|escape|default:"Message Board Topic"}</h1>
-		{if $boards->mInfo.parsed_data}
+		{if $board->mInfo.parsed_data}
 			<p>{$board->mInfo.parsed_data}</p>
 		{/if}
 		Back to <a href="{$cat_url}">{$board->mInfo.content_type.content_description}s</a>
@@ -23,7 +23,7 @@
 	<div class="body">
 		{minifind sort_mode=$sort_mode b=$smarty.request.b}
 		{* looks horrible, but leave for now - xing *}
-		{if $gBitUser->hasPermission( 'p_liberty_post_comments' )}
+		{if $board->hasPostCommentsPermission()}
 			<div class="navbar">
 				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic"}</a>
 			</div>
@@ -140,7 +140,7 @@
 				{/foreach}
 			</table>
 
-			{if $gBitUser->hasPermission( 'p_liberty_post_comments' )}
+			{if $board->hasPostCommentsPermission()}
 				<div class="navbar">
 					<a class="button" title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic" iforce="icon"} {tr}New Topic{/tr}</a>
 				</div>

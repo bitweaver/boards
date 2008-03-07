@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.17 2008/02/05 10:17:11 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.18 2008/03/07 04:30:33 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 
@@ -54,7 +54,7 @@
 	</div>
 
 	<div class="body">
-		{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
+		{if !$topic_locked && $board->hasPostCommentsPermission()}
 			<div class="row submit">
 				<a title="{tr}Post Reply{/tr}" class="button" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
 			</div>
@@ -82,7 +82,7 @@
 			</div><!-- end .preview -->
 		{/if}
 
-		{if !$topic_locked && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
+		{if !$topic_locked && $board->hasPostCommentsPermission()}
 			<div class="row submit">
 				<a title="{tr}Post Reply{/tr}" class="button" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
 			</div>
