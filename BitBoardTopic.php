@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.40 2007/12/13 06:50:07 nickpalmer Exp $
- * $Id: BitBoardTopic.php,v 1.40 2007/12/13 06:50:07 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.41 2008/03/07 03:21:07 wjames5 Exp $
+ * $Id: BitBoardTopic.php,v 1.41 2008/03/07 03:21:07 wjames5 Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.40 $ $Date: 2007/12/13 06:50:07 $ $Author: nickpalmer $
+ * @version $Revision: 1.41 $ $Date: 2008/03/07 03:21:07 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -296,7 +296,8 @@ WHERE
 
 		$selectSql = $joinSql = $whereSql = '';
 		$bindVars = array();
-		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
+		$pParamHash['include_comments'] = 'y';
+		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, NULL, $pParamHash );
 
 		// this will set $find, $sort_mode, $max_records and $offset
 		extract( $pParamHash );
