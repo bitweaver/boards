@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/admin/admin_boards_inc.php,v 1.6 2008/03/01 22:26:58 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/admin/admin_boards_inc.php,v 1.7 2008/03/08 16:00:26 spiderr Exp $
 // Copyright (c) 2005 bitweaver BitBoards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -37,7 +37,7 @@ $formBitBoardsLists = array(
 $gBitSmarty->assign( 'formBitBoardsLists',$formBitBoardsLists );
 
 $formBitBoardsSync = array(
-	'boards_sync_mailserver' => array(
+	'boards_sync_mail_server' => array(
 		'label' => 'Email Server',
 		'note' => 'Internet address of your mail server.',
 	),
@@ -58,8 +58,6 @@ if( $processForm ) {
 	foreach( $bitboardToggles as $item => $data ) {
 		simple_set_toggle( $item, BOARDS_PKG_NAME );
 	}
-vd( $_REQUEST );
-$gBitSystem->debug();
 	foreach( $formBitBoardsSync as $key => $data ) {
 		$gBitSystem->storeConfig( $key, (!empty( $_REQUEST[$key] ) ? $_REQUEST[$key] : NULL), BOARDS_PKG_NAME );
 	}
