@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.6 2008/03/01 23:12:57 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.7 2008/03/24 16:29:24 bitweaver Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -60,7 +60,7 @@
 						<div class="row">
 							{formlabel label="Board Sync" for="boardsync"}
 							{forminput}
-						{if $gBitSystem->getConfig('boards_sync_mailserver')}
+						{if $gBitSystem->getConfig('boards_sync_mail_server')}
 								<input type="text" size="50" maxlength="200" name="bitboardconfig[board_sync_list_address]" id="board_sync_list_address" value="{$gContent->getPreference('board_sync_list_address')|escape}" />
 								{formhelp note="Messages will be sent and recieved to the email address above."}
 						{else}
