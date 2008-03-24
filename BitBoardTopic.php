@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.41 2008/03/07 03:21:07 wjames5 Exp $
- * $Id: BitBoardTopic.php,v 1.41 2008/03/07 03:21:07 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.42 2008/03/24 15:40:17 wjames5 Exp $
+ * $Id: BitBoardTopic.php,v 1.42 2008/03/24 15:40:17 wjames5 Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.41 $ $Date: 2008/03/07 03:21:07 $ $Author: wjames5 $
+ * @version $Revision: 1.42 $ $Date: 2008/03/24 15:40:17 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -312,10 +312,15 @@ WHERE
 			$whereSql .= " AND UPPER( lc.`title` ) LIKE '%". strtoupper( $find ). "%'";
 		}
 
-		if(!empty($pParamHash['b'])) {
+		// if we have the board's board_id (b) we use that, or if we have its content_id we can use that
+		if(!empty($pParamHash['b']) || !empty($pParamHash['content_id'])) {
 			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}boards_map` map ON (map.`topic_content_id` = lcom.`root_id`)";
 			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}boards` b ON (b.`content_id` = map.`board_content_id`)";
-			$whereSql .= " AND b.`board_id` = ". $pParamHash['b'] ;
+			if(!empty($pParamHash['b'])) {
+				$whereSql .= " AND b.`board_id` = ". $pParamHash['b'] ;
+			}else{
+				$whereSql .= " AND b.`content_id` = ". $pParamHash['content_id'] ;
+			}
 		}
 
 		BitBoardTopic::loadTrack($selectSql,$joinSql);
