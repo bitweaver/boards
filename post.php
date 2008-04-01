@@ -63,6 +63,9 @@ if( !$thread->load() ) {
 
 $thread->verifyViewPermission();
 
+$displayHash = array( 'perm_name' => 'p_boards_read' );
+$thread->invokeServices( 'content_display_function', $displayHash );
+
 if (empty($thread->mInfo['th_root_id'])) {
 	if ($_REQUEST['action']==3) {
 		//Invalid as a result of rejecting the post, redirect to the board

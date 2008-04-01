@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.24 2008/03/05 15:45:04 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.25 2008/04/01 21:31:12 wjames5 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -90,6 +90,10 @@ if( !$gContent->load() ) {
 }
 
 $gContent->verifyViewPermission();
+
+$displayHash = array( 'perm_name' => 'p_boards_read' );
+$gContent->invokeServices( 'content_display_function', $displayHash );
+
 /* mass-remove:
 the checkboxes are sent as the array $_REQUEST["checked[]"], values are the wiki-PageNames,
 e.g. $_REQUEST["checked"][3]="HomePage"
