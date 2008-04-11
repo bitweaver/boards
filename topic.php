@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.26 2008/04/11 17:37:00 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.27 2008/04/11 17:52:03 spiderr Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -158,10 +158,11 @@ $comments_return_url=  BOARDS_PKG_URL."index.php?b=".urlencode($gContent->mBitBo
 
 require_once (LIBERTY_PKG_PATH.'comments_inc.php');
 
-if( $gContent->getPreference( 'boards_to_list_sync' ) ) {
-vd( $_REQUEST ); 
-vd( $storeComment );
-die;
+if( !empty( $storeComment ) && $gContent->getPreference('boards_mailing_list') ) {
+	$email = $gContent->getPreference('boards_mailing_list').'@'.$gBitSystem->getConfig( 'boards_email_host', $gBitSystem->getConfig( 'kernel_server_name' ) );
+	if( empty( $storeComment->mErrors ) ) {
+		vd( 'email content '.$gContent->mContentId.' to '.$email );
+	}
 }
 
 
