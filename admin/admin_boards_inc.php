@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/admin/admin_boards_inc.php,v 1.7 2008/03/08 16:00:26 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/admin/admin_boards_inc.php,v 1.8 2008/04/11 17:37:00 spiderr Exp $
 // Copyright (c) 2005 bitweaver BitBoards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -53,8 +53,17 @@ $formBitBoardsSync = array(
 $gBitSmarty->assign( 'formBitBoardsSync',$formBitBoardsSync );
 $processForm = set_tab();
 
+$formBoardsEmailList = array(
+	"boards_email_list" => array(
+		'label' => 'Group Email List',
+		'note' => 'Enable groups to have an associated email list',
+	),
+);
+$gBitSmarty->assign( 'formBoardsEmailList',$formBoardsEmailList );
+$formBoardsEmailText = array( 'boards_email_host', 'boards_email_admin', 'server_mailman_bin' );
+
 if( $processForm ) {
-	$bitboardToggles = array_merge( $formBitBoardsLists );
+	$bitboardToggles = array_merge( $formBitBoardsLists,$formBoardsEmailList );
 	foreach( $bitboardToggles as $item => $data ) {
 		simple_set_toggle( $item, BOARDS_PKG_NAME );
 	}
@@ -62,6 +71,10 @@ if( $processForm ) {
 		$gBitSystem->storeConfig( $key, (!empty( $_REQUEST[$key] ) ? $_REQUEST[$key] : NULL), BOARDS_PKG_NAME );
 	}
 
+	foreach( $formBoardsEmailText as $text ) {
+		$gBitSystem->storeConfig( $text, ( !empty( $_REQUEST[$text] ) ? trim( $_REQUEST[$text] ) : NULL ), BOARDS_PKG_NAME );
+	}
+	
 }
 
 $board = new BitBoard();

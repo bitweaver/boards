@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.25 2008/04/01 21:31:12 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.26 2008/04/11 17:37:00 spiderr Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -157,6 +157,12 @@ $commentsParentId=$gContent->mContentId;
 $comments_return_url=  BOARDS_PKG_URL."index.php?b=".urlencode($gContent->mBitBoardId);
 
 require_once (LIBERTY_PKG_PATH.'comments_inc.php');
+
+if( $gContent->getPreference( 'boards_to_list_sync' ) ) {
+vd( $_REQUEST ); 
+vd( $storeComment );
+die;
+}
 
 
 // create new bitboard object

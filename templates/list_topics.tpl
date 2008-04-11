@@ -1,13 +1,16 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.15 2008/03/07 04:30:33 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.16 2008/04/11 17:37:00 spiderr Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="floaticon">
 		{if $print_page ne 'y'}
 			{if $gBitUser->hasPermission( 'p_boards_edit' )}
-				<a title="{tr}Remove this message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit Message Board"}</a>
+				<a class="item" href="{$smarty.const.BOARDS_PKG_URL}mailing_list.php?b={$board->mInfo.board_id}" title="{tr}Message Board Mailing List{/tr}">{biticon ipackage="icons" iname="internet-mail" iexplain="Edit Message Board"}</a>
+			{/if}
+			{if $gBitUser->hasPermission( 'p_boards_edit' )}
+				<a title="{tr}Edit message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit Message Board"}</a>
 			{/if}
 			{if $gBitUser->hasPermission( 'p_boards_remove' )}
-				<a title="{tr}Remove this message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}board.php?remove=1&amp;b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove Message Board"}</a>
+				<a title="{tr}Remove message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}board.php?remove=1&amp;b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove Message Board"}</a>
 			{/if}
 		{/if}<!-- end print_page -->
 	</div><!-- end .floaticon -->
