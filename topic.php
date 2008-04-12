@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.27 2008/04/11 17:52:03 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.28 2008/04/12 05:54:07 spiderr Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -158,10 +158,21 @@ $comments_return_url=  BOARDS_PKG_URL."index.php?b=".urlencode($gContent->mBitBo
 
 require_once (LIBERTY_PKG_PATH.'comments_inc.php');
 
-if( !empty( $storeComment ) && $gContent->getPreference('boards_mailing_list') ) {
-	$email = $gContent->getPreference('boards_mailing_list').'@'.$gBitSystem->getConfig( 'boards_email_host', $gBitSystem->getConfig( 'kernel_server_name' ) );
+if( $gBitSystem->isPackageActive( 'switchboard' ) && !empty( $storeComment ) && $gContent->getPreference('boards_mailing_list') ) {
 	if( empty( $storeComment->mErrors ) ) {
-		vd( 'email content '.$gContent->mContentId.' to '.$email );
+		global $gSwitchboardSystem;
+		require_once( SWITCHBOARD_PKG_PATH.'SwitchboardSystem.php' );
+		$email = $gContent->getPreference('boards_mailing_list').'@'.$gBitSystem->getConfig( 'boards_email_host', $gBitSystem->getConfig( 'kernel_server_name' ) );
+		$headerHash['mail_from'] = $gBitSystem->getConfig( 'boards_sync_user' ).'@'.$gBitSystem->getConfig( 'boards_sync_mail_server' );
+		if( $storeComment->getField( 'user_id' ) == ANONYMOUS_USER_ID ) {
+			$headerHash['from_name'] = $storeComment->getField( 'anon_name' );
+		} else {
+			$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $storeComment->getField( 'user_id', $gBitUser->mUserId ) ) );
+			$headerHash['from_name'] = !empty( $userInfo['real_name'] ) ? $userInfo['real_name'] : $userInfo['login'];
+			$headerHash['sender'] = $userInfo['email'];
+		}
+		
+		$gSwitchboardSystem->sendEmail( $storeComment->getTitle(), $storeComment->parseData(), $email, $headerHash );
 	}
 }
 
