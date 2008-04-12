@@ -17,6 +17,15 @@
 			{$board->getPreference('boards_mailing_list')}@{$gBitSystem->getConfig('boards_email_host',$gBitSystem->getConfig('kernel_server_name'))}
 		{/forminput}
 	</div>
+	{if $gBitUser->isAdmin()}
+	<div class="row">
+		{formlabel label="Advanced Configuration"}
+		{forminput}
+			<a href="{$gBitSystem->getConfig('boards_mailman_uri',"`$smarty.const.BIT_ROOT_URI`mailman/")}admin/{$board->getPreference('boards_mailing_list')}">
+			{$gBitSystem->getConfig('boards_mailman_uri',"`$smarty.const.BIT_ROOT_URI`mailman/")}admin/{$board->getPreference('boards_mailing_list')}</a>
+		{/forminput}
+	</div>
+	{/if}
 	{form}
 	<input type="hidden" name="b" value="{$board->getField('board_id')}"/>
 	<div class="row">
@@ -42,7 +51,7 @@
 {else}
 			{formfeedback warning="No mailing address has been configured for this group."}
 	{if $board->hasAdminPermission()}
-		{if $gBitSystem->getConfig('server_mailman_bin')}
+		{if $gBitSystem->getConfig('server_mailman_bin') && $gBitSystem->getConfig('boards_sync_user') && $gBitSystem->getConfig('boards_sync_mail_server')}
 {legend legend="Group Mailing List"}
 {form}
 	<input type="hidden" name="b" value="{$board->getField('board_id')}"/>
@@ -68,9 +77,14 @@
 {/form}
 {/legend}
 		{else}
-			{formfeedback error="Mailman is not configured."}
+			{if !$gBitSystem->getConfig('server_mailman_bin')}
+				{formfeedback error="Mailman is not configured."}
+			{/if}
+			{if !$gBitSystem->getConfig('boards_sync_user') || !$gBitSystem->getConfig('boards_sync_user')}
+				{formfeedback error="List to Board Sync is not configured."}
+			{/if}
 			{if $gBitUser->isAdmin()}
-				<a href="{$smarty.const.KERNEL_PKG_PATH}admin/index.php?page=group">{tr}See group configuration{/tr}</a>
+				<a href="{$smarty.const.KERNEL_PKG_PATH}admin/index.php?page=boards">{tr}See Boards Administration{/tr}</a>
 			{/if}
 		{/if}
 	{/if}
