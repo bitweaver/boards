@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.28 2008/04/12 05:54:07 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.29 2008/04/12 06:07:44 spiderr Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -84,15 +84,15 @@ if( @BitBase::verifyId( $_REQUEST['b'] ) ) {
 	$_REQUEST['b'] = NULL;
 }
 
-$gContent = new BitBoard($_REQUEST['b']);
-if( !$gContent->load() ) {
+$gBoard = new BitBoard($_REQUEST['b']);
+if( !$gBoard->load() ) {
 	$gBitSystem->fatalError("board id not given");
 }
 
-$gContent->verifyViewPermission();
+$gBoard->verifyViewPermission();
 
 $displayHash = array( 'perm_name' => 'p_boards_read' );
-$gContent->invokeServices( 'content_display_function', $displayHash );
+$gBoard->invokeServices( 'content_display_function', $displayHash );
 
 /* mass-remove:
 the checkboxes are sent as the array $_REQUEST["checked[]"], values are the wiki-PageNames,
@@ -105,7 +105,7 @@ if so, we call histlib's method remove_all_versions for all the checked boards.
 if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQUEST["submit_mult"] == "remove_boards" ) {
 
 	// Now check permissions to remove the selected bitboard
-	$gContent->verifyPermission( 'p_boards_remove' );
+	$gBoard->verifyPermission( 'p_boards_remove' );
 	$gBitUser->verifyTicket();
 
 	if( !empty( $_REQUEST['cancel'] ) ) {
@@ -153,29 +153,10 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 	
 }
 
-$commentsParentId=$gContent->mContentId;
-$comments_return_url=  BOARDS_PKG_URL."index.php?b=".urlencode($gContent->mBitBoardId);
+$commentsParentId=$gBoard->mContentId;
+$comments_return_url=  BOARDS_PKG_URL."index.php?b=".urlencode($gBoard->mBitBoardId);
 
-require_once (LIBERTY_PKG_PATH.'comments_inc.php');
-
-if( $gBitSystem->isPackageActive( 'switchboard' ) && !empty( $storeComment ) && $gContent->getPreference('boards_mailing_list') ) {
-	if( empty( $storeComment->mErrors ) ) {
-		global $gSwitchboardSystem;
-		require_once( SWITCHBOARD_PKG_PATH.'SwitchboardSystem.php' );
-		$email = $gContent->getPreference('boards_mailing_list').'@'.$gBitSystem->getConfig( 'boards_email_host', $gBitSystem->getConfig( 'kernel_server_name' ) );
-		$headerHash['mail_from'] = $gBitSystem->getConfig( 'boards_sync_user' ).'@'.$gBitSystem->getConfig( 'boards_sync_mail_server' );
-		if( $storeComment->getField( 'user_id' ) == ANONYMOUS_USER_ID ) {
-			$headerHash['from_name'] = $storeComment->getField( 'anon_name' );
-		} else {
-			$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $storeComment->getField( 'user_id', $gBitUser->mUserId ) ) );
-			$headerHash['from_name'] = !empty( $userInfo['real_name'] ) ? $userInfo['real_name'] : $userInfo['login'];
-			$headerHash['sender'] = $userInfo['email'];
-		}
-		
-		$gSwitchboardSystem->sendEmail( $storeComment->getTitle(), $storeComment->parseData(), $email, $headerHash );
-	}
-}
-
+require_once( BOARDS_PKG_PATH.'boards_comments_inc.php' );
 
 // create new bitboard object
 $threads = new BitBoardTopic();
@@ -185,11 +166,11 @@ $gBitSmarty->assign_by_ref( 'threadList', $threadList );
 // getList() has now placed all the pagination information in $_REQUEST['listInfo']
 $gBitSmarty->assign_by_ref( 'listInfo', $_REQUEST['listInfo'] );
 
-$gBitSmarty->assign_by_ref( 'board', $gContent );
-$gBitSmarty->assign( 'cat_url', BOARDS_PKG_URL."index.php"); //?ct=".urlencode($gContent->mInfo['content_type_guid']));
+$gBitSmarty->assign_by_ref( 'board', $gBoard );
+$gBitSmarty->assign( 'cat_url', BOARDS_PKG_URL."index.php"); //?ct=".urlencode($gBoard->mInfo['content_type_guid']));
 
 $gBitThemes->loadAjax( 'mochikit' );
 
 // Display the template
-$gBitSystem->display( 'bitpackage:boards/list_topics.tpl', tra( 'Message Board Threads: ' . $gContent->getField('title') ) );
+$gBitSystem->display( 'bitpackage:boards/list_topics.tpl', tra( 'Message Board Threads: ' . $gBoard->getField('title') ) );
 ?>

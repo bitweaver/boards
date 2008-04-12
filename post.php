@@ -81,9 +81,9 @@ $thread->readTopic();
 $gBitSmarty->assign('topic_locked',$thread->isLocked());
 
 $gBitSmarty->assign_by_ref( 'thread', $thread );
-$board = new BitBoard(null,$thread->mInfo['board_content_id']);
-$board->load();
-$gBitSmarty->assign_by_ref( 'board', $board );
+$gBoard = new BitBoard(null,$thread->mInfo['board_content_id']);
+$gBoard->load();
+$gBitSmarty->assign_by_ref( 'board', $gBoard );
 
 $commentsParentId=$thread->mInfo['content_id'];
 $comments_return_url= BOARDS_PKG_URL."index.php?t={$thread->mRootId}";
@@ -94,7 +94,7 @@ if( empty( $_REQUEST["comments_style"] ) ) {
 	$_REQUEST["comments_style"] = "flat";
 }
 
-require_once (LIBERTY_PKG_PATH.'comments_inc.php');
+require_once( BOARDS_PKG_PATH.'boards_comments_inc.php' );
 
 if( !empty( $_REQUEST['remove'] ) && @BitBase::verifyId( $_REQUEST['t'] ) ) {
 	$gBitUser->verifyTicket();
