@@ -84,7 +84,7 @@
 				{formfeedback error="List to Board Sync is not configured."}
 			{/if}
 			{if $gBitUser->isAdmin()}
-				<a href="{$smarty.const.KERNEL_PKG_PATH}admin/index.php?page=boards">{tr}See Boards Administration{/tr}</a>
+				<a href="{$smarty.const.KERNEL_PKG_URL}admin/index.php?page=boards">{tr}See Boards Administration{/tr}</a>
 			{/if}
 		{/if}
 	{/if}
