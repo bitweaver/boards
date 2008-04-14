@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.6 2008/03/01 23:12:57 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.7 2008/04/14 09:17:55 squareing Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -34,7 +34,7 @@ if( isset( $_REQUEST['bitboard']["description"] ) ) {
 }
 
 if( isset( $_REQUEST["format_guid"] ) ) {
-	$gContent->mInfo['format_guid'] = $_REQUEST["format_guid"];
+	$gContent->mInfo['format_guid'] = $_REQUEST['bitboard']['format_guid'] = $_REQUEST["format_guid"];
 }
 
 if( isset( $_REQUEST['bitboard']["edit"] ) ) {
