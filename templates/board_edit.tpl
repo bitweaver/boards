@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.7 2008/03/24 16:29:24 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.8 2008/04/14 09:01:41 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -52,7 +52,7 @@
 							{/forminput}
 						</div>
 
-						{textarea name="bitboard[edit]"}{/textarea}
+						{textarea name="bitboard[edit]"}{$gContent->mInfo.data}{/textarea}
 
 						{* any simple service edit options *}
 						{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_mini_tpl}
