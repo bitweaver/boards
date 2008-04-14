@@ -118,6 +118,9 @@ if (!empty($_REQUEST['warning'])) {
 }
 $gBitSmarty->assign_by_ref('warnings',$warnings);
 
+// Invoke services
+$gComment->invokeServices( 'content_display_function' );
+
 $gBitSystem->display('bitpackage:boards/list_posts.tpl', "Show Thread: " . $thread->getField('title') );
 
 
