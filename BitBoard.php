@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.39 2008/01/26 21:23:22 nickpalmer Exp $
- * $Id: BitBoard.php,v 1.39 2008/01/26 21:23:22 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.40 2008/04/14 03:22:52 spiderr Exp $
+ * $Id: BitBoard.php,v 1.40 2008/04/14 03:22:52 spiderr Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.39 $ $Date: 2008/01/26 21:23:22 $ $Author: nickpalmer $
+ * @version $Revision: 1.40 $ $Date: 2008/04/14 03:22:52 $ $Author: spiderr $
  * @package boards
  */
 
@@ -693,6 +693,13 @@ function boards_content_store( $pContent, $pParamHash ) {
 		if( @BitBase::verifyId( $pParamHash['content_id'] ) && @BitBase::verifyId( $pParamHash['linked_board_cid'] ) ) {
 			$pContent->mDb->query( "INSERT INTO `".BIT_DB_PREFIX."boards_map` (`board_content_id`,`topic_content_id`) VALUES (?,?)", array( $pParamHash['linked_board_cid'], $pParamHash['content_id'] ) );
 		}
+	}
+}
+
+function boards_content_expunge( $pContent ) {
+	global $gBitSmarty;
+	if( $pContent->isValid() ) {
+		$pContent->mDb->query( "DELETE FROM `".BIT_DB_PREFIX."boards_map` WHERE `topic_content_id`=?", array( $pContent->mContentId ) );
 	}
 }
 
