@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/mailing_list.php,v 1.1 2008/04/11 17:37:00 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/mailing_list.php,v 1.2 2008/04/16 21:14:51 spiderr Exp $
 // Copyright (c) bitweaver Group
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -17,6 +17,11 @@ $gBitSystem->verifyPackage( 'boards' );
 
 // Now check permissions to access this page
 $gContent->verifyViewPermission();
+
+if( $gBitSystem->getConfig('boards_sync_user') ) {
+	$boardSyncInbox = $gBitSystem->getConfig('boards_sync_user').'@'.$gBitSystem->getConfig('boards_sync_mail_server');
+	$gBitSmarty->assign( 'boardSyncInbox', $boardSyncInbox );
+}
 
 if( !empty( $_REQUEST['create_list'] ) ) {
 	//------ Email List ------//
@@ -48,17 +53,27 @@ if( !empty( $_REQUEST['create_list'] ) ) {
 			}
 		}
 	}
-} elseif( !empty( $_REQUEST['subscribe'] ) ) {
-	if( $gContent->getPreference( 'boards_mailing_list' ) ) {
+} elseif( !empty( $_REQUEST['save_list_address'] ) ) {
+	$gContent->storePreference( 'board_sync_list_address', (!empty( $_REQUEST['board_sync_list_address'] ) ? $_REQUEST['board_sync_list_address'] : NULL ) );
+} elseif( $gContent->getPreference( 'boards_mailing_list' ) ) {
+	// check for submits that need boards_mailing_list
+	if( !empty( $_REQUEST['subscribe_boardsync'] ) ) {
+		if( $gContent->getPreference('board_sync_list_address') ) {
+			mailman_addmember( $gContent->getPreference( 'boards_mailing_list' ), $boardSyncInbox );
+		}
+	} elseif( !empty( $_REQUEST['unsubscribe_boardsync'] ) ) {
+		if( $gContent->getPreference('board_sync_list_address') ) {
+			mailman_remove_member( $gContent->getPreference( 'boards_mailing_list' ), $boardSyncInbox );
+		}
+	} elseif( !empty( $_REQUEST['subscribe'] ) ) {
 		mailman_addmember( $gContent->getPreference( 'boards_mailing_list' ), $gBitUser->getField( 'email' ) );
-	}
-} elseif( !empty( $_REQUEST['unsubscribe'] ) ) {
-	if( $gContent->getPreference( 'boards_mailing_list' ) ) {
+	} elseif( !empty( $_REQUEST['unsubscribe'] ) ) {
 		mailman_remove_member( $gContent->getPreference( 'boards_mailing_list' ), $gBitUser->getField( 'email' ) );
 	}
 }
 
 if( $gContent->getPreference( 'boards_mailing_list' ) ) {
+	$gBitSmarty->assign( 'boardsMailingList', $gContent->getPreference( 'boards_mailing_list' ).'@'.$gBitSystem->getConfig( 'boards_email_host', $gBitSystem->getConfig( 'kernel_server_name' ) ) );
 	if ( $gContent->hasUserPermission( 'p_boards_boards_members_view' ) ){
 		$members = mailman_list_members( $gContent->getPreference( 'boards_mailing_list' ) );
 		$gBitSmarty->assign_by_ref( 'listMembers', $members );
