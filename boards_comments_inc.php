@@ -1,12 +1,12 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/boards_comments_inc.php,v 1.1 2008/04/12 06:07:44 spiderr Exp $
- * $Id: boards_comments_inc.php,v 1.1 2008/04/12 06:07:44 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/boards_comments_inc.php,v 1.2 2008/04/16 23:53:49 spiderr Exp $
+ * $Id: boards_comments_inc.php,v 1.2 2008/04/16 23:53:49 spiderr Exp $
  *
  * intermediate include file to provide centralized place to pre/post handle comments_inc include
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.1 $ $Date: 2008/04/12 06:07:44 $ $Author: spiderr $
+ * @version $Revision: 1.2 $ $Date: 2008/04/16 23:53:49 $ $Author: spiderr $
  * @package boards
  */
 
@@ -15,6 +15,7 @@ require_once (LIBERTY_PKG_PATH.'comments_inc.php');
 
 if( $gBitSystem->isPackageActive( 'switchboard' ) && !empty( $storeComment ) && $gBoard->getPreference('boards_mailing_list') ) {
 	if( empty( $storeComment->mErrors ) ) {
+		$storeComment->loadComment();
 		global $gSwitchboardSystem;
 		require_once( SWITCHBOARD_PKG_PATH.'SwitchboardSystem.php' );
 		$email = $gBoard->getPreference('boards_mailing_list').'@'.$gBitSystem->getConfig( 'boards_email_host', $gBitSystem->getConfig( 'kernel_server_name' ) );
@@ -26,7 +27,6 @@ if( $gBitSystem->isPackageActive( 'switchboard' ) && !empty( $storeComment ) && 
 			$headerHash['from_name'] = !empty( $userInfo['real_name'] ) ? $userInfo['real_name'] : $userInfo['login'];
 			$headerHash['sender'] = $userInfo['email'];
 		}
-		
 		$gSwitchboardSystem->sendEmail( $storeComment->getTitle(), $storeComment->parseData(), $email, $headerHash );
 	}
 }
