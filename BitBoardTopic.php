@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.42 2008/03/24 15:40:17 wjames5 Exp $
- * $Id: BitBoardTopic.php,v 1.42 2008/03/24 15:40:17 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.43 2008/04/17 15:14:04 wjames5 Exp $
+ * $Id: BitBoardTopic.php,v 1.43 2008/04/17 15:14:04 wjames5 Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.42 $ $Date: 2008/03/24 15:40:17 $ $Author: wjames5 $
+ * @version $Revision: 1.43 $ $Date: 2008/04/17 15:14:04 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -68,43 +68,45 @@ class BitBoardTopic extends LibertyAttachable {
 
 			$BIT_DB_PREFIX = BIT_DB_PREFIX;
 			$query ="
-SELECT
-	lc.`user_id` AS flc_user_id,
-	lc.`created` AS flc_created,
-	lc.`last_modified` AS flc_last_modified,
-	lc.`title` AS title,
-	lc.`content_id` AS flc_content_id,
+				SELECT
+					lc.`user_id` AS flc_user_id,
+					lc.`created` AS flc_created,
+					lc.`last_modified` AS flc_last_modified,
+					lc.`title` AS title,
+					lc.`content_id` AS flc_content_id,
 
-	COALESCE(post.`is_approved`,0) AS first_approved,
-	lcom.`anon_name`,
+					COALESCE(post.`is_approved`,0) AS first_approved,
+					lcom.`anon_name`,
 
-	th.`parent_id` AS th_first_id,
-	COALESCE(th.`is_locked`,0) AS th_is_locked,
-	COALESCE(th.`is_moved`,0) AS th_is_moved,
-	COALESCE(th.`is_sticky`,0) AS th_is_sticky,
+					th.`parent_id` AS th_first_id,
+					COALESCE(th.`is_locked`,0) AS th_is_locked,
+					COALESCE(th.`is_moved`,0) AS th_is_moved,
+					COALESCE(th.`is_sticky`,0) AS th_is_sticky,
 
-	lcom.`comment_id` AS th_thread_id,
-	lcom.`root_id` AS th_root_id,
-	lcom.`root_id` AS content_id,
-	lc.`content_type_guid` AS content_type_guid,
+					lcom.`comment_id` AS th_thread_id,
+					lcom.`root_id` AS th_root_id,
+					lcom.`root_id` AS content_id,
+					lc.`content_type_guid` AS content_type_guid,
 
-	rlc.content_id AS root_content_id, rlc.title AS root_title, rlc.content_type_guid AS `root_content_type_guid`,
+					rlc.content_id AS root_content_id, rlc.title AS root_title, rlc.content_type_guid AS `root_content_type_guid`,
 
-	map.`board_content_id` AS board_content_id, b.`board_id`
+					map.`board_content_id` AS board_content_id, b.`board_id`
 
-	$selectSql
-FROM `".BIT_DB_PREFIX."liberty_comments` lcom
-	INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
-	INNER JOIN `".BIT_DB_PREFIX."boards_map` map ON (map.`topic_content_id`=lcom.`root_id` )
-	INNER JOIN `".BIT_DB_PREFIX."boards` b ON (map.`board_content_id`=b.`content_id` )
-	INNER JOIN `".BIT_DB_PREFIX."liberty_content` rlc ON (rlc.`content_id` = lcom.`root_id`)
-	$joinSql
-	LEFT JOIN `".BIT_DB_PREFIX."boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
-	LEFT JOIN `".BIT_DB_PREFIX."boards_posts` post ON(post.`comment_id`=lcom.`comment_id`)
-WHERE
-	lcom.`root_id`=lcom.`parent_id` AND	$lookupColumn=?
-	$whereSql";
+				$selectSql
+				FROM `".BIT_DB_PREFIX."liberty_comments` lcom
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
+					INNER JOIN `".BIT_DB_PREFIX."boards_map` map ON (map.`topic_content_id`=lcom.`root_id` )
+					INNER JOIN `".BIT_DB_PREFIX."boards` b ON (map.`board_content_id`=b.`content_id` )
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content` rlc ON (rlc.`content_id` = lcom.`root_id`)
+				$joinSql
+					LEFT JOIN `".BIT_DB_PREFIX."boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
+					LEFT JOIN `".BIT_DB_PREFIX."boards_posts` post ON(post.`comment_id`=lcom.`comment_id`)
+				WHERE
+					lcom.`root_id`=lcom.`parent_id` AND	$lookupColumn=?
+				$whereSql";
+			
 			$result = $this->mDb->query( $query, $bindVars );
+
 			if( $result && $result->numRows() ) {
 				$this->mInfo = $result->fields;
 				$this->mContentId = $this->getField( 'content_id' );
@@ -113,6 +115,7 @@ WHERE
 				$this->mRootId = $result->fields['th_thread_id'];
 				BitBoardTopic::track($this->mInfo);
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
+				
 				if (empty($this->mInfo['anon_name'])) {
 					$this->mInfo['anon_name'] = "Anonymous";
 				}
@@ -265,19 +268,19 @@ WHERE
 		$data['is_moved']=$this->mRootId;
 		$this->mDb->associateInsert( BIT_DB_PREFIX."boards_topics", $data );
 		$query = "UPDATE `".BIT_DB_PREFIX."liberty_comments`
-			SET
-				`root_id` = $board_id,
-				`parent_id` = $board_id
-			WHERE
-				`thread_forward_sequence` LIKE '".sprintf("%09d.", $this->mRootId)."%'
-				AND `root_id`=`parent_id`
-				";
+					SET
+						`root_id` = $board_id,
+						`parent_id` = $board_id
+					WHERE
+						`thread_forward_sequence` LIKE '".sprintf("%09d.", $this->mRootId)."%'
+						AND `root_id`=`parent_id`
+						";
 		$result = $this->mDb->query( $query );
 		$query = "UPDATE `".BIT_DB_PREFIX."liberty_comments`
-			SET
-				`root_id` = $board_id
-			WHERE
-				`thread_forward_sequence` LIKE '".sprintf("%09d.", $this->mRootId)."%'";
+					SET
+						`root_id` = $board_id
+					WHERE
+						`thread_forward_sequence` LIKE '".sprintf("%09d.", $this->mRootId)."%'";
 		$result = $this->mDb->query( $query );
 		$this->mDb->CompleteTrans();
 		$ret = TRUE;
@@ -336,68 +339,69 @@ WHERE
 		}
 		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && ($gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit'))) {
 			$selectSql .= ", ( SELECT COUNT(*)
-			FROM `${BIT_DB_PREFIX}liberty_comments` AS s_lcom
-			INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
-			LEFT JOIN  `${BIT_DB_PREFIX}boards_posts` s ON( s_lcom.`comment_id` = s.`comment_id` )
-			WHERE (".$substrSql.") AND ((s_lc.`user_id` < 0) AND (s.`is_approved` = 0 OR s.`is_approved` IS NULL))
-			) AS unreg";
-		} else {
-			$selectSql .= ", 0 AS unreg";
-		}
+								FROM `${BIT_DB_PREFIX}liberty_comments` AS s_lcom
+									INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
+									LEFT JOIN  `${BIT_DB_PREFIX}boards_posts` s ON( s_lcom.`comment_id` = s.`comment_id` )
+								WHERE (".$substrSql.") AND ((s_lc.`user_id` < 0) AND (s.`is_approved` = 0 OR s.`is_approved` IS NULL))) AS unreg";
+			} else {
+				$selectSql .= ", 0 AS unreg";
+			}
 
-		$sort_sql = "flc.".$this->mDb->convertSortmode( $sort_mode );
+			$sort_sql = "flc.".$this->mDb->convertSortmode( $sort_mode );
 
-		$query = "SELECT
-	lc.`user_id` AS flc_user_id,
-	lc.`created` AS flc_created,
-	lc.`last_modified` AS flc_last_modified,
-	lc.`title` AS title,
-	lc.`content_id` AS flc_content_id,
+			$query = "SELECT
+						lc.`user_id` AS flc_user_id,
+						lc.`created` AS flc_created,
+						lc.`last_modified` AS flc_last_modified,
+						lc.`title` AS title,
+						lc.`content_id` AS flc_content_id,
 
-	COALESCE(post.`is_approved`,0) AS first_approved,
-	lcom.`anon_name`,
+						COALESCE(post.`is_approved`,0) AS first_approved,
+						lcom.`anon_name`,
 
-	th.`parent_id` AS th_first_id,
-	COALESCE(th.`is_locked`,0) AS th_is_locked,
-	COALESCE(th.`is_moved`,0) AS th_is_moved,
-	COALESCE(th.`is_sticky`,0) AS th_is_sticky,
+						th.`parent_id` AS th_first_id,
+						COALESCE(th.`is_locked`,0) AS th_is_locked,
+						COALESCE(th.`is_moved`,0) AS th_is_moved,
+						COALESCE(th.`is_sticky`,0) AS th_is_sticky,
 
-	lcom.`comment_id` AS th_thread_id,
-	lcom.`root_id` AS th_root_id,
+						lcom.`comment_id` AS th_thread_id,
+						lcom.`root_id` AS th_root_id,
 
-	lcom.`root_id` AS content_id,
-	lc.`content_type_guid` AS content_type_guid,
+						lcom.`root_id` AS content_id,
+						lc.`content_type_guid` AS content_type_guid,
 
-	(
-		SELECT COUNT(*)
-		FROM `".BIT_DB_PREFIX."liberty_comments` s_lcom
-		INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
-	    WHERE (".$substrSql.")
-	) AS post_count
+						(
+							SELECT COUNT(*)
+							FROM `".BIT_DB_PREFIX."liberty_comments` s_lcom
+							INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
+							WHERE (".$substrSql.")
+						) AS post_count
 
-	$selectSql
-		FROM `${BIT_DB_PREFIX}liberty_comments` lcom
-		INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
-		LEFT JOIN `${BIT_DB_PREFIX}boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
-		LEFT JOIN `${BIT_DB_PREFIX}boards_posts` post ON (post.`comment_id` = lcom.`comment_id`)
-		$joinSql
-WHERE
-	lcom.`root_id`=lcom.`parent_id`
-	$whereSql
-ORDER BY
-	11 DESC,
-	10 ASC,
-	lc.created DESC
-";
+						$selectSql
+							FROM `${BIT_DB_PREFIX}liberty_comments` lcom
+							INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
+							LEFT JOIN `${BIT_DB_PREFIX}boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
+							LEFT JOIN `${BIT_DB_PREFIX}boards_posts` post ON (post.`comment_id` = lcom.`comment_id`)
+							$joinSql
+						WHERE
+							lcom.`root_id`=lcom.`parent_id`
+							$whereSql
+						ORDER BY
+							11 DESC,
+							10 ASC,
+							lc.created DESC
+						";
+
 		$query_cant  = "SELECT count(*)
-FROM `${BIT_DB_PREFIX}liberty_comments` lcom
-INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
-LEFT JOIN `${BIT_DB_PREFIX}boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
-LEFT JOIN `${BIT_DB_PREFIX}boards_posts` post ON (post.`comment_id` = lcom.`comment_id`)
-$joinSql
-WHERE
-	lcom.`root_id`=lcom.`parent_id`
-	$whereSql";
+						FROM `${BIT_DB_PREFIX}liberty_comments` lcom
+							INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
+							LEFT JOIN `${BIT_DB_PREFIX}boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
+							LEFT JOIN `${BIT_DB_PREFIX}boards_posts` post ON (post.`comment_id` = lcom.`comment_id`)
+							$joinSql
+						WHERE
+							lcom.`root_id`=lcom.`parent_id`
+							$whereSql";
+
 		$result = $this->mDb->query( $query, $bindVars, $max_records, $offset );
 		$ret = array();
 		while( $res = $result->fetchRow() ) {
@@ -541,33 +545,33 @@ WHERE
 
 	function sendNotification($user) {
 		global $gBitSystem;
-return;
+		return;
 		$mail_subject= "Topic Reply Notification - ".$this->mInfo['title'];
 		$host = 'http://'.$_SERVER['HTTP_HOST'];
 		//TODO: use a template for this
 		$mail_message = "Hello ".$user['user'].",
 
-You are receiving this email because you are watching the topic, \"".$this->mInfo['title']."\" at ".$gBitSystem->getConfig('site_title',"[Bitweaver Site]").".
-This topic has received a reply since your last visit.
-You can use the following link to view the replies made, no more notifications will be sent until you visit the topic.
+			You are receiving this email because you are watching the topic, \"".$this->mInfo['title']."\" at ".$gBitSystem->getConfig('site_title',"[Bitweaver Site]").".
+			This topic has received a reply since your last visit.
+			You can use the following link to view the replies made, no more notifications will be sent until you visit the topic.
 
-".$host.$this->getDisplayUrl()."
+			".$host.$this->getDisplayUrl()."
 
-If you no longer wish to watch this topic you can either click the \"Stop watching this topic link\" found at the topic of the topic above, or by clicking the following link after logging on:
+			If you no longer wish to watch this topic you can either click the \"Stop watching this topic link\" found at the topic of the topic above, or by clicking the following link after logging on:
 
-".$host.$this->getDisplayUrl()."&notify=1";
+			".$host.$this->getDisplayUrl()."&notify=1";
 
-
-		@mail($user['email'], $mail_subject , $mail_message, "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n");
+			@mail($user['email'], $mail_subject , $mail_message, "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n");
 
 		$data = array(
-		'notify_date'=>time(),
+			'notify_date'=>time(),
 		);
 
 		$key = array(
-		'user_id' =>$user['user_id'],
-		'topic_id' =>sprintf("%09d.",$this->mRootId),
+			'user_id' =>$user['user_id'],
+			'topic_id' =>sprintf("%09d.",$this->mRootId),
 		);
+
 		$this->mDb->associateUpdate(BIT_DB_PREFIX."boards_tracking",$data,$key);
 	}
 
