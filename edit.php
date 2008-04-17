@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.7 2008/04/14 09:17:55 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.8 2008/04/17 14:32:28 wjames5 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -53,10 +53,12 @@ if( isset( $_REQUEST["preview"] ) ) {
 // Pro
 // Check if the page has changed
 if( !empty( $_REQUEST["save_bitboard"] ) ) {
+	// merge our arrays so our storage hash works with LibertyContent storage of LibertyContent add ons.
+	$storeHash = array_merge( $_REQUEST, $_REQUEST['bitboard'] );
 	// Check if all Request values are delivered, and if not, set them
 	// to avoid error messages. This can happen if some features are
 	// disabled
-	if( $gContent->store( $_REQUEST['bitboard'] ) ) {
+	if( $gContent->store( $storeHash ) ) {
 		$gContent->storePreference( 'board_sync_list_address', (!empty( $_REQUEST['bitboardconfig']['board_sync_list_address'] ) ?  $_REQUEST['bitboardconfig']['board_sync_list_address'] : NULL) );
 		header( "Location: ".$gContent->getDisplayUrl() );
 		die;
