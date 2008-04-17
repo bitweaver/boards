@@ -1,9 +1,9 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.17 2008/04/17 01:01:08 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.18 2008/04/17 14:49:45 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="floaticon">
 		{if $print_page ne 'y'}
-			{if $groupContent->getPreference('boards_mailing_list') || $groupContent->hasAdminPermission()}
+			{if $board->getPreference('boards_mailing_list') || $board->hasAdminPermission()}
 				<a class="item" href="{$smarty.const.BOARDS_PKG_URL}mailing_list.php?b={$board->mInfo.board_id}" title="{tr}Message Board Mailing List{/tr}">{biticon ipackage="icons" iname="internet-mail" iexplain="Edit Message Board"}</a>
 			{/if}
 			{if $gBitUser->hasPermission( 'p_boards_edit' )}
