@@ -16,7 +16,7 @@ if( $mbox = imap_open( $connectionString, $gBitSystem->getConfig( 'boards_sync_u
 		foreach( $messageNumbers as $msgNum ) {
 			$header = imap_headerinfo( $mbox, $msgNum );
 
-			$sql = "SELECT `content_id` FROM `".BIT_DB_PREFIX."liberty_comments` WHERE `message_id`=?";
+			$sql = "SELECT `content_id` FROM `".BIT_DB_PREFIX."liberty_comments` WHERE `message_guid`=?";
 			if( !($contentId = $gBitDb->getOne( $sql, array( $header->message_id ) ) ) ) {
 				$rawHeader = imap_fetchheader( $mbox, $msgNum );
 				//vd( $rawHeader );
@@ -49,9 +49,8 @@ if( $mbox = imap_open( $connectionString, $gBitSystem->getConfig( 'boards_sync_u
 					if( $boardContentId = cache_check_content_prefs( 'board_sync_list_address', $to['email'] ) ) {
 						print "Found Board Content $boardContentId for $to[email]\n";
 						$msgStructure = imap_fetchstructure( $mbox, $msgNum );
-					$gBitDb->debug();
 						if( !empty( $header->in_reply_to ) ) {
-							if( $parent = $gBitDb->GetRow( "SELECT `content_id`, `root_id` FROM `".BIT_DB_PREFIX."liberty_comments` WHERE `message_id`=?", array( $header->in_reply_to ) ) ) {
+							if( $parent = $gBitDb->GetRow( "SELECT `content_id`, `root_id` FROM `".BIT_DB_PREFIX."liberty_comments` WHERE `message_guid`=?", array( $header->in_reply_to ) ) ) {
 								$replyId = $parent['content_id'];
 								$rootId = $parent['root_id'];
 							} else {
@@ -66,7 +65,6 @@ if( $mbox = imap_open( $connectionString, $gBitSystem->getConfig( 'boards_sync_u
 							$replyId = $boardContentId;
 							$rootId = $boardContentId;
 						}
-					$gBitDb->debug( 0 );
 						$userInfo = board_sync_get_user( $header );
 						$storeRow = array();
 						$storeRow['created'] = strtotime( $header->date );	
@@ -74,7 +72,7 @@ if( $mbox = imap_open( $connectionString, $gBitSystem->getConfig( 'boards_sync_u
 						$storeRow['user_id'] = $userInfo['user_id'];
 						$storeRow['modifier_user_id'] = $userInfo['user_id'];
 						$storeRow['title'] = $header->subject;
-						$storeRow['message_id'] = $header->message_id;
+						$storeRow['message_guid'] = $header->message_id;
 						if( $userInfo['user_id'] == ANONYMOUS_USER_ID && !empty( $header->from[0]->personal ) ) {
 							$storeRow['anon_name'] = $header->from[0]->personal;
 						}
@@ -128,7 +126,7 @@ if( $mbox = imap_open( $connectionString, $gBitSystem->getConfig( 'boards_sync_u
 						$storeComment = new LibertyComment( NULL );
 						$gBitDb->StartTrans();
 						if( $storeComment->storeComment($storeRow) ) {
-							$storeComment->mDb->query( "UPDATE `".BIT_DB_PREFIX."liberty_comments` SET `message_id`=? WHERE `content_id`=?", array( $storeRow['message_id'], $storeComment->mContentId ) );
+							$storeComment->mDb->query( "UPDATE `".BIT_DB_PREFIX."liberty_comments` SET `message_guid`=? WHERE `content_id`=?", array( $storeRow['message_guid'], $storeComment->mContentId ) );
 							if($gBitSystem->isPackageActive('bitboards') && $gBitSystem->isFeatureActive('bitboards_thread_track')) {
 								$topicId = substr( $storeComment->mInfo['thread_forward_sequence'], 0, 10 );
 								$data = BitBoardTopic::getNotificationData( $topicId );
