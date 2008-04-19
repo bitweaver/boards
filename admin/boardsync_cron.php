@@ -1,5 +1,6 @@
 <?php
 
+chdir( dirname( __FILE__ ) );
 require_once( '../../bit_setup_inc.php' );
 $_SERVER['REMOTE_ADDR'] = 'cron';
 $gBitUser->mPerms['p_users_bypass_captcha'] = TRUE; 
