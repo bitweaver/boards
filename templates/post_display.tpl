@@ -1,6 +1,4 @@
 {strip}
-{assign var='gContent' value=$comment}
-
 <div class="body" id="comment_{$comment.comment_id|escape}">
 
 	{if $gBitUser->getPreference('boards_show_avatars','y') == 'y'}
