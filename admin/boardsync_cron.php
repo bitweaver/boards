@@ -1,8 +1,8 @@
 <?php
-
+global $gShellScript, $gArgs;
 chdir( dirname( __FILE__ ) );
+$gShellScript = TRUE;
 require_once( '../../bit_setup_inc.php' );
-$_SERVER['REMOTE_ADDR'] = 'cron';
 $gBitUser->mPerms['p_users_bypass_captcha'] = TRUE; 
 
 print '<pre>';
@@ -15,6 +15,7 @@ if( $mbox = imap_open( $connectionString, $gBitSystem->getConfig( 'boards_sync_u
 	$result = imap_fetch_overview($mbox,"1:{$MC->Nmsgs}",0);
 	if( $messageNumbers = imap_sort( $mbox, SORTDATE, 0 ) ) {
 		foreach( $messageNumbers as $msgNum ) {
+			$deleteMsg = TRUE;
 			$header = imap_headerinfo( $mbox, $msgNum );
 
 			$sql = "SELECT `content_id` FROM `".BIT_DB_PREFIX."liberty_comments` WHERE `message_guid`=?";
@@ -138,8 +139,11 @@ if( $mbox = imap_open( $connectionString, $gBitSystem->getConfig( 'boards_sync_u
 								}
 							}
 							$gBitDb->CompleteTrans();
+							$deleteMsg = TRUE;
 						} else {
-							if( $storeComment->mErrors['store'] != 'Duplicate comment.' ) {
+							if( $storeComment->mErrors['store'] == 'Duplicate comment.' ) {
+								$deleteMsg = TRUE;
+							} else {	
 								$gBitDb->RollbackTrans();
 vd( $storeComment->mErrors );
 die;
@@ -149,13 +153,17 @@ die;
 				}
 
 			} else {
-				print( "WARNING: Message Exists ".BIT_ROOT_URL."index.php?content_id=".$contentId."\n" );
+				print( "WARNING: Message \"".$header->subject."\" Exists -> ".BIT_ROOT_URI."index.php?content_id=".$contentId."\n" );
+				$deleteMsg = TRUE;
+			}
+			if( $deleteMsg && empty( $gDebug ) && empty( $gArgs['test'] ) ) {
+				imap_delete( $mbox, $msgNum );
 			}
 		}
 	}
 
+	imap_expunge( $mbox );
 	imap_close( $mbox );
-
 
 } else {
 	bit_log_error( __FILE__." failed imap_open $connectionString ".imap_last_error() );
