@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.29 2008/03/10 21:44:21 wjames5 Exp $
- * $Id: BitBoardPost.php,v 1.29 2008/03/10 21:44:21 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.30 2008/04/21 22:32:25 wjames5 Exp $
+ * $Id: BitBoardPost.php,v 1.30 2008/04/21 22:32:25 wjames5 Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.29 $ $Date: 2008/03/10 21:44:21 $ $Author: wjames5 $
+ * @version $Revision: 1.30 $ $Date: 2008/04/21 22:32:25 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -162,7 +162,7 @@ class BitBoardPost extends LibertyComment {
 			$whereSql .= " AND ((post.`is_approved` = 1) OR (lc.`user_id` >= 0))";
 		}
 
-        $pListHash = array( 'content_id' => $contentId, 'max_records' => $pMaxComments, 'offset'=>$pOffset, 'sort_mode'=> $pSortOrder, 'display_mode' => $pDisplayMode, 'include_comments' => 'y' );
+        $pListHash = array( 'content_id' => $contentId, 'max_records' => $pMaxComments, 'offset'=>$pOffset, 'sort_mode'=> $pSortOrder, 'display_mode' => $pDisplayMode, 'has_comment_view_perm' => TRUE );
         $this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this, $pListHash );		
 
 		if ($pContentId) {
@@ -306,7 +306,7 @@ class BitBoardPost extends LibertyComment {
 		$bindVars = array();
 
 		$joinSql = $selectSql = $whereSql = '';
-		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this );
+		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this, array( 'include_comments' => TRUE ) );
 
 		if ($pContentId) {
 			$sql = "SELECT COUNT(*)
