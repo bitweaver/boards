@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.18 2008/04/17 14:49:45 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.19 2008/04/21 20:08:21 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="floaticon">
@@ -69,6 +69,7 @@
 
 						<td>
 							<a href="{$thread.url}" title="{$thread.title|escape}">{$thread.title|escape}</a>
+							{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='list' serviceHash=$thread}
 						</td>
 
 						<td style="text-align:center;">{if $thread.post_count-1}{$thread.post_count-1}{/if}</td>
