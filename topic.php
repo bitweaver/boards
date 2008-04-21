@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.30 2008/04/12 06:17:09 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.31 2008/04/21 19:44:23 wjames5 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -84,13 +84,17 @@ if( @BitBase::verifyId( $_REQUEST['b'] ) ) {
 	$_REQUEST['b'] = NULL;
 }
 
+// load up the board
 $gBoard = new BitBoard($_REQUEST['b']);
 $gContent = &$gBoard;
+$gBitSmarty->assign_by_ref( 'gContent', $gContent );
+
 if( !$gBoard->load() ) {
 	$gBitSystem->fatalError("board id not given");
 }
 
 $gBoard->verifyViewPermission();
+
 
 $displayHash = array( 'perm_name' => 'p_boards_read' );
 $gBoard->invokeServices( 'content_display_function', $displayHash );

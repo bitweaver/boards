@@ -78,6 +78,9 @@ if (empty($thread->mInfo['th_root_id'])) {
 }
 $thread->readTopic();
 
+$gContent = &$thread;
+$gBitSmarty->assign_by_ref('gContent', $gContent);
+
 $gBitSmarty->assign('topic_locked',$thread->isLocked());
 
 $gBitSmarty->assign_by_ref( 'thread', $thread );
