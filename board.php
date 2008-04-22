@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.13 2007/05/07 05:22:33 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.14 2008/04/22 03:56:35 wjames5 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -22,27 +22,25 @@ $gBitSystem->verifyPackage( 'boards' );
 // Now check permissions to access this page
 $gBitSystem->verifyPermission( 'p_boards_read' );
 
-$ns = array();
-$board_all_cids =array();
-
+// Handle delete request - we should probably move this to edit where it makes more sense
 if( isset( $_REQUEST['remove'] ) && BitBase::verifyId( $_REQUEST['b'] ) ) {
 	$gBitUser->verifyTicket();
 	$tmpBoard = new BitBoard( $_REQUEST['b'] );
 	$tmpBoard->load();
-	if( !empty( $_REQUEST['cancel'] ) ) {
-		// user cancelled - just continue on, doing nothing
-	} elseif( empty( $_REQUEST['confirm'] ) ) {
-		$formHash['b'] = $_REQUEST['b'];
-		$formHash['remove'] = TRUE;
-		$gBitSystem->confirmDialog( $formHash, array( 'warning' => tra( 'Are you sure you want to remove the entire message board' ).' "'.$tmpBoard->getTitle().'" ?', 'error' => 'This cannot be undone!' ) );
-	} else {
-		if( $tmpBoard->isValid() && $gBitUser->hasPermission( 'p_boards_remove' ) ) {
-			if( !$tmpBoard->expunge() ) {
-				$gBitSmarty->assign_by_ref( 'errors', $deleteComment->mErrors );
-			}
+	if( $tmpBoard->isValid() && $tmpBoard->hasUserPermission( 'p_boards_remove', TRUE, TRUE ) ) {
+		if( empty( $_REQUEST['confirm'] ) ) {
+			$formHash['b'] = $_REQUEST['b'];
+			$formHash['remove'] = TRUE;
+			$gBitSystem->confirmDialog( $formHash, array( 'warning' => tra( 'Are you sure you want to remove the entire message board' ).' "'.$tmpBoard->getTitle().'" ?', 'error' => 'This cannot be undone!' ) );
+		} else if( !$tmpBoard->expunge() ) {
+			$gBitSmarty->assign_by_ref( 'errors', $deleteComment->mErrors );
 		}
 	}
 }
+
+// Get a list of boards
+$ns = array();
+$board_all_cids =array();
 
 if($gBitSystem->isPackageActive('pigeonholes')) {
 	require_once(PIGEONHOLES_PKG_PATH.'Pigeonholes.php');
@@ -82,10 +80,10 @@ if($gBitSystem->isPackageActive('pigeonholes')) {
 					$board_cids[] = $boardKey['content_id'];
 				}
 				if (count($board_cids)>0) {
-					$blHash = array('boards'=>$board_cids,'paginationOff'=>'y');
-					$b = new BitBoard();
-					$pos_var['members'] = $b->getList($blHash);
-					$pos_var['pagination']=$blHash['listInfo'];
+					$listHash = array('boards'=>$board_cids,'paginationOff'=>'y');
+					$board = new BitBoard();
+					$pos_var['members'] = $board->getList($listHash);
+					$pos_var['pagination']=$listHash['listInfo'];
 					$board_all_cids = array_merge($board_all_cids,$board_cids);
 				}
 			}
@@ -95,22 +93,24 @@ if($gBitSystem->isPackageActive('pigeonholes')) {
 
 }
 
-$rest =array();
+// get our boards list
+$ret =array();
 if($gBitSystem->isPackageActive('pigeonholes')) {
-//	$rest['data']['title']="Uncategorised Boards";
+//	$ret['data']['title']="Uncategorised Boards";
 } else {
-//	$rest['data']['title']="Board List";
+//	$ret['data']['title']="Board List";
 }
-$rest['children']=array();
-$blHash = array('nboards'=>$board_all_cids,'paginationOff'=>'y');
-$b = new BitBoard();
-$rest['members'] = $b->getList($blHash);
-if (count($rest['members'])>0) {
-	$ns[] = $rest;
+$ret['children']=array();
+$listHash = array('nboards'=>$board_all_cids,'paginationOff'=>'y');
+$board = new BitBoard();
+$ret['members'] = $board->getList($listHash);
+if (count($ret['members'])>0) {
+	$ns[] = $ret;
 }
 
 $gBitSmarty->assign_by_ref('ns',$ns);
 
+// this might be for getting a count of nested boards - not entirely sure, if you figure it out please clarify this comment.
 function countBoards(&$a) {
 	$s = count($a['members']);
 	foreach ($a['children'] as $k=>$c) {
