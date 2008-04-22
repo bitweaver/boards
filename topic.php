@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.31 2008/04/21 19:44:23 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.32 2008/04/22 04:56:59 wjames5 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -19,14 +19,15 @@ require_once( BOARDS_PKG_PATH.'BitBoard.php' );
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'boards' );
 
-// Now check permissions to access this page
-$gBitSystem->verifyPermission( 'p_boards_read' );
-
-
+// This appears to be related to setting topics as having been read - but has a bug
 if (isset($_REQUEST["new"])) {
+	// Now check permissions to access this page
+	$gBitSystem->verifyPermission( 'p_boards_read' );
+
 	require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 	$res = true;
 	if (isset($_REQUEST["new"]) && is_numeric($_REQUEST["new"])) {
+		// @TODO Debug: gContent appears to be the wrong content type, a BitBoard instead of a BitBoardTopic which has readTopicSet method
 		$res = $gContent->readTopicSet($_REQUEST["new"]);
 	}
 	if ($res) {
@@ -35,11 +36,13 @@ if (isset($_REQUEST["new"])) {
 		trigger_error(var_export($gContent->mErrors,true ));
 	}
 	die();
+// This appears to be related to setting topics as being sticky or locked - but has a bug
 } elseif (isset($_REQUEST["locked"]) || isset($_REQUEST["sticky"])) {
 	// Now check permissions to access this page
 	$gBitSystem->verifyPermission( 'p_boards_edit' );
 
 	require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
+	// @TODO Debug: gContent appears to be the wrong content type, a BitBoard instead of a BitBoardTopic which has lock and sticky methods
 	$res = true;
 	if (isset($_REQUEST["locked"]) && is_numeric($_REQUEST["locked"])) {
 		$res = $gContent->lock($_REQUEST["locked"]);
@@ -52,6 +55,7 @@ if (isset($_REQUEST["new"])) {
 		trigger_error(var_export($gContent->mErrors,true ));
 	}
 	die();
+// approve or reject ananymous comments
 } elseif (!empty($_REQUEST['action'])) {
 	// Now check permissions to access this page
 	$gBitSystem->verifyPermission( 'p_boards_edit' );
@@ -73,31 +77,26 @@ if (isset($_REQUEST["new"])) {
 		default:
 			break;
 	}
-}
-
-if( @BitBase::verifyId( $_REQUEST['b'] ) ) {
-} elseif( @BitBase::verifyId( $_REQUEST['migrate_board_id'] ) ) {
+} elseif ( @BitBase::verifyId( $_REQUEST['migrate_board_id'] ) ) {
 	if( $_REQUEST['b'] = BitBoard::lookupByMigrateBoard( $_REQUEST['migrate_board_id'] ) ) {
 		bit_redirect( BOARDS_PKG_URL.'index.php?b='. $_REQUEST['b'] );
 	}
-} else {
-	$_REQUEST['b'] = NULL;
 }
 
-// load up the board
-$gBoard = new BitBoard($_REQUEST['b']);
-$gContent = &$gBoard;
-$gBitSmarty->assign_by_ref( 'gContent', $gContent );
 
-if( !$gBoard->load() ) {
-	$gBitSystem->fatalError("board id not given");
+
+// Finally we can get down to businesses - load up the board
+require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
+
+if( !$gContent->isValid() ) {
+	$gBitSystem->setHttpStatus( 404 );
+	$gBitSystem->fatalError( "The board you requested could not be found." );
 }
 
-$gBoard->verifyViewPermission();
-
+$gContent->verifyViewPermission();
 
 $displayHash = array( 'perm_name' => 'p_boards_read' );
-$gBoard->invokeServices( 'content_display_function', $displayHash );
+$gContent->invokeServices( 'content_display_function', $displayHash );
 
 /* mass-remove:
 the checkboxes are sent as the array $_REQUEST["checked[]"], values are the wiki-PageNames,
@@ -110,7 +109,7 @@ if so, we call histlib's method remove_all_versions for all the checked boards.
 if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQUEST["submit_mult"] == "remove_boards" ) {
 
 	// Now check permissions to remove the selected bitboard
-	$gBoard->verifyPermission( 'p_boards_remove' );
+	$gContent->verifyPermission( 'p_boards_remove' );
 	$gBitUser->verifyTicket();
 
 	if( !empty( $_REQUEST['cancel'] ) ) {
@@ -158,12 +157,13 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 	
 }
 
-$commentsParentId=$gBoard->mContentId;
-$comments_return_url=  BOARDS_PKG_URL."index.php?b=".urlencode($gBoard->mBitBoardId);
+// set some comment values since topics are comments
+$commentsParentId=$gContent->mContentId;
+$comments_return_url=  BOARDS_PKG_URL."index.php?b=".urlencode($gContent->mBitBoardId);
 
 require_once( BOARDS_PKG_PATH.'boards_comments_inc.php' );
 
-// create new bitboard object
+// get the topics for this board
 $threads = new BitBoardTopic();
 $threadList = $threads->getList( $_REQUEST );
 
@@ -171,11 +171,11 @@ $gBitSmarty->assign_by_ref( 'threadList', $threadList );
 // getList() has now placed all the pagination information in $_REQUEST['listInfo']
 $gBitSmarty->assign_by_ref( 'listInfo', $_REQUEST['listInfo'] );
 
-$gBitSmarty->assign_by_ref( 'board', $gBoard );
-$gBitSmarty->assign( 'cat_url', BOARDS_PKG_URL."index.php"); //?ct=".urlencode($gBoard->mInfo['content_type_guid']));
+$gBitSmarty->assign_by_ref( 'board', $gContent );
+$gBitSmarty->assign( 'cat_url', BOARDS_PKG_URL."index.php"); //?ct=".urlencode($gContent->mInfo['content_type_guid']));
 
 $gBitThemes->loadAjax( 'mochikit' );
 
 // Display the template
-$gBitSystem->display( 'bitpackage:boards/list_topics.tpl', tra( 'Message Board Threads: ' . $gBoard->getField('title') ) );
+$gBitSystem->display( 'bitpackage:boards/list_topics.tpl', tra( 'Message Board Threads: ' . $gContent->getField('title') ) );
 ?>
