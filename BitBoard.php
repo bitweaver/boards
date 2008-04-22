@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.42 2008/04/22 03:55:19 spiderr Exp $
- * $Id: BitBoard.php,v 1.42 2008/04/22 03:55:19 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.43 2008/04/22 04:10:25 spiderr Exp $
+ * $Id: BitBoard.php,v 1.43 2008/04/22 04:10:25 spiderr Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.42 $ $Date: 2008/04/22 03:55:19 $ $Author: spiderr $
+ * @version $Revision: 1.43 $ $Date: 2008/04/22 04:10:25 $ $Author: spiderr $
  * @package boards
  */
 
@@ -235,11 +235,18 @@ class BitBoard extends LibertyAttachable {
 		$ret = FALSE;
 		if( $this->isValid() ) {
 			$this->mDb->StartTrans();
+			$mailingList = $this->getPreference( 'boards_mailing_list' );
 			$query = "DELETE FROM `".BIT_DB_PREFIX."boards_map` WHERE `board_content_id` = ?";
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
 			$query = "DELETE FROM `".BIT_DB_PREFIX."boards` WHERE `content_id` = ?";
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
 			if( LibertyAttachable::expunge() ) {
+				if( $mailingList ) {
+					require_once( UTIL_PKG_PATH.'mailman_lib.php' );
+					if( $error = mailman_rmlist( $mailingList ) ) {
+						$this->mErrors['mailing_list'] = $error;
+					}
+				}
 				$ret = TRUE;
 				$this->mDb->CompleteTrans();
 			} else {
