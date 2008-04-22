@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.40 2008/04/14 03:22:52 spiderr Exp $
- * $Id: BitBoard.php,v 1.40 2008/04/14 03:22:52 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.41 2008/04/22 03:51:44 spiderr Exp $
+ * $Id: BitBoard.php,v 1.41 2008/04/22 03:51:44 spiderr Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.40 $ $Date: 2008/04/14 03:22:52 $ $Author: spiderr $
+ * @version $Revision: 1.41 $ $Date: 2008/04/22 03:51:44 $ $Author: spiderr $
  * @package boards
  */
 
@@ -135,6 +135,23 @@ class BitBoard extends LibertyAttachable {
 
 				$result = $this->mDb->associateInsert( $table, $pParamHash['board_store'] );
 				$result = $this->mDb->associateInsert( BIT_DB_PREFIX."boards_map",array('board_content_id'=>$pParamHash['board_store']['content_id'],'topic_content_id'=>$pParamHash['board_store']['content_id']));
+				if( !empty( $pParamHash['boards_mailing_list'] ) ) {
+					global $gBitSystem, $gBitUser;
+					require_once( UTIL_PKG_PATH.'mailman_lib.php' );
+$this->debug();
+					if( $gBitSystem->getConfig( 'boards_sync_mail_server' ) ) {
+						if( !($error = mailman_newlist( array( 'listname' => $pParamHash['boards_mailing_list'], 'admin-password'=>$pParamHash['boards_mailing_list_password'], 'listadmin-addr'=>$gBitUser->getField( 'email' ) ) )) ) {
+							$this->storePreference( 'boards_mailing_list', !empty( $pParamHash['boards_mailing_list'] ) ? $pParamHash['boards_mailing_list'] : NULL );
+							$this->storePreference( 'boards_mailing_list_password', $pParamHash['boards_mailing_list_password'] );
+							if( $this->getBoardSyncInbox() ) {
+								mailman_addmember( $this->getPreference( 'boards_mailing_list' ), $this->getBoardSyncInbox() );
+							}
+							$this->storePreference( 'board_sync_list_address', $this->getBoardMailingList() );
+						} else {
+							$this->mErrors['mailing_list'] = $error;
+						}
+					}
+				}
 			}
 
 
@@ -625,6 +642,26 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 		}
 		return $ret;
 	}
+
+
+	// =-=-=-=-=-=-=-=-=-=-=-=-=-= Board Sync Methods =-=-=-=-=-=-=-=-=-=-=-=-=-=
+	function getBoardSyncInbox() {
+		global $gBitSystem;
+		$ret = '';
+		if( $gBitSystem->getConfig('boards_sync_user') ) {
+			$ret = $gBitSystem->getConfig('boards_sync_user').'@'.$gBitSystem->getConfig('boards_sync_mail_server');
+		}
+		return $ret;
+	}
+
+	function getBoardMailingList() {
+		global $gBitSystem;
+		$ret = NULL;
+		if( $this->isValid() ) {
+			$ret = $this->getPreference( 'boards_mailing_list' ).'@'.$gBitSystem->getConfig( 'boards_email_host', $gBitSystem->getConfig( 'kernel_server_name' ) );	
+		}
+		return $ret;
+	}
 }
 
 function boards_content_display ( $pContent ) {
@@ -660,8 +697,8 @@ function boards_content_store( $pContent, $pParamHash ) {
 
 			// Get the pigeonholes this content is in
 			$p = null;
-			if ( ! empty( $_REQUEST['pigoneholes'] ) ) {
-				foreach( $_REQUEST['pigeonholes']['pigeonhole'] as $p_id ) {
+			if ( ! empty( $pParamHash['pigoneholes'] ) ) {
+				foreach( $pParamHash['pigeonholes']['pigeonhole'] as $p_id ) {
 					require_once(PIGEONHOLES_PKG_PATH.'Pigeonholes.php');
 					if (empty($p)) {
 						$p = new Pigeonholes();
