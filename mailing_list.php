@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/mailing_list.php,v 1.2 2008/04/16 21:14:51 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/mailing_list.php,v 1.3 2008/04/22 03:51:10 spiderr Exp $
 // Copyright (c) bitweaver Group
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -18,8 +18,7 @@ $gBitSystem->verifyPackage( 'boards' );
 // Now check permissions to access this page
 $gContent->verifyViewPermission();
 
-if( $gBitSystem->getConfig('boards_sync_user') ) {
-	$boardSyncInbox = $gBitSystem->getConfig('boards_sync_user').'@'.$gBitSystem->getConfig('boards_sync_mail_server');
+if( $boardSyncInbox = BitBoard::getBoardSyncInbox() ) {
 	$gBitSmarty->assign( 'boardSyncInbox', $boardSyncInbox );
 }
 
@@ -72,8 +71,8 @@ if( !empty( $_REQUEST['create_list'] ) ) {
 	}
 }
 
-if( $gContent->getPreference( 'boards_mailing_list' ) ) {
-	$gBitSmarty->assign( 'boardsMailingList', $gContent->getPreference( 'boards_mailing_list' ).'@'.$gBitSystem->getConfig( 'boards_email_host', $gBitSystem->getConfig( 'kernel_server_name' ) ) );
+if( $gContent->getBoardMailingList() ) {
+	$gBitSmarty->assign( 'boardsMailingList', $gContent->getBoardMailingList() );
 	if ( $gContent->hasUserPermission( 'p_boards_boards_members_view' ) ){
 		$members = mailman_list_members( $gContent->getPreference( 'boards_mailing_list' ) );
 		$gBitSmarty->assign_by_ref( 'listMembers', $members );
