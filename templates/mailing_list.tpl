@@ -38,6 +38,21 @@
 
 {/jstab}
 
+{if $gContent->hasAdminPermission()}
+{if $listMembers}
+{jstab title="List Subscribers"}
+		<ol class="data">
+			{foreach from=$listMembers key=userId item=member}
+				<li>{displayname email=$member} &lt;{$member}&gt;</li>
+			{foreachelse}
+				<li>{tr}The group has no members.{/tr}</li>
+			{/foreach}
+		</ol>
+{/jstab}
+{/if}
+{/if}
+
+{if $gBitUser->hasPermission('p_boards_admin')}
 {jstab title="List &rArr; Board Configuration"}
 	<div>
 		{formlabel label="Introduction" for="boardsync"}
@@ -102,14 +117,11 @@
 			{$board->getPreference('boards_mailing_list')}@{$gBitSystem->getConfig('boards_email_host',$gBitSystem->getConfig('kernel_server_name'))}
 		{/forminput}
 	</div>
-	{if $board->hasAdminPermission()}
 	<div class="row submit">
 		{forminput}
 			<input type="submit" name="delete_list" value="Delete List" />
 		{/forminput}
 	</div>
-	{/if}
-	{if $gBitUser->isAdmin()}
 	<div class="row">
 		{formlabel label="Advanced Configuration"}
 		{forminput}
@@ -117,10 +129,8 @@
 			{$gBitSystem->getConfig('boards_mailman_uri',"`$smarty.const.BIT_ROOT_URI`mailman/")}admin/{$board->getPreference('boards_mailing_list')}</a>
 		{/forminput}
 	</div>
-	{/if}
 {else}
-	{if $board->hasAdminPermission()}
-		{if $gBitSystem->getConfig('server_mailman_bin') && $gBitSystem->getConfig('boards_sync_user') && $gBitSystem->getConfig('boards_sync_mail_server')}
+	{if $gBitSystem->getConfig('server_mailman_bin') && $gBitSystem->getConfig('boards_sync_user') && $gBitSystem->getConfig('boards_sync_mail_server')}
 {legend legend="Group Mailing List"}
 	<input type="hidden" name="b" value="{$board->getField('board_id')}"/>
 	<div class="row">
@@ -143,30 +153,19 @@
 		{/forminput}
 	</div>
 {/legend}
-		{else}
-			{if !$gBitSystem->getConfig('server_mailman_bin')}
-				{formfeedback error="Mailman is not configured."}
-			{/if}
-			{if !$gBitSystem->getConfig('boards_sync_user') || !$gBitSystem->getConfig('boards_sync_user')}
-				{formfeedback error="List to Board Sync is not configured."}
-			{/if}
-			{if $gBitUser->isAdmin()}
-				<a href="{$smarty.const.KERNEL_PKG_URL}admin/index.php?page=boards">{tr}See Boards Administration{/tr}</a>
-			{/if}
+	{else}
+		{if !$gBitSystem->getConfig('server_mailman_bin')}
+			{formfeedback error="Mailman is not configured."}
+		{/if}
+		{if !$gBitSystem->getConfig('boards_sync_user') || !$gBitSystem->getConfig('boards_sync_user')}
+			{formfeedback error="List to Board Sync is not configured."}
+		{/if}
+		{if $gBitUser->isAdmin()}
+			<a href="{$smarty.const.KERNEL_PKG_URL}admin/index.php?page=boards">{tr}See Boards Administration{/tr}</a>
 		{/if}
 	{/if}
 {/if}
 	{/form}
-{/jstab}
-{if $listMembers}
-{jstab title="List Subscribers"}
-		<ol class="data">
-			{foreach from=$listMembers key=userId item=member}
-				<li>{displayname email=$member} &lt;{$member}&gt;</li>
-			{foreachelse}
-				<li>{tr}The group has no members.{/tr}</li>
-			{/foreach}
-		</ol>
 {/jstab}
 {/if}
 
