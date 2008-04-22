@@ -2,7 +2,7 @@
 
 <div class="listing users">
 	<div class="header">
-		<h1>{tr}Mailing List{/tr}: {$board->getTitle()}</h1>
+		<h1>{tr}Mailing List{/tr}: {$board->getDisplayLink()}</h1>
 	</div>
 
 	<div class="body">
