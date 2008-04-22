@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.41 2008/04/22 03:51:44 spiderr Exp $
- * $Id: BitBoard.php,v 1.41 2008/04/22 03:51:44 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.42 2008/04/22 03:55:19 spiderr Exp $
+ * $Id: BitBoard.php,v 1.42 2008/04/22 03:55:19 spiderr Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.41 $ $Date: 2008/04/22 03:51:44 $ $Author: spiderr $
+ * @version $Revision: 1.42 $ $Date: 2008/04/22 03:55:19 $ $Author: spiderr $
  * @package boards
  */
 
@@ -138,7 +138,6 @@ class BitBoard extends LibertyAttachable {
 				if( !empty( $pParamHash['boards_mailing_list'] ) ) {
 					global $gBitSystem, $gBitUser;
 					require_once( UTIL_PKG_PATH.'mailman_lib.php' );
-$this->debug();
 					if( $gBitSystem->getConfig( 'boards_sync_mail_server' ) ) {
 						if( !($error = mailman_newlist( array( 'listname' => $pParamHash['boards_mailing_list'], 'admin-password'=>$pParamHash['boards_mailing_list_password'], 'listadmin-addr'=>$gBitUser->getField( 'email' ) ) )) ) {
 							$this->storePreference( 'boards_mailing_list', !empty( $pParamHash['boards_mailing_list'] ) ? $pParamHash['boards_mailing_list'] : NULL );
