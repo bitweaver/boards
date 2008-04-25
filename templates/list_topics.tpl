@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.19 2008/04/21 20:08:21 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.20 2008/04/25 20:00:54 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="floaticon">
@@ -6,10 +6,10 @@
 			{if $board->getPreference('boards_mailing_list') || $board->hasAdminPermission()}
 				<a class="item" href="{$smarty.const.BOARDS_PKG_URL}mailing_list.php?b={$board->mInfo.board_id}" title="{tr}Message Board Mailing List{/tr}">{biticon ipackage="icons" iname="internet-mail" iexplain="Edit Message Board"}</a>
 			{/if}
-			{if $gBitUser->hasPermission( 'p_boards_edit' )}
+			{if $board->hasEditPermission()}
 				<a title="{tr}Edit message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit Message Board"}</a>
 			{/if}
-			{if $gBitUser->hasPermission( 'p_boards_remove' )}
+			{if $board->hasUserPermission( 'p_boards_remove', TRUE, TRUE )}
 				<a title="{tr}Remove message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}board.php?remove=1&amp;b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove Message Board"}</a>
 			{/if}
 		{/if}<!-- end print_page -->

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.8 2008/04/17 14:32:28 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.9 2008/04/25 20:00:54 wjames5 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -16,15 +16,20 @@ require_once( '../bit_setup_inc.php' );
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'boards' );
 
-// Now check permissions to access this page
-$gBitSystem->verifyPermission('p_boards_edit' );
-
 if( isset( $_REQUEST['bitboard']['board_id'] ) ) {
 	$_REQUEST['b'] = $_REQUEST['bitboard']['board_id'];
 }
 
 require_once(BOARDS_PKG_PATH.'lookup_inc.php' );
 
+//must be owner or admin to edit an existing board
+if( $gContent->isValid() ) {
+	$gContent->verifyEditPermission();
+} else {
+	$gBitSystem->verifyPermission( 'p_boards_edit' );
+}
+
+// Editing page needs general ticket verification
 if( isset( $_REQUEST['bitboard']["title"] ) ) {
 	$gContent->mInfo["title"] = $_REQUEST['bitboard']["title"];
 }

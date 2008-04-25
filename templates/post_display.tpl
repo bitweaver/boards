@@ -31,10 +31,10 @@
 					{if $comment.editable}
 						<a href="{$comments_return_url}&amp;post_comment_id={$comment.comment_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit" iforce="icon"}</a>
 					{/if}
-					{if $gBitUser->hasPermission( 'p_liberty_admin_comments' )}
+					{if $board->hasUserPermission( 'p_liberty_admin_comments' )}
 						<a href="{$comments_return_url}&amp;delete_comment_id={$comment.comment_id}" rel="nofollow">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove" iforce="icon"}</a>
 					{/if}
-					{if $gBitUser->hasPermission( 'p_boards_edit' ) && (($comment.user_id<0 && $comment.is_approved==0)||$comment.user_id>=0) && !$comment.is_warned}
+					{if $board->hasUserPermission( 'p_boards_edit' ) && (($comment.user_id<0 && $comment.is_approved==0)||$comment.user_id>=0) && !$comment.is_warned}
 						{if $comment.user_id<0 && $comment.is_approved==0}
 							<a title="{tr}Approve this post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}post.php?t={$thread->mRootId}&amp;action=1&amp;comment_id={$comment.comment_id}">
 								{biticon ipackage="icons" iname="list-add" iexplain="Approve Post" iforce="icon"}
