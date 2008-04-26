@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.43 2008/04/22 04:10:25 spiderr Exp $
- * $Id: BitBoard.php,v 1.43 2008/04/22 04:10:25 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.44 2008/04/26 16:36:09 wjames5 Exp $
+ * $Id: BitBoard.php,v 1.44 2008/04/26 16:36:09 wjames5 Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.43 $ $Date: 2008/04/22 04:10:25 $ $Author: spiderr $
+ * @version $Revision: 1.44 $ $Date: 2008/04/26 16:36:09 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -638,10 +638,10 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 		global $gBitDb;
 		$ret = NULL;
 		if( BitBase::verifyId( $pContentId ) ) {
-			$sql = "SELECT b.`board_id`, b.`content_id` AS `board_content_id`, COUNT(lcm.`comment_id`) AS `post_count`
+			$sql = "SELECT b.`board_id`, b.`content_id` AS `board_content_id`, COUNT(lcom.`comment_id`) AS `post_count`
 					FROM `".BIT_DB_PREFIX."boards_map` bm
 						INNER JOIN `".BIT_DB_PREFIX."boards` b ON (bm.`board_content_id`=b.`content_id`)
-						LEFT JOIN `".BIT_DB_PREFIX."liberty_comments` lcm ON (lcm.`root_id`=bm.`topic_content_id`)
+						LEFT JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (lcom.`root_id`=bm.`topic_content_id`)
 					WHERE bm.`topic_content_id`=?
 					GROUP BY b.`board_id`, b.`content_id`";
 			$ret = $gBitDb->getRow( $sql, array( $pContentId ) );
