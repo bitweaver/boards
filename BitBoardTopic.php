@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.45 2008/04/28 23:54:45 wjames5 Exp $
- * $Id: BitBoardTopic.php,v 1.45 2008/04/28 23:54:45 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.46 2008/04/28 23:55:33 wjames5 Exp $
+ * $Id: BitBoardTopic.php,v 1.46 2008/04/28 23:55:33 wjames5 Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.45 $ $Date: 2008/04/28 23:54:45 $ $Author: wjames5 $
+ * @version $Revision: 1.46 $ $Date: 2008/04/28 23:55:33 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -105,7 +105,6 @@ class BitBoardTopic extends LibertyAttachable {
 					lcom.`root_id`=lcom.`parent_id` AND	$lookupColumn=?
 				$whereSql";
 			
-			vd( $query );
 			$result = $this->mDb->query( $query, $bindVars );
 
 			if( $result && $result->numRows() ) {
