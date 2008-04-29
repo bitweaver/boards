@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.33 2008/04/22 05:20:25 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.34 2008/04/29 02:12:49 wjames5 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -112,8 +112,11 @@ $comments_return_url=  BOARDS_PKG_URL."index.php?b=".urlencode($gContent->mBitBo
 require_once( BOARDS_PKG_PATH.'boards_comments_inc.php' );
 
 // get the topics for this board
-$threads = new BitBoardTopic();
-$threadList = $threads->getList( $_REQUEST );
+$threads = new BitBoardTopic( $gContent->mContentId );
+// lets pass in a ref to the root obj so we can fully mimic comments
+$threads->mRootObj = $gContent; 
+$threadsListHash = $_REQUEST;
+$threadList = $threads->getList( $threadsListHash );
 
 $gBitSmarty->assign_by_ref( 'threadList', $threadList );
 // getList() has now placed all the pagination information in $_REQUEST['listInfo']

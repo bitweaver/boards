@@ -78,15 +78,14 @@ if (empty($thread->mInfo['th_root_id'])) {
 }
 $thread->readTopic();
 
-$gContent = &$thread;
-$gBitSmarty->assign_by_ref('gContent', $gContent);
-
 $gBitSmarty->assign('topic_locked',$thread->isLocked());
 
 $gBitSmarty->assign_by_ref( 'thread', $thread );
 $gBoard = new BitBoard(null,$thread->mInfo['board_content_id']);
 $gBoard->load();
 $gBitSmarty->assign_by_ref( 'board', $gBoard );
+$gContent = &$gBoard;
+$gBitSmarty->assign_by_ref('gContent', $gContent);
 
 $commentsParentId=$thread->mInfo['content_id'];
 $comments_return_url= BOARDS_PKG_URL."index.php?t={$thread->mRootId}";

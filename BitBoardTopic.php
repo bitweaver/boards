@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.46 2008/04/28 23:55:33 wjames5 Exp $
- * $Id: BitBoardTopic.php,v 1.46 2008/04/28 23:55:33 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.47 2008/04/29 02:12:49 wjames5 Exp $
+ * $Id: BitBoardTopic.php,v 1.47 2008/04/29 02:12:49 wjames5 Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.46 $ $Date: 2008/04/28 23:55:33 $ $Author: wjames5 $
+ * @version $Revision: 1.47 $ $Date: 2008/04/29 02:12:49 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -44,6 +44,8 @@ class BitBoardTopic extends LibertyAttachable {
 		$this->mViewContentPerm  = 'p_boards_read';
 		$this->mEditContentPerm  = 'p_boards_edit';
 		$this->mAdminContentPerm = 'p_boards_admin';
+
+		$this->mRootObj = NULL;  //a reference to the root obj
 	}
 
 	/**
@@ -741,5 +743,14 @@ class BitBoardTopic extends LibertyAttachable {
 		unset($res['track_notify_date']);
 		unset($res['track_notify']);
 	}
+
+    function getRootObj(){
+        if ( !is_object( $this->mRootObj ) && !empty( $this->mInfo['root_id'] ) ){
+            if ( $obj = LibertyBase::getLibertyObject( $this->mInfo['root_id'] ) ) {
+                $this->mRootObj = $obj;
+            }
+        }
+        return $this->mRootObj;
+    }
 }
 ?>
