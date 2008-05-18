@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.45 2008/05/18 02:11:47 laetzer Exp $
- * $Id: BitBoard.php,v 1.45 2008/05/18 02:11:47 laetzer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.46 2008/05/18 17:52:57 wjames5 Exp $
+ * $Id: BitBoard.php,v 1.46 2008/05/18 17:52:57 wjames5 Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.45 $ $Date: 2008/05/18 02:11:47 $ $Author: laetzer $
+ * @version $Revision: 1.46 $ $Date: 2008/05/18 17:52:57 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -663,7 +663,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 	function getBoardMailingList() {
 		global $gBitSystem;
 		$ret = NULL;
-		if( $this->isValid() ) {
+		if( $this->isValid() && $gBitSystem->getConfig( 'boards_sync_mail_server' ) && $this->getPreference( 'boards_mailing_list' ) ) {
 			$ret = $this->getPreference( 'boards_mailing_list' ).'@'.$gBitSystem->getConfig( 'boards_email_host', $gBitSystem->getConfig( 'kernel_server_name' ) );	
 		}
 		return $ret;
