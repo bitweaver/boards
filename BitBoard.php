@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.44 2008/04/26 16:36:09 wjames5 Exp $
- * $Id: BitBoard.php,v 1.44 2008/04/26 16:36:09 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.45 2008/05/18 02:11:47 laetzer Exp $
+ * $Id: BitBoard.php,v 1.45 2008/05/18 02:11:47 laetzer Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.44 $ $Date: 2008/04/26 16:36:09 $ $Author: wjames5 $
+ * @version $Revision: 1.45 $ $Date: 2008/05/18 02:11:47 $ $Author: laetzer $
  * @package boards
  */
 
@@ -591,7 +591,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 			ORDER BY lc.`title` ASC";
 		if( $pBlankFirst ) {
 			if( $rs = $gBitDb->query( $query ) ) {
-				$ret[''] = '~~~ '.tra('None').' ~~~';
+				$ret[''] = '---------';
 				while( $row = $rs->fetchRow() ) {
 					$ret[$row['hash_key']] = $row['title'];
 				}
