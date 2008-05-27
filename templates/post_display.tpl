@@ -48,7 +48,7 @@
 								{biticon ipackage="icons" iname="dialog-warning" iexplain="Warn Post" iforce="icon"}
 							</a>
 
-							<div style="display:none;" id="warn_block_{$comment.comment_id|escape:"url"}">
+							<div class="warn_block" style="display:none;" id="warn_block_{$comment.comment_id|escape:"url"}">
 								{form action="`$thread_mInfo.display_url`"}
 									<input type="hidden" value="3" name="action" />
 									<input type="hidden" value="{$thread_mInfo.th_thread_id}" name="t" />
