@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.18 2008/03/07 04:30:33 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.19 2008/05/27 11:07:21 laetzer Exp $ *}
 {strip}
 <div class="listing boards">
 
@@ -8,7 +8,7 @@
 		</div>
 	</div>
 
-	<div class="floaticon">
+	<div class="floaticon floatctrl">
 		{* not happy with this yet - xing *}
 		{form action="$comments_return_url" class="mb-threading"}
 			<input type="hidden" name="t" value="{$smarty.request.t}" />
