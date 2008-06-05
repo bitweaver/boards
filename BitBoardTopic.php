@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.47 2008/04/29 02:12:49 wjames5 Exp $
- * $Id: BitBoardTopic.php,v 1.47 2008/04/29 02:12:49 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.48 2008/06/05 22:21:18 wjames5 Exp $
+ * $Id: BitBoardTopic.php,v 1.48 2008/06/05 22:21:18 wjames5 Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.47 $ $Date: 2008/04/29 02:12:49 $ $Author: wjames5 $
+ * @version $Revision: 1.48 $ $Date: 2008/06/05 22:21:18 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -26,7 +26,7 @@ define( 'BITBOARDTOPIC_CONTENT_TYPE_GUID', 'bitboardtopic' );
  * @package boards
  * expunge is handled explicitly in LibertyComment::expunge
  */
-class BitBoardTopic extends LibertyAttachable {
+class BitBoardTopic extends LibertyMime {
 	/**
 	* Primary key for our mythical Messageboards class object & table
 	* @public
@@ -37,7 +37,7 @@ class BitBoardTopic extends LibertyAttachable {
 	* During initialisation, be sure to call our base constructors
 	**/
 	function BitBoardTopic( $pRootId=NULL ) {
-		LibertyAttachable::LibertyAttachable();
+		LibertyMime::LibertyMime();
 		$this->mRootId = $pRootId;
 
 		// Permission setup
@@ -297,7 +297,7 @@ class BitBoardTopic extends LibertyAttachable {
 		global $gBitSystem, $gBitUser;
 		$BIT_DB_PREFIX = BIT_DB_PREFIX;
 		// this makes sure parameters used later on are set
-		LibertyAttachable::prepGetList( $pParamHash );
+		LibertyMime::prepGetList( $pParamHash );
 
 		$selectSql = $joinSql = $whereSql = '';
 		$bindVars = array();
@@ -425,7 +425,7 @@ class BitBoardTopic extends LibertyAttachable {
 		}
 		$pParamHash["cant"] = $this->mDb->getOne( $query_cant, $bindVars );
 		// add all pagination info to pParamHash
-		LibertyAttachable::postGetList( $pParamHash );
+		LibertyMime::postGetList( $pParamHash );
 		return $ret;
 	}
 
@@ -455,7 +455,7 @@ class BitBoardTopic extends LibertyAttachable {
 
 	/**
 	* Generates the URL to the bitboard page
-	* @param pExistsHash the hash that was returned by LibertyAttachable::pageExists
+	* @param pExistsHash the hash that was returned by LibertyMime::pageExists
 	* @return the link to display the page.
 	*/
 	function getDisplayUrl( $pTopicId=NULL ) {

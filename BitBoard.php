@@ -1,20 +1,20 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.46 2008/05/18 17:52:57 wjames5 Exp $
- * $Id: BitBoard.php,v 1.46 2008/05/18 17:52:57 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.47 2008/06/05 22:21:18 wjames5 Exp $
+ * $Id: BitBoard.php,v 1.47 2008/06/05 22:21:18 wjames5 Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.46 $ $Date: 2008/05/18 17:52:57 $ $Author: wjames5 $
+ * @version $Revision: 1.47 $ $Date: 2008/06/05 22:21:18 $ $Author: wjames5 $
  * @package boards
  */
 
 /**
  * required setup
  */
-require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
+require_once( LIBERTY_PKG_PATH.'LibertyMime.php' );
 
 /**
 * This is used to uniquely identify the object
@@ -24,7 +24,7 @@ define( 'BITBOARD_CONTENT_TYPE_GUID', 'bitboard' );
 /**
  * @package boards
  */
-class BitBoard extends LibertyAttachable {
+class BitBoard extends LibertyMime {
 	/**
 	* Primary key for our mythical BitBoard class object & table
 	* @public
@@ -35,7 +35,7 @@ class BitBoard extends LibertyAttachable {
 	* During initialisation, be sure to call our base constructors
 	**/
 	function BitBoard( $pBitBoardId=NULL, $pContentId=NULL ) {
-		LibertyAttachable::LibertyAttachable();
+		LibertyMime::LibertyMime();
 		$this->mBitBoardId = $pBitBoardId;
 		$this->mContentId = $pContentId;
 		$this->mContentTypeGuid = BITBOARD_CONTENT_TYPE_GUID;
@@ -89,7 +89,7 @@ class BitBoard extends LibertyAttachable {
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['parsed_data'] = $this->parseData();
 
-				LibertyAttachable::load();
+				LibertyMime::load();
 			}
 		}
 		return( count( $this->mInfo ) );
@@ -117,7 +117,7 @@ class BitBoard extends LibertyAttachable {
 	* @access public
 	**/
 	function store( &$pParamHash ) {
-		if( $this->verify( $pParamHash )&& LibertyAttachable::store( $pParamHash ) ) {
+		if( $this->verify( $pParamHash )&& LibertyMime::store( $pParamHash ) ) {
 			$table = BIT_DB_PREFIX."boards";
 			$this->mDb->StartTrans();
 			if( $this->mBitBoardId ) {
@@ -240,7 +240,7 @@ class BitBoard extends LibertyAttachable {
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
 			$query = "DELETE FROM `".BIT_DB_PREFIX."boards` WHERE `content_id` = ?";
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
-			if( LibertyAttachable::expunge() ) {
+			if( LibertyMime::expunge() ) {
 				if( $mailingList ) {
 					require_once( UTIL_PKG_PATH.'mailman_lib.php' );
 					if( $error = mailman_rmlist( $mailingList ) ) {
