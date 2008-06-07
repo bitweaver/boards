@@ -27,7 +27,7 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 		foreach( $_REQUEST["checked"] as $deleteId ) {
 			$deleteComment = new LibertyComment( $deleteId );
 			if( $deleteComment->isValid() && $gBitUser->hasPermission('p_liberty_admin_comments') ) {
-				if( !$deleteComment->deleteComment() ) {
+				if( !$deleteComment->expunge() ) {
 					$gBitSmarty->assign_by_ref( 'errors', $deleteComment->mErrors );
 				}
 			}
@@ -50,7 +50,7 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 	} else {
 		$deleteComment = new LibertyComment($_REQUEST['thread_id']);
 		if( $deleteComment->isValid() && $gBitUser->hasPermission('p_liberty_admin_comments') ) {
-			if( !$deleteComment->deleteComment() ) {
+			if( !$deleteComment->expunge() ) {
 				$gBitSmarty->assign_by_ref( 'errors', $deleteComment->mErrors );
 			}
 		}
