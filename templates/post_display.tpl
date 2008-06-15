@@ -110,7 +110,7 @@
 				>{biticon ipackage="icons" iname="dialog-error" iexplain="Warned Post"}</a>
 
 				<div id="warned_message_{$comment.comment_id|escape:"url"}">
-					{if !empty($warnings.$comment_id)}{$comment.is_warned_message}{/if}
+					{if !empty($warnings.$comment_id)}{$comment.warned_message}{/if}
 				</div>
 
 				{if empty($warnings.$comment_id)}

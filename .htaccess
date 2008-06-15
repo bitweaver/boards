@@ -6,10 +6,11 @@
     RewriteCond %{SCRIPT_FILENAME}/index.php    -f
     RewriteRule ^(.*)$            - [L]
 
-    RewriteRule ^board/(\d+).*$    index.php?b=$1     [L,QSA]
-    RewriteRule ^topic/(\d+).*$    index.php?t=$1     [L,QSA]
-    RewriteRule ^view/board/(\d+).*$    index.php?b=$1     [L,QSA]
-    RewriteRule ^view/topic/(\d+).*$    index.php?t=$1     [L,QSA]
+    # Make sure URLs like this work: ...topic/123&warning[1345]=show
+    RewriteRule ^board/(\d+.*)$    index.php?b=$1     [L,QSA]
+    RewriteRule ^topic/(\d+.*)$    index.php?t=$1     [L,QSA]
+    RewriteRule ^view/board/(\d+.*)$    index.php?b=$1     [L,QSA]
+    RewriteRule ^view/topic/(\d+.*)$    index.php?t=$1     [L,QSA]
 
 
 
