@@ -1,4 +1,11 @@
 <?php
+/**
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit_topic_inc.php,v 1.3 2008/06/18 09:17:59 lsces Exp $
+ * $Id: edit_topic_inc.php,v 1.3 2008/06/18 09:17:59 lsces Exp $
+ *
+ * @package boards
+ * @subpackage functions
+ */
 /* mass-remove:
 the checkboxes are sent as the array $_REQUEST["checked[]"], values are the wiki-PageNames,
 e.g. $_REQUEST["checked"][3]="HomePage"

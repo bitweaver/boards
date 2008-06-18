@@ -1,16 +1,18 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/boards_comments_inc.php,v 1.4 2008/04/23 18:48:56 wjames5 Exp $
- * $Id: boards_comments_inc.php,v 1.4 2008/04/23 18:48:56 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/boards_comments_inc.php,v 1.5 2008/06/18 09:17:59 lsces Exp $
+ * $Id: boards_comments_inc.php,v 1.5 2008/06/18 09:17:59 lsces Exp $
  *
  * intermediate include file to provide centralized place to pre/post handle comments_inc include
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.4 $ $Date: 2008/04/23 18:48:56 $ $Author: wjames5 $
+ * @version $Revision: 1.5 $ $Date: 2008/06/18 09:17:59 $ $Author: lsces $
  * @package boards
  */
 
-
+/**
+ * Initialization
+ */
 require_once (LIBERTY_PKG_PATH.'comments_inc.php');
 
 if( !empty( $storeComment ) && $gContent->getPreference('boards_mailing_list') ) {
