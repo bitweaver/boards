@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.34 2008/04/29 02:12:49 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/topic.php,v 1.35 2008/06/22 01:41:27 jht001 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -119,8 +119,9 @@ $threadsListHash = $_REQUEST;
 $threadList = $threads->getList( $threadsListHash );
 
 $gBitSmarty->assign_by_ref( 'threadList', $threadList );
+
 // getList() has now placed all the pagination information in $_REQUEST['listInfo']
-$gBitSmarty->assign_by_ref( 'listInfo', $_REQUEST['listInfo'] );
+$gBitSmarty->assign_by_ref( 'listInfo', $threadsListHash['listInfo'] );
 
 $gBitSmarty->assign_by_ref( 'board', $gContent );
 $gBitSmarty->assign( 'cat_url', BOARDS_PKG_URL."index.php"); //?ct=".urlencode($gContent->mInfo['content_type_guid']));
