@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.32 2008/06/05 22:21:18 wjames5 Exp $
- * $Id: BitBoardPost.php,v 1.32 2008/06/05 22:21:18 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.33 2008/06/23 21:56:12 squareing Exp $
+ * $Id: BitBoardPost.php,v 1.33 2008/06/23 21:56:12 squareing Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.32 $ $Date: 2008/06/05 22:21:18 $ $Author: wjames5 $
+ * @version $Revision: 1.33 $ $Date: 2008/06/23 21:56:12 $ $Author: squareing $
  * @package boards
  */
 
@@ -188,7 +188,10 @@ class BitBoardPost extends LibertyComment {
 			if( $result = $this->mDb->query( $sql, $bindVars, $pMaxComments, $pOffset ) ) {
 				while( $row = $result->FetchRow() ) {
 					if (empty($row['anon_name'])) $row['anon_name'] = "Anonymous";
-					$row['user_avatar_url'] = liberty_fetch_thumbnail_url( $row['avatar_storage_path'], 'avatar');
+					$row['user_avatar_url'] = liberty_fetch_thumbnail_url( array(
+						'storage_path' => $row['avatar_storage_path'],
+						'size' => 'avatar'
+					));
 					unset($row['avatar_storage_path']);
 					if (!empty($row['warned_message'])) {
 						$row['warned_message'] = str_replace("\n","<br />\n",$row['warned_message']);
