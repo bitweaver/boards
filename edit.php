@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.9 2008/04/25 20:00:54 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.10 2008/06/25 22:21:08 spiderr Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -73,5 +73,5 @@ if( !empty( $_REQUEST["save_bitboard"] ) ) {
 }
 
 // Display the template
-$gBitSystem->display( 'bitpackage:boards/board_edit.tpl', tra('Board') );
+$gBitSystem->display( 'bitpackage:boards/board_edit.tpl', tra('Board') , array( 'display_mode' => 'edit' ));
 ?>

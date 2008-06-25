@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.14 2008/04/22 03:56:35 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/Attic/board.php,v 1.15 2008/06/25 22:21:08 spiderr Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -137,6 +137,6 @@ foreach ($ns as $k=> $a) {
 }
 
 //$gBitSmarty->display( 'bitpackage:boards/cat_display.tpl');
-$gBitSystem->display( 'bitpackage:boards/list_boards.tpl', tra( 'Boards' ) );
+$gBitSystem->display( 'bitpackage:boards/list_boards.tpl', tra( 'Boards' ) , array( 'display_mode' => 'display' ));
 
 ?>

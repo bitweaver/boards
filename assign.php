@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/assign.php,v 1.4 2007/03/31 15:54:13 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/assign.php,v 1.5 2008/06/25 22:21:08 spiderr Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -52,5 +52,5 @@ $data = BitBoard::getAllMap();
 $gBitSmarty->assign_by_ref('data',$data);
 
 // Display the template
-$gBitSystem->display( 'bitpackage:boards/board_assign.tpl', tra('Assign content to Board') );
+$gBitSystem->display( 'bitpackage:boards/board_assign.tpl', tra('Assign content to Board') , array( 'display_mode' => 'display' ));
 ?>

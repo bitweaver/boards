@@ -58,5 +58,5 @@ $board = new BitBoard();
 $gBitSmarty->assign_by_ref('boards', $board->getBoardSelectList());
 require_once( BOARDS_PKG_PATH .'lookup_inc.php' );
 
-$gBitSystem->display( 'bitpackage:boards/topic_move.tpl', tra('Category') );
+$gBitSystem->display( 'bitpackage:boards/topic_move.tpl', tra('Category') , array( 'display_mode' => 'display' ));
 ?>

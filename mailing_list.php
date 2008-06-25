@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/mailing_list.php,v 1.4 2008/06/18 09:17:59 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/mailing_list.php,v 1.5 2008/06/25 22:21:08 spiderr Exp $
  * Copyright (c) bitweaver Group
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -90,5 +90,5 @@ if( $gContent->getBoardMailingList() ) {
 
 // display
 $gBitSmarty->assign_by_ref( 'board', $gContent );
-$gBitSystem->display( "bitpackage:boards/mailing_list.tpl", $gContent->getTitle() ." ".  tra( 'Message Board Mailing List' ) );
+$gBitSystem->display( "bitpackage:boards/mailing_list.tpl", $gContent->getTitle() ." ".  tra( 'Message Board Mailing List' ) , array( 'display_mode' => 'list' ));
 ?>
