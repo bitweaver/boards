@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.48 2008/06/05 22:21:18 wjames5 Exp $
- * $Id: BitBoardTopic.php,v 1.48 2008/06/05 22:21:18 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.49 2008/07/29 06:23:50 lsces Exp $
+ * $Id: BitBoardTopic.php,v 1.49 2008/07/29 06:23:50 lsces Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.48 $ $Date: 2008/06/05 22:21:18 $ $Author: wjames5 $
+ * @version $Revision: 1.49 $ $Date: 2008/07/29 06:23:50 $ $Author: lsces $
  * @package boards
  */
 
@@ -332,6 +332,8 @@ class BitBoardTopic extends LibertyMime {
 
 		if ( $this->mDb->mType == 'firebird' ) {
 			$substrSql = "SUBSTRING(s_lcom.`thread_forward_sequence` FROM 1 FOR 10) LIKE SUBSTRING(lcom.`thread_forward_sequence` FROM 1 FOR 10)";
+		} elseif ( $this->mDb->mType == 'oci8' ) {
+			$substrSql = "SUBSTR(s_lcom.`thread_forward_sequence`, 1, 10) LIKE SUBSTR(lcom.`thread_forward_sequence`, 1, 10)";
 		} else {
 			$substrSql = "SUBSTRING(s_lcom.`thread_forward_sequence`, 1, 10) LIKE SUBSTRING(lcom.`thread_forward_sequence`, 1, 10)";
 		}
