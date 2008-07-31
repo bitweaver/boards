@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.49 2008/07/29 06:23:50 lsces Exp $
- * $Id: BitBoardTopic.php,v 1.49 2008/07/29 06:23:50 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.50 2008/07/31 17:54:09 wjames5 Exp $
+ * $Id: BitBoardTopic.php,v 1.50 2008/07/31 17:54:09 wjames5 Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.49 $ $Date: 2008/07/29 06:23:50 $ $Author: lsces $
+ * @version $Revision: 1.50 $ $Date: 2008/07/31 17:54:09 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -592,9 +592,9 @@ class BitBoardTopic extends LibertyMime {
 			$flip['new']['id']=$arr['th_thread_id'];
 			$flip['new']['idname']='t';
 			$flip['new']['up']='folder-new';
-			$flip['new']['upname']='New Posts';
+			$flip['new']['upname']=tra('New Posts');
 			$flip['new']['down']='folder';
-			$flip['new']['downname']='No new posts';
+			$flip['new']['downname']=tra('No new posts');
 			$flip['new']['perm']='p_boards_read';
 		}
 		if ($gBitSystem->isFeatureActive('boards_thread_notification') && $gBitUser->isRegistered()) {
@@ -603,9 +603,9 @@ class BitBoardTopic extends LibertyMime {
 			$flip['notify']['id']=$arr['th_thread_id'];
 			$flip['notify']['idname']='t';
 			$flip['notify']['up']='mail-forward';
-			$flip['notify']['upname']='Reply Notification';
+			$flip['notify']['upname']=tra('Reply Notification');
 			$flip['notify']['down']='internet-mail';
-			$flip['notify']['downname']='Reply Notification Disabled';
+			$flip['notify']['downname']=tra('Reply Notification Disabled');
 			$flip['notify']['perm']='p_boards_read';
 		}
 
@@ -614,9 +614,9 @@ class BitBoardTopic extends LibertyMime {
 		$flip['is_locked']['id']=$arr['th_thread_id'];
 		$flip['is_locked']['idname']='t';
 		$flip['is_locked']['up']='emblem-readonly';
-		$flip['is_locked']['upname']='Thread Locked';
+		$flip['is_locked']['upname']=tra('Thread Locked');
 		$flip['is_locked']['down']='internet-group-chat';
-		$flip['is_locked']['downname']='Thread Unlocked';
+		$flip['is_locked']['downname']=tra('Thread Unlocked');
 		$flip['is_locked']['perm']='p_boards_edit';
 
 		$flip['is_sticky']['state']=$arr['th_is_sticky'];
@@ -624,9 +624,9 @@ class BitBoardTopic extends LibertyMime {
 		$flip['is_sticky']['id']=$arr['th_thread_id'];
 		$flip['is_sticky']['idname']='t';
 		$flip['is_sticky']['up']='emblem-important';
-		$flip['is_sticky']['upname']='Sticky Thread';
+		$flip['is_sticky']['upname']=tra('Sticky Thread');
 		$flip['is_sticky']['down']='media-playback-stop';
-		$flip['is_sticky']['downname']='Non Sticky Thread';
+		$flip['is_sticky']['downname']=tra('Non Sticky Thread');
 		$flip['is_sticky']['perm']='p_boards_edit';
 
 		return $flip;
