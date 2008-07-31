@@ -15,10 +15,6 @@
  */
 require_once( '../bit_setup_inc.php' );
 
-require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
-require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
-require_once( BOARDS_PKG_PATH.'BitBoard.php' );
-
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'boards' );
 
@@ -91,12 +87,14 @@ set_error_handler("ajax_nice_error");
 
 switch ($_GET['req']) {
 	case 1:
+		require_once( BOARDS_PKG_PATH.'BitBoard.php' );
 		$board = new BitBoard();
 		$boardList=$board->getBoardSelectList();
 		$gBitSmarty->assign_by_ref('boardList',$boardList);
 		$gBitSmarty->display('bitpackage:boards/ajax.tpl');
 		break;
 	case 10:
+		require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
 		$comment = new BitBoardPost($_GET['comment_id']);
 		$comment->loadMetaData();
 		if (@$comment->verifyId($comment->mCommentId)) {
