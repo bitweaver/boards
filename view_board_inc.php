@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/view_board_inc.php,v 1.1 2008/07/31 16:54:41 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/view_board_inc.php,v 1.2 2008/07/31 21:36:00 wjames5 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -19,44 +19,8 @@ require_once( BOARDS_PKG_PATH.'BitBoard.php' );
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'boards' );
 
-// This appears to be related to setting topics as having been read - but has a bug
-if (isset($_REQUEST["new"])) {
-	// Now check permissions to access this page
-	$gBitSystem->verifyPermission( 'p_boards_read' );
-
-	require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
-	$res = true;
-	if (isset($_REQUEST["new"]) && is_numeric($_REQUEST["new"])) {
-		// @TODO Debug: gContent appears to be the wrong content type, a BitBoard instead of a BitBoardTopic which has readTopicSet method
-		$res = $gContent->readTopicSet($_REQUEST["new"]);
-	}
-	if ($res) {
-		header ("location: ".$_SERVER['HTTP_REFERER']);
-	} else {
-		trigger_error(var_export($gContent->mErrors,true ));
-	}
-	die();
-// This appears to be related to setting topics as being sticky or locked - but has a bug
-} elseif (isset($_REQUEST["locked"]) || isset($_REQUEST["sticky"])) {
-	// Now check permissions to access this page
-	$gBitSystem->verifyPermission( 'p_boards_edit' );
-
-	require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
-	// @TODO Debug: gContent appears to be the wrong content type, a BitBoard instead of a BitBoardTopic which has lock and sticky methods
-	$res = true;
-	if (isset($_REQUEST["locked"]) && is_numeric($_REQUEST["locked"])) {
-		$res = $gContent->lock($_REQUEST["locked"]);
-	} elseif (isset($_REQUEST["sticky"]) && is_numeric($_REQUEST["sticky"])) {
-		$res = $gContent->sticky($_REQUEST["sticky"]);
-	}
-	if ($res) {
-		header ("location: ".$_SERVER['HTTP_REFERER']);
-	} else {
-		trigger_error(var_export($gContent->mErrors,true ));
-	}
-	die();
 // approve or reject ananymous comments
-} elseif (!empty($_REQUEST['action'])) {
+if (!empty($_REQUEST['action'])) {
 	// Now check permissions to access this page
 	$gBitSystem->verifyPermission( 'p_boards_edit' );
 
@@ -99,7 +63,7 @@ $displayHash = array( 'perm_name' => 'p_boards_read' );
 $gContent->invokeServices( 'content_display_function', $displayHash );
 
 
-/* A mass remove request might be made, handle it
+/* A mass remove topics request might be made, handle it
  * Code is moved to edit_topic_inc to try to make this all a little more sane.
  */
 require_once( BOARDS_PKG_PATH.'edit_topic_inc.php' );

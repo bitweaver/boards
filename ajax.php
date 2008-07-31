@@ -96,61 +96,6 @@ switch ($_GET['req']) {
 		$gBitSmarty->assign_by_ref('boardList',$boardList);
 		$gBitSmarty->display('bitpackage:boards/ajax.tpl');
 		break;
-	case 2:
-		// Now check permissions to access this page
-		$gBitSystem->verifyPermission( 'p_boards_edit' );
-		require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
-		if($gContent->lock($_REQUEST["is_locked"]) ) {
-			$gContent->load();
-			$gBitSmarty->assign_by_ref('flip',$gContent->getFlipFlop());
-			$gBitSmarty->assign('flip_name','is_locked');
-			$gBitSmarty->display('bitpackage:boards/flipswitch.tpl');
-		} else {
-			trigger_error(var_export($gContent->mErrors,true ));
-		}
-		break;
-	case 3:
-		// Now check permissions to access this page
-		$gBitSystem->verifyPermission( 'p_boards_edit' );
-		require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
-		if($gContent->sticky($_REQUEST["is_sticky"]) ) {
-			$gContent->load();
-			$gBitSmarty->assign('flip',$gContent->getFlipFlop());
-			$gBitSmarty->assign('flip_name','is_sticky');
-			$gBitSmarty->display('bitpackage:boards/flipswitch.tpl');
-		} else {
-			trigger_error(var_export($gContent->mErrors,true ));
-		}
-		break;
-	case 4:
-		// Now check permissions to access this page
-		$gBitSystem->verifyPermission( 'p_boards_read' );
-
-		require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
-		if($gContent->readTopicSet($_REQUEST["new"]) ) {
-			$gContent->load();
-			$gBitSmarty->assign_by_ref('flip',$gContent->getFlipFlop());
-			$gBitSmarty->assign('flip_name','new');
-			$gBitSmarty->display('bitpackage:boards/flipswitch.tpl');
-		} else {
-			trigger_error(var_export($gContent->mErrors,true ));
-		}
-		break;
-	case 5:
-		// Now check permissions to access this page
-		$gBitSystem->verifyPermission( 'p_boards_read' );
-
-		require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
-		if($gContent->notify($_REQUEST["notify"]) ) {
-			$gContent->load();
-			$gBitSmarty->assign_by_ref('flip',$gContent->getFlipFlop());
-			$gBitSmarty->assign('flip_name','notify');
-			$gBitSmarty->display('bitpackage:boards/flipswitch.tpl');
-		} else {
-			trigger_error(var_export($gContent->mErrors,true ));
-		}
-		break;
-
 	case 10:
 		$comment = new BitBoardPost($_GET['comment_id']);
 		$comment->loadMetaData();
