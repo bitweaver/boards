@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.47 2008/06/05 22:21:18 wjames5 Exp $
- * $Id: BitBoard.php,v 1.47 2008/06/05 22:21:18 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.48 2008/07/31 23:31:38 wjames5 Exp $
+ * $Id: BitBoard.php,v 1.48 2008/07/31 23:31:38 wjames5 Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.47 $ $Date: 2008/06/05 22:21:18 $ $Author: wjames5 $
+ * @version $Revision: 1.48 $ $Date: 2008/07/31 23:31:38 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -227,6 +227,36 @@ class BitBoard extends LibertyMime {
 
 		return( count( $this->mErrors )== 0 );
 	}
+	
+
+	/**
+	 * Prepare data for preview
+	 */
+	function preparePreview( $pParamHash ) {
+		global $gBitSystem, $gBitUser;
+
+		if( empty( $pParamHash['user_id'] ) ) {
+			$pParamHash['user_id'] = $gBitUser->mUserId;
+		}
+
+		if( isset( $pParamHash["title"] ) ) {
+			$this->mInfo["title"] = $pParamHash["title"]; 
+		}       
+
+		if( isset( $pParamHash["description"] ) ) {
+			$this->mInfo["description"] = $pParamHash["description"];
+		}
+
+		if( isset( $pParamHash["format_guid"] ) ) {
+			$this->mInfo['format_guid'] = $pParamHash["format_guid"];
+		}   
+
+		if( isset( $pParamHash["edit"] ) ) {
+			$this->mInfo["data"] = $pParamHash["edit"];
+			$this->mInfo['parsed_data'] = $this->parseData();
+		}
+	}
+
 
 	/**
 	* This function removes a bitboard entry

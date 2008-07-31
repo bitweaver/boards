@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.10 2008/06/25 22:21:08 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.11 2008/07/31 23:31:38 wjames5 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -29,27 +29,11 @@ if( $gContent->isValid() ) {
 	$gBitSystem->verifyPermission( 'p_boards_edit' );
 }
 
-// Editing page needs general ticket verification
-if( isset( $_REQUEST['bitboard']["title"] ) ) {
-	$gContent->mInfo["title"] = $_REQUEST['bitboard']["title"];
-}
-
-if( isset( $_REQUEST['bitboard']["description"] ) ) {
-	$gContent->mInfo["description"] = $_REQUEST['bitboard']["description"];
-}
-
-if( isset( $_REQUEST["format_guid"] ) ) {
-	$gContent->mInfo['format_guid'] = $_REQUEST['bitboard']['format_guid'] = $_REQUEST["format_guid"];
-}
-
-if( isset( $_REQUEST['bitboard']["edit"] ) ) {
-	$gContent->mInfo["data"] = $_REQUEST['bitboard']["edit"];
-	$gContent->mInfo['parsed_data'] = $gContent->parseData();
-}
-
 // If we are in preview mode then preview it!
 if( isset( $_REQUEST["preview"] ) ) {
 	$gBitSmarty->assign('preview', 'y');
+	$previewHash = array_merge( $_REQUEST, $_REQUEST['bitboard'] );
+	$gContent->preparePreview( $previewHash );
 	$gContent->invokeServices( 'content_preview_function' );
 } else {
 	$gContent->invokeServices( 'content_edit_function' );
