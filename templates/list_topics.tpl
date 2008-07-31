@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.20 2008/04/25 20:00:54 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.21 2008/07/31 16:54:42 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="floaticon">
@@ -10,7 +10,7 @@
 				<a title="{tr}Edit message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit Message Board"}</a>
 			{/if}
 			{if $board->hasUserPermission( 'p_boards_remove', TRUE, TRUE )}
-				<a title="{tr}Remove message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}board.php?remove=1&amp;b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove Message Board"}</a>
+				<a title="{tr}Remove message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}list_board_inc.php?remove=1&amp;b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove Message Board"}</a>
 			{/if}
 		{/if}<!-- end print_page -->
 	</div><!-- end .floaticon -->
@@ -91,10 +91,10 @@
 						{if $gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit')}
 							<td class="actionicon">
 								{if $thread.flc_user_id<0 && $thread.first_approved==0}
-									<a title="{tr}Approve First Post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}topic.php?b={$board->mInfo.board_id}&amp;action=1&amp;comment_id={$thread.th_thread_id}">
+									<a title="{tr}Approve First Post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_board_inc.php?b={$board->mInfo.board_id}&amp;action=1&amp;comment_id={$thread.th_thread_id}">
 										{biticon ipackage="icons" iname="list-add" iexplain="Approve First Post" iforce="icon"}
 									</a>
-									<a title="{tr}Reject First Post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}topic.php?b={$board->mInfo.board_id}&amp;action=2&amp;comment_id={$thread.th_thread_id}">
+									<a title="{tr}Reject First Post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_board_inc.php?b={$board->mInfo.board_id}&amp;action=2&amp;comment_id={$thread.th_thread_id}">
 										{biticon ipackage="icons" iname="list-remove" iexplain="Reject First Post" iforce="icon"}
 									</a>
 								{/if}
@@ -112,7 +112,7 @@
 								{/if}
 
 								{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_boards_remove' )}
-									<a title="{tr}Delete Topic{/tr}" href="{$smarty.const.BOARDS_PKG_URL}topic.php?b={$smarty.request.b}&amp;remove=1&amp;thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread" iforce="icon"}</a>
+									<a title="{tr}Delete Topic{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_board_inc.php?b={$smarty.request.b}&amp;remove=1&amp;thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread" iforce="icon"}</a>
 								{else}
 									{biticon ipackage=liberty iname=spacer iforce="icon"}
 								{/if}

@@ -13,7 +13,7 @@ $flip_downname=>$flip.$flip_name.downname
 <span id="flip_{$flip.$flip_name.id}-{$flip_name}">
 {if $gBitUser->hasPermission( $flip.$flip_name.perm )}
 	{if !$gBitThemes->isJavascriptEnabled()}
-		<a href="{$smarty.const.BOARDS_PKG_URL}topic.php?t={$flip.$flip_name.id}&amp;
+		<a href="{$smarty.const.BOARDS_PKG_URL}view_board_inc.php?t={$flip.$flip_name.id}&amp;
 			{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}
 			&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}" />
 	{else}	
