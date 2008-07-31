@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/view_board_inc.php,v 1.2 2008/07/31 21:36:00 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/view_board_inc.php,v 1.3 2008/07/31 22:21:49 wjames5 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -12,23 +12,45 @@
  * required setup
  */
 require_once( '../bit_setup_inc.php' );
-require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
-require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
-require_once( BOARDS_PKG_PATH.'BitBoard.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'boards' );
 
+// if we're getting a migrate id then lets move on right away
+if ( @BitBase::verifyId( $_REQUEST['migrate_board_id'] ) ) {
+	require_once( BOARDS_PKG_PATH.'BitBoard.php' );
+
+	if( $_REQUEST['b'] = BitBoard::lookupByMigrateBoard( $_REQUEST['migrate_board_id'] ) ) {
+		bit_redirect( BOARDS_PKG_URL.'index.php?b='. $_REQUEST['b'] );
+	}
+}
+
+// Load up the board
+require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
+
+if( !$gContent->isValid() ) {
+	$gBitSystem->setHttpStatus( 404 );
+	$gBitSystem->fatalError( "The board you requested could not be found." );
+}
+
 // approve or reject ananymous comments
 if (!empty($_REQUEST['action'])) {
-	// Now check permissions to access this page
-	$gBitSystem->verifyPermission( 'p_boards_edit' );
+	// Check edit perms on the group
+	$gContent->verifyEditPermission();
+	
+	// Check the ticket
+	$gBitUser->verifyTicket();
 
+	// Load up the comment as a board post
+	require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
 	$comment = new BitBoardPost($_REQUEST['comment_id']);
 	$comment->loadComment();
+
 	if (!$comment->isValid()) {
 		$gBitSystem->fatalError("Invalid Comment Id");
 	}
+	
+	// Take action
 	switch ($_REQUEST['action']) {
 		case 1:
 			// Aprove
@@ -41,42 +63,38 @@ if (!empty($_REQUEST['action'])) {
 		default:
 			break;
 	}
-} elseif ( @BitBase::verifyId( $_REQUEST['migrate_board_id'] ) ) {
-	if( $_REQUEST['b'] = BitBoard::lookupByMigrateBoard( $_REQUEST['migrate_board_id'] ) ) {
-		bit_redirect( BOARDS_PKG_URL.'index.php?b='. $_REQUEST['b'] );
-	}
+}else{
+	// we're just here to view (in most cases) so make sure we can
+	$gContent->verifyViewPermission();
 }
 
-
-
-// Finally we can get down to businesses - load up the board
-require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
-
-if( !$gContent->isValid() ) {
-	$gBitSystem->setHttpStatus( 404 );
-	$gBitSystem->fatalError( "The board you requested could not be found." );
-}
-
-$gContent->verifyViewPermission();
-
-$displayHash = array( 'perm_name' => 'p_boards_read' );
-$gContent->invokeServices( 'content_display_function', $displayHash );
-
-
-/* A mass remove topics request might be made, handle it
+/* One more thing before we get into displaying
+ * A mass remove topics request might be made, handle it, perms are checked in the include, it does not require board edit perms necessarily.
  * Code is moved to edit_topic_inc to try to make this all a little more sane.
+ *
+ * @TODO perhaps move this into the action process above
  */
 require_once( BOARDS_PKG_PATH.'edit_topic_inc.php' );
 
+
+// Ok finally we can get on with viewing our board
+
+// liberty display services
+$displayHash = array( 'perm_name' => 'p_boards_read' );
+$gContent->invokeServices( 'content_display_function', $displayHash );
 
 // set some comment values since topics are comments
 $commentsParentId=$gContent->mContentId;
 $comments_return_url=  BOARDS_PKG_URL."index.php?b=".urlencode($gContent->mBitBoardId);
 
+// @TODO not clear why we load up comments and topics after this when its likely to get both. If someone figures it out please clarify.
 require_once( BOARDS_PKG_PATH.'boards_comments_inc.php' );
 
 // get the topics for this board
+require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
+
 $threads = new BitBoardTopic( $gContent->mContentId );
+
 // lets pass in a ref to the root obj so we can fully mimic comments
 $threads->mRootObj = $gContent; 
 $threadsListHash = $_REQUEST;
