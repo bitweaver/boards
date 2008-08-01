@@ -9,54 +9,62 @@
  */
 require_once( '../bit_setup_inc.php' );
 
-require_once( BOARDS_PKG_PATH.'BitBoard.php' );
-
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'boards' );
 
-// Now check permissions to access this page
-$gBitSystem->verifyPermission( 'p_boards_edit' );
+// Look up Topic (lookup_inc is universal, gContent == BitBoardTopic)
+require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 
-
-if( isset( $_REQUEST["confirm"] ) ) {
-	require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
-	if( $gContent->moveTo($_REQUEST["target"]) ) {
-		header ("location: ".$_REQUEST["ref"] );
-		die;
-	} else {
-		$gBitSystem->fatalError( "There was an error moving the topic: ".vc( $gContent->mErrors ));
-	}
+// Make sure topic exists since we only run through here for existing topics. New topics are created via comment system.
+if( !$gContent->isValid() ){
+	$gBitSystem->fatalError( 'No topic specified' );
 }
+
+// Load up the Topic's board - we'll respect its permissions
+$board = new BitBoard( $gContent->mInfo['board_id'] );
+$board->load();
+$board->verifyAdminPermission();
 
 if( isset( $_REQUEST["target"] ) ) {
-	$_REQUEST["content_id"] = $_REQUEST["target"];
-	require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
-	$bitThread = $gContent;
-	unset($gContent);
-	require_once( LIBERTY_PKG_PATH.'lookup_content_inc.php' );
-	$bitBoard = $gContent;
+	// Check the user's ticket
+	$gBitUser->verifyTicket();
 
-	$gBitSystem->setBrowserTitle( tra( 'Confirm moving' ).' "' .$bitThread->mInfo['title'] .'" '. tra("to Board"). ' "'.$bitBoard->mInfo['title'].'"');
-	$formHash=array();
-	if (empty($_REQUEST["ref"])) {
-		$_REQUEST["ref"]=$_SERVER['HTTP_REFERER'];
-	} elseif ($_REQUEST["ref"]=="-") {
-		$_REQUEST["ref"]=$bitThread->getDisplayUrl();
+	$targetBoard = new BitBoard( null, $_REQUEST["target"] );
+	$targetBoard->load();
+	if( !$targetBoard->hasAdminPermission() ){
+		$gBitSystem->fatalError( 'You do not have permission to move topics to the Board' . $targetBoard->mInfo['title'] );
 	}
-	$formHash["ref"]=$_REQUEST["ref"];
-	$formHash["target"]=$_REQUEST["target"];
-	$formHash["t"]=$_REQUEST["t"];
-	$msgHash = array(
-		'label' => tra( "Move Thread" ).": ".$bitThread->mInfo['title']  ,
-		'confirm_item' => $bitThread->mInfo['title'] ,
-		'warning' => tra( "Move ".' "' .$bitThread->mInfo['title'] .'" '. tra("to Board"). ' "'.$bitBoard->mInfo['title'].'"'."<br />This cannot be undone!" ),
-	);
-	$gBitSystem->confirmDialog( $formHash,$msgHash );
+	
+	if( isset( $_REQUEST["confirm"] ) ) {
+		if( $gContent->moveTo($_REQUEST["target"]) ) {
+			header ("location: ".$_REQUEST["ref"] );
+			die;
+		} else {
+			$gBitSystem->fatalError( "There was an error moving the topic: ".vc( $gContent->mErrors ));
+		}
+	}else{
+		$gBitSystem->setBrowserTitle( tra( 'Confirm moving' ).' "' .$gContent->mInfo['title'] .'" '. tra("to Board"). ' "'.$targetBoard->mInfo['title'].'"');
+		$formHash=array();
+		if (empty($_REQUEST["ref"])) {
+			$_REQUEST["ref"]=$_SERVER['HTTP_REFERER'];
+		} elseif ($_REQUEST["ref"]=="-") {
+			$_REQUEST["ref"]=$gContent->getDisplayUrl();
+		}
+		$formHash["ref"]=$_REQUEST["ref"];
+		$formHash["target"]=$_REQUEST["target"];
+		$formHash["t"]=$_REQUEST["t"];
+		$msgHash = array(
+			'label' => tra( "Move Thread" ).": ".$gContent->mInfo['title']  ,
+//			'confirm_item' => $gContent->mInfo['title'] ,
+			'warning' => tra( "Move ".' "' .$gContent->mInfo['title'] .'" '. tra("to Board"). ' "'.$targetBoard->mInfo['title'].'"'."<br />This cannot be undone!" ),
+		);
+		$gBitSystem->confirmDialog( $formHash,$msgHash );
+	}
 }
 
-$board = new BitBoard();
-$gBitSmarty->assign_by_ref('boards', $board->getBoardSelectList());
-require_once( BOARDS_PKG_PATH .'lookup_inc.php' );
+// get list of boards we can move the topic to
+$boards = $board->getBoardSelectList();
+$gBitSmarty->assign_by_ref('boards', $boards);
 
 $gBitSystem->display( 'bitpackage:boards/topic_move.tpl', tra('Category') , array( 'display_mode' => 'display' ));
 ?>

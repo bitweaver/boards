@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.24 2008/08/01 04:32:02 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.25 2008/08/01 19:19:13 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="floaticon">
@@ -99,34 +99,15 @@
 									</a>
 								{/if}
 
-								{if $thread.th_moved==0}
-									{if $board->hasEditPermission()}
-										{*smartlink ititle="Edit" ifile="edit.php" ibiticon="liberty/edit" board_id=$thread.board_id*}
-										<a {if !$gBitThemes->isJavascriptEnabled()}
-											href="{$smarty.const.BOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}"
-											{else}
-											href="javascript:void(0);" onclick="BitBoards.moveThread( 'move_block_{$thread.th_thread_id|escape:"url"}', 'move_{$thread.th_thread_id|escape:"url"}', '{$smarty.const.BOARDS_PKG_URL}ajax.php?req=1&amp;seq=' + new Date().getTime(), this );"
-											{/if}
-											title="{tr}Move Thread{/tr}">{biticon ipackage=icons iname="go-jump" iexplain="Move Thread" iforce="icon"}</a>
-									{/if}
-								{/if}
-
 								{if $thread.th_moved==0 && $board->hasAdminPermission()}
+									{*smartlink ititle="Edit" ifile="edit.php" ibiticon="liberty/edit" board_id=$thread.board_id*}
+									<a href="{$smarty.const.BOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}"
+										title="{tr}Move Thread{/tr}">{biticon ipackage=icons iname="go-jump" iexplain="Move Thread" iforce="icon"}
+									</a>
 									<a title="{tr}Delete Topic{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit_topic.php?remove=1&amp;t={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread" iforce="icon"}</a>
 								{else}
 									{biticon ipackage=liberty iname=spacer iforce="icon"}
-								{/if}
-
-								{if $thread.th_moved==0}
-									{if $board->hasEditPermission()}
-										<br />
-										<div style="display:none;" id="move_block_{$thread.th_thread_id|escape:"url"}">
-											Move&nbsp;to:&nbsp;<select onchange="window.location=('{$smarty.const.BOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}&amp;target='+
-												document.getElementById('move_{$thread.th_thread_id|escape:"url"}').value);" id="move_{$thread.th_thread_id|escape:"url"}">
-												<option></option>
-											</select>
-										</div>
-									{/if}
+									{biticon ipackage=liberty iname=spacer iforce="icon"}
 								{/if}
 							</td>
 

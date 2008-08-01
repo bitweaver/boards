@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/topic_move.tpl,v 1.5 2007/05/03 08:10:23 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/topic_move.tpl,v 1.6 2008/08/01 19:19:13 wjames5 Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -11,16 +11,16 @@
 		{form enctype="multipart/form-data" id="editbitboardform"}
 			{assign var=title value=$gContent->mInfo.title|escape}
 			<input type="hidden" name="ref" value="-" />
-			<input type="hidden" name="thread_id" value="{$smarty.request.thread_id}" />
+			<input type="hidden" name="t" value="{$smarty.request.t}" />
 			<div class="row">
 				{formlabel label="To Board" for="target"}
 				{forminput}
 					<select name="target" id="target">
-						{section name=ix loop=$boards}
-							<option value="{$boards[ix].content_id|escape}">{$boards[ix].title|escape|truncate:20:"...":true} [{$boards[ix].post_count|escape}]</option>
-						{sectionelse}
+						{foreach from=$boards key=content_id item=board_title}
+						<option value="{$content_id|escape}">{$board_title|escape}</option>
+						{foreachelse}
 							<option>{tr}No records found{/tr}</option>
-						{/section}
+						{/foreach}
 					</select>
 				{/forminput}
 			</div>
