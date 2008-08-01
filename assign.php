@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/assign.php,v 1.5 2008/06/25 22:21:08 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/assign.php,v 1.6 2008/08/01 19:18:57 wjames5 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -16,19 +16,23 @@ require_once( '../bit_setup_inc.php' );
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'boards' );
 
-// Now check permissions to access this page
-$gBitSystem->verifyPermission('p_boards_edit' );
-
 require_once(BOARDS_PKG_PATH.'lookup_inc.php' );
+
+// verify minimal edit permission level
+$gContent->verifyEditPermission();
 
 if (!empty($_REQUEST['remove'])) {
 	foreach ($_REQUEST['remove'] as $board_id => $content_ids) {
 		$b = new BitBoard($board_id);
 		$b->load();
-		foreach ($content_ids as $content_id => $remove) {
-			if ($remove) {
-				$b->removeContent($content_id);
+		if ( $b->hasEditPermission() ){
+			foreach ($content_ids as $content_id => $remove) {
+				if ($remove) {
+					$b->removeContent($content_id);
+				}
 			}
+		}else{
+			// @TODO assign error and report back to user which were not processed
 		}
 	}
 }
@@ -36,8 +40,10 @@ if (!empty($_REQUEST['remove'])) {
 if( !empty( $_REQUEST['assign'] ) && @BitBase::verifyId( $_REQUEST['to_board_id'] ) ) {
 	$b = new BitBoard( $_REQUEST['to_board_id'] );
 	$b->load();
-	foreach( $_REQUEST['assign'] as $content_id ) {
-		$b->addContent( $content_id );
+	if ( $b->verifyEditPermission() ){
+		foreach( $_REQUEST['assign'] as $content_id ) {
+			$b->addContent( $content_id );
+		}
 	}
 }
 
@@ -45,7 +51,9 @@ if (!empty($_REQUEST['integrity'])) {
 	$board_id = $_REQUEST['integrity'];
 	$b = new BitBoard($board_id);
 	$b->load();
-	$b->fixContentMap();
+	if ( $b->verifyEditPermission() ){
+		$b->fixContentMap();
+	}
 }
 
 $data = BitBoard::getAllMap();
