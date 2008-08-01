@@ -1,4 +1,9 @@
 {strip}
+{if $comments_style eq 'threaded' && $comment.level}
+	<div style="margin-left:20px">
+{else}
+	<div style="margin-left:0px">
+{/if}
 <div class="body" id="comment_{$comment.comment_id|escape}">
 
 	{if $gBitUser->getPreference('boards_show_avatars','y') == 'y'}
@@ -141,4 +146,5 @@
 {/if}
 <div id="comment_{$comment.content_id}_footer"></div>
 
+</div><!-- end .left margin -->
 {/strip}
