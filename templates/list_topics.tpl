@@ -1,6 +1,12 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.25 2008/08/01 19:19:13 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.26 2008/08/01 23:02:17 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
+	<div class="navbar">
+		<div class="boards breadcrumb">
+			<a href="{$smarty.const.BOARDS_PKG_URL}">{tr}Message Boards{/tr}</a>
+		</div>
+	</div>
+
 	<div class="floaticon">
 		{if $print_page ne 'y'}
 			{if $board->getPreference('boards_mailing_list') || $board->hasAdminPermission()}
@@ -20,15 +26,13 @@
 		{if $board->mInfo.parsed_data}
 			<p>{$board->mInfo.parsed_data}</p>
 		{/if}
-		Back to <a href="{$cat_url}">{$board->mInfo.content_type.content_description}s</a>
 	</div>
 
 	<div class="body">
 		{minifind sort_mode=$sort_mode b=$smarty.request.b}
-		{* looks horrible, but leave for now - xing *}
 		{if $board->hasPostCommentsPermission()}
 			<div class="navbar">
-				<a title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic"}</a>
+				<a class="button" title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic" iforce="icon"} {tr}New Topic{/tr}</a>
 			</div>
 		{/if}
 
