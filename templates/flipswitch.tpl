@@ -11,7 +11,7 @@ $flip_down=>$flip.$flip_name.down
 $flip_downname=>$flip.$flip_name.downname
 *}
 <span id="flip_{$flip.$flip_name.id}-{$flip_name}">
-{if $gBitUser->hasPermission( $flip.$flip_name.perm )}
+{if $gContent->hasUserPermission( $flip.$flip_name.perm )}
 		<a href="{$smarty.const.BOARDS_PKG_URL}edit_topic.php?{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}" />
 {/if}
 {if $flip.$flip_name.state==1}
@@ -19,7 +19,7 @@ $flip_downname=>$flip.$flip_name.downname
 {else}
 	{biticon ipackage=icons iname=$flip.$flip_name.down iexplain=$flip.$flip_name.downname iforce="icon"}
 {/if}
-{if $gBitUser->hasPermission( $flip.$flip_name.perm )}
+{if $gContent->hasUserPermission( $flip.$flip_name.perm )}
 	</a>
 {/if}
 </span>

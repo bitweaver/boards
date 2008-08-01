@@ -18,6 +18,7 @@ $gBitUser->verifyTicket();
 
 // Load up the Topic's board - we'll respect its permissions
 $board = new BitBoard( $gContent->mInfo['board_id'] );
+$board->load();
 
 $rslt = false;
 
@@ -35,7 +36,7 @@ if( isset($_REQUEST['is_locked']) || isset($_REQUEST['is_sticky']) ){
 // Remove a topic
 }elseif( isset( $_REQUEST['remove'] ) ) {
 	// Check permissions to edit this topic if the root object is the board check its perms, otherwise check general comment admin perms
-	if( !(( $gContent->mInfo['root_id'] == $gContent->mInfo['board_id'] && $board->hasEditPermission() ) || $gBitUser->hasPermission('p_liberty_admin_comments')) ){
+	if( !(( $gContent->mInfo['root_id'] == $gContent->mInfo['board_content_id'] && $board->hasAdminPermission() ) || $gBitUser->hasPermission('p_liberty_admin_comments')) ){
 		$gBitSystem->fatalError( 'You do not have permission to delete this topic.' );
 	}
 	

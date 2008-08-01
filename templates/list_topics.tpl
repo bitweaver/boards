@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.23 2008/08/01 03:44:32 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.24 2008/08/01 04:32:02 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="floaticon">
@@ -45,7 +45,7 @@
 						<th style="width:5%;">{tr}Replies{/tr}</th>
 						<th style="width:20%;">{tr}Started{/tr}</th>
 						<th style="width:20%;">{tr}Last Reply{/tr}</th>
-						{if $gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit')}
+						{if $board->hasEditPermission() || $gBitUser->hasPermission('p_boards_post_edit')}
 							<th style="width:1%;"><abbr title="{tr}Number of posts by Anonymous users{/tr}">Anon</abbr></th>
 						{/if}
 						{if $board->hasEditPermission()}
@@ -111,7 +111,7 @@
 									{/if}
 								{/if}
 
-								{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_boards_remove' )}
+								{if $thread.th_moved==0 && $board->hasAdminPermission()}
 									<a title="{tr}Delete Topic{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit_topic.php?remove=1&amp;t={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread" iforce="icon"}</a>
 								{else}
 									{biticon ipackage=liberty iname=spacer iforce="icon"}
@@ -130,7 +130,7 @@
 								{/if}
 							</td>
 
-							{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_boards_remove' )}
+							{if $thread.th_moved==0 && $board->hasAdminPermission()}
 								<td>
 									<input type="checkbox" name="checked[]" title="{$thread.title|escape}" value="{$thread.th_thread_id}" />
 								</td>
@@ -150,7 +150,7 @@
 				</div>
 			{/if}
 
-			{if $gBitUser->hasPermission( 'p_boards_remove' )}
+			{if $board->hasAdminPermission()}
 				<div style="text-align:right;">
 					<script type="text/javascript">/* <![CDATA[ check / uncheck all */
 						document.write("<label for=\"switcher\">{tr}Select All{/tr}</label> ");
@@ -161,7 +161,7 @@
 
 					<select name="submit_mult" onchange="this.form.submit();">
 						<option value="" selected="selected">{tr}with checked{/tr}:</option>
-						{if $gBitUser->hasPermission( 'p_boards_remove' )}
+						{if $board->hasAdminPermission()}
 							<option value="remove_boards">{tr}remove{/tr}</option>
 						{/if}
 					</select>
