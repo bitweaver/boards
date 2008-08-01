@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.21 2008/07/31 16:54:42 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.22 2008/08/01 03:31:46 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="floaticon">
@@ -112,7 +112,7 @@
 								{/if}
 
 								{if $thread.th_moved==0 && $gBitUser->hasPermission( 'p_boards_remove' )}
-									<a title="{tr}Delete Topic{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_board_inc.php?b={$smarty.request.b}&amp;remove=1&amp;thread_id={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread" iforce="icon"}</a>
+									<a title="{tr}Delete Topic{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit_topic.php?remove=1&amp;t={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread" iforce="icon"}</a>
 								{else}
 									{biticon ipackage=liberty iname=spacer iforce="icon"}
 								{/if}

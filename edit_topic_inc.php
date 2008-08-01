@@ -1,7 +1,7 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/edit_topic_inc.php,v 1.3 2008/06/18 09:17:59 lsces Exp $
- * $Id: edit_topic_inc.php,v 1.3 2008/06/18 09:17:59 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit_topic_inc.php,v 1.4 2008/08/01 03:31:46 wjames5 Exp $
+ * $Id: edit_topic_inc.php,v 1.4 2008/08/01 03:31:46 wjames5 Exp $
  *
  * @package boards
  * @subpackage functions
@@ -43,25 +43,5 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 			$gBitSmarty->assign_by_ref( 'errors', $errors );
 		}
 	}
-} elseif( isset( $_REQUEST['remove'] ) && BitBase::verifyId( $_REQUEST['thread_id'] ) ) {
-	$gBitUser->verifyTicket();
-	$tmpTopic = new BitBoardTopic( $_REQUEST['thread_id'] );
-	$tmpTopic->load();
-	if( !empty( $_REQUEST['cancel'] ) ) {
-		// user cancelled - just continue on, doing nothing
-	} elseif( empty( $_REQUEST['confirm'] ) ) {
-		$formHash['b'] = $_REQUEST['b'];
-		$formHash['remove'] = TRUE;
-		$formHash['thread_id'] = $_REQUEST['thread_id'];
-		$gBitSystem->confirmDialog( $formHash, array( 'warning' => tra( 'Are you sure you want to delete the topic' ).' "'.$tmpTopic->getTitle().'" ?', 'error' => 'This cannot be undone!' ) );
-	} else {
-		$deleteComment = new LibertyComment($_REQUEST['thread_id']);
-		if( $deleteComment->isValid() && $gBitUser->hasPermission('p_liberty_admin_comments') ) {
-			if( !$deleteComment->expunge() ) {
-				$gBitSmarty->assign_by_ref( 'errors', $deleteComment->mErrors );
-			}
-		}
-	}
-	
 }
 ?>
