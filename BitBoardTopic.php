@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.51 2008/08/01 03:28:52 wjames5 Exp $
- * $Id: BitBoardTopic.php,v 1.51 2008/08/01 03:28:52 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.52 2008/08/01 04:12:59 wjames5 Exp $
+ * $Id: BitBoardTopic.php,v 1.52 2008/08/01 04:12:59 wjames5 Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.51 $ $Date: 2008/08/01 03:28:52 $ $Author: wjames5 $
+ * @version $Revision: 1.52 $ $Date: 2008/08/01 04:12:59 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -187,7 +187,6 @@ class BitBoardTopic extends LibertyMime {
 		global $gBitSystem;
 		$ret = FALSE;
 		if( $this->mRootId && $this->verify( $pParamHash ) ) {
-			//$gBitSystem->verifyPermission('p_boards_edit');
 			//$pParamHash = (($pParamHash + 1)%2);
 			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = ?";
 			$isStored = $this->mDb->getOne( $query_sel, array( $this->mRootId ) );
@@ -211,7 +210,6 @@ class BitBoardTopic extends LibertyMime {
 		if ($state==null || !is_numeric($state) || $state > 1 || $state<0) {
 			$this->mErrors[]=("Invalid current state");
 		} else {
-			$gBitSystem->verifyPermission('p_boards_edit');
 			$state = (($state+1)%2);
 			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = ?";
 			$result = $this->mDb->query( $query_sel, array( $this->mRootId ) );
@@ -236,7 +234,6 @@ class BitBoardTopic extends LibertyMime {
 		if ($state==null || !is_numeric($state) || $state > 1 || $state<0) {
 			$this->mErrors[]=("Invalid current state");
 		} else {
-			$gBitSystem->verifyPermission('p_boards_edit');
 			$state = (($state+1)%2);
 			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = ?";
 			$result = $this->mDb->query( $query_sel, array( $this->mRootId ) );
