@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.50 2008/07/31 17:54:09 wjames5 Exp $
- * $Id: BitBoardTopic.php,v 1.50 2008/07/31 17:54:09 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.51 2008/08/01 03:28:52 wjames5 Exp $
+ * $Id: BitBoardTopic.php,v 1.51 2008/08/01 03:28:52 wjames5 Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.50 $ $Date: 2008/07/31 17:54:09 $ $Author: wjames5 $
+ * @version $Revision: 1.51 $ $Date: 2008/08/01 03:28:52 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -115,6 +115,8 @@ class BitBoardTopic extends LibertyMime {
 				$llc_data = BitBoardTopic::getLastPost($this->mInfo);
 				$this->mInfo = array_merge($this->mInfo,$llc_data);
 				$this->mRootId = $result->fields['th_thread_id'];
+				// @TODO this would make more sense if this were assigned to mRootId - but that is currently in use as top comment id
+				$this->mInfo['root_id'] = $result->fields['th_root_id'];
 				BitBoardTopic::track($this->mInfo);
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				
