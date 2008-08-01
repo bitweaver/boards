@@ -86,13 +86,6 @@ function ajax_nice_error($errno, $errstr, $errfile, $errline) {
 set_error_handler("ajax_nice_error");
 
 switch ($_GET['req']) {
-	case 1:
-		require_once( BOARDS_PKG_PATH.'BitBoard.php' );
-		$board = new BitBoard();
-		$boardList=$board->getBoardSelectList();
-		$gBitSmarty->assign_by_ref('boardList',$boardList);
-		$gBitSmarty->display('bitpackage:boards/ajax.tpl');
-		break;
 	case 10:
 		require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
 		$comment = new BitBoardPost($_GET['comment_id']);

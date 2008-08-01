@@ -37,7 +37,7 @@ if( isset( $_REQUEST["target"] ) ) {
 	
 	if( isset( $_REQUEST["confirm"] ) ) {
 		if( $gContent->moveTo($_REQUEST["target"]) ) {
-			header ("location: ".$_REQUEST["ref"] );
+			header ("location: ".$gContent-getDisplayUrl() );
 			die;
 		} else {
 			$gBitSystem->fatalError( "There was an error moving the topic: ".vc( $gContent->mErrors ));
@@ -55,6 +55,7 @@ if( isset( $_REQUEST["target"] ) ) {
 		$formHash["t"]=$_REQUEST["t"];
 		$msgHash = array(
 			'label' => tra( "Move Thread" ).": ".$gContent->mInfo['title']  ,
+// redundant to title in tpl
 //			'confirm_item' => $gContent->mInfo['title'] ,
 			'warning' => tra( "Move ".' "' .$gContent->mInfo['title'] .'" '. tra("to Board"). ' "'.$targetBoard->mInfo['title'].'"'."<br />This cannot be undone!" ),
 		);
@@ -65,6 +66,8 @@ if( isset( $_REQUEST["target"] ) ) {
 // get list of boards we can move the topic to
 $boards = $board->getBoardSelectList();
 $gBitSmarty->assign_by_ref('boards', $boards);
+
+$gBitSmarty->assign('fromBoardId', $board->mContentId);
 
 $gBitSystem->display( 'bitpackage:boards/topic_move.tpl', tra('Category') , array( 'display_mode' => 'display' ));
 ?>

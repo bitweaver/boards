@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.52 2008/08/01 04:12:59 wjames5 Exp $
- * $Id: BitBoardTopic.php,v 1.52 2008/08/01 04:12:59 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.53 2008/08/01 21:00:29 wjames5 Exp $
+ * $Id: BitBoardTopic.php,v 1.53 2008/08/01 21:00:29 wjames5 Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.52 $ $Date: 2008/08/01 04:12:59 $ $Author: wjames5 $
+ * @version $Revision: 1.53 $ $Date: 2008/08/01 21:00:29 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -254,20 +254,26 @@ class BitBoardTopic extends LibertyMime {
 	**/
 	function moveTo($board_id) {
 		$ret = FALSE;
+		// start transaction
 		$this->mDb->StartTrans();
+
+		// create a new comment letting people know it has beem moved
 		$lcom = new LibertyComment();
-		$lcom_hash['data']="The comments from: {$this->mInfo['title']} ({$this->mRootId}) have been is_moved to $board_id";
+		$lcom_hash['edit']="The comments from: {$this->mInfo['title']} ({$this->mRootId}) have been is_moved to $board_id";
 		$lcom_hash['title']=$this->mInfo['title'];
 		$lcom_hash['parent_id']=$this->mInfo['th_root_id'];
 		$lcom_hash['root_id']=$this->mInfo['th_root_id'];
 		$lcom_hash['created']=$this->mInfo['flc_created'];
 		$lcom_hash['last_modified']=$this->mInfo['flc_last_modified'];
 		$lcom->storeComment($lcom_hash);
-		$lcom->mCommentId;
+
+		// map the move to the topic table
 		$data = array();
 		$data['parent_id']=$lcom->mCommentId;
 		$data['is_moved']=$this->mRootId;
 		$this->mDb->associateInsert( BIT_DB_PREFIX."boards_topics", $data );
+		
+		// move the comment we want to move to the target board
 		$query = "UPDATE `".BIT_DB_PREFIX."liberty_comments`
 					SET
 						`root_id` = $board_id,
@@ -283,7 +289,10 @@ class BitBoardTopic extends LibertyMime {
 					WHERE
 						`thread_forward_sequence` LIKE '".sprintf("%09d.", $this->mRootId)."%'";
 		$result = $this->mDb->query( $query );
+
+		// end transaction
 		$this->mDb->CompleteTrans();
+
 		$ret = TRUE;
 
 		return $ret;

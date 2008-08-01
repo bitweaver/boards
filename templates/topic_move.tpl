@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/topic_move.tpl,v 1.6 2008/08/01 19:19:13 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/topic_move.tpl,v 1.7 2008/08/01 21:00:29 wjames5 Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -17,7 +17,9 @@
 				{forminput}
 					<select name="target" id="target">
 						{foreach from=$boards key=content_id item=board_title}
-						<option value="{$content_id|escape}">{$board_title|escape}</option>
+							{if $content_id != $fromBoardId}
+								<option value="{$content_id|escape}">{$board_title|escape}</option>
+							{/if}
 						{foreachelse}
 							<option>{tr}No records found{/tr}</option>
 						{/foreach}

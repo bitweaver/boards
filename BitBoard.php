@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.48 2008/07/31 23:31:38 wjames5 Exp $
- * $Id: BitBoard.php,v 1.48 2008/07/31 23:31:38 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.49 2008/08/01 21:00:29 wjames5 Exp $
+ * $Id: BitBoard.php,v 1.49 2008/08/01 21:00:29 wjames5 Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.48 $ $Date: 2008/07/31 23:31:38 $ $Author: wjames5 $
+ * @version $Revision: 1.49 $ $Date: 2008/08/01 21:00:29 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -524,10 +524,13 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
 			ORDER BY ".$this->mDb->convertSortmode( $sort_mode );
+
 		$query_cant = "select count(*)
 			FROM `".BIT_DB_PREFIX."boards` ts INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql";
+
 		$result = $this->mDb->query( $query, $bindVars );
+
 		$ret = array();
 		while( $res = $result->fetchRow() ) {
 			$res['url']= BOARDS_PKG_URL."index.php?b={$res['board_id']}";
@@ -610,8 +613,15 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 	}
 
 	function getBoardSelectList( $pBlankFirst=FALSE ) {
-		global $gBitDb;
-		$ret = array();
+		global $gBitSystem, $gBitUser;
+
+		// invoke list sql principly to enforce permission services
+		$selectSql = $joinSql = $whereSql = '';
+		$bindVars = array();
+
+		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
+		
+		/* DEPRECATED - has some pointless stuff
 		$query = "SELECT lc.`content_id` as hash_key, lc.`title` AS `title`
 			FROM `".BIT_DB_PREFIX."boards` b
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = b.`content_id` )
@@ -619,15 +629,27 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 				LEFT JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (bm.`topic_content_id` = lcom.`root_id`)
 			GROUP BY lc.`content_id`, lc.`title`, lcom.`comment_id`
 			ORDER BY lc.`title` ASC";
-		if( $pBlankFirst ) {
-			if( $rs = $gBitDb->query( $query ) ) {
+		 */
+
+		// replacement query where we at least check that the board has been mapped to another board - a requirement for displaying comments
+		// if you hate it fix it or lets chat -wjames5
+		$query = "SELECT lc.`content_id` as hash_key, lc.`title` AS `title`
+			FROM `".BIT_DB_PREFIX."boards` b
+				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = b.`content_id` )
+				INNER JOIN `".BIT_DB_PREFIX."boards_map` bm ON( bm.`topic_content_id`=b.`content_id` )
+				$joinSql
+			WHERE lc.`content_id` = b.`content_id` $whereSql
+			ORDER BY lc.`title` ASC";
+
+		$ret = array();
+
+		if( $rslt = $this->mDb->query( $query, $bindVars ) ){
+			if( $pBlankFirst ) {
 				$ret[''] = '---------';
-				while( $row = $rs->fetchRow() ) {
-					$ret[$row['hash_key']] = $row['title'];
-				}
 			}
-		} else {
-			$ret = $gBitDb->getAssoc( $query);
+			while( $row = $rslt->fetchRow() ) {
+				$ret[$row['hash_key']] = $row['title'];
+			}
 		}
 
 		return $ret;
@@ -716,7 +738,10 @@ function boards_content_edit ( $pContent, $pParamHash ) {
 			$boardInfo['board_content_id'] = $pParamHash['linked_board_cid'];
 			$gBitSmarty->assign( 'boardInfo', $boardInfo );
 		}
-		$gBitSmarty->assign( 'boardList', BitBoard::getBoardSelectList( TRUE ) );
+		require_once( BOARDS_PKG_PATH.'BitBoard.php' );
+		$board = new BitBoard();
+		$boardList = $board->getBoardSelectList( TRUE );
+		$gBitSmarty->assign( 'boardList', $boardList );
 	}
 }
 
