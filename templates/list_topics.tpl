@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.22 2008/08/01 03:31:46 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.23 2008/08/01 03:44:32 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="floaticon">
@@ -48,7 +48,7 @@
 						{if $gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit')}
 							<th style="width:1%;"><abbr title="{tr}Number of posts by Anonymous users{/tr}">Anon</abbr></th>
 						{/if}
-						{if $gBitUser->hasPermission('p_boards_edit')}
+						{if $board->hasEditPermission()}
 							<th style="width:10%;" colspan="2">Actions</th>
 						{/if}
 					</tr>
@@ -84,11 +84,11 @@
 							{if $thread.post_count > 1}{if $thread.llc_user_id < 0}{$thread.l_anon_name|escape}{else}{displayname user_id=$thread.llc_user_id}{/if}{else}{/if}
 						</td>
 
-						{if $gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit')}
+						{if $board->hasEditPermission() || $gBitUser->hasPermission('p_boards_post_edit')}
 							<td style="text-align:center;">{if $thread.unreg > 0}<a class="highlight" href="{$thread.url}" title="{$thread.title|escape}">{$thread.unreg}</a>{/if}</td>
 						{/if}
 
-						{if $gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit')}
+						{if $board->hasEditPermission() || $gBitUser->hasPermission('p_boards_post_edit')}
 							<td class="actionicon">
 								{if $thread.flc_user_id<0 && $thread.first_approved==0}
 									<a title="{tr}Approve First Post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_board_inc.php?b={$board->mInfo.board_id}&amp;action=1&amp;comment_id={$thread.th_thread_id}">
@@ -100,7 +100,7 @@
 								{/if}
 
 								{if $thread.th_moved==0}
-									{if $gBitUser->hasPermission( 'p_boards_edit' )}
+									{if $board->hasEditPermission()}
 										{*smartlink ititle="Edit" ifile="edit.php" ibiticon="liberty/edit" board_id=$thread.board_id*}
 										<a {if !$gBitThemes->isJavascriptEnabled()}
 											href="{$smarty.const.BOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}"
@@ -118,7 +118,7 @@
 								{/if}
 
 								{if $thread.th_moved==0}
-									{if $gBitUser->hasPermission( 'p_boards_edit' )}
+									{if $board->hasEditPermission()}
 										<br />
 										<div style="display:none;" id="move_block_{$thread.th_thread_id|escape:"url"}">
 											Move&nbsp;to:&nbsp;<select onchange="window.location=('{$smarty.const.BOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}&amp;target='+
