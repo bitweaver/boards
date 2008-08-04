@@ -32,11 +32,10 @@
 				</div>
 			</td>
 			<td style="text-align:center">
-				{* this field is poorly named *}
-					<strong class="count">{$board.post_count}</strong>
+				<strong class="count">{$board.topic_count}</strong>
 			</td>
 			<td style="text-align:center">
-				@TODO
+				<strong class="count">{$board.post_count}</strong>
 			</td>
 			<td>
 				{if !empty($board.last)}

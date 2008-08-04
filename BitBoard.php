@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.49 2008/08/01 21:00:29 wjames5 Exp $
- * $Id: BitBoard.php,v 1.49 2008/08/01 21:00:29 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.50 2008/08/04 16:18:43 spiderr Exp $
+ * $Id: BitBoard.php,v 1.50 2008/08/04 16:18:43 spiderr Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.49 $ $Date: 2008/08/01 21:00:29 $ $Author: wjames5 $
+ * @version $Revision: 1.50 $ $Date: 2008/08/04 16:18:43 $ $Author: spiderr $
  * @package boards
  */
 
@@ -534,12 +534,20 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 		$ret = array();
 		while( $res = $result->fetchRow() ) {
 			$res['url']= BOARDS_PKG_URL."index.php?b={$res['board_id']}";
-			$res['post_count'] = $this->mDb->getOne( "SELECT count(*)
+
+			$res['topic_count'] = $this->mDb->getOne( "SELECT count(*)
 				FROM `".BIT_DB_PREFIX."boards_map` map
 					INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` slc ON( slc.`content_id` = lcom.`content_id` )
 					LEFT JOIN `".BIT_DB_PREFIX."boards_posts` fp ON (fp.`comment_id` = lcom.`comment_id`)
 				WHERE lcom.`root_id`=lcom.`parent_id` AND map.`board_content_id`=? AND ((fp.`is_approved` = 1) OR (fp.`is_approved` IS NULL))", array( $res['content_id'] ) );
+
+			$res['post_count'] = $this->mDb->getOne( "SELECT count(*)
+				FROM `".BIT_DB_PREFIX."liberty_comments` lcom
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content` slc ON( slc.`content_id` = lcom.`content_id` )
+					INNER JOIN `".BIT_DB_PREFIX."boards_map` map ON (lcom.`root_id`=map.`topic_content_id`)
+					LEFT JOIN `".BIT_DB_PREFIX."boards_posts` fp ON (fp.`comment_id` = lcom.`comment_id`)
+				WHERE map.`board_content_id`=? AND ((fp.`is_approved` = 1) OR (fp.`is_approved` IS NULL))", array( $res['content_id'] ) );
 			if($track) {
 				if ($gBitUser->isRegistered()) {
 					$res['track']['on'] = true;
