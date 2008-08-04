@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.tpl,v 1.7 2008/08/04 21:21:56 laetzer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.tpl,v 1.8 2008/08/04 21:30:04 laetzer Exp $ *}
 {strip}
 {if $gBitSystem->isPackageActive('boards') && {$modLastBoardPosts}
 	{bitmodule title="$moduleTitle" name="last_board_posts"}
@@ -7,7 +7,7 @@
 				<li class="{cycle values="odd,even"}">
 					<a title="{tr}Author:{/tr} {displayname hash=$modLastBoardPosts[ix]}" href="{$modLastBoardPosts[ix].display_url}">{$modLastBoardPosts[ix].title|default:"Comment"|escape:html}</a>
 					<div class="date">
-						{tr}by {displayname hash=$modLastBoardPosts[ix]}{/tr} {$modLastBoardPosts[ix].created|bit_short_date}
+						{displayname hash=$modLastBoardPosts[ix]}, {$modLastBoardPosts[ix].created|bit_short_date}
 					</div>
 				</li>
 			{/section}
