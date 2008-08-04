@@ -1,5 +1,11 @@
 {strip}
 <table class="data">
+	<tr>
+		<th colspan="2">Board</th>
+		<th>Topics</th>
+		<th>Posts</th>
+		<th>Last Post</th>
+	<tr>
 	{foreach item=board from=$boardsList}
 		{if $board.title}
 			{assign var=board_title value=$board.title|escape}
@@ -9,32 +15,41 @@
 		{/if}
 
 		<tr class="{cycle values="even,odd"}{if $board.unreg > 0} unapproved{/if}">
-			<td style="width:1px">
+			<td>
 			{* topic tracking icons *}
-				{if $board.track.on && $board.track.mod}
-					{biticon ipackage="icons" iname="folder-new" ipath="large" iexplain="New Posts" iforce="icon"}
-				{else}
-					{biticon ipackage="icons" iname="folder" ipath="large" iexplain="New Posts" iforce="icon"}
-				{/if}
-					<strong class="count">{$board.post_count}</strong>
+				<span style="float:left;">
+					{if $board.track.on && $board.track.mod}
+						{biticon ipackage="icons" iname="folder-new" ipath="large" iexplain="New Posts" iforce="icon"}
+					{else}
+						{biticon ipackage="icons" iname="folder" ipath="large" iexplain="New Posts" iforce="icon"}
+					{/if}
+				</span>
 			</td>
 			<td>
 				<h2 class="title"><a href="{$board.url}" title="{$board_title}">{$board_title}</a></h2>
-				<span style="float:right; text-align:right">
-					{if !empty($board.last)}
-						Last Post:&nbsp;
-						"<a href="{$board.last.url}" title="{$board.last.title|default:"Post..."}">{$board.last.title|default:"Post..."}</a>"&nbsp;
-						<br/>{if $board.last.last_modified > 0}{$board.last.last_modified|reltime}{/if}
-						&nbsp;by&nbsp;
-						{if $board.last.user_id < 0}{$board.last.l_anon_name|escape}{else}{displayname user_id=$board.last.user_id}{/if}
-					{/if}
-					{if $gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit')}
-						{if $board.unreg > 0}<a class="highlight" href="{$board.url}" title="{$board.title|escape}">{$board.unreg}</a>{/if}
-					{/if}
-				</span>
 				<div class="desc">
 					{$board.parsed_data}
 				</div>
+			</td>
+			<td style="text-align:center">
+				{* this field is poorly named *}
+					<strong class="count">{$board.post_count}</strong>
+			</td>
+			<td style="text-align:center">
+				@TODO
+			</td>
+			<td>
+				{if !empty($board.last)}
+					<a href="{$board.last.url}" title="{$board.last.title|default:"Post..."}">{$board.last.title|default:"Post..."|truncate:30}</a>
+					<br/>
+					on&nbsp;{if $board.last.last_modified > 0}{$board.last.last_modified|reltime}{/if}
+					<br/>
+					by&nbsp;
+					{if $board.last.user_id < 0}{$board.last.l_anon_name|escape}{else}{displayname user_id=$board.last.user_id}{/if}
+				{/if}
+				{if $gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit')}
+					{if $board.unreg > 0}<a class="highlight" href="{$board.url}" title="{$board.title|escape}">{$board.unreg}</a>{/if}
+				{/if}
 			</td>
 		</tr>
 	{/foreach}
