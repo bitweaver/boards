@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.53 2008/08/01 21:00:29 wjames5 Exp $
- * $Id: BitBoardTopic.php,v 1.53 2008/08/01 21:00:29 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.54 2008/08/21 17:51:51 spiderr Exp $
+ * $Id: BitBoardTopic.php,v 1.54 2008/08/21 17:51:51 spiderr Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.53 $ $Date: 2008/08/01 21:00:29 $ $Author: wjames5 $
+ * @version $Revision: 1.54 $ $Date: 2008/08/21 17:51:51 $ $Author: spiderr $
  * @package boards
  */
 
@@ -326,7 +326,8 @@ class BitBoardTopic extends LibertyMime {
 		}
 
 		// if we have the board's board_id (b) we use that, or if we have its content_id we can use that
-		if(!empty($pParamHash['b']) || !empty($pParamHash['content_id'])) {
+		if( (!empty( $pParamHash['b'] ) && $this->verifyId( $pParamHash['b'] ))
+		    || (!empty( $pParamHash['content_id'] ) && $this->verifyId( $pParamHash['content_id'] )) ) {
 			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}boards_map` map ON (map.`topic_content_id` = lcom.`root_id`)";
 			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}boards` b ON (b.`content_id` = map.`board_content_id`)";
 			if(!empty($pParamHash['b'])) {
