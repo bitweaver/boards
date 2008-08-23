@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.54 2008/08/21 17:51:51 spiderr Exp $
- * $Id: BitBoardTopic.php,v 1.54 2008/08/21 17:51:51 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.55 2008/08/23 05:25:04 bitweaver Exp $
+ * $Id: BitBoardTopic.php,v 1.55 2008/08/23 05:25:04 bitweaver Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.54 $ $Date: 2008/08/21 17:51:51 $ $Author: spiderr $
+ * @version $Revision: 1.55 $ $Date: 2008/08/23 05:25:04 $ $Author: bitweaver $
  * @package boards
  */
 
@@ -389,7 +389,14 @@ class BitBoardTopic extends LibertyMime {
 							FROM `".BIT_DB_PREFIX."liberty_comments` s_lcom
 							INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
 							WHERE (".$substrSql.")
-						) AS post_count
+						) AS post_count,
+
+						(
+							SELECT MAX(s_lc.created)
+							FROM `".BIT_DB_PREFIX."liberty_comments` s_lcom
+							INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
+							WHERE (".$substrSql.")
+						) AS last_post
 
 						$selectSql
 							FROM `${BIT_DB_PREFIX}liberty_comments` lcom
@@ -403,6 +410,7 @@ class BitBoardTopic extends LibertyMime {
 						ORDER BY
 							11 DESC,
 							10 ASC,
+							last_post DESC,
 							lc.created DESC
 						";
 
