@@ -2,10 +2,7 @@
 {strip}
 <br />
 <div class="edit comment">
-	{if ( $smarty.request.post_comment_request || $post_comment_preview )}
-		<a name="editcomments"></a>
-	{/if}
-	<div class="body">
+	<div class="body"{if ( $smarty.request.post_comment_request || $post_comment_preview )} id="editcomments"{/if}>
 		{formfeedback hash=$formfeedback}
 
 		{if $post_comment_preview}
@@ -21,7 +18,6 @@
 			<input type="hidden" name="comments_sort_mode" value="{$comments_sort_mode}" />
 
 			{if $smarty.request.post_comment_request || $smarty.request.post_comment_preview}
-				<a name="editcomments"></a>
 				{legend legend="Post"}
 					<input type="hidden" name="post_comment_reply_id" value="{$post_comment_reply_id}" />
 				    <input type="hidden" name="post_comment_id" value="{$post_comment_id}" />
