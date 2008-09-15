@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.34 2008/07/01 17:08:21 spiderr Exp $
- * $Id: BitBoardPost.php,v 1.34 2008/07/01 17:08:21 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.35 2008/09/15 06:01:57 spiderr Exp $
+ * $Id: BitBoardPost.php,v 1.35 2008/09/15 06:01:57 spiderr Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.34 $ $Date: 2008/07/01 17:08:21 $ $Author: spiderr $
+ * @version $Revision: 1.35 $ $Date: 2008/09/15 06:01:57 $ $Author: spiderr $
  * @package boards
  */
 
@@ -248,7 +248,7 @@ class BitBoardPost extends LibertyComment {
 		if( !empty( $pListHash['board_id'] ) ) {
 			$joinSql .= "INNER JOIN `".BIT_DB_PREFIX."boards` b ON (b.`content_id` = bm.`board_content_id`)";
 			$whereSql .= ' AND b.`board_id`=? ';
-			array_push( $bindVars, $pListHash['board_id'] );
+			array_push( $bindVars, (int)$pListHash['board_id'] );
 		}
 
 		if( BitBase::verifyId( $pListHash['user_id'] ) ) {
