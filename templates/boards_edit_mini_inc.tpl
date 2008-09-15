@@ -4,7 +4,11 @@
 	{formlabel label="Linked Board"}
 	{forminput}
 		{if $boardList}
-			{html_options name="linked_board_cid" options=$boardList selected=$boardInfo.board_content_id}
+			{if $smarty.post.preview}
+				{html_options name="linked_board_cid" options=$boardList selected=$smarty.post.linked_board_cid}
+			{else}
+				{html_options name="linked_board_cid" options=$boardList selected=$boardInfo.board_content_id}
+			{/if}
 		{else}
 			<em>{tr}No discussion boards have been created.{/tr}</em>
 		{/if}
