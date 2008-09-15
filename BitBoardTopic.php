@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.56 2008/09/15 06:06:30 spiderr Exp $
- * $Id: BitBoardTopic.php,v 1.56 2008/09/15 06:06:30 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.57 2008/09/15 06:20:23 spiderr Exp $
+ * $Id: BitBoardTopic.php,v 1.57 2008/09/15 06:20:23 spiderr Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.56 $ $Date: 2008/09/15 06:06:30 $ $Author: spiderr $
+ * @version $Revision: 1.57 $ $Date: 2008/09/15 06:20:23 $ $Author: spiderr $
  * @package boards
  */
 
@@ -334,7 +334,7 @@ class BitBoardTopic extends LibertyMime {
 				$whereSql .= " AND b.`board_id` = ?";
 				$bindVars[] = (int)$pParamHash['b'];
 			}else{
-				$whereSql .= " AND b.`content_id` = ";
+				$whereSql .= " AND b.`content_id` = ?";
 				$bindVars[] = (int)$pParamHash['content_id'];
 			}
 		}
