@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.55 2008/08/23 05:25:04 bitweaver Exp $
- * $Id: BitBoardTopic.php,v 1.55 2008/08/23 05:25:04 bitweaver Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.56 2008/09/15 06:06:30 spiderr Exp $
+ * $Id: BitBoardTopic.php,v 1.56 2008/09/15 06:06:30 spiderr Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.55 $ $Date: 2008/08/23 05:25:04 $ $Author: bitweaver $
+ * @version $Revision: 1.56 $ $Date: 2008/09/15 06:06:30 $ $Author: spiderr $
  * @package boards
  */
 
@@ -331,9 +331,11 @@ class BitBoardTopic extends LibertyMime {
 			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}boards_map` map ON (map.`topic_content_id` = lcom.`root_id`)";
 			$joinSql .= " INNER JOIN `${BIT_DB_PREFIX}boards` b ON (b.`content_id` = map.`board_content_id`)";
 			if(!empty($pParamHash['b'])) {
-				$whereSql .= " AND b.`board_id` = ". $pParamHash['b'] ;
+				$whereSql .= " AND b.`board_id` = ?";
+				$bindVars[] = (int)$pParamHash['b'];
 			}else{
-				$whereSql .= " AND b.`content_id` = ". $pParamHash['content_id'] ;
+				$whereSql .= " AND b.`content_id` = ";
+				$bindVars[] = (int)$pParamHash['content_id'];
 			}
 		}
 
