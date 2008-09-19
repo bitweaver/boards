@@ -10,7 +10,7 @@ require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 
 // Make sure topic exists since we only run through here for existing topics. New topics are created via comment system.
 if( !$gContent->isValid() ){
-	$gBitSystem->fatalError( 'No topic specified' );
+	$gBitSystem->fatalError( tra('No topic specified.') );
 }
 
 // Check the user's ticket
@@ -37,7 +37,7 @@ if( isset($_REQUEST['is_locked']) || isset($_REQUEST['is_sticky']) ){
 }elseif( isset( $_REQUEST['remove'] ) ) {
 	// Check permissions to edit this topic if the root object is the board check its perms, otherwise check general comment admin perms
 	if( !(( $gContent->mInfo['root_id'] == $gContent->mInfo['board_content_id'] && $board->hasAdminPermission() ) || $gBitUser->hasPermission('p_liberty_admin_comments')) ){
-		$gBitSystem->fatalError( 'You do not have permission to delete this topic.' );
+		$gBitSystem->fatalError( tra('You do not have permission to delete this topic.') );
 	}
 	
 	if( !empty( $_REQUEST['cancel'] ) ) {
@@ -45,7 +45,12 @@ if( isset($_REQUEST['is_locked']) || isset($_REQUEST['is_sticky']) ){
 	} elseif( empty( $_REQUEST['confirm'] ) ) {
 		$formHash['remove'] = TRUE;
 		$formHash['t'] = $_REQUEST['t'];
-		$gBitSystem->confirmDialog( $formHash, array( 'warning' => tra( 'Are you sure you want to delete the topic' ).' "'.$gContent->getTitle().'" ?', 'error' => 'This cannot be undone!' ) );
+		$gBitSystem->confirmDialog( $formHash, 
+			array( 
+				'warning' => tra( 'Are you sure you want to delete this topic?' ) . ' ' . $gContent->getTitle(),
+				'error' => tra('This cannot be undone!')
+			)
+		);
 	} else {
 		// @TODO Topic should extend LibertyComment - but until that day we load it up a second time
 		$topicAsComment = new LibertyComment( $_REQUEST['t'] );

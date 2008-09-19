@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/mailing_list.php,v 1.5 2008/06/25 22:21:08 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/mailing_list.php,v 1.6 2008/09/19 01:34:36 laetzer Exp $
  * Copyright (c) bitweaver Group
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -48,7 +48,12 @@ if( !empty( $_REQUEST['create_list'] ) ) {
 		if( empty( $_REQUEST['confirm'] ) ) {
 			$formHash['delete_list'] = TRUE;
 			$formHash['b'] = $gContent->getField( 'board_id' );
-			$gBitSystem->confirmDialog( $formHash, array( 'warning' => 'Are you sure you want to delete the mailing list '.$gContent->getTitle().'?', 'error' => 'This cannot be undone!' ) );
+			$gBitSystem->confirmDialog(	$formHash,
+				array(
+					'warning' => tra('Are you sure you want to delete this mailing list?') . ' ' . $gContent->getTitle(),
+					'error' => tra('This cannot be undone!'),
+				)
+			);
 		} else {
 			if( !($error = mailman_rmlist( $gContent->getPreference( 'boards_mailing_list' ) )) ) {
 				$gContent->storePreference( 'boards_mailing_list', NULL );

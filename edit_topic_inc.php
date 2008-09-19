@@ -1,7 +1,7 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/edit_topic_inc.php,v 1.4 2008/08/01 03:31:46 wjames5 Exp $
- * $Id: edit_topic_inc.php,v 1.4 2008/08/01 03:31:46 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit_topic_inc.php,v 1.5 2008/09/19 01:34:36 laetzer Exp $
+ * $Id: edit_topic_inc.php,v 1.5 2008/09/19 01:34:36 laetzer Exp $
  *
  * @package boards
  * @subpackage functions
@@ -29,7 +29,12 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 		foreach( $_REQUEST["checked"] as $del ) {
 			$formHash['input'][] = '<input type="hidden" name="checked[]" value="'.$del.'"/>';
 		}
-		$gBitSystem->confirmDialog( $formHash, array( 'warning' => 'Are you sure you want to delete '.count( $_REQUEST["checked"] ).' Topics?', 'error' => 'This cannot be undone!' ) );
+		$gBitSystem->confirmDialog( $formHash, 
+			array( 
+				'warning' => tra('Are you sure you want to delete these topics?') . ' (' . tra('Count: ') . count( $_REQUEST["checked"] ) . ')',				
+				'error' => tra('This cannot be undone!'),
+			)
+		);
 	} else {
 		foreach( $_REQUEST["checked"] as $deleteId ) {
 			$deleteComment = new LibertyComment( $deleteId );
