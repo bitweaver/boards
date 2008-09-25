@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.26 2008/08/01 23:02:17 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.27 2008/09/25 16:03:21 spiderr Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="navbar">
@@ -29,10 +29,10 @@
 	</div>
 
 	<div class="body">
-		{minifind sort_mode=$sort_mode b=$smarty.request.b}
 		{if $board->hasPostCommentsPermission()}
 			<div class="navbar">
 				<a class="button" title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic" iforce="icon"} {tr}New Topic{/tr}</a>
+		{minifind sort_mode=$sort_mode b=$smarty.request.b prompt="Search `$smarty.const.BOARDS_PKG_DIR`"}
 			</div>
 		{/if}
 
@@ -47,7 +47,6 @@
 						<th style="width:5%;"> </th>
 						<th style="width:40%;">{tr}Title{/tr}</th>
 						<th style="width:5%;">{tr}Replies{/tr}</th>
-						<th style="width:20%;">{tr}Started{/tr}</th>
 						<th style="width:20%;">{tr}Last Reply{/tr}</th>
 						{if $board->hasEditPermission() || $gBitUser->hasPermission('p_boards_post_edit')}
 							<th style="width:1%;"><abbr title="{tr}Number of posts by Anonymous users{/tr}">Anon</abbr></th>
@@ -72,18 +71,14 @@
 						</td>
 
 						<td>
-							<a href="{$thread.url}" title="{$thread.title|escape}">{$thread.title|escape}</a>
+							<div class="topictitle"><a href="{$thread.url}" title="{$thread.title|escape}">{$thread.title|escape}</a></div>
 							{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='list' serviceHash=$thread}
+							{tr}by{/tr} {if $thread.flc_user_id < 0}{$thread.anon_name|escape}{else}{displayname user_id=$thread.flc_user_id}{/if} {tr}on{/tr} {$thread.flc_created|reltime:short|escape}
 						</td>
 
-						<td style="text-align:center;">{if $thread.post_count-1}{$thread.post_count-1}{/if}</td>
+						<td class="topiccount">{if $thread.post_count-1}{$thread.post_count-1}{/if}</td>
 
-						<td style="text-align:center;">
-							{$thread.flc_created|reltime:short|escape}<br/>
-							{if $thread.flc_user_id < 0}{$thread.anon_name|escape}{else}{displayname user_id=$thread.flc_user_id}{/if}
-						</td>
-
-						<td style="text-align:center;">
+						<td class="topiclastreply">
 							{if $thread.post_count > 1}{$thread.llc_last_modified|reltime:short|escape}{else}{/if}<br/>
 							{if $thread.post_count > 1}{if $thread.llc_user_id < 0}{$thread.l_anon_name|escape}{else}{displayname user_id=$thread.llc_user_id}{/if}{else}{/if}
 						</td>
