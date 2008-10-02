@@ -1,7 +1,7 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/edit_topic_inc.php,v 1.5 2008/09/19 01:34:36 laetzer Exp $
- * $Id: edit_topic_inc.php,v 1.5 2008/09/19 01:34:36 laetzer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit_topic_inc.php,v 1.6 2008/10/02 16:17:15 wjames5 Exp $
+ * $Id: edit_topic_inc.php,v 1.6 2008/10/02 16:17:15 wjames5 Exp $
  *
  * @package boards
  * @subpackage functions
@@ -17,7 +17,7 @@ if so, we call histlib's method remove_all_versions for all the checked boards.
 if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQUEST["submit_mult"] == "remove_boards" ) {
 
 	// Now check permissions to remove the selected bitboard
-	$gContent->verifyPermission( 'p_boards_remove' );
+	$gContent->verifyUserPermission( 'p_boards_remove' );
 	$gBitUser->verifyTicket();
 
 	if( !empty( $_REQUEST['cancel'] ) ) {
