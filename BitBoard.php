@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.50 2008/08/04 16:18:43 spiderr Exp $
- * $Id: BitBoard.php,v 1.50 2008/08/04 16:18:43 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.51 2008/10/02 14:06:43 nickpalmer Exp $
+ * $Id: BitBoard.php,v 1.51 2008/10/02 14:06:43 nickpalmer Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.50 $ $Date: 2008/08/04 16:18:43 $ $Author: spiderr $
+ * @version $Revision: 1.51 $ $Date: 2008/10/02 14:06:43 $ $Author: nickpalmer $
  * @package boards
  */
 
@@ -52,6 +52,7 @@ class BitBoard extends LibertyMime {
 		$this->mViewContentPerm  = 'p_boards_read';
 		$this->mEditContentPerm  = 'p_boards_edit';
 		$this->mAdminContentPerm = 'p_boards_admin';
+		$this->mExpungeContentPerm = 'p_boards_remove';
 	}
 
 	/**
