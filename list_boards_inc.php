@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/list_boards_inc.php,v 1.1 2008/07/31 16:54:41 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/list_boards_inc.php,v 1.2 2008/10/02 13:11:59 nickpalmer Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -21,22 +21,6 @@ $gBitSystem->verifyPackage( 'boards' );
 
 // Now check permissions to access this page
 $gBitSystem->verifyPermission( 'p_boards_read' );
-
-// Handle delete request - we should probably move this to edit where it makes more sense
-if( isset( $_REQUEST['remove'] ) && BitBase::verifyId( $_REQUEST['b'] ) ) {
-	$gBitUser->verifyTicket();
-	$tmpBoard = new BitBoard( $_REQUEST['b'] );
-	$tmpBoard->load();
-	if( $tmpBoard->isValid() && $tmpBoard->hasUserPermission( 'p_boards_remove', TRUE, TRUE ) ) {
-		if( empty( $_REQUEST['confirm'] ) ) {
-			$formHash['b'] = $_REQUEST['b'];
-			$formHash['remove'] = TRUE;
-			$gBitSystem->confirmDialog( $formHash, array( 'warning' => tra( 'Are you sure you want to remove the entire message board' ).' "'.$tmpBoard->getTitle().'" ?', 'error' => 'This cannot be undone!' ) );
-		} else if( !$tmpBoard->expunge() ) {
-			$gBitSmarty->assign_by_ref( 'errors', $deleteComment->mErrors );
-		}
-	}
-}
 
 // Get a list of boards
 $ns = array();

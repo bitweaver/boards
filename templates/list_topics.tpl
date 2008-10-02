@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.28 2008/09/25 17:09:52 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.29 2008/10/02 13:11:59 nickpalmer Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="navbar">
@@ -16,7 +16,7 @@
 				<a title="{tr}Edit message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit Message Board"}</a>
 			{/if}
 			{if $board->hasUserPermission( 'p_boards_remove', TRUE, TRUE )}
-				<a title="{tr}Remove message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}list_board_inc.php?remove=1&amp;b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove Message Board"}</a>
+				<a title="{tr}Remove message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?remove=1&amp;b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove Message Board"}</a>
 			{/if}
 		{/if}<!-- end print_page -->
 	</div><!-- end .floaticon -->

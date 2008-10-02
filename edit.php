@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.11 2008/07/31 23:31:38 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.12 2008/10/02 13:11:59 nickpalmer Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -27,6 +27,25 @@ if( $gContent->isValid() ) {
 	$gContent->verifyEditPermission();
 } else {
 	$gBitSystem->verifyPermission( 'p_boards_edit' );
+}
+
+// Handle delete request 
+if( isset( $_REQUEST['remove'] ) ) {
+	// @TODO: Change to verifyExpungePermission when that exists in LibertyContent
+	if ( $gContent->isValid() && $gContent->hasUserPermission( 'p_boards_remove', TRUE, TRUE ) ) {
+		if( empty( $_REQUEST['confirm'] ) ) {
+			$formHash['b'] = $_REQUEST['b'];
+			$formHash['remove'] = TRUE;
+			$gBitSystem->confirmDialog( $formHash, array( 'warning' => tra( 'Are you sure you want to remove the entire message board' ).' "'.$gContent->getTitle().'" ?', 'error' => 'This cannot be undone!' ) );
+		} elseif( !$gContent->expunge() ) {
+			$gBitSmarty->assign_by_ref( 'errors', $deleteComment->mErrors );
+		} else {
+		  bit_redirect(BOARDS_PKG_URL.'index.php');
+		  die;
+		}
+	} else {
+		$gBitSystem->fatalPermission( 'p_boards_remove' );
+	}
 }
 
 // If we are in preview mode then preview it!
