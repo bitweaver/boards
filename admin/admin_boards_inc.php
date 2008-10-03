@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/admin/admin_boards_inc.php,v 1.8 2008/04/11 17:37:00 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/admin/admin_boards_inc.php,v 1.9 2008/10/03 17:43:07 nickpalmer Exp $
 // Copyright (c) 2005 bitweaver BitBoards
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -60,7 +60,7 @@ $formBoardsEmailList = array(
 	),
 );
 $gBitSmarty->assign( 'formBoardsEmailList',$formBoardsEmailList );
-$formBoardsEmailText = array( 'boards_email_host', 'boards_email_admin', 'server_mailman_bin' );
+$formBoardsEmailText = array( 'boards_email_host', 'boards_email_admin', 'server_mailman_bin', 'server_mailman_cmd', 'server_newaliases_cmd', 'server_aliases_file' );
 
 if( $processForm ) {
 	$bitboardToggles = array_merge( $formBitBoardsLists,$formBoardsEmailList );

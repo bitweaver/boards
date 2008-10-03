@@ -73,22 +73,24 @@
 				{/forminput}
 			</div>
 		{/foreach}
+
 		<div class="row">
-			{formlabel label="Email Host" for='emailhost'}
+			{formlabel label="Email Host" for='boards_email_host'}
 			{forminput}
 				<input type="text" name="boards_email_host" value="{$gBitSystem->getConfig('boards_email_host',$gBitSystem->getConfig('kernel_server_name'))}" />
 				{formhelp note="Enter the host name to which all mailing lists will be hosted and addressed."}
 			{/forminput}
 		</div>
 		<div class="row">
-			{formlabel label="Administrator Email" for='emailhost'}
+			{formlabel label="Administrator Email" for='boards_email_admin'}
 			{forminput}
 				<input type="text" name="boards_email_admin" value="{$gBitSystem->getConfig('boards_email_admin',$gBitSystem->getConfig('site_sender_email'))}" />
 				{formhelp note="This is the email for the master administrator for all mailing lists."}
 			{/forminput}
 		</div>
+
 		<div class="row">
-			{formlabel label="Mailman bin Path" for='emailhost'}
+			{formlabel label="Mailman bin Path" for='server_mailman_bin'}
 			{forminput}
 				<input type="text" name="server_mailman_bin" value="{$gBitSystem->getConfig('server_mailman_bin')|escape}" />
 				{formhelp note="Path to mailman applications, typically: /usr/lib/mailman/bin/"}
@@ -97,10 +99,30 @@
 				{/if}
 			{/forminput}
 		</div>
-		{/legend}
-		<div class="row submit">
-			<input type="submit" name="listTabSubmit" value="{tr}Change preferences{/tr}" />
+		<div class="row">
+			{formlabel label="Mailman Command Path" for='mailman_cmd'}
+			{forminput}
+				<input type="text" name="server_mailman_cmd" value="{$gBitSystem->getConfig('server_mailman_cmd', '/usr/lib/mailman/mail/mailman')|escape}" />
+				{formhelp note="Path to mailman binary, typically: /usr/lib/mailman/mail/mailman"}
+			{/forminput}
 		</div>
-
+		<div class="row">
+			{formlabel label="Newaliases command" for='server_newaliases_cmd'}
+			{forminput}
+				<input type="text" name="server_newaliases_cmd" value="{$gBitSystem->getConfig('server_newaliases_cmd', '/usr/bin/newaliases')|escape}" />
+				{formhelp note="Path to the command to tell the mail server to reload the aliases file. For sendmail typically: /usr/bin/newaliases"}
+			{/forminput}
+		</div>
+		<div class="row">
+			{formlabel label="MTA Aliases Map" for='server_aliases_file'}
+			{forminput}
+				<input type="text" name="server_aliases_file" value="{$gBitSystem->getConfig('server_aliases_file', '/etc/aliases')|escape}" />
+				{formhelp note="Path to the command to tell the mail server to reload the aliases file. For sendmail typically: /usr/bin/newaliases"}
+			{/forminput}
+		</div>
+	{/legend}
+	<div class="row submit">
+		<input type="submit" name="listTabSubmit" value="{tr}Change preferences{/tr}" />
+	</div>
 {/form}
 {/strip}

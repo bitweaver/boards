@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/mailing_list.php,v 1.6 2008/09/19 01:34:36 laetzer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/mailing_list.php,v 1.7 2008/10/03 17:43:07 nickpalmer Exp $
  * Copyright (c) bitweaver Group
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -21,6 +21,11 @@ require_once( UTIL_PKG_PATH.'mailman_lib.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'boards' );
+
+// Verify we found a board
+if( !$gContent->isValid() ) {
+  $gBitSystem->fatalError(tra("Error: No such board."));
+}
 
 // Now check permissions to access this page
 $gContent->verifyViewPermission();
