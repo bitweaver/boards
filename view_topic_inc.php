@@ -28,8 +28,8 @@ if( @BitBase::verifyId( $_REQUEST['migrate_topic_id'] ) ) {
 // @TODO move this to edit_post
 if (!empty($_REQUEST['action'])) {
 	// Now check permissions to access this page
-	// @TODO load up the parent board and call verifyEditPermission
-	$gBitSystem->verifyPermission( 'p_boards_edit' );
+	// @TODO load up the parent board and call verifyUpdatePermission
+	$gBitSystem->verifyPermission( 'p_boards_update' );
 
 	$comment = new BitBoardPost($_REQUEST['comment_id']);
 	$comment->loadComment();

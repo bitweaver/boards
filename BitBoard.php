@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.52 2008/10/03 17:20:15 wjames5 Exp $
- * $Id: BitBoard.php,v 1.52 2008/10/03 17:20:15 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.53 2008/10/20 21:40:09 spiderr Exp $
+ * $Id: BitBoard.php,v 1.53 2008/10/20 21:40:09 spiderr Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.52 $ $Date: 2008/10/03 17:20:15 $ $Author: wjames5 $
+ * @version $Revision: 1.53 $ $Date: 2008/10/20 21:40:09 $ $Author: spiderr $
  * @package boards
  */
 
@@ -51,7 +51,7 @@ class BitBoard extends LibertyMime {
 		// Permission setup
 		$this->mViewContentPerm  = 'p_boards_read';
 		$this->mCreateContentPerm  = 'p_boards_create';
-		$this->mEditContentPerm  = 'p_boards_edit';
+		$this->mUpdateContentPerm  = 'p_boards_update';
 		$this->mAdminContentPerm = 'p_boards_admin';
 		$this->mExpungeContentPerm = 'p_boards_remove';
 	}
@@ -492,10 +492,10 @@ class BitBoard extends LibertyMime {
 
 		}
 
-		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && !($gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit'))) {
+		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && !($gBitUser->hasPermission('p_boards_update') || $gBitUser->hasPermission('p_boards_post_update'))) {
 
 		}
-		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && ($gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit'))) {
+		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && ($gBitUser->hasPermission('p_boards_update') || $gBitUser->hasPermission('p_boards_post_update'))) {
 			$selectSql .= ", ( SELECT COUNT(*)
 			FROM `".BIT_DB_PREFIX."boards_map` map
 			INNER JOIN `".BIT_DB_PREFIX."liberty_comments` s_lcom ON (map.`topic_content_id` = s_lcom.`root_id`)

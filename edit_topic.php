@@ -26,7 +26,7 @@ $rslt = false;
 // Set locked or sticky
 if( isset($_REQUEST['is_locked']) || isset($_REQUEST['is_sticky']) ){
 	// Check permissions to edit this topic
-	$board->verifyEditPermission();
+	$board->verifyUpdatePermission();
 	
 	if ( isset($_REQUEST['is_locked']) && is_numeric($_REQUEST['is_locked']) ){
 		$rslt = $gContent->lock($_REQUEST['is_locked']);

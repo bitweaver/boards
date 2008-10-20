@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/view_board_inc.php,v 1.3 2008/07/31 22:21:49 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/view_board_inc.php,v 1.4 2008/10/20 21:40:09 spiderr Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -36,7 +36,7 @@ if( !$gContent->isValid() ) {
 // approve or reject ananymous comments
 if (!empty($_REQUEST['action'])) {
 	// Check edit perms on the group
-	$gContent->verifyEditPermission();
+	$gContent->verifyUpdatePermission();
 	
 	// Check the ticket
 	$gBitUser->verifyTicket();

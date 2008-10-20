@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.29 2008/10/02 13:11:59 nickpalmer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.30 2008/10/20 21:40:09 spiderr Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="navbar">
@@ -12,7 +12,7 @@
 			{if $board->getPreference('boards_mailing_list') || $board->hasAdminPermission()}
 				<a class="item" href="{$smarty.const.BOARDS_PKG_URL}mailing_list.php?b={$board->mInfo.board_id}" title="{tr}Message Board Mailing List{/tr}">{biticon ipackage="icons" iname="internet-mail" iexplain="Edit Message Board"}</a>
 			{/if}
-			{if $board->hasEditPermission()}
+			{if $board->hasUpdatePermission()}
 				<a title="{tr}Edit message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit Message Board"}</a>
 			{/if}
 			{if $board->hasUserPermission( 'p_boards_remove', TRUE, TRUE )}
@@ -48,10 +48,10 @@
 						<th style="width:40%;">{tr}Title{/tr}</th>
 						<th style="width:5%;">{tr}Replies{/tr}</th>
 						<th style="width:20%;">{tr}Last Reply{/tr}</th>
-						{if $board->hasEditPermission() || $gBitUser->hasPermission('p_boards_post_edit')}
+						{if $board->hasUpdatePermission() || $gBitUser->hasPermission('p_boards_post_update')}
 							<th style="width:1%;"><abbr title="{tr}Number of posts by Anonymous users{/tr}">Anon</abbr></th>
 						{/if}
-						{if $board->hasEditPermission()}
+						{if $board->hasUpdatePermission()}
 							<th style="width:10%;" colspan="2">Actions</th>
 						{/if}
 					</tr>
@@ -83,11 +83,11 @@
 							{if $thread.post_count > 1}{if $thread.llc_user_id < 0}{$thread.l_anon_name|escape}{else}{displayname user_id=$thread.llc_user_id}{/if}{else}{/if}
 						</td>
 
-						{if $board->hasEditPermission() || $gBitUser->hasPermission('p_boards_post_edit')}
+						{if $board->hasUpdatePermission() || $gBitUser->hasPermission('p_boards_post_update')}
 							<td style="text-align:center;">{if $thread.unreg > 0}<a class="highlight" href="{$thread.url}" title="{$thread.title|escape}">{$thread.unreg}</a>{/if}</td>
 						{/if}
 
-						{if $board->hasEditPermission() || $gBitUser->hasPermission('p_boards_post_edit')}
+						{if $board->hasUpdatePermission() || $gBitUser->hasPermission('p_boards_post_update')}
 							<td class="actionicon">
 								{if $thread.flc_user_id<0 && $thread.first_approved==0}
 									<a title="{tr}Approve First Post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_board_inc.php?b={$board->mInfo.board_id}&amp;action=1&amp;comment_id={$thread.th_thread_id}">

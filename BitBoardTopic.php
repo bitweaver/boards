@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.57 2008/09/15 06:20:23 spiderr Exp $
- * $Id: BitBoardTopic.php,v 1.57 2008/09/15 06:20:23 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.58 2008/10/20 21:40:09 spiderr Exp $
+ * $Id: BitBoardTopic.php,v 1.58 2008/10/20 21:40:09 spiderr Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.57 $ $Date: 2008/09/15 06:20:23 $ $Author: spiderr $
+ * @version $Revision: 1.58 $ $Date: 2008/10/20 21:40:09 $ $Author: spiderr $
  * @package boards
  */
 
@@ -42,7 +42,7 @@ class BitBoardTopic extends LibertyMime {
 
 		// Permission setup
 		$this->mViewContentPerm  = 'p_boards_read';
-		$this->mEditContentPerm  = 'p_boards_edit';
+		$this->mUpdateContentPerm  = 'p_boards_update';
 		$this->mAdminContentPerm = 'p_boards_admin';
 
 		$this->mRootObj = NULL;  //a reference to the root obj
@@ -62,7 +62,7 @@ class BitBoardTopic extends LibertyMime {
 			array_push( $bindVars, $lookupId = @BitBase::verifyId( $this->mRootId ) ? $this->mRootId : $this->mContentId );
 			$this->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this, array( 'include_comments' => TRUE ) );
 
-			if (!($gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_posts_edit'))) {
+			if (!($gBitUser->hasPermission('p_boards_update') || $gBitUser->hasPermission('p_boards_posts_update'))) {
 				//$whereSql .= " AND ((first.`is_approved` = 1) OR (flc.`user_id` >= 0))";
 			}
 
@@ -349,10 +349,10 @@ class BitBoardTopic extends LibertyMime {
 			$substrSql = "SUBSTRING(s_lcom.`thread_forward_sequence`, 1, 10) LIKE SUBSTRING(lcom.`thread_forward_sequence`, 1, 10)";
 		}
 
-		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && !($gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit'))) {
+		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && !($gBitUser->hasPermission('p_boards_update') || $gBitUser->hasPermission('p_boards_post_update'))) {
 			$whereSql .= " AND ((post.`is_approved` = 1) OR (lc.`user_id` >= 0))";
 		}
-		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && ($gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit'))) {
+		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && ($gBitUser->hasPermission('p_boards_update') || $gBitUser->hasPermission('p_boards_post_update'))) {
 			$selectSql .= ", ( SELECT COUNT(*)
 								FROM `${BIT_DB_PREFIX}liberty_comments` AS s_lcom
 									INNER JOIN `".BIT_DB_PREFIX."liberty_content` s_lc ON (s_lcom.`content_id` = s_lc.`content_id`)
@@ -636,7 +636,7 @@ class BitBoardTopic extends LibertyMime {
 		$flip['is_locked']['upname']=tra('Thread Locked');
 		$flip['is_locked']['down']='internet-group-chat';
 		$flip['is_locked']['downname']=tra('Thread Unlocked');
-		$flip['is_locked']['perm']='p_boards_edit';
+		$flip['is_locked']['perm']='p_boards_update';
 
 		$flip['is_sticky']['state']=$arr['th_is_sticky'];
 		$flip['is_sticky']['req']=3;
@@ -646,7 +646,7 @@ class BitBoardTopic extends LibertyMime {
 		$flip['is_sticky']['upname']=tra('Sticky Thread');
 		$flip['is_sticky']['down']='media-playback-stop';
 		$flip['is_sticky']['downname']=tra('Non Sticky Thread');
-		$flip['is_sticky']['perm']='p_boards_edit';
+		$flip['is_sticky']['perm']='p_boards_update';
 
 		return $flip;
 	}

@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.35 2008/09/15 06:01:57 spiderr Exp $
- * $Id: BitBoardPost.php,v 1.35 2008/09/15 06:01:57 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.36 2008/10/20 21:40:09 spiderr Exp $
+ * $Id: BitBoardPost.php,v 1.36 2008/10/20 21:40:09 spiderr Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.35 $ $Date: 2008/09/15 06:01:57 $ $Author: spiderr $
+ * @version $Revision: 1.36 $ $Date: 2008/10/20 21:40:09 $ $Author: spiderr $
  * @package boards
  */
 
@@ -29,7 +29,7 @@ class BitBoardPost extends LibertyComment {
 
 		// Permission setup
 		$this->mViewContentPerm  = 'p_boards_read';
-		$this->mEditContentPerm  = 'p_boards_post_edit';
+		$this->mUpdateContentPerm  = 'p_boards_post_update';
 		$this->mAdminContentPerm = 'p_boards_admin';
 	}
 
@@ -68,7 +68,7 @@ class BitBoardPost extends LibertyComment {
 		global $gBitSystem;
 		$ret = FALSE;
 		if( $this->mCommentId && $this->verify( $pParamHash ) ) {
-			//$gBitSystem->verifyPermission('p_boards_edit');
+			//$gBitSystem->verifyPermission('p_boards_update');
 			//$pParamHash = (($pParamHash + 1)%2);
 			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_posts` WHERE `comment_id` = ?";
 			$isStored = $this->mDb->getOne( $query_sel, array( $this->mCommentId ) );
@@ -158,7 +158,7 @@ class BitBoardPost extends LibertyComment {
 			$join1 = '';
 		}
 
-		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && !($gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit'))) {
+		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && !($gBitUser->hasPermission('p_boards_update') || $gBitUser->hasPermission('p_boards_post_update'))) {
 			$whereSql .= " AND ((post.`is_approved` = 1) OR (lc.`user_id` >= 0))";
 		}
 
@@ -239,7 +239,7 @@ class BitBoardPost extends LibertyComment {
 			}
 		}
 
-		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && !($gBitUser->hasPermission('p_boards_edit') || $gBitUser->hasPermission('p_boards_post_edit'))) {
+		if ($gBitSystem->isFeatureActive('boards_posts_anon_moderation') && !($gBitUser->hasPermission('p_boards_update') || $gBitUser->hasPermission('p_boards_post_update'))) {
 			$whereSql .= " AND ((post.`is_approved` = 1) OR (lc.`user_id` >= 0))";
 		}
 

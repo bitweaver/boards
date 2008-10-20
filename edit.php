@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.13 2008/10/03 17:20:15 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.14 2008/10/20 21:40:09 spiderr Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -24,7 +24,7 @@ require_once(BOARDS_PKG_PATH.'lookup_inc.php' );
 
 //must be owner or admin to edit an existing board
 if( $gContent->isValid() ) {
-	$gContent->verifyEditPermission();
+	$gContent->verifyUpdatePermission();
 } else {
 	$gContent->verifyCreatePermission();
 }

@@ -64,8 +64,8 @@ $gBitInstaller->registerSchemaSequences( BOARDS_PKG_NAME, $sequences );
 $gBitInstaller->registerUserPermissions( BOARDS_PKG_NAME, array(
 	array( 'p_boards_admin' , 'Can admin message boards'  , 'admin'  , BOARDS_PKG_NAME ),
 	array( 'p_boards_create', 'Can create a message board', 'editors', BOARDS_PKG_NAME ),
-	array( 'p_boards_post_edit', 'Can edit any post', 'editors', BOARDS_PKG_NAME ),
-	array( 'p_boards_edit'  , 'Can edit any message board', 'editors', BOARDS_PKG_NAME ),
+	array( 'p_boards_post_update', 'Can update any post', 'editors', BOARDS_PKG_NAME ),
+	array( 'p_boards_update'  , 'Can update any message board', 'editors', BOARDS_PKG_NAME ),
 	array( 'p_boards_read'  , 'Can read message boards'   , 'basic'  , BOARDS_PKG_NAME ),
 	array( 'p_boards_remove', 'Can delete message boards' , 'editors', BOARDS_PKG_NAME ),
 ) );
