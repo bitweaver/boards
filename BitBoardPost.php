@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.36 2008/10/20 21:40:09 spiderr Exp $
- * $Id: BitBoardPost.php,v 1.36 2008/10/20 21:40:09 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.37 2008/11/02 21:40:56 pppspoonman Exp $
+ * $Id: BitBoardPost.php,v 1.37 2008/11/02 21:40:56 pppspoonman Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.36 $ $Date: 2008/10/20 21:40:09 $ $Author: spiderr $
+ * @version $Revision: 1.37 $ $Date: 2008/11/02 21:40:56 $ $Author: pppspoonman $
  * @package boards
  */
 
@@ -376,7 +376,7 @@ class BitBoardPost extends LibertyComment {
 		$this->setMetaData($data);
 
 		if ($gBitSystem->isPackageActive('messages')) {
-			require_once(MESSAGES_PKG_PATH.'messages_lib.php');
+			require_once(MESSAGES_PKG_PATH.'Messages.php');
 
 			$u = new BitUser($this->mInfo['user_id']);
 			$u->load();
