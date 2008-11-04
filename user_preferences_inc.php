@@ -15,11 +15,13 @@ $boardsSettings = array(
 	 */
 );
 
-foreach( $boardsSettings as $option => $op) {
-	if ($op['type']=="checkbox") {
-		$editUser->storePreference($op['pref'], !empty( $_REQUEST['boards'][$option]) ? 'y' : 'n', 'users');
-	} else {
-		$editUser->storePreference($op['pref'], !empty( $_REQUEST['boards'][$option]) ? $_REQUEST['boards'][$option] : '', 'users');
+if (!empty( $_REQUEST['boards'] ) ) {
+	foreach( $boardsSettings as $option => $op) {
+		if ($op['type']=="checkbox") {
+			$editUser->storePreference($op['pref'], !empty( $_REQUEST['boards'][$option]) ? 'y' : 'n', 'users');
+		} else {
+			$editUser->storePreference($op['pref'], !empty( $_REQUEST['boards'][$option]) ? $_REQUEST['boards'][$option] : '', 'users');
+		}
 	}
 }
 
