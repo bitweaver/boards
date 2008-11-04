@@ -34,3 +34,4 @@
     RewriteCond %{QUERY_STRING} .*f=([0-9]*).*
     RewriteRule .* /forums/index.php?migrate_board_id=%1   [R]
 </IfModule>
+
