@@ -33,7 +33,7 @@
 					{if !$topic_locked && $board->hasPostCommentsPermission()}
 						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1&amp;quote=y#editcomments" rel="nofollow">{biticon ipackage="icons" iname="mail-reply-all" iexplain="Reply with Quote to this Post" iforce="icon"}</a>
 					{/if}
-					{if $comment.editable}
+					{if $comment.is_editable || $gContent->hasUserPermission('p_liberty_edit_comments')}
 						<a href="{$comments_return_url}&amp;post_comment_id={$comment.comment_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit" iforce="icon"}</a>
 					{/if}
 					{if $board->hasUserPermission( 'p_liberty_admin_comments' )}

@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.37 2008/11/02 21:40:56 pppspoonman Exp $
- * $Id: BitBoardPost.php,v 1.37 2008/11/02 21:40:56 pppspoonman Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.38 2008/11/18 04:21:49 spiderr Exp $
+ * $Id: BitBoardPost.php,v 1.38 2008/11/18 04:21:49 spiderr Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.37 $ $Date: 2008/11/02 21:40:56 $ $Author: pppspoonman $
+ * @version $Revision: 1.38 $ $Date: 2008/11/18 04:21:49 $ $Author: spiderr $
  * @package boards
  */
 
@@ -202,7 +202,7 @@ class BitBoardPost extends LibertyComment {
 					$row['level'] = substr_count ( $row['thread_forward_sequence'], '.' ) - 1;
 					$c = new LibertyComment();
 					$c->mInfo=$row;
-					$row['editable'] = $c->userCanEdit();
+					$row['is_editable'] = $c->userCanEdit();
 					$flat_comments[$row['content_id']] = $row;
 					//va($row);
 				}
@@ -292,7 +292,7 @@ class BitBoardPost extends LibertyComment {
 				$row['display_url'] = $this->getDisplayUrl( $row['comment_id'], boards_get_topic_comment( $row['thread_forward_sequence'] ) );
 				$c = new LibertyComment();
 				$c->mInfo=$row;
-				$row['editable'] = $c->userCanEdit();
+				$row['is_editable'] = $c->userCanEdit();
 				$ret[] = $row;
 				//va($row);
 			}
