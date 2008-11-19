@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.38 2008/11/18 04:21:49 spiderr Exp $
- * $Id: BitBoardPost.php,v 1.38 2008/11/18 04:21:49 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.39 2008/11/19 14:31:16 wjames5 Exp $
+ * $Id: BitBoardPost.php,v 1.39 2008/11/19 14:31:16 wjames5 Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.38 $ $Date: 2008/11/18 04:21:49 $ $Author: spiderr $
+ * @version $Revision: 1.39 $ $Date: 2008/11/19 14:31:16 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -132,9 +132,9 @@ class BitBoardPost extends LibertyComment {
 		$mid = 'thread_forward_sequence  ASC';
 		if (!empty($pSortOrder)) {
 			if ($pSortOrder == 'commentDate_desc') {
-				$mid = 'last_modified DESC';
+				$mid = 'created DESC';
 			} else if ($pSortOrder == 'commentDate_asc') {
-				$mid = 'last_modified ASC';
+				$mid = 'created ASC';
 			} elseif ($pSortOrder == 'thread_asc') {
 				$mid = 'thread_forward_sequence  ASC';
 			// thread newest first is harder...
