@@ -1,10 +1,10 @@
 {strip}
 <table class="data">
 	<tr>
-		<th colspan="2">Board</th>
-		<th>Topics</th>
-		<th>Posts</th>
-		<th>Last Post</th>
+		<th class="boarddesc" colspan="2">Board</th>
+		<th class="topiccount">Topics</th>
+		<th class="postcount">Posts</th>
+		<th class="lastpost">Last Post</th>
 	<tr>
 	{foreach item=board from=$boardsList}
 		{if $board.title}
