@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/mailing_list.php,v 1.7 2008/10/03 17:43:07 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/mailing_list.php,v 1.8 2008/11/27 17:19:14 nickpalmer Exp $
  * Copyright (c) bitweaver Group
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -74,9 +74,10 @@ if( !empty( $_REQUEST['create_list'] ) ) {
 } elseif( $gContent->getPreference( 'boards_mailing_list' ) ) {
 	// check for submits that need boards_mailing_list
 	if( !empty( $_REQUEST['subscribe_boardsync'] ) ) {
-		if( $gContent->getPreference('board_sync_list_address') ) {
-			mailman_addmember( $gContent->getPreference( 'boards_mailing_list' ), $boardSyncInbox );
-		}
+	  if( $gContent->getPreference('board_sync_list_address') ) {
+	  	mailman_addmember( $gContent->getPreference( 'boards_mailing_list' ), $boardSyncInbox );
+		mailman_setmoderator( $gContent->getPreference( 'boards_mailing_list' ), $boardSyncInbox );
+	  }
 	} elseif( !empty( $_REQUEST['unsubscribe_boardsync'] ) ) {
 		if( $gContent->getPreference('board_sync_list_address') ) {
 			mailman_remove_member( $gContent->getPreference( 'boards_mailing_list' ), $boardSyncInbox );
