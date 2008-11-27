@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.30 2008/10/20 21:40:09 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.31 2008/11/27 15:48:31 nickpalmer Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="navbar">
@@ -89,7 +89,8 @@
 
 						{if $board->hasUpdatePermission() || $gBitUser->hasPermission('p_boards_post_update')}
 							<td class="actionicon">
-								{if $thread.flc_user_id<0 && $thread.first_approved==0}
+								{* modcomments handles this *}
+								{if $thread.flc_user_id<0 && $thread.first_approved==0 && !$gBitSystem->isPackageActive('modcomments')}
 									<a title="{tr}Approve First Post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_board_inc.php?b={$board->mInfo.board_id}&amp;action=1&amp;comment_id={$thread.th_thread_id}">
 										{biticon ipackage="icons" iname="list-add" iexplain="Approve First Post" iforce="icon"}
 									</a>
