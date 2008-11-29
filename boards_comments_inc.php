@@ -1,12 +1,12 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/boards_comments_inc.php,v 1.6 2008/11/27 17:19:14 nickpalmer Exp $
- * $Id: boards_comments_inc.php,v 1.6 2008/11/27 17:19:14 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/boards_comments_inc.php,v 1.7 2008/11/29 01:58:30 tekimaki_admin Exp $
+ * $Id: boards_comments_inc.php,v 1.7 2008/11/29 01:58:30 tekimaki_admin Exp $
  *
  * intermediate include file to provide centralized place to pre/post handle comments_inc include
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.6 $ $Date: 2008/11/27 17:19:14 $ $Author: nickpalmer $
+ * @version $Revision: 1.7 $ $Date: 2008/11/29 01:58:30 $ $Author: tekimaki_admin $
  * @package boards
  */
 
@@ -14,13 +14,6 @@
  * Initialization
  */
 require_once (LIBERTY_PKG_PATH.'comments_inc.php');
-
-if( !empty( $storeComment ) && $gContent->getPreference('boards_mailing_list') ) {
-	if( empty( $storeComment->mErrors ) ) {
-		$storeComment->loadComment();
-		send_board_email($storeComment);
-	}
-}
 
 if (!function_exists("send_board_email")) {
 	function send_board_email($storeComment) {
@@ -51,6 +44,13 @@ if (!function_exists("send_board_email")) {
 			$messageId = $bitMailer->sendEmail( $storeComment->getTitle(), $storeComment->parseData(), $email, $headerHash );
 			$storeComment->storeMessageId( $messageId );
 		}
+	}
+}
+
+if( !empty( $storeComment ) && $gContent->getPreference('boards_mailing_list') ) {
+	if( empty( $storeComment->mErrors ) ) {
+		$storeComment->loadComment();
+		send_board_email($storeComment);
 	}
 }
 
