@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.53 2008/10/20 21:40:09 spiderr Exp $
- * $Id: BitBoard.php,v 1.53 2008/10/20 21:40:09 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.54 2008/11/29 02:01:04 tekimaki_admin Exp $
+ * $Id: BitBoard.php,v 1.54 2008/11/29 02:01:04 tekimaki_admin Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.53 $ $Date: 2008/10/20 21:40:09 $ $Author: spiderr $
+ * @version $Revision: 1.54 $ $Date: 2008/11/29 02:01:04 $ $Author: tekimaki_admin $
  * @package boards
  */
 
@@ -144,8 +144,12 @@ class BitBoard extends LibertyMime {
 						if( !($error = mailman_newlist( array( 'listname' => $pParamHash['boards_mailing_list'], 'admin-password'=>$pParamHash['boards_mailing_list_password'], 'listadmin-addr'=>$gBitUser->getField( 'email' ) ) )) ) {
 							$this->storePreference( 'boards_mailing_list', !empty( $pParamHash['boards_mailing_list'] ) ? $pParamHash['boards_mailing_list'] : NULL );
 							$this->storePreference( 'boards_mailing_list_password', $pParamHash['boards_mailing_list_password'] );
+							// Subscribe the owner
+							mailman_addmember( $this->getPreference( 'boards_mailing_list'), $gBitUser->getField('email') );
+							// If we have an inbox then subscribe it as a moderator
 							if( $this->getBoardSyncInbox() ) {
 								mailman_addmember( $this->getPreference( 'boards_mailing_list' ), $this->getBoardSyncInbox() );
+								mailman_setmoderator( $this->getPreference( 'boards_mailing_list' ), $this->getBoardSyncInbox() );
 							}
 							$this->storePreference( 'board_sync_list_address', $this->getBoardMailingList() );
 						} else {
@@ -155,9 +159,14 @@ class BitBoard extends LibertyMime {
 				}
 			}
 
-
-			$this->mDb->CompleteTrans();
-			$this->load();
+			if( count( $this->mErrors ) == 0 ) {
+				$this->mDb->CompleteTrans();
+				$this->load();
+			} else {
+				$this->mDb->RollbackTrans();
+				$this->mContentId = NULL;
+				$this->mBitBoardId = NULL;
+			}
 		}
 		return( count( $this->mErrors )== 0 );
 	}
