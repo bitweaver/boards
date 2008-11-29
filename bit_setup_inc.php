@@ -53,6 +53,7 @@ if( $gBitSystem->isPackageActive( 'boards' ) ) {
 
 		// Register our event handler
 		$gModerationSystem->registerModerationObserver(BOARDS_PKG_NAME, 'modcomments', 'board_comments_moderation');
+		$gModerationSystem->registerModerationObserver(BOARDS_PKG_NAME, 'liberty', 'board_comments_moderation');
 
 		// And define the function we use to handle the observation.
 		function board_comments_moderation($pModerationInfo) {
@@ -67,7 +68,12 @@ if( $gBitSystem->isPackageActive( 'boards' ) ) {
 				$boardSync = $board->getPreference('board_sync_list_address');
 				$code = $storeComment->getPreference('board_confirm_code');
 				$approved = $board->getPreference('boards_mailing_list_password');
-
+				// Possible race. Did we beat the cron?
+				if( empty($code) ) {
+					require_once(BOARDS_PKG_PATH.'admin/boardsync_inc.php');
+					// Try to pick up the message!
+					board_sync_run(TRUE);
+				}
 				if( !empty($code) && !empty($boardSync) && !empty($approved) ) {
 					$boardSync = str_replace('@', '-request@', $boardSync);
 					$code = 'confirm '.$code;
