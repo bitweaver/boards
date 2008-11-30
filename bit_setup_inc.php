@@ -50,49 +50,52 @@ if( $gBitSystem->isPackageActive( 'boards' ) ) {
 	if( file_exists(BIT_ROOT_PATH.'moderation/bit_setup_inc.php') ) {
 		require_once( BIT_ROOT_PATH.'moderation/bit_setup_inc.php' );
 		global $gModerationSystem;
+		
+		if( $gBitSystem->isPackageActive( 'moderation' ) ) {
 
-		// Register our event handler
-		$gModerationSystem->registerModerationObserver(BOARDS_PKG_NAME, 'modcomments', 'board_comments_moderation');
-		$gModerationSystem->registerModerationObserver(BOARDS_PKG_NAME, 'liberty', 'board_comments_moderation');
-
-		// And define the function we use to handle the observation.
-		function board_comments_moderation($pModerationInfo) {
-			if( $pModerationInfo['type'] == 'comment_post' ) {
-				$storeComment = new LibertyComment( NULL, $pModerationInfo['content_id'] );
-				$storeComment->load();
-				$comments_return_url = '';
-				$root_id = $storeComment->mInfo['root_id'];
-				global $gContent;
-				$board = new BitBoard(NULL, $root_id);
-				$board->load();
-				$boardSync = $board->getPreference('board_sync_list_address');
-				$code = $storeComment->getPreference('board_confirm_code');
-				$approved = $board->getPreference('boards_mailing_list_password');
-				// Possible race. Did we beat the cron?
-				if( empty($code) ) {
-					require_once(BOARDS_PKG_PATH.'admin/boardsync_inc.php');
-					// Try to pick up the message!
-					board_sync_run(TRUE);
-				}
-				if( !empty($code) && !empty($boardSync) && !empty($approved) ) {
-					$boardSync = str_replace('@', '-request@', $boardSync);
-					$code = 'confirm '.$code;
-					require_once(KERNEL_PKG_PATH.'BitMailer.php');
-					$mailer = new BitMailer();
-
-					if( $pModerationInfo['last_status'] == MODERATION_DELETE ) {
-						// Send a reject message
-						$mailer->sendEmail($code, '', $boardSync,
-										   array( 'sender' =>
-												  BitBoard::getBoardSyncInbox() ) );
-					} else {
-						// Send an accept message
-						$mailer->sendEmail($code, '', $boardSync,
-										   array('sender' =>
-												 BitBoard::getBoardSyncInbox(),
-												 'x_headers' =>
-												 array( 'Approved' =>
-														$approved) ) );
+			// Register our event handler
+			$gModerationSystem->registerModerationObserver(BOARDS_PKG_NAME, 'modcomments', 'board_comments_moderation');
+			$gModerationSystem->registerModerationObserver(BOARDS_PKG_NAME, 'liberty', 'board_comments_moderation');
+	
+			// And define the function we use to handle the observation.
+			function board_comments_moderation($pModerationInfo) {
+				if( $pModerationInfo['type'] == 'comment_post' ) {
+					$storeComment = new LibertyComment( NULL, $pModerationInfo['content_id'] );
+					$storeComment->load();
+					$comments_return_url = '';
+					$root_id = $storeComment->mInfo['root_id'];
+					global $gContent;
+					$board = new BitBoard(NULL, $root_id);
+					$board->load();
+					$boardSync = $board->getPreference('board_sync_list_address');
+					$code = $storeComment->getPreference('board_confirm_code');
+					$approved = $board->getPreference('boards_mailing_list_password');
+					// Possible race. Did we beat the cron?
+					if( empty($code) ) {
+						require_once(BOARDS_PKG_PATH.'admin/boardsync_inc.php');
+						// Try to pick up the message!
+						board_sync_run(TRUE);
+					}
+					if( !empty($code) && !empty($boardSync) && !empty($approved) ) {
+						$boardSync = str_replace('@', '-request@', $boardSync);
+						$code = 'confirm '.$code;
+						require_once(KERNEL_PKG_PATH.'BitMailer.php');
+						$mailer = new BitMailer();
+	
+						if( $pModerationInfo['last_status'] == MODERATION_DELETE ) {
+							// Send a reject message
+							$mailer->sendEmail($code, '', $boardSync,
+											   array( 'sender' =>
+													  BitBoard::getBoardSyncInbox() ) );
+						} else {
+							// Send an accept message
+							$mailer->sendEmail($code, '', $boardSync,
+											   array('sender' =>
+													 BitBoard::getBoardSyncInbox(),
+													 'x_headers' =>
+													 array( 'Approved' =>
+															$approved) ) );
+						}
 					}
 				}
 			}
