@@ -61,7 +61,7 @@ $thread->load();
 
 if( !$thread->isValid() ) {
 	$gBitSystem->setHttpStatus( 404 );
-	$gBitSystem->fatalError("Unkown discussion");
+	$gBitSystem->fatalError( "Unknown discussion" );
 }
 
 $thread->verifyViewPermission();
