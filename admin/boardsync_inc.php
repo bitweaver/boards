@@ -142,10 +142,18 @@ function board_sync_get_user( $pFrom ) {
 
 function cache_check_content_prefs( $pName, $pValue ) {
 	global $gBitDb, $gBitSystem;
-	
-	$bindVars = array( $pName, $pValue );
+	static $prefs;
 
-	return $gBitDb->getOne( "SELECT `content_id` FROM `".BIT_DB_PREFIX."liberty_content_prefs` WHERE `pref_name`=? AND `pref_value`=?", $bindVars );
+	if( empty($prefs[$pName]) ) {		
+		$bindVars = array( $pName );
+		$prefs[$pName] = $gBitDb->getAssoc( "SELECT `pref_value`, `content_id` FROM `".BIT_DB_PREFIX."liberty_content_prefs` WHERE `pref_name`=?", $bindVars );
+	}
+
+	if( !empty($prefs[$pName][$pValue]) ) {
+		return $prefs[$pName][$pValue];
+	}
+
+	return NULL;
 }
 
 function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructure, $pModerate = FALSE , $pLog) {
@@ -174,7 +182,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 		$allRecipients = board_sync_get_header('To', $pRawHeader).','.
 			board_sync_get_header('Cc', $pRawHeader);
 
-		//		print "  ---- $allRecipients ----\n";
+		if ($pLog) print "  ---- $allRecipients ----\n";
 		$allSplit = split( ',', $allRecipients );
 		foreach( $allSplit as $s ) {
 			$s = trim( $s );
@@ -189,7 +197,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 				$toAddresses[] = array( 'email'=>$s );
 			}
 		}
-		//		print_r($toAddresses);
+		if ($pLog) print_r($toAddresses);
 
 		$date = board_sync_get_header('Date', $pRawHeader);
 		$fromaddress = board_sync_get_header('From', $pRawHeader);
@@ -201,7 +209,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 		print( "\n---- ".date( "Y-m-d HH:mm:ss" )." -------------------------\nImporting: ".$message_id."\nDate: ".$date."\nFrom: ".$fromaddress."\nTo: ".$toaddress."\nSubject: ".$subject."\nIn Reply To: ".$in_reply_to."\nName: ".$personal."\n");
 
 		foreach( $toAddresses AS $to ) {
-			if( $boardContentId = cache_check_content_prefs( 'board_sync_list_address', $to['email'] ) ) {
+			if( $boardContentId = cache_check_content_prefs( 'board_sync_list_address', strtolower($to['email']) ) ) {
 				print "Found Board Content $boardContentId for $to[email]\n";
 				if( !empty( $in_reply_to ) ) {
 					if( $parent = $gBitDb->GetRow( "SELECT `content_id`, `root_id` FROM `".BIT_DB_PREFIX."liberty_comments` WHERE `message_guid`=?", array( $in_reply_to ) ) ) {
@@ -297,10 +305,12 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 					if( !$pModerate && $gBitSystem->isPackageActive('moderation') && $gBitSystem->isPackageActive('modcomments') ) {
 						global $gModerationSystem, $gBitUser;
 						$moderation = $gModerationSystem->getModeration(NULL, $storeComment->mContentId);
-						// Allow to moderate
-						$gBitUser->setPermissionOverride('p_admin', TRUE);
-						$gModerationSystem->setModerationReply($moderation['moderation_id'], MODERATION_APPROVED);
-						$gBitUser->setPermissionOverride('p_admin', FALSE);
+						if( !empty($moderation) ) {
+							// Allow to moderate
+							$gBitUser->setPermissionOverride('p_admin', TRUE);
+							$gModerationSystem->setModerationReply($moderation['moderation_id'], MODERATION_APPROVED);
+							$gBitUser->setPermissionOverride('p_admin', FALSE);
+						}
 					}
 
 					$storeComment->mDb->query( "UPDATE `".BIT_DB_PREFIX."liberty_comments` SET `message_guid`=? WHERE `content_id`=?", array( $storeRow['message_guid'], $storeComment->mContentId ) );

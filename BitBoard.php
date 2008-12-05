@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.54 2008/11/29 02:01:04 tekimaki_admin Exp $
- * $Id: BitBoard.php,v 1.54 2008/11/29 02:01:04 tekimaki_admin Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.55 2008/12/05 19:51:46 tekimaki_admin Exp $
+ * $Id: BitBoard.php,v 1.55 2008/12/05 19:51:46 tekimaki_admin Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.54 $ $Date: 2008/11/29 02:01:04 $ $Author: tekimaki_admin $
+ * @version $Revision: 1.55 $ $Date: 2008/12/05 19:51:46 $ $Author: tekimaki_admin $
  * @package boards
  */
 
@@ -141,7 +141,7 @@ class BitBoard extends LibertyMime {
 					global $gBitSystem, $gBitUser;
 					require_once( UTIL_PKG_PATH.'mailman_lib.php' );
 					if( $gBitSystem->getConfig( 'boards_sync_mail_server' ) ) {
-						if( !($error = mailman_newlist( array( 'listname' => $pParamHash['boards_mailing_list'], 'admin-password'=>$pParamHash['boards_mailing_list_password'], 'listadmin-addr'=>$gBitUser->getField( 'email' ) ) )) ) {
+						if( !($error = mailman_newlist( array( 'listname' => $pParamHash['boards_mailing_list'], 'listhost' => $gBitSystem->getConfig( 'boards_email_host', $gBitSystem->getConfig( 'kernel_server_name' ) ), 'admin-password'=>$pParamHash['boards_mailing_list_password'], 'listadmin-addr'=>$gBitUser->getField( 'email' ) ) )) ) {
 							$this->storePreference( 'boards_mailing_list', !empty( $pParamHash['boards_mailing_list'] ) ? $pParamHash['boards_mailing_list'] : NULL );
 							$this->storePreference( 'boards_mailing_list_password', $pParamHash['boards_mailing_list_password'] );
 							// Subscribe the owner

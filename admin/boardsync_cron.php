@@ -8,4 +8,6 @@ require_once( '../../bit_setup_inc.php' );
 
 require_once( BOARDS_PKG_PATH.'admin/boardsync_inc.php');
 
+print "Running: ".date(DATE_RFC822)."\r\n";
+
 board_sync_run(TRUE);
