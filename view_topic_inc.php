@@ -35,7 +35,7 @@ if (!empty($_REQUEST['action'])) {
 	$comment->loadComment();
 	if (!$comment->isValid()) {
 		$gBitSystem->setHttpStatus( 404 );
-		$gBitSystem->fatalError("Invalid Comment");
+		$gBitSystem->fatalError(tra("Invalid Comment"));
 	}
 	switch ($_REQUEST['action']) {
 		case 1:
@@ -61,7 +61,7 @@ $thread->load();
 
 if( !$thread->isValid() ) {
 	$gBitSystem->setHttpStatus( 404 );
-	$gBitSystem->fatalError( "Unknown discussion" );
+	$gBitSystem->fatalError(tra("Unknown discussion"));
 }
 
 $thread->verifyViewPermission();
