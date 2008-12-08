@@ -5,6 +5,10 @@
  * customie the file util/mailman.cfg to get things tuned to ones liking
  * calling this file will update all your lists configuring them using
  * the settings in util/mailman.cfg
+ *
+ * WARNING!: If you are using boards with groups pkg and have different 
+ * list moderation settings for each list this will set all lists to the
+ * default moderation setting in mailman.cfg
  */
 
 require_once( '../../bit_setup_inc.php' );
