@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/list_boards_inc.php,v 1.2 2008/10/02 13:11:59 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/list_boards_inc.php,v 1.3 2008/12/08 21:53:40 wjames5 Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -26,6 +26,7 @@ $gBitSystem->verifyPermission( 'p_boards_read' );
 $ns = array();
 $board_all_cids =array();
 
+// @TODO move pigeonholes to its own file library or something
 if($gBitSystem->isPackageActive('pigeonholes')) {
 	require_once(PIGEONHOLES_PKG_PATH.'Pigeonholes.php');
 
