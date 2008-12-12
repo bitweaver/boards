@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_boards/boards_rss.php,v 1.3 2007/07/26 21:05:48 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_boards/boards_rss.php,v 1.4 2008/12/12 23:12:38 pppspoonman Exp $
  * @package boards
  * @subpackage functions
  */
@@ -34,7 +34,9 @@ $rss->description = $board->getField( 'parsed_data' );
 $rss->link =  'http://'.$_SERVER['HTTP_HOST'].$board->getDisplayUrl();
 
 // check if we want to use the cache file
-$cacheFile = TEMP_PKG_PATH.RSS_PKG_NAME.'/'.BOARDS_PKG_NAME.'/'.$cacheFileTail;
+// HTTP_HOST is needed beacuse people subscribe to RSS via different URLs (docs.bw.o and www.bw.o for example)
+// cached versions of other URLs will double posts 
+$cacheFile = TEMP_PKG_PATH.RSS_PKG_NAME.'/'.BOARDS_PKG_NAME.'/'.$_SERVER['HTTP_HOST']."_".$cacheFileTail;
 $rss->useCached( $rss_version_name, $cacheFile, $gBitSystem->getConfig( 'rssfeed_cache_time' ));
 
 $topic = new BitBoardTopic();
