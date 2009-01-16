@@ -75,9 +75,11 @@
 				{if $gBitUser->getPreference('boards_show_avatars','y') != 'y'}
 					{tr}Posted by{/tr}: {if $comment.user_id < 0}{$comment.unreg_uname|escape}{else}{displayname hash=$comment}{/if}, 
 				{else}
-					{tr}Posted{/tr}: {/if}
-						{$comment.created|reltime}, {if $comment.created != $comment.last_modified}
-					{tr}Last modification by{/tr}:
+					{tr}Posted{/tr}: 
+				{/if}
+				{$comment.created|reltime}
+				{if $comment.created != $comment.last_modified && ($comment.last_modified - $comment.created > 3600 || $board->hasAdminPermission())}
+					, {tr}Last modification by{/tr}:
 					{if $comment.user_id < 0}
 						{$comment.unreg_uname|escape}
 					{else}
