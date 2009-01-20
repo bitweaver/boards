@@ -58,5 +58,5 @@
 	</div><!-- end .body -->
 </div><!-- end .boards -->
 {/jstab}
-{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_tab_tpl}
+{include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_tab_tpl"}
 {/strip}
