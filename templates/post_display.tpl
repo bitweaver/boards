@@ -89,7 +89,7 @@
 			</span>
 		</div><!-- end .header -->
 
-		{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$comment}
+		{* include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$comment *}
 
 		{if $gBitUser->isRegistered() and $comment.is_warned}
 			<div class="warning">
