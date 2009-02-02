@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.39 2008/11/19 14:31:16 wjames5 Exp $
- * $Id: BitBoardPost.php,v 1.39 2008/11/19 14:31:16 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.40 2009/02/02 17:08:02 spiderr Exp $
+ * $Id: BitBoardPost.php,v 1.40 2009/02/02 17:08:02 spiderr Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.39 $ $Date: 2008/11/19 14:31:16 $ $Author: wjames5 $
+ * @version $Revision: 1.40 $ $Date: 2009/02/02 17:08:02 $ $Author: spiderr $
  * @package boards
  */
 
@@ -309,7 +309,8 @@ class BitBoardPost extends LibertyComment {
 		$bindVars = array();
 
 		$joinSql = $selectSql = $whereSql = '';
-		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this, array( 'include_comments' => TRUE ) );
+		$paramHash = array( 'include_comments' => TRUE );
+		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this, $paramHash );
 
 		if ($pContentId) {
 			$sql = "SELECT COUNT(*)

@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.60 2008/11/18 22:45:43 pppspoonman Exp $
- * $Id: BitBoardTopic.php,v 1.60 2008/11/18 22:45:43 pppspoonman Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.61 2009/02/02 17:08:02 spiderr Exp $
+ * $Id: BitBoardTopic.php,v 1.61 2009/02/02 17:08:02 spiderr Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.60 $ $Date: 2008/11/18 22:45:43 $ $Author: pppspoonman $
+ * @version $Revision: 1.61 $ $Date: 2009/02/02 17:08:02 $ $Author: spiderr $
  * @package boards
  */
 
@@ -60,7 +60,8 @@ class BitBoardTopic extends LibertyMime {
 			$bindVars = array();
 			$selectSql = $joinSql = $whereSql = '';
 			array_push( $bindVars, $lookupId = @BitBase::verifyId( $this->mRootId ) ? $this->mRootId : $this->mContentId );
-			$this->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this, array( 'include_comments' => TRUE ) );
+			$paramHash = array( array( 'include_comments' => TRUE ) );
+			$this->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this, $paramHash );
 
 			if (!($gBitUser->hasPermission('p_boards_update') || $gBitUser->hasPermission('p_boards_posts_update'))) {
 				//$whereSql .= " AND ((first.`is_approved` = 1) OR (flc.`user_id` >= 0))";
