@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.61 2009/02/02 17:08:02 spiderr Exp $
- * $Id: BitBoardTopic.php,v 1.61 2009/02/02 17:08:02 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.62 2009/02/04 17:42:00 tekimaki_admin Exp $
+ * $Id: BitBoardTopic.php,v 1.62 2009/02/04 17:42:00 tekimaki_admin Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.61 $ $Date: 2009/02/02 17:08:02 $ $Author: spiderr $
+ * @version $Revision: 1.62 $ $Date: 2009/02/04 17:42:00 $ $Author: tekimaki_admin $
  * @package boards
  */
 
@@ -489,7 +489,7 @@ class BitBoardTopic extends LibertyMime {
 			$pTopicId = $this->mRootId;
 		}
 
-		if( @$this->verifyId( $this->mRootId ) ) {
+		if( @$this->verifyId( $pTopicId ) ) {
 			if( $gBitSystem->isFeatureActive( 'pretty_urls' ) || $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				$rewrite_tag = $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ? 'view/':'';
 				$ret = BOARDS_PKG_URL.$rewrite_tag."topic/".$pTopicId;
