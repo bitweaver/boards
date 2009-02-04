@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.55 2008/12/05 19:51:46 tekimaki_admin Exp $
- * $Id: BitBoard.php,v 1.55 2008/12/05 19:51:46 tekimaki_admin Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.56 2009/02/04 19:14:42 tekimaki_admin Exp $
+ * $Id: BitBoard.php,v 1.56 2009/02/04 19:14:42 tekimaki_admin Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.55 $ $Date: 2008/12/05 19:51:46 $ $Author: tekimaki_admin $
+ * @version $Revision: 1.56 $ $Date: 2009/02/04 19:14:42 $ $Author: tekimaki_admin $
  * @package boards
  */
 
@@ -613,6 +613,19 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 	function getDisplayUrl( $pBitBoardId = NULL, $pParamHash = NULL ) {
 		global $gBitSystem;
 		$ret = NULL;
+
+		if( !empty( $pParamHash['comment'] ) && !empty( $pParamHash['comment']['thread_forward_sequence'] ) ){
+			// look up base of comment sequece which is BitBoardTopic
+			$seq = explode( ".",  $pParamHash['comment']['thread_forward_sequence'] );	
+			$topicRootId = 	(int)$seq[0];
+			if( @$this->verifyId( $topicRootId )) {
+				require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
+				$ret = @BitBoardTopic::getDisplayUrl( $topicRootId );
+				// we're out of here with our topic url
+				return $ret;
+			}
+		}
+
 		if( empty( $pBitBoardId ) && @BitBase::verifyId( $this->mBitBoardId )) {
 			$pBitBoardId = $this->mBitBoardId;
 		}

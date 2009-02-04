@@ -4,7 +4,7 @@
 {else}
 	<div style="margin-left:0px">
 {/if}
-<div class="body" id="comment_{$comment.comment_id|escape}">
+<div class="body" id="comment_{$comment.content_id|escape}">
 
 	{if $gBitUser->getPreference('boards_show_avatars','y') == 'y'}
 		<div class="userinfo">
