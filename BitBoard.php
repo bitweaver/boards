@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.56 2009/02/04 19:14:42 tekimaki_admin Exp $
- * $Id: BitBoard.php,v 1.56 2009/02/04 19:14:42 tekimaki_admin Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.57 2009/02/19 18:29:20 tekimaki_admin Exp $
+ * $Id: BitBoard.php,v 1.57 2009/02/19 18:29:20 tekimaki_admin Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.56 $ $Date: 2009/02/04 19:14:42 $ $Author: tekimaki_admin $
+ * @version $Revision: 1.57 $ $Date: 2009/02/19 18:29:20 $ $Author: tekimaki_admin $
  * @package boards
  */
 
@@ -301,7 +301,7 @@ class BitBoard extends LibertyMime {
 	* Make sure bitboard is loaded and valid
 	**/
 	function isValid() {
-		return( $this->verifyId( $this->mBitBoardId ) );
+		return( $this->verifyId( $this->mBitBoardId ) && $this->verifyId( $this->mContentId ) );
 	}
 
 	function getAllMap() {
