@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.40 2009/02/02 17:08:02 spiderr Exp $
- * $Id: BitBoardPost.php,v 1.40 2009/02/02 17:08:02 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.41 2009/03/17 20:23:21 wjames5 Exp $
+ * $Id: BitBoardPost.php,v 1.41 2009/03/17 20:23:21 wjames5 Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.40 $ $Date: 2009/02/02 17:08:02 $ $Author: spiderr $
+ * @version $Revision: 1.41 $ $Date: 2009/03/17 20:23:21 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -203,8 +203,29 @@ class BitBoardPost extends LibertyComment {
 					$c = new LibertyComment();
 					$c->mInfo=$row;
 					$row['is_editable'] = $c->userCanEdit();
+					
+					if( $gBitSystem->isFeatureActive( 'comments_allow_attachments' ) ){
+						// get attachments for each comment
+						global $gLibertySystem;
+						$query = "SELECT * FROM `".BIT_DB_PREFIX."liberty_attachments` la WHERE la.`content_id`=? ORDER BY la.`pos` ASC, la.`attachment_id` ASC";
+						if( $result2 = $this->mDb->query( $query,array( (int)$row['content_id'] ))) {
+							while( $row2 = $result2->fetchRow() ) {
+								if( $func = $gLibertySystem->getPluginFunction( $row2['attachment_plugin_guid'], 'load_function', 'mime' )) {
+									// we will pass the preferences by reference that the plugin can easily update them
+									if( empty( $row['storage'][$row2['attachment_id']] )) {
+										$row['storage'][$row2['attachment_id']] = array();
+									}
+									$row['storage'][$row2['attachment_id']] = $func( $row2, $row['storage'][$row2['attachment_id']] );
+								} else {
+									print "No load_function for ".$row2['attachment_plugin_guid'];
+								}
+							}
+						}
+						// end get attachements for each comment
+					}
+					
 					$flat_comments[$row['content_id']] = $row;
-					//va($row);
+					// vd($row);
 				}
 			}
 

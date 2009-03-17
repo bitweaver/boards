@@ -131,6 +131,9 @@
 
 		<div class="content">
 			{$comment.parsed_data}
+			{if $gBitSystem->isFeatureActive( 'comments_allow_attachments' )}
+				{include file="bitpackage:liberty/list_comment_files_inc.tpl" storageHash=$comment.storage}
+			{/if}
 		</div><!-- end .content -->
 	</div><!-- end .wrapper -->
 	<div class="clear"><!-- --></div>

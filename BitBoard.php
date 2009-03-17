@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.57 2009/02/19 18:29:20 tekimaki_admin Exp $
- * $Id: BitBoard.php,v 1.57 2009/02/19 18:29:20 tekimaki_admin Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.58 2009/03/17 20:23:21 wjames5 Exp $
+ * $Id: BitBoard.php,v 1.58 2009/03/17 20:23:21 wjames5 Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.57 $ $Date: 2009/02/19 18:29:20 $ $Author: tekimaki_admin $
+ * @version $Revision: 1.58 $ $Date: 2009/03/17 20:23:21 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -763,6 +763,7 @@ function boards_content_display ( $pContent ) {
 
 function boards_content_edit ( $pContent, $pParamHash ) {
 	global $gBitSmarty;
+	// topic service
 	if( !$pContent->isContentType( BITBOARDTOPIC_CONTENT_TYPE_GUID ) ) {
 		if( $pContent->isValid() ) {
 			$gBitSmarty->assign( 'boardInfo', BitBoard::getLinkedBoard( $pContent->mContentId ) );
@@ -777,6 +778,7 @@ function boards_content_edit ( $pContent, $pParamHash ) {
 	}
 }
 
+// store services for boads, topics, and posts
 function boards_content_store( $pContent, $pParamHash ) {
 	global $gBitDb, $gBitSmarty, $gBitSystem;
 
@@ -822,6 +824,34 @@ function boards_content_store( $pContent, $pParamHash ) {
 	} else {
 		if( @BitBase::verifyId( $pParamHash['content_id'] ) && @BitBase::verifyId( $pParamHash['linked_board_cid'] ) ) {
 			$pContent->mDb->query( "INSERT INTO `".BIT_DB_PREFIX."boards_map` (`board_content_id`,`topic_content_id`) VALUES (?,?)", array( $pParamHash['linked_board_cid'], $pParamHash['content_id'] ) );
+		}
+	}
+
+	// board posts ( e.g. liberty comments ) service
+	if( $gBitSystem->isPackageActive( 'boards' ) && $pContent->isContentType( BITCOMMENT_CONTENT_TYPE_GUID ) && $gBitSystem->isFeatureActive( 'boards_thread_track' )) {
+		$topic_id = substr( $pContent->mInfo['thread_forward_sequence'], 0, 10 );
+		$data = BitBoardTopic::getNotificationData($topic_id);
+		foreach( $data['users'] as $login => $user ) {
+			if( $data['topic']->mInfo['llc_last_modified'] > $user['track_date'] && $data['topic']->mInfo['llc_last_modified'] > $user['track_notify_date'] ) {
+				$data['topic']->sendNotification( $user );
+			}
+		}
+	}
+}
+
+function boards_content_verify( &$pObject, &$pParamHash ){
+	// board posts ( e.g. liberty comments ) service
+	global $gBitSystem, $gBitUser;
+	if( $gBitSystem->isPackageActive( 'boards' ) && $pObject->isContentType( BITCOMMENT_CONTENT_TYPE_GUID ) ){
+		if( empty( $pParamHash['post_comment_id'] ) ) {
+			$content_type = $gBitUser->getPreference( 'signature_content_type' );
+			$content_data = $gBitUser->getPreference( 'signature_content_data' );
+			if( !empty( $content_type ) && !empty( $content_data )) {
+				$pParamHash['edit'] .= "\n{renderer format_guid=$content_type class=mb-signature}$content_data{/renderer}";
+			}
+		}
+		if( BitBoardTopic::isLockedMsg( $pParamHash['parent_id'] )) {
+			$pObject->mErrors['warning']=tra("The selected Topic is Locked posting is disabled");
 		}
 	}
 }
