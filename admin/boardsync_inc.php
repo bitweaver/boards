@@ -274,7 +274,8 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 							'tmp_name'=> $partHash[$i]['attachment'],
 							'type'=>$gBitSystem->verifyMimeType( $partHash[$i]['attachment'] ),
 							'size'=>filesize( $partHash[$i]['attachment'] ),
-							'name'=>basename( $partHash[$i]['attachment'] )  );
+							'name'=>basename( $partHash[$i]['attachment'] ),
+							'user_id'=>$userInfo['user_id'] );
 					}
 				}
 
@@ -299,9 +300,25 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 				global $gBitUser;
 				$gBitUser->setPermissionOverride('p_liberty_trusted_editor', true);
 
+				// rudimentary check to add attachments to comments
+				if( $userInfo['user_id'] != ANONYMOUS_USER_ID ) {
+					$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
+					$bitUser = new $userClass( $userInfo['user_id'] );
+					$bitUser->load();
+				}
+				else{
+					$bitUser = &$gBitUser;
+				}
+				if( $gBitSystem->isFeatureActive( 'comments_allow_attachments' ) && $bitUser->hasPermission( 'p_liberty_attach_attachments' ) ){ 
+					$gBitUser->setPermissionOverride('p_liberty_attach_attachments', true);
+				};
+
 				$storeComment = new LibertyComment( NULL );
 				$gBitDb->StartTrans();
 				if( $storeComment->storeComment($storeRow) ) {
+					// undo the attachment permission
+					$gBitUser->setPermissionOverride('p_liberty_attach_attachments', false);
+
 					if( !$pModerate && $gBitSystem->isPackageActive('moderation') && $gBitSystem->isPackageActive('modcomments') ) {
 						global $gModerationSystem, $gBitUser;
 						$moderation = $gModerationSystem->getModeration(NULL, $storeComment->mContentId);
@@ -315,6 +332,11 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 
 					$storeComment->mDb->query( "UPDATE `".BIT_DB_PREFIX."liberty_comments` SET `message_guid`=? WHERE `content_id`=?", array( $storeRow['message_guid'], $storeComment->mContentId ) );
 
+					/**
+					 * DEPRECATED - slated for removal
+					 * now handled in boards service
+					 * note the moderate condition however - make sure that is covered in boards service
+					 *
 					if(!$pModerate && $gBitSystem->isPackageActive('bitboards') && $gBitSystem->isFeatureActive('bitboards_thread_track')) {
 						$topicId = substr( $storeComment->mInfo['thread_forward_sequence'], 0, 10 );
 						$data = BitBoardTopic::getNotificationData( $topicId );
@@ -324,6 +346,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 							}
 						}
 					}
+					*/
 
 					// Store the confirm code
 					if( $pModerate ) {
