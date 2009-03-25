@@ -332,10 +332,13 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 					$gBitDb->CompleteTrans();
 					return TRUE;
 				} else {
-					if( $storeComment->mErrors['store'] == 'Duplicate comment.' ) {
+					if( count( $storeComment->mErrors ) == 1 && !empty( $storeComment->mErrors['store'] ) && $storeComment->mErrors['store'] == 'Duplicate comment.' ) {
 						return TRUE;
 					} else {
 						$gBitDb->RollbackTrans();
+						foreach( $storeComment->mErrors as $error ){
+							bit_log_error( $error );
+						}
 						//						vd( $storeComment->mErrors );
 						return FALSE;
 					}
