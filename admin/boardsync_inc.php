@@ -304,7 +304,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 				if( $userInfo['user_id'] != ANONYMOUS_USER_ID ) {
 					$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
 					$bitUser = new $userClass( $userInfo['user_id'] );
-					$bitUser->load();
+					$bitUser->load( TRUE );
 				}
 				else{
 					$bitUser = &$gBitUser;
