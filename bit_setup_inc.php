@@ -26,6 +26,7 @@ if( $gBitSystem->isPackageActive( 'boards' ) ) {
 		'content_store_function' => 'boards_content_store',
 		'content_verify_function' => 'boards_content_verify',
 		'content_expunge_function' => 'boards_content_expunge',
+		'comment_store_function'		=> 'boards_comment_store',
 //		'content_view_tpl' => 'bitpackage:boards/service_view_boards.tpl',
 		'content_icon_tpl' => 'bitpackage:boards/boards_service_icons.tpl',
 		'content_list_sql_function' => 'boards_content_list_sql',

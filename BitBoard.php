@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.58 2009/03/17 20:23:21 wjames5 Exp $
- * $Id: BitBoard.php,v 1.58 2009/03/17 20:23:21 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.59 2009/03/26 13:37:42 wjames5 Exp $
+ * $Id: BitBoard.php,v 1.59 2009/03/26 13:37:42 wjames5 Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.58 $ $Date: 2009/03/17 20:23:21 $ $Author: wjames5 $
+ * @version $Revision: 1.59 $ $Date: 2009/03/26 13:37:42 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -778,7 +778,7 @@ function boards_content_edit ( $pContent, $pParamHash ) {
 	}
 }
 
-// store services for boads, topics, and posts
+// store services for boads
 function boards_content_store( $pContent, $pParamHash ) {
 	global $gBitDb, $gBitSmarty, $gBitSystem;
 
@@ -826,14 +826,21 @@ function boards_content_store( $pContent, $pParamHash ) {
 			$pContent->mDb->query( "INSERT INTO `".BIT_DB_PREFIX."boards_map` (`board_content_id`,`topic_content_id`) VALUES (?,?)", array( $pParamHash['linked_board_cid'], $pParamHash['content_id'] ) );
 		}
 	}
+}
 
+// store services for topics and posts
+function boards_comment_store( &$pObject, &$pParamHash ) {
 	// board posts ( e.g. liberty comments ) service
-	if( $gBitSystem->isPackageActive( 'boards' ) && $pContent->isContentType( BITCOMMENT_CONTENT_TYPE_GUID ) && $gBitSystem->isFeatureActive( 'boards_thread_track' )) {
-		$topic_id = substr( $pContent->mInfo['thread_forward_sequence'], 0, 10 );
-		$data = BitBoardTopic::getNotificationData($topic_id);
-		foreach( $data['users'] as $login => $user ) {
-			if( $data['topic']->mInfo['llc_last_modified'] > $user['track_date'] && $data['topic']->mInfo['llc_last_modified'] > $user['track_notify_date'] ) {
-				$data['topic']->sendNotification( $user );
+	// @TODO check that root object is a board -- otherwise all comments get fired
+	// @TODO probably should migrate sendMotification to Switchboard
+	if( $gBitSystem->isPackageActive( 'boards' ) && $pObject->isContentType( BITCOMMENT_CONTENT_TYPE_GUID ) && $gBitSystem->isFeatureActive( 'boards_thread_notification' )) {
+		if( isset( $pObject->mInfo['thread_forward_sequence'] ) ){
+			$topic_id = substr( $pObject->mInfo['thread_forward_sequence'], 0, 10 );
+			$data = BitBoardTopic::getNotificationData($topic_id);
+			foreach( $data['users'] as $login => $user ) {
+				if( $data['topic']->mInfo['llc_last_modified'] > $user['track_date'] && $data['topic']->mInfo['llc_last_modified'] > $user['track_notify_date'] ) {
+					$data['topic']->sendNotification( $user );
+				}
 			}
 		}
 	}
