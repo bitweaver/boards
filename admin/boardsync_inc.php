@@ -263,15 +263,15 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 						}
 						break;
 					}
-					$plainBody = NULL;
-					$htmlBody = NULL;
+					$plainBody = "";
+					$htmlBody = "";
 
 					foreach( array_keys( $partHash ) as $i ) {
 						if( !empty( $partHash[$i]['plain'] ) ) {
-							$plainBody = $partHash[$i]['plain'];
+							$plainBody .= $partHash[$i]['plain'];
 						}
 						if( !empty( $partHash[$i]['html'] ) ) {
-							$htmlBody = $partHash[$i]['html'];
+							$htmlBody .= $partHash[$i]['html'];
 						}
 						if( !empty( $partHash[$i]['attachment'] ) ) {
 							$storeRow['_files_override'][] = array(
