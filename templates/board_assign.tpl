@@ -47,7 +47,7 @@
 			{if $board.map}
 				{capture assign=title}
 					{if ! $board.integrity}
-						<img src="{$smarty.const.LIBERTY_PKG_URL}/icons/warning.png" alt="Integrity Check Failed" title="Integrity Check Failed" class="icon" />
+						{biticon iname=dialog-warning iexplain="Integrity Check Failed"}
 					{/if}
 					{$board.title|escape}
 				{/capture}
