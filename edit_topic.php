@@ -1,5 +1,16 @@
 <?php
+/**
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit_topic.php,v 1.6 2009/03/31 05:50:19 lsces Exp $
+ * Copyright (c) 2004 bitweaver Messageboards
+ * All Rights Reserved. See copyright.txt for details and a complete list of authors.
+ * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
+ * @package boards
+ * @subpackage functions
+ */
 
+/**
+ * required setup
+ */
 require_once( '../bit_setup_inc.php' );
 
 // Is package installed and enabled
