@@ -307,12 +307,16 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 					// rudimentary check to add attachments to comments
 					if( $userInfo['user_id'] != ANONYMOUS_USER_ID ) {
 						$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
-						$bitUser = new $userClass( $userInfo['user_id'] );
-						$bitUser->load( TRUE );
+						$newBitUser = new $userClass( $userInfo['user_id'] );
+						$newBitUser->load( TRUE );
 					}
-					else{
+
+					if( !empty( $newBitUser ) && $newBitUser->isValid() ){
+						$bitUser = &$newBitUser;
+					}else{
 						$bitUser = &$gBitUser;
 					}
+
 					if( $gBitSystem->isFeatureActive( 'comments_allow_attachments' ) && $bitUser->hasPermission( 'p_liberty_attach_attachments' ) ){ 
 						$gBitUser->setPermissionOverride('p_liberty_attach_attachments', true);
 					};
