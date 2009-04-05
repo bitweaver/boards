@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.31 2008/11/27 15:48:31 nickpalmer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.32 2009/04/05 12:04:18 lsces Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="navbar">
@@ -32,8 +32,8 @@
 		{if $board->hasPostCommentsPermission()}
 			<div class="navbar">
 				<a class="button" title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic" iforce="icon"} {tr}New Topic{/tr}</a>
-		{minifind sort_mode=$sort_mode b=$smarty.request.b prompt="Search `$smarty.const.BOARDS_PKG_DIR`..."}
 			</div>
+			{minifind sort_mode=$sort_mode b=$smarty.request.b prompt="Search `$smarty.const.BOARDS_PKG_DIR`..."}
 		{/if}
 
 		{form id="checkform"}
