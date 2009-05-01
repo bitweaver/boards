@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.60 2009/03/26 19:43:46 tekimaki_admin Exp $
- * $Id: BitBoard.php,v 1.60 2009/03/26 19:43:46 tekimaki_admin Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.61 2009/05/01 15:53:15 wjames5 Exp $
+ * $Id: BitBoard.php,v 1.61 2009/05/01 15:53:15 wjames5 Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.60 $ $Date: 2009/03/26 19:43:46 $ $Author: tekimaki_admin $
+ * @version $Revision: 1.61 $ $Date: 2009/05/01 15:53:15 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -607,7 +607,6 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 
 	/**
 	* Generates the URL to the bitboard page
-	* @param pExistsHash the hash that was returned by LibertyContent::pageExists
 	* @return the link to display the page.
 	*/
 	function getDisplayUrl( $pBitBoardId = NULL, $pParamHash = NULL ) {

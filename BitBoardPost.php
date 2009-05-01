@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.41 2009/03/17 20:23:21 wjames5 Exp $
- * $Id: BitBoardPost.php,v 1.41 2009/03/17 20:23:21 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.42 2009/05/01 15:53:15 wjames5 Exp $
+ * $Id: BitBoardPost.php,v 1.42 2009/05/01 15:53:15 wjames5 Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.41 $ $Date: 2009/03/17 20:23:21 $ $Author: wjames5 $
+ * @version $Revision: 1.42 $ $Date: 2009/05/01 15:53:15 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -348,7 +348,6 @@ class BitBoardPost extends LibertyComment {
 
 	/**
 	* Generates the URL to the bitboard page
-	* @param pExistsHash the hash that was returned by LibertyMime::pageExists
 	* @return the link to display the page.
 	*/
 	function getDisplayUrl( $pCommentId=NULL, $pTopicId=NULL ) {
