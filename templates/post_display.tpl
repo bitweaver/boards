@@ -78,13 +78,13 @@
 					{tr}Posted{/tr}: 
 				{/if}
 				{$comment.created|reltime}
-				{if $comment.created != $comment.last_modified && ($comment.last_modified - $comment.created > 3600 || $board->hasAdminPermission())}
-					, {tr}Last modification by{/tr}:
+				{if $board->hasAdminPermission() && $comment.last_modified - $comment.created > $gBitSystem->getConfig( 'comments_edit_minutes' )}
+					[ {tr}Modified by{/tr}:
 					{if $comment.user_id < 0}
 						{$comment.unreg_uname|escape}
 					{else}
 						{displayname user=$comment.modifier_user user_id=$comment.modifier_user_id real_name=$comment.modifier_real_name}
-					{/if}, {$comment.last_modified|reltime}
+					{/if}, {$comment.last_modified|reltime} ]
 				{/if}
 			</span>
 		</div><!-- end .header -->
