@@ -79,12 +79,12 @@
 				{/if}
 				{$comment.created|reltime}
 				{if $board->hasAdminPermission() && $comment.last_modified - $comment.created > $gBitSystem->getConfig( 'comments_edit_minutes' )}
-					[ {tr}Modified by{/tr}:
+					<em> {tr}Last modified{/tr}:
 					{if $comment.user_id < 0}
 						{$comment.unreg_uname|escape}
 					{else}
 						{displayname user=$comment.modifier_user user_id=$comment.modifier_user_id real_name=$comment.modifier_real_name}
-					{/if}, {$comment.last_modified|reltime} ]
+					{/if}, {$comment.last_modified|reltime} </em>
 				{/if}
 			</span>
 		</div><!-- end .header -->
