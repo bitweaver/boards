@@ -78,7 +78,7 @@
 					{tr}Posted{/tr}: 
 				{/if}
 				{$comment.created|reltime}
-				{if $board->hasAdminPermission() && $comment.last_modified - $comment.created > $gBitSystem->getConfig( 'comments_edit_minutes' )}
+				{if $board->hasAdminPermission() && $comment.last_modified != $comment.created}
 					<em> {tr}Last modified{/tr}:
 					{if $comment.user_id < 0}
 						{$comment.unreg_uname|escape}
