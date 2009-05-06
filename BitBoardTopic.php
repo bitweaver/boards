@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.63 2009/05/01 15:53:15 wjames5 Exp $
- * $Id: BitBoardTopic.php,v 1.63 2009/05/01 15:53:15 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.64 2009/05/06 15:13:29 bitweaver Exp $
+ * $Id: BitBoardTopic.php,v 1.64 2009/05/06 15:13:29 bitweaver Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.63 $ $Date: 2009/05/01 15:53:15 $ $Author: wjames5 $
+ * @version $Revision: 1.64 $ $Date: 2009/05/06 15:13:29 $ $Author: bitweaver $
  * @package boards
  */
 
@@ -499,69 +499,62 @@ class BitBoardTopic extends LibertyMime {
 		return $ret;
 	}
 
-	function isLocked($thread_id=false) {
+	function isLocked($pThreadId=false) {
 		global $gBitSystem;
-		if (!$thread_id) {
-			$thread_id = $this->mRootId;
+		if (!$pThreadId) {
+			$pThreadId = $this->mRootId;
 		} else {
-			$thread_id=intval($thread_id);
+			$pThreadId=intval($pThreadId);
 		}
-		$ret = $gBitSystem->mDb->getOne("SELECT `is_locked` FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = $thread_id");
+		$ret = $gBitSystem->mDb->getOne("SELECT `is_locked` FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = ?", array( $pThreadId ) );
 		return !empty($ret);
 	}
 
 	function isLockedMsg($parent_id) {
 		$parentComment = new LibertyComment(NULL,$parent_id);
-		$topic_id = $parentComment->mInfo['thread_forward_sequence'];
-		if (!empty($topic_id)) {
-			return BitBoardTopic::isLocked($topic_id);
+		$topicId = $parentComment->mInfo['thread_forward_sequence'];
+		if (!empty($topicId)) {
+			return BitBoardTopic::isLocked($topicId);
 		}
 		return false;
 	}
 
-	function isNotificationOn($thread_id=false) {
+	function isNotificationOn($pThreadId=false) {
 		global $gBitSystem, $gBitUser;
 		if ($gBitSystem->isPackageActive('boards') && $gBitSystem->isFeatureActive('boards_thread_track')) {
-			if (!$thread_id) {
-				$thread_id = $this->mRootId;
+			if (!$pThreadId) {
+				$pThreadId = $this->mRootId;
 			}
-			if (is_numeric($thread_id)) {
-				$topic_id = sprintf("%09d.",$thread_id);
+			if (is_numeric($pThreadId)) {
+				$topicId = sprintf("%09d.",$pThreadId);
 			}
-			return $gBitSystem->mDb->getOne("SELECT SUM(`notify`) FROM `".BIT_DB_PREFIX."boards_tracking` WHERE topic_id='$topic_id'");
+			return $gBitSystem->mDb->getOne("SELECT SUM(`notify`) FROM `".BIT_DB_PREFIX."boards_tracking` WHERE topic_id='$topicId'");
 		}
 		return false;
 	}
 
-	function getNotificationData($thread_id) {
+	function getNotificationData($pThreadId) {
 		global $gBitSystem, $gBitUser;
 		if ($gBitSystem->isPackageActive('boards') && $gBitSystem->isFeatureActive('boards_thread_track')) {
-			if (!$thread_id) {
-				$thread_id = $this->mRootId;
+			if (!$pThreadId) {
+				$pThreadId = $this->mRootId;
 			}
-			if (is_numeric($thread_id)) {
-				$topic_id = sprintf("%09d.",$thread_id);
+			if (is_numeric($pThreadId)) {
+				$topicId = sprintf("%09d.",$pThreadId);
 			}
-			$query = "SELECT
-			uu.user_id,
-			uu.email,
-			uu.login,
-			uu.real_name,
-			trk.`track_date`,
-			trk.`notify` AS track_notify,
-			trk.`notify_date` AS track_notify_date
-			FROM `".BIT_DB_PREFIX."boards_tracking` trk
-			LEFT JOIN `".BIT_DB_PREFIX."users_users` uu ON( uu.`user_id` = trk.`user_id` )
-			WHERE topic_id='$topic_id'";
+			$query = "SELECT uu.user_id, uu.email, uu.login, uu.real_name, trk.`track_date`, trk.`notify` AS track_notify, trk.`notify_date` AS track_notify_date
+						FROM `".BIT_DB_PREFIX."boards_tracking` trk
+							LEFT JOIN `".BIT_DB_PREFIX."users_users` uu ON( uu.`user_id` = trk.`user_id` )
+						WHERE topic_id=?";
 
-			$result = $gBitSystem->mDb->query($query);
+			$result = $gBitSystem->mDb->query( $query, array( $topicId ) );
 			$ret = array();
 			$ret['users']=array();
 			while( $res = $result->fetchRow() ) {
 				$res['user'] =( isset( $res['real_name'] )? $res['real_name'] : $res['login'] );
 				$ret['users'][$res['login']] = $res;
 			}
-			$ret['topic'] = new BitBoardTopic(intval($topic_id));
+			$ret['topic'] = new BitBoardTopic(intval($topicId));
 			$ret['topic']->load();
 			return $ret;
 		}
@@ -655,13 +648,13 @@ class BitBoardTopic extends LibertyMime {
 	function readTopic() {
 		global $gBitUser, $gBitSystem;
 		if ($gBitSystem->isFeatureActive('boards_thread_track') && $gBitUser->isRegistered()) {
-			$topic_id = sprintf("%09d.",$this->mRootId);
+			$topicId = sprintf("%09d.",$this->mRootId);
 			$BIT_DB_PREFIX = BIT_DB_PREFIX;
-			$c = $this->mDb->getOne("SELECT COUNT(*) FROM `".BIT_DB_PREFIX."boards_tracking` WHERE user_id=? AND topic_id='$topic_id'",array($gBitUser->mUserId));
+			$c = $this->mDb->getOne("SELECT COUNT(*) FROM `".BIT_DB_PREFIX."boards_tracking` WHERE user_id=? AND topic_id='$topicId'",array($gBitUser->mUserId));
 
 			$data = array(
 			'user_id' =>$gBitUser->mUserId,
-			'topic_id' =>$topic_id,
+			'topic_id' =>$topicId,
 			'track_date'=>time(),
 			);
 
@@ -670,7 +663,7 @@ class BitBoardTopic extends LibertyMime {
 			} else {
 				$key = array(
 				'user_id' =>$gBitUser->mUserId,
-				'topic_id' =>$topic_id,
+				'topic_id' =>$topicId,
 				);
 				$this->mDb->associateUpdate(BIT_DB_PREFIX."boards_tracking",$data,$key);
 			}
@@ -681,7 +674,7 @@ class BitBoardTopic extends LibertyMime {
 	function readTopicSet($pState) {
 		global $gBitUser, $gBitSystem;
 		if ($gBitSystem->isFeatureActive('boards_thread_track') && $gBitUser->isRegistered()) {
-			$topic_id = sprintf("%09d.",$this->mRootId);
+			$topicId = sprintf("%09d.",$this->mRootId);
 			$ret = FALSE;
 			if ($pState==null || !is_numeric($pState) || $pState > 1 || $pState<0) {
 				$this->mErrors[]=("Invalid current state");
@@ -690,7 +683,7 @@ class BitBoardTopic extends LibertyMime {
 				if ($pState == 0) {
 					$this->readTopic();
 				} else {
-					$this->mDb->query("DELETE FROM `".BIT_DB_PREFIX."boards_tracking` WHERE user_id=$gBitUser->mUserId AND topic_id='$topic_id'");
+					$this->mDb->query("DELETE FROM `".BIT_DB_PREFIX."boards_tracking` WHERE user_id=$gBitUser->mUserId AND topic_id='$topicId'");
 				}
 				$ret = true;
 			}
@@ -701,16 +694,16 @@ class BitBoardTopic extends LibertyMime {
 	function notify($pState) {
 		global $gBitUser, $gBitSystem;
 		if ($gBitSystem->isFeatureActive('boards_thread_track') && $gBitUser->isRegistered()) {
-			$topic_id = sprintf("%09d.",$this->mRootId);
+			$topicId = sprintf("%09d.",$this->mRootId);
 			$ret = FALSE;
 			if ($pState==null || !is_numeric($pState) || $pState > 1 || $pState<0) {
 				$this->mErrors[]=("Invalid current state");
 			} else {
 				$pState = (($pState+1)%2);
-				$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_tracking` WHERE user_id=$gBitUser->mUserId AND topic_id='$topic_id'";
+				$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_tracking` WHERE user_id=$gBitUser->mUserId AND topic_id='$topicId'";
 				$data = array(
 				'user_id' =>$gBitUser->mUserId,
-				'topic_id' =>$topic_id,
+				'topic_id' =>$topicId,
 				'notify'=>$pState,
 				);
 				$c = $this->mDb->getOne( $query_sel );
@@ -719,7 +712,7 @@ class BitBoardTopic extends LibertyMime {
 				} else {
 					$key = array(
 					'user_id' =>$gBitUser->mUserId,
-					'topic_id' =>$topic_id,
+					'topic_id' =>$topicId,
 					);
 					$this->mDb->associateUpdate(BIT_DB_PREFIX."boards_tracking",$data,$key);
 				}
