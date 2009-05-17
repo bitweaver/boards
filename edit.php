@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.14 2008/10/20 21:40:09 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/edit.php,v 1.15 2009/05/17 05:26:29 squareing Exp $
  * Copyright (c) 2004 bitweaver Messageboards
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -40,8 +40,7 @@ if( isset( $_REQUEST['remove'] ) ) {
 		} elseif( !$gContent->expunge() ) {
 			$gBitSmarty->assign_by_ref( 'errors', $deleteComment->mErrors );
 		} else {
-		  bit_redirect(BOARDS_PKG_URL.'index.php');
-		  die;
+			bit_redirect( BOARDS_PKG_URL.'index.php' );
 		}
 	} else {
 		$gBitSystem->fatalPermission( 'p_boards_remove' );
@@ -68,8 +67,7 @@ if( !empty( $_REQUEST["save_bitboard"] ) ) {
 	// disabled
 	if( $gContent->store( $storeHash ) ) {
 		$gContent->storePreference( 'board_sync_list_address', (!empty( $_REQUEST['bitboardconfig']['board_sync_list_address'] ) ?  $_REQUEST['bitboardconfig']['board_sync_list_address'] : NULL) );
-		header( "Location: ".$gContent->getDisplayUrl() );
-		die;
+		bit_redirect( $gContent->getDisplayUrl() );
 	} else {
 		$gBitSmarty->assign_by_ref( 'errors', $gContent->mErrors );
 	}
