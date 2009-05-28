@@ -110,9 +110,11 @@ if( empty( $_REQUEST["comments_style"] ) ) {
 
 require_once( BOARDS_PKG_PATH.'boards_comments_inc.php' );
 
-$postComment['registration_date']=$gBitUser->mInfo['registration_date'];
-$postComment['user_avatar_url']=$gBitUser->mInfo['avatar_url'];
-$postComment['user_url'] = $gBitUser->getDisplayUrl();
+if( $gBitUser->isRegistered() ) {
+	$postComment['registration_date']=$gBitUser->mInfo['registration_date'];
+	$postComment['user_avatar_url']=$gBitUser->mInfo['avatar_url'];
+	$postComment['user_url'] = $gBitUser->getDisplayUrl();
+}
 
 
 // display warnings - might be for edit processes - if you know please comment
