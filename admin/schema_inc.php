@@ -64,6 +64,7 @@ $gBitInstaller->registerSchemaIndexes( BOARDS_PKG_NAME, $indices );
 // ### Sequences
 $sequences = array (
 	'boards_board_id_seq' => array( 'start' => 1 ),
+	'boards_sections_id_seq' => array( 'start' => 1 ),
 );
 $gBitInstaller->registerSchemaSequences( BOARDS_PKG_NAME, $sequences );
 
