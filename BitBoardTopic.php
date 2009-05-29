@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.64 2009/05/06 15:13:29 bitweaver Exp $
- * $Id: BitBoardTopic.php,v 1.64 2009/05/06 15:13:29 bitweaver Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.65 2009/05/29 21:10:22 tekimaki_admin Exp $
+ * $Id: BitBoardTopic.php,v 1.65 2009/05/29 21:10:22 tekimaki_admin Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.64 $ $Date: 2009/05/06 15:13:29 $ $Author: bitweaver $
+ * @version $Revision: 1.65 $ $Date: 2009/05/29 21:10:22 $ $Author: tekimaki_admin $
  * @package boards
  */
 
@@ -32,6 +32,12 @@ class BitBoardTopic extends LibertyMime {
 	* @public
 	*/
 	var $mRootId;
+
+	/**
+	 * the content id of the topic comment object
+	 * this is really the contentId, but mContentId houses the parent board content_id currently
+	 **/
+	var $mCommentContentId;
 
 	/**
 	* During initialisation, be sure to call our base constructors
@@ -102,7 +108,7 @@ class BitBoardTopic extends LibertyMime {
 					INNER JOIN `".BIT_DB_PREFIX."boards` b ON (map.`board_content_id`=b.`content_id` )
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` rlc ON (rlc.`content_id` = lcom.`root_id`)
 				$joinSql
-					LEFT JOIN `".BIT_DB_PREFIX."boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
+					LEFT JOIN `".BIT_DB_PREFIX."boards_topics` th ON (th.`parent_id`=lcom.`content_id`)
 					LEFT JOIN `".BIT_DB_PREFIX."boards_posts` post ON(post.`comment_id`=lcom.`comment_id`)
 				WHERE
 					lcom.`root_id`=lcom.`parent_id` AND	$lookupColumn=?
@@ -113,6 +119,7 @@ class BitBoardTopic extends LibertyMime {
 			if( $result && $result->numRows() ) {
 				$this->mInfo = $result->fields;
 				$this->mContentId = $this->getField( 'content_id' );
+				$this->mCommentContentId = $this->getField('flc_content_id');
 				$llc_data = BitBoardTopic::getLastPost($this->mInfo);
 				$this->mInfo = array_merge($this->mInfo,$llc_data);
 				$this->mRootId = $result->fields['th_thread_id'];
@@ -187,14 +194,14 @@ class BitBoardTopic extends LibertyMime {
 	function store( &$pParamHash ) {
 		global $gBitSystem;
 		$ret = FALSE;
-		if( $this->mRootId && $this->verify( $pParamHash ) ) {
+		if( $this->mCommentContentId && $this->verify( $pParamHash ) ) {
 			//$pParamHash = (($pParamHash + 1)%2);
 			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = ?";
-			$isStored = $this->mDb->getOne( $query_sel, array( $this->mRootId ) );
+			$isStored = $this->mDb->getOne( $query_sel, array( $this->mCommentContentId ) );
 			if( $isStored ) {
-				$result = $this->mDb->associateUpdate( 'boards_topics', $pParamHash['topic_store'], array( 'parent_id' => $this->mRootId ) );
+				$result = $this->mDb->associateUpdate( 'boards_topics', $pParamHash['topic_store'], array( 'parent_id' => $this->mCommentContentId ) );
 			} else {
-				$pParamHash['topic_store']['parent_id'] = $this->mRootId;
+				$pParamHash['topic_store']['parent_id'] = $this->mCommentContentId;
 				$result = $this->mDb->associateInsert( 'boards_topics', $pParamHash['topic_store'] );
 			}
 			$ret = TRUE;
@@ -213,13 +220,13 @@ class BitBoardTopic extends LibertyMime {
 		} else {
 			$state = (($state+1)%2);
 			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = ?";
-			$result = $this->mDb->query( $query_sel, array( $this->mRootId ) );
+			$result = $this->mDb->query( $query_sel, array( $this->mCommentContentId ) );
 			if($result->RowCount()==0) {
 				$query_ins = "INSERT INTO `".BIT_DB_PREFIX."boards_topics` (`parent_id`,`is_locked`) VALUES ( ?, ?)";
-				$result = $this->mDb->query( $query_ins, array( $this->mRootId, $state ) );
+				$result = $this->mDb->query( $query_ins, array( $this->mCommentContentId, $state ) );
 			} else {
 				$query_up = "UPDATE `".BIT_DB_PREFIX."boards_topics` SET `is_locked` = ? WHERE `parent_id` = ?";
-				$result = $this->mDb->query( $query_up, array( $state, $this->mRootId ) );
+				$result = $this->mDb->query( $query_up, array( $state, $this->mCommentContentId ) );
 			}
 			$ret = true;
 		}
@@ -237,13 +244,13 @@ class BitBoardTopic extends LibertyMime {
 		} else {
 			$state = (($state+1)%2);
 			$query_sel = "SELECT * FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = ?";
-			$result = $this->mDb->query( $query_sel, array( $this->mRootId ) );
+			$result = $this->mDb->query( $query_sel, array( $this->mCommentContentId ) );
 			if($result->RowCount()==0) {
 				$query_ins = "INSERT INTO `".BIT_DB_PREFIX."boards_topics` (`parent_id`,`is_sticky`) VALUES ( ?, ? )";
-				$result = $this->mDb->query( $query_ins, array( $this->mRootId, $state ) );
+				$result = $this->mDb->query( $query_ins, array( $this->mCommentContentId, $state ) );
 			} else {
 				$query_up = "UPDATE `".BIT_DB_PREFIX."boards_topics` SET `is_sticky` = ? WHERE `parent_id` = ?";
-				$result = $this->mDb->query( $query_up, array( $state, $this->mRootId) );
+				$result = $this->mDb->query( $query_up, array( $state, $this->mCommentContentId) );
 			}
 			$ret = TRUE;
 		}
@@ -270,7 +277,7 @@ class BitBoardTopic extends LibertyMime {
 
 		// map the move to the topic table
 		$data = array();
-		$data['parent_id']=$lcom->mCommentId;
+		$data['parent_id']=$lcom->mContentId;
 		$data['is_moved']=$this->mRootId;
 		$this->mDb->associateInsert( BIT_DB_PREFIX."boards_topics", $data );
 		
@@ -405,7 +412,7 @@ class BitBoardTopic extends LibertyMime {
 						$selectSql
 							FROM `${BIT_DB_PREFIX}liberty_comments` lcom
 							INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
-							LEFT JOIN `${BIT_DB_PREFIX}boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
+							LEFT JOIN `${BIT_DB_PREFIX}boards_topics` th ON (th.`parent_id`=lcom.`content_id`)
 							LEFT JOIN `${BIT_DB_PREFIX}boards_posts` post ON (post.`comment_id` = lcom.`comment_id`)
 							$joinSql
 						WHERE
@@ -421,7 +428,7 @@ class BitBoardTopic extends LibertyMime {
 		$query_cant  = "SELECT count(*)
 						FROM `${BIT_DB_PREFIX}liberty_comments` lcom
 							INNER JOIN `${BIT_DB_PREFIX}liberty_content` lc ON( lc.`content_id` = lcom.`content_id` )
-							LEFT JOIN `${BIT_DB_PREFIX}boards_topics` th ON (th.`parent_id`=lcom.`comment_id`)
+							LEFT JOIN `${BIT_DB_PREFIX}boards_topics` th ON (th.`parent_id`=lcom.`content_id`)
 							LEFT JOIN `${BIT_DB_PREFIX}boards_posts` post ON (post.`comment_id` = lcom.`comment_id`)
 							$joinSql
 						WHERE
@@ -502,7 +509,7 @@ class BitBoardTopic extends LibertyMime {
 	function isLocked($pThreadId=false) {
 		global $gBitSystem;
 		if (!$pThreadId) {
-			$pThreadId = $this->mRootId;
+			$pThreadId = $this->mCommentContentId;
 		} else {
 			$pThreadId=intval($pThreadId);
 		}
@@ -511,10 +518,10 @@ class BitBoardTopic extends LibertyMime {
 	}
 
 	function isLockedMsg($parent_id) {
-		$parentComment = new LibertyComment(NULL,$parent_id);
-		$topicId = $parentComment->mInfo['thread_forward_sequence'];
-		if (!empty($topicId)) {
-			return BitBoardTopic::isLocked($topicId);
+		// $parentComment = new LibertyComment(NULL,$parent_id);
+		// $topicId = $parentComment->mInfo['thread_forward_sequence'];
+		if (!empty($parent_id)) {
+			return BitBoardTopic::isLocked($parent_id);
 		}
 		return false;
 	}
