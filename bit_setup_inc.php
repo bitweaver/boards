@@ -8,7 +8,7 @@ $registerHash = array(
 );
 $gBitSystem->registerPackage( $registerHash );
 
-if( $gBitSystem->isPackageActive( 'boards' ) ) {
+if( $gBitSystem->isPackageActive( 'boards' ) && $gBitUser->hasPermission( 'p_board_read' )) {
 	$menuHash = array(
 		'package_name'  => BOARDS_PKG_NAME,
 		'index_url'     => BOARDS_PKG_URL.'index.php',
