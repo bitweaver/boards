@@ -16,11 +16,18 @@ $tables = array(
 		migrate_topic_id INT
 		CONSTRAINT ', CONSTRAINT `boards_topics_parent_ref` FOREIGN KEY (`parent_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
 	",
+	'boards_sections' => "
+		section_id I4 PRIMARY,
+		section_title C(255)
+	",	
 	'boards' => "
 		board_id I4 PRIMARY,
 		content_id I4 NOTNULL,
+		section_id I4,
+		pos I4,
 		migrate_board_id INT
 		CONSTRAINT ', CONSTRAINT `boards_content_ref` FOREIGN KEY (`content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
+					, CONSTRAINT `boards_section_ref` FOREIGN KEY (`section_id`) REFERENCES `".BIT_DB_PREFIX."boards_sections` (`section_id`)'
 	",
 	'boards_map' => "
 		board_content_id I4 NOTNULL,
