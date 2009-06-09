@@ -26,7 +26,7 @@ $tables = array(
 		section_id I4,
 		pos I4,
 		migrate_board_id INT
-		CONSTRAINT ', CONSTRAINT `boards_content_ref` FOREIGN KEY (`content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
+		CONSTRAINT ', CONSTRAINT `boards_content_ref` FOREIGN KEY (`content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)
 					, CONSTRAINT `boards_section_ref` FOREIGN KEY (`section_id`) REFERENCES `".BIT_DB_PREFIX."boards_sections` (`section_id`)'
 	",
 	'boards_map' => "
