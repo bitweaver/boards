@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_boards/admin/upgrades/1.0.1.php,v 1.2 2009/05/30 17:21:15 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_boards/admin/upgrades/1.0.1.php,v 1.3 2009/06/10 20:25:47 wjames5 Exp $
  */
 global $gBitInstaller;
 
@@ -35,6 +35,8 @@ array( 'DATADICT' => array(
 
 array( 'PHP' => '
 // Is package installed and enabled
+global $gBitSystem;
+
 $gBitSystem->verifyPackage( "boards" );
 
 require_once( BOARDS_PKG_PATH."BitBoardTopic.php");
