@@ -82,6 +82,17 @@ function board_parse_msg_parts( &$pPartHash, $pMbox, $pMsgId, $pMsgPart, $pPartN
 	}
 	switch( $pMsgPart->type ) {
 		case '0':
+			// make sure text is UTF-8
+			if( $pMsgPart->ifparameters ){
+				foreach( $pMsgPart->parameters as $params ){
+					// we trust the email source to specify the correct charset
+					// Note: alternatively one might run a check to make sure the text is really utf-8, regardless of the header
+					if( $params->attribute == 'CHARSET' && $params->value != 'UTF-8' ){
+						$part = @iconv($params->value, 'UTF-8', $part ); 
+					}
+				}
+			}
+			// put msg in hash
 			$pPartHash[$pPartNum][strtolower($pMsgPart->subtype)] = $part;
 			break;
 		default:
