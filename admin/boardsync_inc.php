@@ -1,4 +1,7 @@
 <?php
+// load mime email parser utility
+require_once( UTIL_PKG_PATH.'emailparser/rfc822_addresses.php');
+require_once( UTIL_PKG_PATH.'emailparser/mime_parser.php');
 
 function board_sync_run($pLog = FALSE) {
 	global $gBitUser, $gBitSystem;
@@ -87,7 +90,8 @@ function board_parse_msg_parts( &$pPartHash, $pMbox, $pMsgId, $pMsgPart, $pPartN
 				foreach( $pMsgPart->parameters as $params ){
 					// we trust the email source to specify the correct charset
 					// Note: alternatively one might run a check to make sure the text is really utf-8, regardless of the header
-					if( $params->attribute == 'CHARSET' && $params->value != 'UTF-8' ){
+					// use strtolower on the attributes since different php installs do not reconcile casing consistantly
+					if( strtolower( $params->attribute ) == 'charset' && strtolower( $params->value ) != 'utf-8' ){
 						$part = @iconv($params->value, 'UTF-8', $part ); 
 					}
 				}
@@ -170,6 +174,9 @@ function cache_check_content_prefs( $pName, $pValue ) {
 function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructure, $pModerate = FALSE , $pLog) {
 	global $gBitSystem, $gBitDb;
 
+	// @TODO deprecate board_sync_get_header and get info directly from header hash
+	$header = imap_headerinfo( $mbox, $msgNum );
+
 	// Collect a bit of header information
 	$message_id = board_sync_get_header('Message-ID', $pRawHeader);
 	if( empty($message_id) ) {
@@ -177,7 +184,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 	}	
 
 	if( empty( $message_id ) ){
-		bit_error_log( "Email sync for message: ".board_sync_get_header('Subject', $pRawHeader)." failed: No Message Id in mail header." );
+		bit_log_error( "Email sync for message: ".board_sync_get_header('Subject', $pRawHeader)." failed: No Message Id in mail header." );
 	}else{
 		$subject = board_sync_get_header('Subject', $pRawHeader);
 		print("Processing: ".$message_id."\n");
@@ -194,8 +201,16 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 			$matches = array();
 			$toAddresses = array();
 			$allRecipients = '';
+			/* DEPRECATED
 			$allRecipients = board_sync_get_header('To', $pRawHeader).','.
 				board_sync_get_header('Cc', $pRawHeader);
+			*/
+			if( isset( $header->toaddress ) ){
+				$allRecipients .= $header->toaddress;
+			}
+			if( isset( $header->ccaddress ) ){
+				$allRecipients .= $header->ccaddress;
+			}
 
 			if ($pLog) print "  ---- $allRecipients ----\n";
 			$allSplit = split( ',', $allRecipients );
@@ -457,3 +472,19 @@ function board_sync_get_personal($pEmail) {
 	}
 	return NULL;
 }
+
+function is_utf8($string) {
+   
+    // From http://w3.org/International/questions/qa-forms-utf-8.html
+    return preg_match('%^(?:
+          [\x09\x0A\x0D\x20-\x7E]            # ASCII
+        | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
+        |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
+        | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
+        |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
+        |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
+        | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
+        |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
+    )*$%xs', $string);
+   
+} // function is_utf8
