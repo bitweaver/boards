@@ -200,7 +200,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 
 			$matches = array();
 			$toAddresses = array();
-			$allRecipients = '';
+			$allRecipients = "";
 			/* DEPRECATED
 			$allRecipients = board_sync_get_header('To', $pRawHeader).','.
 				board_sync_get_header('Cc', $pRawHeader);
@@ -209,7 +209,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 				$allRecipients .= $header->toaddress;
 			}
 			if( isset( $header->ccaddress ) ){
-				$allRecipients .= $header->ccaddress;
+				$allRecipients .= (( $allRecipients != "" )?",":"") . $header->ccaddress;
 			}
 
 			if ($pLog) print "  ---- $allRecipients ----\n";
