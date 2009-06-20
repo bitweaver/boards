@@ -175,7 +175,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pRawHeader, $pMsgStructu
 	global $gBitSystem, $gBitDb;
 
 	// @TODO deprecate board_sync_get_header and get info directly from header hash
-	$header = imap_headerinfo( $mbox, $msgNum );
+	$header = imap_headerinfo( $pMbox, $pMsgNum );
 
 	// Collect a bit of header information
 	$message_id = board_sync_get_header('Message-ID', $pRawHeader);
