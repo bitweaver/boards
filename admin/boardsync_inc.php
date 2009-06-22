@@ -1,8 +1,4 @@
 <?php
-// load mime email parser utility
-require_once( UTIL_PKG_PATH.'emailparser/rfc822_addresses.php');
-require_once( UTIL_PKG_PATH.'emailparser/mime_parser.php');
-
 function board_sync_run($pLog = FALSE) {
 	global $gBitUser, $gBitSystem;
 
