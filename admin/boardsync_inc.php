@@ -8,6 +8,7 @@ function board_sync_run($pLog = FALSE) {
 	
 	// Can we open the mailbox?
 	if( $mbox = imap_open( $connectionString, $gBitSystem->getConfig( 'boards_sync_user' ), $gBitSystem->getConfig( 'boards_sync_password' ) ) )  {
+
 		$MC = imap_check($mbox);
 		
 		// Fetch an overview for all messages in INBOX of mailbox has messages
@@ -16,13 +17,13 @@ function board_sync_run($pLog = FALSE) {
 			$result = imap_fetch_overview($mbox,"1:{$MC->Nmsgs}",0);
 			if( $messageNumbers = imap_sort( $mbox, SORTDATE, 0 ) ) {
 				foreach( $messageNumbers as $msgNum ) {
-					if ($pLog) print "Processing Msg#: ".$msgNum."<br />";
+					if ($pLog) print "Processing Msg#: ".$msgNum."\n";
 					$deleteMsg = FALSE;
 					$header = imap_headerinfo( $mbox, $msgNum );
 					
 					// Is this a moderation message?
 					if( preg_match('/.*? post from .*? requires approval/', $header->subject) ) {
-						if ($pLog) print "Is Moderation Request.<br />";
+						if ($pLog) print "Is Moderation Request.\n";
 						// moderated messages nest the orginal message in another part
 						// php imap functions dont give us easy access to part header info, so...
 						// to easily get to the headers of those message we open the part as a new imap stream
@@ -50,15 +51,15 @@ function board_sync_run($pLog = FALSE) {
 						$replyHeaders = board_sync_raw_headers($replyBody);
 						$approveSubj = board_sync_get_header('Subject', $replyHeaders);
 						$confirmCode = substr($approveSubj, strlen('confirm '));
-						if ($pLog) print "Confirm code: ".$confirmCode."<br />";
+						if ($pLog) print "Confirm code: ".$confirmCode."\n";
 
 						$deleteMsg = board_sync_process_message($mbox, $msgNum, $msgHeader, imap_fetchstructure( $mbox, $msgNum, 2), $confirmCode, $pLog);
 						// Is this a reminder message that we just skip?
 					} elseif( preg_match('/[0-9]+ .*? moderator request.* waiting/', $header->subject) ) {
-						if ($pLog) print "Deleting reminder.<br />";
+						if ($pLog) print "Deleting reminder.\n";
 						$deleteMsg = TRUE;
 					} elseif( preg_match('/Welcome to the .* mailing list/', $header->subject) ) {
-						if ($pLog) print "Deleting welcome message.<br />";
+						if ($pLog) print "Deleting welcome message.\n";
 						$deleteMsg = TRUE;
 					} else {
 						$deleteMsg = board_sync_process_message( $mbox, $msgNum, imap_headerinfo( $mbox, $msgNum ), imap_fetchstructure( $mbox, $msgNum ) , FALSE, $pLog);
@@ -66,7 +67,7 @@ function board_sync_run($pLog = FALSE) {
 					}
 					if( $deleteMsg && empty( $gDebug ) && empty( $gArgs['test'] ) ) {
 						//					vd("DELETE!");
-						if ($pLog) print "Deleted msg $msgNum<br />";
+						if ($pLog) print "Deleted msg $msgNum\n";
 						imap_delete( $mbox, $msgNum );
 					}
 				}
@@ -82,7 +83,7 @@ function board_sync_run($pLog = FALSE) {
 	
 }
 
-function board_parse_msg_parts( &$pPartHash, $pMbox, $pMsgId, $pMsgPart, $pPartNum ) {
+function board_parse_msg_parts( &$pPartHash, $pMbox, $pMsgId, $pMsgPart, $pPartNum, $pLog ) {
 
     //fetch part
     $part=imap_fetchbody( $pMbox, $pMsgId, $pPartNum);
@@ -99,6 +100,9 @@ function board_parse_msg_parts( &$pPartHash, $pMbox, $pMsgId, $pMsgPart, $pPartN
 		//4	QUOTED-PRINTABLE
 		//5	OTHER
 	}
+
+	if ($pLog) print "Msg part ".$pPartNum." type: ".$pMsgPart->subtype."\n";
+
 	switch( $pMsgPart->type ) {
 		case '0':
 			// make sure text is UTF-8
@@ -108,6 +112,7 @@ function board_parse_msg_parts( &$pPartHash, $pMbox, $pMsgId, $pMsgPart, $pPartN
 					// Note: alternatively one might run a check to make sure the text is really utf-8, regardless of the header
 					// use strtolower on the attributes since different php installs do not reconcile casing consistantly
 					if( strtolower( $params->attribute ) == 'charset' && strtolower( $params->value ) != 'utf-8' ){
+						if ($pLog) print( "Msg part ".$pPartNum." charset: ".$params->value."\n" ); 
 						$part = @iconv($params->value, 'UTF-8', $part ); 
 					}
 				}
@@ -202,19 +207,16 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 	}	
 	$subject = board_sync_get_headerinfo( $pMsgHeader, 'Subject' );
 
-
 	if( empty( $message_id ) ){
 		bit_log_error( "Email sync for message: ".$subject." failed: No Message Id in mail header." );
 	}else{
-		if ($pLog) print("Processing: ".$message_id."<br />");
-		if ($pLog) print("  Subject: ".$subject."<br />");
+		if ($pLog) print("Processing: ".$message_id."\n");
+		if ($pLog) print("  Subject: ".$subject."\n");
 		// Do we already have this message?
 		$contentId = NULL;
 		if( $message_id != NULL ) {
-			/*
 			$sql = "SELECT `content_id` FROM `".BIT_DB_PREFIX."liberty_comments` WHERE `message_guid`=?";
 			$contentId = $gBitDb->getOne( $sql, array( $message_id ) );
-			 */
 		}
 		if( empty($contentId) ) {
 
@@ -223,14 +225,14 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 			$allRecipients = "";
 			if( isset( $pMsgHeader->toaddress ) ){
 				$allRecipients .= $pMsgHeader->toaddress;
-				if ($pLog) print ("  To addresses: " . $pMsgHeader->toaddress . "<br />");
+				if ($pLog) print ("  To addresses: " . $pMsgHeader->toaddress . "\n");
 			}
 			if( isset( $pMsgHeader->ccaddress ) ){
 				$allRecipients .= (( $allRecipients != "" )?",":"") . $pMsgHeader->ccaddress;
-				if ($pLog) print ("  CC addresses: " . $pMsgHeader->ccaddress . "<br />");
+				if ($pLog) print ("  CC addresses: " . $pMsgHeader->ccaddress . "\n");
 			}
 
-			if ($pLog) print ("  All Recipients: ". $allRecipients ."<br />");
+			if ($pLog) print ("  All Recipients: ". $allRecipients ."\n");
 			$allSplit = split( ',', $allRecipients );
 			foreach( $allSplit as $s ) {
 				$s = trim( $s );
@@ -253,14 +255,13 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 			$personal = ucwords($from[0]->personal);
 			$in_reply_to = board_sync_get_headerinfo($pMsgHeader, 'in_reply_to');
 
-
-			if ($pLog) print( "<br />---- ".date( "Y-m-d HH:mm:ss" )." -------------------------<br />Importing: ".$message_id."<br />Date: ".$date."<br />From: ".$fromaddress."<br />To: ".$allRecipients."<br />Subject: ".$subject."<br />In Reply To: ".$in_reply_to."<br />Name: ".$personal."<br />");
+			if ($pLog) print( "\n---- ".date( "Y-m-d HH:mm:ss" )." -------------------------\nImporting: ".$message_id."\nDate: ".$date."\nFrom: ".$fromaddress."\nTo: ".$allRecipients."\nSubject: ".$subject."\nIn Reply To: ".$in_reply_to."\nName: ".$personal."\n");
 
 			foreach( $toAddresses AS $to ) {
-				if ($pLog) print( "  Processing email: " . strtolower($to['email']) . "<br />");
+				if ($pLog) print( "  Processing email: " . strtolower($to['email']) . "\n");
 				// get a board match for the email address
 				if( $boardContentId = cache_check_content_prefs( 'board_sync_list_address', strtolower($to['email']) ) ) {
-					if ($pLog) print "Found Board Content $boardContentId for $to[email]<br />";
+					if ($pLog) print "Found Board Content $boardContentId for $to[email]\n";
 					if( !empty( $in_reply_to ) ) {
 						if( $parent = $gBitDb->GetRow( "SELECT `content_id`, `root_id` FROM `".BIT_DB_PREFIX."liberty_comments` WHERE `message_guid`=?", array( $in_reply_to ) ) ) {
 							$replyId = $parent['content_id'];
@@ -298,9 +299,11 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 
 					switch( $pMsgStructure->type ) {
 					case '0':
-						board_parse_msg_parts( $partHash, $pMbox, $pMsgNum, $pMsgStructure, 1 );
+						if ($pLog) print( "Structure Type: text\n" );
+						board_parse_msg_parts( $partHash, $pMbox, $pMsgNum, $pMsgStructure, 1, $pLog );
 						break;
 					case '1':
+						if ($pLog) print( "Structure Type: multipart\n" );
 						if ($pModerate) {
 							$prefix = '2.';
 						}
@@ -308,7 +311,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 							$prefix = '';
 						}
 						foreach( $pMsgStructure->parts as $partNum => $part ) {
-							board_parse_msg_parts( $partHash, $pMbox, $pMsgNum, $part, $prefix.($partNum+1) );
+							board_parse_msg_parts( $partHash, $pMbox, $pMsgNum, $part, $prefix.($partNum+1), $pLog );
 						}
 						break;
 					}
@@ -417,11 +420,11 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 						}
 					}
 				}else{
-					if ($pLog) print "No Board match found for $to[email]<br />";
+					if ($pLog) print "No Board match found for $to[email]\n";
 				}
 			}
 		} elseif ( !empty($contentId) ) {
-			if ($pLog) print "Message Exists: $contentId : $message_id : $pModerate<br />";
+			if ($pLog) print "Message Exists: $contentId : $message_id : $pModerate\n";
 			// If this isn't a moderation message
 			if( $pModerate === FALSE ) {
 				// If the message exists it must have been approved via some
@@ -431,13 +434,13 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 					$storeComment = new LibertyComment( NULL, $contentId );
 					$storeComment->loadComment();
 					if ($storeComment->mInfo['content_status_id'] > 0) {
-						if ($pLog) print "Already approved: $contentId<br />";
+						if ($pLog) print "Already approved: $contentId\n";
 					} else {
 						$moderation = $gModerationSystem->getModeration(NULL, $contentId);
 						//				vd($moderation);
 						if( !empty($moderation) ) {
 							$gBitUser->setPermissionOverride('p_admin', TRUE);
-							if ($pLog) print( "Setting approved: $contentId<br />" );
+							if ($pLog) print( "Setting approved: $contentId\n" );
 							$gModerationSystem->setModerationReply($moderation['moderation_id'], MODERATION_APPROVED);
 							$gBitUser->setPermissionOverride('p_admin', FALSE);
 							if ($pLog) print "Done";
@@ -448,7 +451,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 				}
 			} else {
 			  // Store the approve code;
-			  if ($pLog) print "Storing approval code: " . $contentId . ":" . $pModerate . "<br />";
+			  if ($pLog) print "Storing approval code: " . $contentId . ":" . $pModerate . "\n";
 			  $storeComment = new LibertyComment( NULL, $contentId );
 			  $storeComment->storePreference('board_confirm_code', $pModerate);
 			}
