@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.65 2009/05/29 21:10:22 tekimaki_admin Exp $
- * $Id: BitBoardTopic.php,v 1.65 2009/05/29 21:10:22 tekimaki_admin Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.66 2009/06/25 18:09:15 tylerbello Exp $
+ * $Id: BitBoardTopic.php,v 1.66 2009/06/25 18:09:15 tylerbello Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.65 $ $Date: 2009/05/29 21:10:22 $ $Author: tekimaki_admin $
+ * @version $Revision: 1.66 $ $Date: 2009/06/25 18:09:15 $ $Author: tylerbello $
  * @package boards
  */
 
@@ -330,7 +330,8 @@ class BitBoardTopic extends LibertyMime {
 			$bindVars = array_merge ( $bindVars, $find );
 		} elseif( is_string( $find ) ) {
 			// or a string
-			$whereSql .= " AND UPPER( lc.`title` ) LIKE '%". strtoupper( $find ). "%'";
+			$bindVars[] = '%'. strtoupper( $find ).'%';
+			$whereSql .= " AND UPPER( lc.`title` ) LIKE ?"; 
 		}
 
 		// if we have the board's board_id (b) we use that, or if we have its content_id we can use that
