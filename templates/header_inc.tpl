@@ -24,9 +24,9 @@
 			
 			/* this is called from list_topic.tpl */
 			"moveThread": function( elmid, targetid, url, caller ){
-				$( elmid ).style['display']='inline';
+				document.getElementById( elmid ).style['display']='inline';
 				var url = url;
-				var elm = $(targetid);
+				var elm = document.getElementById(targetid);
 				BitAjax.updater( elm,url );
 				//this makes no sense but was here, so leave it for now but will prolly kill soon - wjames5
 				//return false;
