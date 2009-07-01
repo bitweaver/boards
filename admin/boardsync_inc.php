@@ -62,7 +62,11 @@ function board_sync_run($pLog = FALSE) {
 						if ($pLog) print "Deleting welcome message.\n";
 						$deleteMsg = TRUE;
 					} else {
-						$deleteMsg = board_sync_process_message( $mbox, $msgNum, imap_headerinfo( $mbox, $msgNum ), imap_fetchstructure( $mbox, $msgNum ) , FALSE, $pLog);
+						// imap_headerinfo acts retarded on these emails and improperly parses the header unless we call fetchstructure first - so do it.
+						// note this problem does not occure above when parsing the temp email in a moderated msg - god damn spooky
+						$msgStructure = imap_fetchstructure(  $mbox, $msgNum );
+						$msgHeader = imap_headerinfo( $mbox, $msgNum );
+						$deleteMsg = board_sync_process_message( $mbox, $msgNum, $msgHeader, $msgStructure, FALSE, $pLog);
 						//					vd($deleteMsg);
 					}
 					if( $deleteMsg && empty( $gDebug ) && empty( $gArgs['test'] ) ) {
