@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.61 2009/05/01 15:53:15 wjames5 Exp $
- * $Id: BitBoard.php,v 1.61 2009/05/01 15:53:15 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.62 2009/08/26 21:34:11 tylerbello Exp $
+ * $Id: BitBoard.php,v 1.62 2009/08/26 21:34:11 tylerbello Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.61 $ $Date: 2009/05/01 15:53:15 $ $Author: wjames5 $
+ * @version $Revision: 1.62 $ $Date: 2009/08/26 21:34:11 $ $Author: tylerbello $
  * @package boards
  */
 
@@ -833,6 +833,7 @@ function boards_comment_store( &$pObject, &$pParamHash ) {
 	// board posts ( e.g. liberty comments ) service
 	// @TODO check that root object is a board -- otherwise all comments get fired
 	// @TODO probably should migrate sendMotification to Switchboard
+	
 	if( $gBitSystem->isPackageActive( 'boards' ) && $pObject->isContentType( BITCOMMENT_CONTENT_TYPE_GUID ) && $gBitSystem->isFeatureActive( 'boards_thread_notification' )) {
 		if( isset( $pObject->mInfo['thread_forward_sequence'] ) ){
 			$topic_id = substr( $pObject->mInfo['thread_forward_sequence'], 0, 10 );
@@ -849,14 +850,8 @@ function boards_comment_store( &$pObject, &$pParamHash ) {
 function boards_content_verify( &$pObject, &$pParamHash ){
 	// board posts ( e.g. liberty comments ) service
 	global $gBitSystem, $gBitUser;
-	if( $gBitSystem->isPackageActive( 'boards' ) && $pObject->isContentType( BITCOMMENT_CONTENT_TYPE_GUID ) ){
-		if( empty( $pParamHash['post_comment_id'] ) ) {
-			$content_type = $gBitUser->getPreference( 'signature_content_type' );
-			$content_data = $gBitUser->getPreference( 'signature_content_data' );
-			if( !empty( $content_type ) && !empty( $content_data )) {
-				$pParamHash['edit'] .= "\n{renderer format_guid=$content_type class=mb-signature}$content_data{/renderer}";
-			}
-		}
+	// use is_a instead of isContentType( BITCOMMENT_CONTENT_TYPE_GUID ) as isContentType() checks isValid(), and this service method will not properly handle new object stores
+	if( $gBitSystem->isPackageActive( 'boards' ) && is_a( $pObject , 'LibertyComment' ) ) {
 		if( BitBoardTopic::isLockedMsg( $pParamHash['parent_id'] )) {
 			$pObject->mErrors['warning']=tra("The selected Topic is Locked posting is disabled");
 		}
