@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.66 2009/06/25 18:09:15 tylerbello Exp $
- * $Id: BitBoardTopic.php,v 1.66 2009/06/25 18:09:15 tylerbello Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardTopic.php,v 1.67 2009/08/26 21:37:50 tylerbello Exp $
+ * $Id: BitBoardTopic.php,v 1.67 2009/08/26 21:37:50 tylerbello Exp $
  * 
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com> 
- * @version $Revision: 1.66 $ $Date: 2009/06/25 18:09:15 $ $Author: tylerbello $
+ * @version $Revision: 1.67 $ $Date: 2009/08/26 21:37:50 $ $Author: tylerbello $
  * @package boards
  */
 
@@ -566,12 +566,13 @@ class BitBoardTopic extends LibertyMime {
 			$ret['topic']->load();
 			return $ret;
 		}
+		
 		return array();
 	}
 
 	function sendNotification($user) {
 		global $gBitSystem;
-		return;
+		//return;
 		$mail_subject= "Topic Reply Notification - ".$this->mInfo['title'];
 		$host = 'http://'.$_SERVER['HTTP_HOST'];
 		//TODO: use a template for this
@@ -586,8 +587,8 @@ class BitBoardTopic extends LibertyMime {
 			If you no longer wish to watch this topic you can either click the \"Stop watching this topic link\" found at the topic of the topic above, or by clicking the following link after logging on:
 
 			".$host.$this->getDisplayUrl()."&notify=1";
-
-			@mail($user['email'], $mail_subject , $mail_message, "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n");
+			
+		@mail($user['email'], $mail_subject , $mail_message, "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n");
 
 		$data = array(
 			'notify_date'=>time(),

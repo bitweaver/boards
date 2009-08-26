@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.62 2009/08/26 21:34:11 tylerbello Exp $
- * $Id: BitBoard.php,v 1.62 2009/08/26 21:34:11 tylerbello Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.63 2009/08/26 21:37:50 tylerbello Exp $
+ * $Id: BitBoard.php,v 1.63 2009/08/26 21:37:50 tylerbello Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.62 $ $Date: 2009/08/26 21:34:11 $ $Author: tylerbello $
+ * @version $Revision: 1.63 $ $Date: 2009/08/26 21:37:50 $ $Author: tylerbello $
  * @package boards
  */
 
@@ -832,7 +832,7 @@ function boards_comment_store( &$pObject, &$pParamHash ) {
 	global $gBitSystem;
 	// board posts ( e.g. liberty comments ) service
 	// @TODO check that root object is a board -- otherwise all comments get fired
-	// @TODO probably should migrate sendMotification to Switchboard
+	// @TODO probably should migrate sendNotification to Switchboard
 	
 	if( $gBitSystem->isPackageActive( 'boards' ) && $pObject->isContentType( BITCOMMENT_CONTENT_TYPE_GUID ) && $gBitSystem->isFeatureActive( 'boards_thread_notification' )) {
 		if( isset( $pObject->mInfo['thread_forward_sequence'] ) ){
