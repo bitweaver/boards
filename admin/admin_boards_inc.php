@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/admin/admin_boards_inc.php,v 1.11 2009/10/01 14:16:58 wjames5 Exp $
+// $Header: /cvsroot/bitweaver/_bit_boards/admin/admin_boards_inc.php,v 1.12 2009/10/04 15:46:35 wjames5 Exp $
 // Copyright (c) 2005 bitweaver BitBoards
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
@@ -22,7 +22,7 @@ $formBitBoardsLists = array(
 		'note' => 'Allow users to be sent emails when topics they are interested in receive replies.',
 	),
 	'boards_posts_anon_moderation' => array(
-		'label' => 'Enable Forced Anon Post Moderation',
+		'label' => 'Require Anonymous Post Moderation',
 		'note' => 'Require that ALL Anonymous posts must be validated before they are shown.',
 	),
 	'boards_hide_edit_tpl' => array(
