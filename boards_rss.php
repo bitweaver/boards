@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_boards/boards_rss.php,v 1.4 2008/12/12 23:12:38 pppspoonman Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_boards/boards_rss.php,v 1.5 2009/10/05 18:00:55 wjames5 Exp $
  * @package boards
  * @subpackage functions
  */
@@ -23,6 +23,8 @@ if(!empty($_REQUEST['u'])) {
 $boardId = !empty( $_REQUEST['b'] ) ? $_REQUEST['b'] : NULL;
 $board = new BitBoard( $boardId );
 $board->load();
+$board->verifyViewPermission();
+
 $board->parseData();
 
 $rss->title = $board->getField( 'title' )." Feed";
