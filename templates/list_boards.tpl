@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_boards.tpl,v 1.4 2007/05/03 08:10:23 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_boards.tpl,v 1.5 2009/10/05 17:28:58 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="header">
@@ -11,6 +11,8 @@
 			{if $child.sub_count > 0}
 				{include file="bitpackage:boards/board_cat.tpl" child=$child color=$color}
 			{/if}
+		{foreachelse}
+			{tr}No message boards found{/tr}
 		{/foreach}
 
 		{include file="bitpackage:boards/legend_inc.tpl"  boardicons=1}
