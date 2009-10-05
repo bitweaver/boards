@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.63 2009/08/26 21:37:50 tylerbello Exp $
- * $Id: BitBoard.php,v 1.63 2009/08/26 21:37:50 tylerbello Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.64 2009/10/05 17:19:52 wjames5 Exp $
+ * $Id: BitBoard.php,v 1.64 2009/10/05 17:19:52 wjames5 Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.63 $ $Date: 2009/08/26 21:37:50 $ $Author: tylerbello $
+ * @version $Revision: 1.64 $ $Date: 2009/10/05 17:19:52 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -755,7 +755,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 
 function boards_content_display ( $pContent ) {
 	global $gBitSmarty;
-	if( $pContent->isValid() ) {
+	if( $pContent->isValid() && $pContent->getField('content_type_guid') != 'bitboard' ) {
 		$gBitSmarty->assign( 'boardInfo', BitBoard::getLinkedBoard( $pContent->mContentId ) );
 	}
 }
