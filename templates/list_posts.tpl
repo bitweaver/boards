@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.19 2008/05/27 11:07:21 laetzer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.20 2009/10/08 22:20:30 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 
@@ -40,6 +40,9 @@
 				document.getElementById('set_btn').parentNode.removeChild(document.getElementById('set_btn'));
 			/*]]>*/</script>
 		{/form}
+		{if $gBitSystem->isPackageActive( 'rss' )}
+			<a title="{tr}Get RSS Feed{/tr}" href="{$smarty.const.BOARDS_PKG_URL}rss.php?t={$smarty.request.t}">{biticon iname="rss-16x16" ipackage=rss iexplain="Get RSS Feed"}</a>
+		{/if}
 		{assign var=flip value=$thread->getFlipFlop()}
 		{foreach from=$flip item=flip_s key=flip_name}
 			{include file="bitpackage:boards/flipswitch.tpl"}

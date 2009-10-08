@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.33 2009/10/05 17:19:53 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.34 2009/10/08 22:20:30 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="navbar">
@@ -12,6 +12,9 @@
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='icon' serviceHash=$board->mInfo}
 			{if $board->getPreference('boards_mailing_list') || $board->hasAdminPermission()}
 				<a class="item" href="{$smarty.const.BOARDS_PKG_URL}mailing_list.php?b={$board->mInfo.board_id}" title="{tr}Message Board Mailing List{/tr}">{biticon ipackage="icons" iname="internet-mail" iexplain="Edit Board Mailing List"}</a>
+			{/if}
+			{if $gBitSystem->isPackageActive( 'rss' )}
+				<a title="{tr}Get RSS Feed{/tr}" href="{$smarty.const.BOARDS_PKG_URL}rss.php?b={$smarty.request.b}">{biticon iname="rss-16x16" ipackage=rss iexplain="Get RSS Feed"}</a>
 			{/if}
 			{if $board->hasUpdatePermission()}
 				<a title="{tr}Edit message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit Message Board"}</a>
