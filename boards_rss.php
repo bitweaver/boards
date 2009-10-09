@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_boards/boards_rss.php,v 1.5 2009/10/05 18:00:55 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_boards/boards_rss.php,v 1.6 2009/10/09 04:07:42 wjames5 Exp $
  * @package boards
  * @subpackage functions
  */
@@ -9,49 +9,83 @@
  * Initialization
  */
 require_once( "../bit_setup_inc.php" );
-require_once( RSS_PKG_PATH."rss_inc.php" );
-require_once( BOARDS_PKG_PATH."BitBoard.php" );
-require_once( BOARDS_PKG_PATH."BitBoardTopic.php" );
 
 $gBitSystem->verifyPackage( 'boards' );
 $gBitSystem->verifyPackage( 'rss' );
 
-if(!empty($_REQUEST['u'])) {
-	$gBitUser->login($_REQUEST['u'],$_REQUEST['p']);
-}
+require_once( RSS_PKG_PATH."rss_inc.php" );
 
-$boardId = !empty( $_REQUEST['b'] ) ? $_REQUEST['b'] : NULL;
-$board = new BitBoard( $boardId );
-$board->load();
-$board->verifyViewPermission();
+// Load up the board or topic
+require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 
-$board->parseData();
-
-$rss->title = $board->getField( 'title' )." Feed";
-if ($gBitUser->isRegistered()) {
-	$rss->title = $rss->title. " (".$gBitUser->getDisplayName().")";
-}
-
-$rss->description = $board->getField( 'parsed_data' );
-$rss->link =  'http://'.$_SERVER['HTTP_HOST'].$board->getDisplayUrl();
+// access check
+if( !empty( $_REQUEST['t'] ) || !empty($_REQUEST['b'] ) ){
+	if( $gContent->isValid() ){
+		$gContent->load();
+	}
+	else{
+		$gBitSystem->setHttpStatus( 404 );
+		$gBitSystem->fatalError(tra("Unknown discussion"));
+	}
+} 
+$gContent->verifyViewPermission();
 
 // check if we want to use the cache file
 // HTTP_HOST is needed beacuse people subscribe to RSS via different URLs (docs.bw.o and www.bw.o for example)
 // cached versions of other URLs will double posts 
-$cacheFile = TEMP_PKG_PATH.RSS_PKG_NAME.'/'.BOARDS_PKG_NAME.'/'.$_SERVER['HTTP_HOST']."_".$cacheFileTail;
+// $cacheFile = TEMP_PKG_PATH.RSS_PKG_NAME.'/'.BOARDS_PKG_NAME.'/'.$_SERVER['HTTP_HOST']."_".$cacheFileTail;
+$cacheFile = TEMP_PKG_PATH.RSS_PKG_NAME.'/'.BOARDS_PKG_NAME.'/'.$_SERVER['HTTP_HOST'];
+// BitTopic acts strange and does not set mContentTypeGuid
+switch( $gContent->getField('content_type_guid') ){
+	case 'bitcomment':
+		$cacheFile .= '_comment'.$_REQUEST['t'];
+		break;
+	case 'bitboard':
+		if( $gContent->isValid() ){
+			$cacheFile .= '_board'.$_REQUEST['b'];
+		}
+		break;
+	default:
+		break;
+}
+$cacheFile.="_".$cacheFileTail;
 $rss->useCached( $rss_version_name, $cacheFile, $gBitSystem->getConfig( 'rssfeed_cache_time' ));
 
-$topic = new BitBoardTopic();
-$pParamHash = array();
-if( !empty( $_REQUEST['b'] ) ) {
-	$pParamHash['b'] = $_REQUEST['b'];
+$title = tra("Recent Discussions");
+$description = tra("All recent forum discussions on ".$gBitSystem->getConfig( 'site_title' ) );
+if( $gContent->isValid() ){
+	$gContent->parseData();
+	$title = $gContent->getField( 'title' )." Feed";
+	$description = $gContent->getField( 'parsed_data' );
 }
-$pParamHash['find'] ='';
-//TODO allow proper sort order
-$pParamHash['sort_mode'] = "llc_last_modified_desc";
-$max_records = $gBitSystem->getConfig( 'boards_rss_max_records', 10 );
-$pParamHash['offset'] = 0;
-$feeds = $topic->getList( $pParamHash );
+$rss->title = $title; 
+$rss->description = $description; 
+$rss->link =  'http://'.$_SERVER['HTTP_HOST'].$gContent->getDisplayUrl();
+
+
+// get all topics of a board or all recent topics in general
+switch( $gContent->getField('content_type_guid') ){
+	case 'bitcomment':
+		// need to use post class to get list of comments 
+		$gComment = new BitBoardPost($_REQUEST['t']);
+		// pass in a reference to the root object so that we can do proper permissions checks
+		$gComment->mRootObj = $gContent;
+		$feeds = $gComment->getComments( $gContent->mContentId, $gBitSystem->getConfig( 'boards_rss_max_records', 10 ), 0, 'commentDate_desc', 'flat' );
+		break;
+	case 'bitboard':
+	default:
+		$topic = new BitBoardTopic();
+		$pParamHash = array();
+		if( !empty( $_REQUEST['b'] ) ) {
+			$pParamHash['b'] = $_REQUEST['b'];
+		}
+		$pParamHash['find'] ='';
+		$pParamHash['sort_mode'] = "llc_last_modified_desc";
+		$pParamHash['max_records'] = $gBitSystem->getConfig( 'boards_rss_max_records', 10 );
+		$pParamHash['offset'] = 0;
+		$feeds = $topic->getList( $pParamHash );
+		break;
+}
 
 // get all the data ready for the feed creator
 foreach( $feeds as $feed ) {
@@ -61,34 +95,43 @@ foreach( $feeds as $feed ) {
 	//*/
 	$item = new FeedItem();
 	$item->title = $feed['title'];
-	if ($gBitUser->isRegistered()) {
-		if (!empty($feed['track']['on'])&&$feed['track']['mod']) {
-			$item->title = "[NEW] " .$item->title;
-		}
-	}
-	if( !empty( $feed['th_sticky'] ) ) {
-		$item->title = "[!] " .$item->title;
-	}
-	if( !empty( $feed['th_locked'] ) ) {
-		$item->title = "[#] " .$item->title;
-	}
-	$item->link = 'http://'.$_SERVER['HTTP_HOST'].$feed['url'];
-	$data = BitBoard::getBoard($feed['llc_content_id']);
-
-	$item->description =  $data['data'];
-
-	//TODO allow proper sort order
-	//$item->date = ( int )$feed['event_date'];
-
-	$item->date = ( int )$feed['llc_last_modified'];
 	$item->source = 'http://'.$_SERVER['HTTP_HOST'].BIT_ROOT_URL;
 
-	$user = new BitUser($feed['llc_user_id']);
-	$user->load();
+	switch( $gContent->getField('content_type_guid') ){
+		case 'bitcomment':
+			// topic specific 
+			$item->link = 'http://'.$_SERVER['HTTP_HOST'].BIT_ROOT_URL.'index.php?content_id='.$feed['content_id']; //comment paths are tricky, but work automagically through the front door
+			$item->description =  $feed['parsed_data'];
+			$item->date = ( int )$feed['last_modified'];
+			$user = new BitUser($feed['user_id']);
+			break;
+		case 'bitboard':
+		default:
+			// board specific
+			if ($gBitUser->isRegistered()) {
+				if (!empty($feed['track']['on'])&&$feed['track']['mod']) {
+					$item->title = "[NEW] " .$item->title;
+				}
+			}
+			if( !empty( $feed['th_sticky'] ) ) {
+				$item->title = "[!] " .$item->title;
+			}
+			if( !empty( $feed['th_locked'] ) ) {
+				$item->title = "[#] " .$item->title;
+			}
+			$item->link = 'http://'.$_SERVER['HTTP_HOST'].$feed['url'];
+			$data = BitBoard::getBoard($feed['llc_content_id']);
+			$item->description =  $data['data'];
+			//TODO allow proper sort order
+			//$item->date = ( int )$feed['event_date'];
+			$item->date = ( int )$feed['llc_last_modified'];
+			$user = new BitUser($feed['llc_user_id']);
+			break;
+	}
 
+	$user->load();
 	$item->author = $user->getDisplayName();//$gBitUser->getDisplayName( FALSE, array( 'user_id' => $feed['modifier_user_id'] ) );
 	$item->authorEmail = $user->mInfo['email'];
-
 	$item->descriptionTruncSize = $gBitSystem->getConfig( 'rssfeed_truncate', 1000 );
 	$item->descriptionHtmlSyndicated = FALSE;
 	/*

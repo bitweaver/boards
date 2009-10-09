@@ -34,7 +34,7 @@
 				<div class="row">
 					{formlabel label="Feed" for="pkg"}
 					{forminput}
-						{if $gContent->isValid()}{tr}{$gContent->getField('title')} Feed{/tr}{else}{tr}All Recent Topics{/tr}{/if}
+						{if $gContent->isValid()}{tr}{$gContent->getField('title')} Feed{/tr}{else}{tr}Recent Discussions{/tr}{/if}
 						{formhelp note=""}
 					{/forminput}
 				</div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/rss.php,v 1.1 2009/10/08 22:20:30 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/rss.php,v 1.2 2009/10/09 04:07:42 wjames5 Exp $
  */
 
 /**
@@ -8,6 +8,7 @@
  */
 require_once( '../bit_setup_inc.php' );
 
+$gBitSystem->verifyPackage( 'boards' );
 $gBitSystem->verifyPackage( 'rss' );
 
 $feedFormat = array(
