@@ -78,8 +78,16 @@ function board_sync_run($pLog = FALSE) {
 			}
 		}
 		
+		// final cleanup
 		imap_expunge( $mbox );
 		imap_close( $mbox );
+		// clear everything we've written to the temp directory
+		$dir = TEMP_PKG_PATH.BOARDS_PKG_NAME.'/boardsync';
+		if( is_dir( $dir ) && strpos( $item['path'], BIT_ROOT_PATH ) === 0 ) {
+			if( !unlink_r( $dir ) ) {
+				bit_log_error( "Failed to clear directory: ".$dir." in boards package mailinglist synchronization." );
+			}
+		}
 		
 	} else {
 		bit_log_error( __FILE__." failed imap_open $connectionString ".imap_last_error() );
