@@ -368,22 +368,48 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 					global $gBitUser;
 					$gBitUser->setPermissionOverride('p_liberty_trusted_editor', true);
 
-					// rudimentary check to add attachments to comments
+
+					// Check to add attachments 
+
+					// NOTE: we temporarily change the gBitUser here!
+					// This is so we can run a proper content permissions check
+					// for attachment permission against the parent
+					// board object. This is sort of a hack to deal 
+					// with the fact that LibertyContent does not have a
+					// means to check the permissions of any user except gBitUser -wjames5
+
+					// Important store a reference so we can switch back when we are done
+					$gBitUserOrg = $gBitUser;
+
+					// Load the message sending user
 					if( $userInfo['user_id'] != ANONYMOUS_USER_ID ) {
 						$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
 						$newBitUser = new $userClass( $userInfo['user_id'] );
 						$newBitUser->load( TRUE );
 					}
-
 					if( !empty( $newBitUser ) && $newBitUser->isValid() ){
-						$bitUser = &$newBitUser;
-					}else{
-						$bitUser = &$gBitUser;
+						// flip gBitUser to our message sender
+						$gBitUser = &$newBitUser;
 					}
 
-					if( $gBitSystem->isFeatureActive( 'comments_allow_attachments' ) && $bitUser->hasPermission( 'p_liberty_attach_attachments' ) ){ 
-						$gBitUser->setPermissionOverride('p_liberty_attach_attachments', true);
+					// Load the parent board
+					$board = new BitBoard( NULL, $boardContentId );
+					$board->load();
+
+					// Check the permission for the user on the board
+					if( $gBitSystem->isFeatureActive( 'comments_allow_attachments' ) && $board->hasPermission( 'p_liberty_attach_attachments' ) ){ 
+						// note we grant the permission to the anonymous user which will become gBitUser once again
+						$gBitUserOrg->setPermissionOverride('p_liberty_attach_attachments', true);
 					};
+					
+					// Clear the reference to this board so we dont mistakenly use it later
+					unset( $board );
+
+					// Important: switch gBitUser back!
+					$gBitUser = $gBitUserOrg;
+
+					// End check to add attachments to comments to the parent board
+					
 
 					$storeComment = new LibertyComment( NULL );
 					$gBitDb->StartTrans();
