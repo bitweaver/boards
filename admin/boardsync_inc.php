@@ -83,7 +83,7 @@ function board_sync_run($pLog = FALSE) {
 		imap_close( $mbox );
 		// clear everything we've written to the temp directory
 		$dir = TEMP_PKG_PATH.BOARDS_PKG_NAME.'/boardsync';
-		if( is_dir( $dir ) && strpos( $item['path'], BIT_ROOT_PATH ) === 0 ) {
+		if( is_dir( $dir ) && strpos( $dir, BIT_ROOT_PATH ) === 0 ) {
 			if( !unlink_r( $dir ) ) {
 				bit_log_error( "Failed to clear directory: ".$dir." in boards package mailinglist synchronization." );
 			}
@@ -397,7 +397,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 					$board->load();
 
 					// Check the permission for the user on the board
-					if( $gBitSystem->isFeatureActive( 'comments_allow_attachments' ) && $board->hasPermission( 'p_liberty_attach_attachments' ) ){ 
+					if( $gBitSystem->isFeatureActive( 'comments_allow_attachments' ) && $board->hasUserPermission( 'p_liberty_attach_attachments' ) ){ 
 						// note we grant the permission to the anonymous user which will become gBitUser once again
 						$gBitUserOrg->setPermissionOverride('p_liberty_attach_attachments', true);
 					};
