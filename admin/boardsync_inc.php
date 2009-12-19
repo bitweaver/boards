@@ -389,7 +389,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 					}
 					if( !empty( $newBitUser ) && $newBitUser->isValid() ){
 						// flip gBitUser to our message sender
-						$gBitUser = &$newBitUser;
+						$gBitUser = $newBitUser;
 					}
 
 					// Load the parent board
