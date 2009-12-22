@@ -188,17 +188,19 @@ function board_sync_get_user( $pFrom ) {
 	return $gBitUser->getUserInfo( array( 'user_id'=>-1 ) );
 }
 
-function cache_check_content_prefs( $pName, $pValue ) {
+function cache_check_content_prefs( $pName, $pValue, $pLower = FALSE ) {
 	global $gBitDb, $gBitSystem;
 	static $prefs;
 
-	if( empty($prefs[$pName]) ) {		
+	if( empty($prefs[$pLower][$pName]) ) {		
 		$bindVars = array( $pName );
-		$prefs[$pName] = $gBitDb->getAssoc( "SELECT `pref_value`, `content_id` FROM `".BIT_DB_PREFIX."liberty_content_prefs` WHERE `pref_name`=?", $bindVars );
+		$prefs[$pLower][$pName] = $gBitDb->getAssoc( "SELECT " .
+						    ($pLower ? 'LOWER(`pref_value`)' : '`pref_value`').
+						    ", `content_id` FROM `".BIT_DB_PREFIX."liberty_content_prefs` WHERE `pref_name`=?", $bindVars );
 	}
 
-	if( !empty($prefs[$pName][$pValue]) ) {
-		return $prefs[$pName][$pValue];
+	if( !empty($prefs[$pLower][$pName][$pValue]) ) {
+		return $prefs[$pLower][$pName][$pValue];
 	}
 
 	return NULL;
@@ -272,7 +274,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 			foreach( $toAddresses AS $to ) {
 				if ($pLog) print( "  Processing email: " . strtolower($to['email']) . "\n");
 				// get a board match for the email address
-				if( $boardContentId = cache_check_content_prefs( 'board_sync_list_address', strtolower($to['email']) ) ) {
+				if( $boardContentId = cache_check_content_prefs( 'board_sync_list_address', strtolower($to['email']), TRUE ) ) {
 					if ($pLog) print "Found Board Content $boardContentId for $to[email]\n";
 					if( !empty( $in_reply_to ) ) {
 						if( $parent = $gBitDb->GetRow( "SELECT `content_id`, `root_id` FROM `".BIT_DB_PREFIX."liberty_comments` WHERE `message_guid`=?", array( $in_reply_to ) ) ) {
