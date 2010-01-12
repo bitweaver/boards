@@ -45,7 +45,6 @@ function board_sync_run($pLog = FALSE) {
 						// open the temp file as an imap stream so we can use imap_headerinfo() to parse the org msg header
 						$mbox2 = imap_open( $filestore, "", "" );
 						$msgHeader = imap_headerinfo( $mbox2, 1 );
-
 						// moderation validation is also in a part, extract it
 						$replyBody = imap_fetchbody( $mbox, $msgNum, 3);
 						$replyHeaders = board_sync_raw_headers($replyBody);
@@ -53,7 +52,8 @@ function board_sync_run($pLog = FALSE) {
 						$confirmCode = substr($approveSubj, strlen('confirm '));
 						if ($pLog) print "Confirm code: ".$confirmCode."\n";
 
-						$deleteMsg = board_sync_process_message($mbox, $msgNum, $msgHeader, imap_fetchstructure( $mbox, $msgNum, 2), $confirmCode, $pLog);
+						$deliveredTo = board_sync_delivered_to($replyHeaders);
+						$deleteMsg = board_sync_process_message($mbox, $msgNum, $msgHeader, imap_fetchstructure( $mbox, $msgNum, 2), $confirmCode, $pLog, $deliveredTo);
 						// Is this a reminder message that we just skip?
 					} elseif( preg_match('/[0-9]+ .*? moderator request.* waiting/', $header->subject) ) {
 						if ($pLog) print "Deleting reminder.\n";
@@ -66,7 +66,10 @@ function board_sync_run($pLog = FALSE) {
 						// note this problem does not occure above when parsing the temp email in a moderated msg - god damn spooky
 						$msgStructure = imap_fetchstructure(  $mbox, $msgNum );
 						$msgHeader = imap_headerinfo( $mbox, $msgNum );
-						$deleteMsg = board_sync_process_message( $mbox, $msgNum, $msgHeader, $msgStructure, FALSE, $pLog);
+						// With multiple To: recipients it is often handy to know who the message is "Delivered-To" by the MTA
+						$raw_headers = imap_fetchheader($mbox, $msgNum);
+						$deliveredTo = board_sync_delivered_to($raw_headers);
+						$deleteMsg = board_sync_process_message( $mbox, $msgNum, $msgHeader, $msgStructure, FALSE, $pLog, $deliveredTo);
 						//					vd($deleteMsg);
 					}
 					if( $deleteMsg && empty( $gDebug ) && empty( $gArgs['test'] ) ) {
@@ -168,7 +171,7 @@ function board_parse_msg_parts( &$pPartHash, $pMbox, $pMsgId, $pMsgPart, $pPartN
     //if subparts... recurse into function and parse them too!
     if( !empty( $pMsgPart->parts ) ){
         foreach ($pMsgPart->parts as $pno=>$parr){
-            board_parse_msg_parts( $pPartHash, $pMbox, $pMsgId, $parr, ( $pPartNum.'.'.( $pno + 1 ) ) );
+		board_parse_msg_parts( $pPartHash, $pMbox, $pMsgId, $parr, ( $pPartNum.'.'.( $pno + 1 ) ), $pLog);
 		}
 	}
 }
@@ -209,7 +212,7 @@ function cache_check_content_prefs( $pName, $pValue, $pLower = FALSE ) {
 /**
  * $pMsgHeader is a imap_headerinfo generated array
  **/
-function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructure, $pModerate = FALSE , $pLog) {
+function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructure, $pModerate = FALSE , $pLog=FALSE, $pDeliveredTo=NULL) {
 	global $gBitSystem, $gBitDb;
 	// vd( $pMsgHeader );
 
@@ -274,10 +277,17 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 			}
 			$in_reply_to = board_sync_get_headerinfo($pMsgHeader, 'in_reply_to');
 
-			if ($pLog) print( "\n---- ".date( "Y-m-d HH:mm:ss" )." -------------------------\nImporting: ".$message_id."\nDate: ".$date."\nFrom: ".$fromaddress."\nTo: ".$allRecipients."\nSubject: ".$subject."\nIn Reply To: ".$in_reply_to."\nName: ".$personal."\n");
+			if ($pLog) print( "\n---- ".date( "Y-m-d HH:mm:ss" )." -------------------------\nImporting: ".$message_id."\nDate: ".$date."\nFrom: ".$fromaddress."\nTo: ".$allRecipients."\nSubject: ".$subject."\nIn Reply To: ".$in_reply_to."\nName: ".$personal.(is_array($pDeliveredTo) ? "\nDelivered-To:".implode(", ", $pDeliveredTo) : '')."\n");
 
 			foreach( $toAddresses AS $to ) {
 				if ($pLog) print( "  Processing email: " . strtolower($to['email']) . "\n");
+				// Attempt to filter by "Delivered-To:" headers if provided by the MTA
+				if (isset($pDeliveredTo) && 
+				    !in_array(strtolower($to['email']), $pDeliveredTo)) {
+				  if ($pLog) print "\nSkipping To: not in Delivered-To:" . strtolower($to['email']);
+				  
+				  continue;
+				}
 				// get a board match for the email address
 				if( $boardContentId = cache_check_content_prefs( 'board_sync_list_address', strtolower($to['email']), TRUE ) ) {
 					if ($pLog) print "Found Board Content $boardContentId for $to[email]\n";
@@ -527,6 +537,18 @@ function board_sync_get_headerinfo( $header, $key ){
 	$ret = NULL;
 	if( isset( $header->$key ) ){
 		$ret = $header->$key;
+	}
+	return $ret;
+}
+
+function board_sync_delivered_to( $raw_headers ) {
+	$ret = null;
+	if (isset($raw_headers) && 
+	    preg_match_all("/Delivered-To:\s*(.*)\s*/", $raw_headers, $deliveredTo) > 0) {
+		$ret = array();
+		foreach ($deliveredTo[1] as $address) {
+		  $ret[] = strtolower(trim($address));
+		}
 	}
 	return $ret;
 }
