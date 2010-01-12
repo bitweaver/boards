@@ -266,7 +266,12 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 			$date = board_sync_get_headerinfo($pMsgHeader, 'Date');
 			$from = board_sync_get_headerinfo($pMsgHeader, 'from');
 			$fromaddress = $from[0]->mailbox."@".$from[0]->host;
-			$personal = ucwords($from[0]->personal);
+			// personal is not always defined.
+			if (isset($from[0]->personal)) {
+				$personal = ucwords($from[0]->personal);
+			} else {
+				$personal = null;
+			}
 			$in_reply_to = board_sync_get_headerinfo($pMsgHeader, 'in_reply_to');
 
 			if ($pLog) print( "\n---- ".date( "Y-m-d HH:mm:ss" )." -------------------------\nImporting: ".$message_id."\nDate: ".$date."\nFrom: ".$fromaddress."\nTo: ".$allRecipients."\nSubject: ".$subject."\nIn Reply To: ".$in_reply_to."\nName: ".$personal."\n");
