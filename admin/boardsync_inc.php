@@ -240,28 +240,34 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 			$matches = array();
 			$toAddresses = array();
 			$allRecipients = "";
-			if( isset( $pMsgHeader->toaddress ) ){
-				$allRecipients .= $pMsgHeader->toaddress;
-				if ($pLog) print ("  To addresses: " . $pMsgHeader->toaddress . "\n");
-			}
-			if( isset( $pMsgHeader->ccaddress ) ){
-				$allRecipients .= (( $allRecipients != "" )?",":"") . $pMsgHeader->ccaddress;
-				if ($pLog) print ("  CC addresses: " . $pMsgHeader->ccaddress . "\n");
-			}
+			if (empty($pDeliveredTo)) {
+				if( isset( $pMsgHeader->toaddress ) ){
+					$allRecipients .= $pMsgHeader->toaddress;
+					if ($pLog) print ("  To addresses: " . $pMsgHeader->toaddress . "\n");
+				}
+				if( isset( $pMsgHeader->ccaddress ) ){
+					$allRecipients .= (( $allRecipients != "" )?",":"") . $pMsgHeader->ccaddress;
+					if ($pLog) print ("  CC addresses: " . $pMsgHeader->ccaddress . "\n");
+				}
 
-			if ($pLog) print ("  All Recipients: ". $allRecipients ."\n");
-			$allSplit = split( ',', $allRecipients );
-			foreach( $allSplit as $s ) {
-				$s = trim( $s );
-				$matches = array();
-				if( strpos( $s, '<' ) !== FALSE ) {
-					if( preg_match( "/\s*(.*)\s*<\s*(.*)\s*>/", $s, $matches ) ) {
-						$toAddresses[] = array( 'name'=>$matches[1], 'email'=>$matches[2] );
-					} elseif( preg_match('/<\s*(.*)\s*>\s*(.*)\s*/', $s, $matches) ) {
-						$toAddresses[] = array( 'email'=>$matches[1], 'name'=>$matches[2] );
+				if ($pLog) print ("  All Recipients: ". $allRecipients ."\n");
+				$allSplit = split( ',', $allRecipients );
+				foreach( $allSplit as $s ) {
+					$s = trim( $s );
+					$matches = array();
+					if( strpos( $s, '<' ) !== FALSE ) {
+						if( preg_match( "/\s*(.*)\s*<\s*(.*)\s*>/", $s, $matches ) ) {
+							$toAddresses[] = array( 'name'=>$matches[1], 'email'=>$matches[2] );
+						} elseif( preg_match('/<\s*(.*)\s*>\s*(.*)\s*/', $s, $matches) ) {
+							$toAddresses[] = array( 'email'=>$matches[1], 'name'=>$matches[2] );
+						}
+					} elseif( validate_email_syntax( $s ) ) {
+						$toAddresses[] = array( 'email'=>$s );
 					}
-				} elseif( validate_email_syntax( $s ) ) {
-					$toAddresses[] = array( 'email'=>$s );
+				}
+			} else {
+				foreach ($pDeliveredTo as $address) {
+					$toAddresses[] = array('email' => $address);
 				}
 			}
 			if ($pLog) print_r($toAddresses);
@@ -281,13 +287,6 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 
 			foreach( $toAddresses AS $to ) {
 				if ($pLog) print( "  Processing email: " . strtolower($to['email']) . "\n");
-				// Attempt to filter by "Delivered-To:" headers if provided by the MTA
-				if (isset($pDeliveredTo) && 
-				    !in_array(strtolower($to['email']), $pDeliveredTo)) {
-				  if ($pLog) print "\nSkipping To: not in Delivered-To:" . strtolower($to['email']);
-				  
-				  continue;
-				}
 				// get a board match for the email address
 				if( $boardContentId = cache_check_content_prefs( 'board_sync_list_address', strtolower($to['email']), TRUE ) ) {
 					if ($pLog) print "Found Board Content $boardContentId for $to[email]\n";
@@ -547,7 +546,10 @@ function board_sync_delivered_to( $raw_headers ) {
 	    preg_match_all("/Delivered-To:\s*(.*)\s*/", $raw_headers, $deliveredTo) > 0) {
 		$ret = array();
 		foreach ($deliveredTo[1] as $address) {
-		  $ret[] = strtolower(trim($address));
+			// Make sure the Delivered-To: address is valid.
+			if (validate_email_syntax( $address ) ) {
+				$ret[] = strtolower(trim($address));
+			}
 		}
 	}
 	return $ret;
