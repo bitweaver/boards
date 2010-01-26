@@ -426,6 +426,17 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 
 					// End check to add attachments to comments to the parent board
 					
+					// Check for an empty body
+					// Duplicate subject if we have it
+					if (empty($storeRow['edit'])) {
+						if (!empty($storeRow['title'])) {
+							$storeRow['edit'] = $storeRow['title'];
+						}
+						else {
+							$storeRow['edit'] = ".";
+						}
+					}
+
 
 					$storeComment = new LibertyComment( NULL );
 					$gBitDb->StartTrans();
