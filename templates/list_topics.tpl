@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.34 2009/10/08 22:20:30 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.35 2010/02/02 22:02:21 spiderr Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="navbar">
@@ -26,7 +26,7 @@
 	</div><!-- end .floaticon -->
 
 	<div class="header">
-		<h1>{$board->mInfo.title|escape|default:"Message Board Topic"}</h1>
+		<h1>{$board->getTitle()|escape|default:"Message Board Topic"}</h1>
 		{if $board->mInfo.parsed_data}
 			<p>{$board->mInfo.parsed_data}</p>
 		{/if}

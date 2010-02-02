@@ -1,15 +1,15 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.10 2009/01/20 22:18:07 dansut Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/board_edit.tpl,v 1.11 2010/02/02 22:02:21 spiderr Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
 <div class="admin boards">
 	{if $preview}
-		<h2>Preview {$gContent->mInfo.title|escape}</h2>
+		<h2>Preview {$gContent->getTitle()|escape}</h2>
 		<div class="preview">
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$gContent->mInfo}
 				<div class="display boards">
 					<div class="header">
-						<h1>{$gContent->mInfo.title|escape|default:"Board"}</h1>
+						<h1>{$gContent->getTitle()|escape|default:"Board"}</h1>
 					</div><!-- end .header -->
 
 					<div class="body">

@@ -1,10 +1,10 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.20 2009/10/08 22:20:30 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_posts.tpl,v 1.21 2010/02/02 22:02:21 spiderr Exp $ *}
 {strip}
 <div class="listing boards">
 
 	<div class="navbar">
 		<div class="boards breadcrumb">
-			<a href="{$smarty.const.BOARDS_PKG_URL}">{tr}Message Boards{/tr}</a> &raquo; <a href="{$board->mInfo.display_url}">{$board->mInfo.title|escape}</a>
+			<a href="{$smarty.const.BOARDS_PKG_URL}">{tr}Message Boards{/tr}</a> &raquo; <a href="{$board->mInfo.display_url}">{$board->getTitle()|escape}</a>
 		</div>
 	</div>
 
