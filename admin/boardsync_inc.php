@@ -229,67 +229,69 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 	}else{
 		if ($pLog) print("Processing: ".$message_id."\n");
 		if ($pLog) print("  Subject: ".$subject."\n");
-		// Do we already have this message?
-		$contentId = NULL;
-		if( $message_id != NULL ) {
-			$sql = "SELECT `content_id` FROM `".BIT_DB_PREFIX."liberty_comments` WHERE `message_guid`=?";
-			$contentId = $gBitDb->getOne( $sql, array( $message_id ) );
-		}
-		if( empty($contentId) ) {
 
-			$matches = array();
-			$toAddresses = array();
-			$allRecipients = "";
-			if (empty($pDeliveredTo)) {
-				if( isset( $pMsgHeader->toaddress ) ){
-					$allRecipients .= $pMsgHeader->toaddress;
-					if ($pLog) print ("  To addresses: " . $pMsgHeader->toaddress . "\n");
-				}
-				if( isset( $pMsgHeader->ccaddress ) ){
-					$allRecipients .= (( $allRecipients != "" )?",":"") . $pMsgHeader->ccaddress;
-					if ($pLog) print ("  CC addresses: " . $pMsgHeader->ccaddress . "\n");
-				}
 
-				if ($pLog) print ("  All Recipients: ". $allRecipients ."\n");
-				$allSplit = split( ',', $allRecipients );
-				foreach( $allSplit as $s ) {
-					$s = trim( $s );
-					$matches = array();
-					if( strpos( $s, '<' ) !== FALSE ) {
-						if( preg_match( "/\s*(.*)\s*<\s*(.*)\s*>/", $s, $matches ) ) {
-							$toAddresses[] = array( 'name'=>$matches[1], 'email'=>$matches[2] );
-						} elseif( preg_match('/<\s*(.*)\s*>\s*(.*)\s*/', $s, $matches) ) {
-							$toAddresses[] = array( 'email'=>$matches[1], 'name'=>$matches[2] );
-						}
-					} elseif( validate_email_syntax( $s ) ) {
-						$toAddresses[] = array( 'email'=>$s );
+		$matches = array();
+		$toAddresses = array();
+		$allRecipients = "";
+		if (empty($pDeliveredTo)) {
+			if( isset( $pMsgHeader->toaddress ) ){
+				$allRecipients .= $pMsgHeader->toaddress;
+				if ($pLog) print ("  To addresses: " . $pMsgHeader->toaddress . "\n");
+			}
+			if( isset( $pMsgHeader->ccaddress ) ){
+				$allRecipients .= (( $allRecipients != "" )?",":"") . $pMsgHeader->ccaddress;
+				if ($pLog) print ("  CC addresses: " . $pMsgHeader->ccaddress . "\n");
+			}
+			
+			if ($pLog) print ("  All Recipients: ". $allRecipients ."\n");
+			$allSplit = split( ',', $allRecipients );
+			foreach( $allSplit as $s ) {
+				$s = trim( $s );
+				$matches = array();
+				if( strpos( $s, '<' ) !== FALSE ) {
+					if( preg_match( "/\s*(.*)\s*<\s*(.*)\s*>/", $s, $matches ) ) {
+						$toAddresses[] = array( 'name'=>$matches[1], 'email'=>$matches[2] );
+					} elseif( preg_match('/<\s*(.*)\s*>\s*(.*)\s*/', $s, $matches) ) {
+						$toAddresses[] = array( 'email'=>$matches[1], 'name'=>$matches[2] );
 					}
-				}
-			} else {
-				foreach ($pDeliveredTo as $address) {
-					$toAddresses[] = array('email' => $address);
+				} elseif( validate_email_syntax( $s ) ) {
+					$toAddresses[] = array( 'email'=>$s );
 				}
 			}
-			if ($pLog) print_r($toAddresses);
-
-			$date = board_sync_get_headerinfo($pMsgHeader, 'Date');
-			$from = board_sync_get_headerinfo($pMsgHeader, 'from');
-			$fromaddress = $from[0]->mailbox."@".$from[0]->host;
-			// personal is not always defined.
-			if (isset($from[0]->personal)) {
-				$personal = ucwords($from[0]->personal);
-			} else {
-				$personal = null;
+		} else {
+			foreach ($pDeliveredTo as $address) {
+				$toAddresses[] = array('email' => $address);
 			}
-			$in_reply_to = board_sync_get_headerinfo($pMsgHeader, 'in_reply_to');
+		}
+		if ($pLog) print_r($toAddresses);
+		
+		$date = board_sync_get_headerinfo($pMsgHeader, 'Date');
+		$from = board_sync_get_headerinfo($pMsgHeader, 'from');
+		$fromaddress = $from[0]->mailbox."@".$from[0]->host;
+		// personal is not always defined.
+		if (isset($from[0]->personal)) {
+			$personal = ucwords($from[0]->personal);
+		} else {
+			$personal = null;
+		}
+		$in_reply_to = board_sync_get_headerinfo($pMsgHeader, 'in_reply_to');
 
-			if ($pLog) print( "\n---- ".date( "Y-m-d HH:mm:ss" )." -------------------------\nImporting: ".$message_id."\nDate: ".$date."\nFrom: ".$fromaddress."\nTo: ".$allRecipients."\nSubject: ".$subject."\nIn Reply To: ".$in_reply_to."\nName: ".$personal.(is_array($pDeliveredTo) ? "\nDelivered-To:".implode(", ", $pDeliveredTo) : '')."\n");
+		if ($pLog) print( "\n---- ".date( "Y-m-d HH:mm:ss" )." -------------------------\nImporting: ".$message_id."\nDate: ".$date."\nFrom: ".$fromaddress."\nTo: ".$allRecipients."\nSubject: ".$subject."\nIn Reply To: ".$in_reply_to."\nName: ".$personal.(is_array($pDeliveredTo) ? "\nDelivered-To:".implode(", ", $pDeliveredTo) : '')."\n");
 
-			foreach( $toAddresses AS $to ) {
-				if ($pLog) print( "  Processing email: " . strtolower($to['email']) . "\n");
-				// get a board match for the email address
-				if( $boardContentId = cache_check_content_prefs( 'board_sync_list_address', strtolower($to['email']), TRUE ) ) {
-					if ($pLog) print "Found Board Content $boardContentId for $to[email]\n";
+		foreach( $toAddresses AS $to ) {
+			if ($pLog) print( "  Processing email: " . strtolower($to['email']) . "\n");
+			// get a board match for the email address
+			if( $boardContentId = cache_check_content_prefs( 'board_sync_list_address', strtolower($to['email']), TRUE ) ) {
+				if ($pLog) print "Found Board Content $boardContentId for $to[email]\n";
+
+				// Do we already have this message in this board?
+				$contentId = NULL;
+				if( $message_id != NULL ) {
+					$sql = "SELECT `content_id` FROM `".BIT_DB_PREFIX."liberty_comments` WHERE `message_guid`=? AND `root_id`=?";
+					$contentId = $gBitDb->getOne( $sql, array( $message_id, $boardContentId ) );
+				}
+				if( empty($contentId) ) {
 					if( !empty( $in_reply_to ) ) {
 						if( $parent = $gBitDb->GetRow( "SELECT `content_id`, `root_id` FROM `".BIT_DB_PREFIX."liberty_comments` WHERE `message_guid`=?", array( $in_reply_to ) ) ) {
 							$replyId = $parent['content_id'];
@@ -299,11 +301,11 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 							$replyId = $boardContentId;
 							$rootId = $boardContentId;
 						}
-					// if no reply to message guid then match on title - this looks dangerous as titles could easily be duplicated -wjames
+						// if no reply to message guid then match on title - this looks dangerous as titles could easily be duplicated -wjames
 					} elseif( $parent = $gBitDb->GetRow( "SELECT lcom.`content_id`, lcom.`root_id` FROM `".BIT_DB_PREFIX."liberty_comments` lcom INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON(lcom.`content_id`=lc.`content_id`) WHERE lc.`title`=?", array( preg_replace( '/re: /i', '', $subject ) ) ) ) {
 						$replyId = $parent['content_id'];
 						$rootId = $parent['root_id'];
-					// attach to board as first level comment e.g. new topic
+						// attach to board as first level comment e.g. new topic
 					} else {
 						$replyId = $boardContentId;
 						$rootId = $boardContentId;
@@ -322,9 +324,9 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 					}
 					$storeRow['root_id'] = $rootId;
 					$storeRow['parent_id'] = $replyId;
-
+					
 					$partHash = array();
-
+					
 					switch( $pMsgStructure->type ) {
 					case '0':
 						if ($pLog) print( "Structure Type: text\n" );
@@ -345,7 +347,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 					}
 					$plainBody = "";
 					$htmlBody = "";
-
+					
 					foreach( array_keys( $partHash ) as $i ) {
 						if( !empty( $partHash[$i]['plain'] ) ) {
 							$plainBody .= $partHash[$i]['plain'];
@@ -355,14 +357,14 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 						}
 						if( !empty( $partHash[$i]['attachment'] ) ) {
 							$storeRow['_files_override'][] = array(
-								'tmp_name'=> $partHash[$i]['attachment'],
-								'type'=>$gBitSystem->verifyMimeType( $partHash[$i]['attachment'] ),
-								'size'=>filesize( $partHash[$i]['attachment'] ),
-								'name'=>basename( $partHash[$i]['attachment'] ),
-								'user_id'=>$userInfo['user_id'] );
+											       'tmp_name'=> $partHash[$i]['attachment'],
+											       'type'=>$gBitSystem->verifyMimeType( $partHash[$i]['attachment'] ),
+											       'size'=>filesize( $partHash[$i]['attachment'] ),
+											       'name'=>basename( $partHash[$i]['attachment'] ),
+											       'user_id'=>$userInfo['user_id'] );
 						}
 					}
-
+					
 					if( !empty( $htmlBody ) ) {
 						$storeRow['edit'] = $htmlBody;
 						$storeRow['format_guid'] = 'bithtml';
@@ -370,33 +372,33 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 						$storeRow['edit'] = nl2br( $plainBody );
 						$storeRow['format_guid'] = 'bithtml';
 					}
-
+					
 					// Nuke all email addresses from the body.
 					if( !empty($storeRow['edit']) ) {
 						$storeRow['edit'] = ereg_replace(
-							'[-!#$%&\`*+\\./0-9=?A-Z^_`a-z{|}~]+'.'@'.
-							'(localhost|[-!$%&\'*+\\/0-9=?A-Z^_`a-z{|}~]+\.'.
-							'[-!$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+)', '', $storeRow['edit'] );
+										 '[-!#$%&\`*+\\./0-9=?A-Z^_`a-z{|}~]+'.'@'.
+										 '(localhost|[-!$%&\'*+\\/0-9=?A-Z^_`a-z{|}~]+\.'.
+										 '[-!$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+)', '', $storeRow['edit'] );
 					}
-
+					
 					// We trust the user from this source
 					// and count on moderation to handle links
 					global $gBitUser;
 					$gBitUser->setPermissionOverride('p_liberty_trusted_editor', true);
 
-
+					
 					// Check to add attachments 
-
+					
 					// NOTE: we temporarily change the gBitUser here!
 					// This is so we can run a proper content permissions check
 					// for attachment permission against the parent
 					// board object. This is sort of a hack to deal 
 					// with the fact that LibertyContent does not have a
 					// means to check the permissions of any user except gBitUser -wjames5
-
+					
 					// Important store a reference so we can switch back when we are done
 					$gBitUserOrg = $gBitUser;
-
+					
 					// Load the message sending user
 					if( $userInfo['user_id'] != ANONYMOUS_USER_ID ) {
 						$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
@@ -407,25 +409,25 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 						// flip gBitUser to our message sender
 						$gBitUser = $newBitUser;
 					}
-
+				
 					// Load the parent board
 					$board = new BitBoard( NULL, $boardContentId );
 					$board->load();
-
+				
 					// Check the permission for the user on the board
 					if( $gBitSystem->isFeatureActive( 'comments_allow_attachments' ) && $board->hasUserPermission( 'p_liberty_attach_attachments' ) ){ 
 						// note we grant the permission to the anonymous user which will become gBitUser once again
 						$gBitUserOrg->setPermissionOverride('p_liberty_attach_attachments', true);
 					};
-					
+				
 					// Clear the reference to this board so we dont mistakenly use it later
 					unset( $board );
-
+				
 					// Important: switch gBitUser back!
 					$gBitUser = $gBitUserOrg;
-
+				
 					// End check to add attachments to comments to the parent board
-					
+				
 					// Check for an empty body
 					// Duplicate subject if we have it
 					if (empty($storeRow['edit'])) {
@@ -436,14 +438,14 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 							$storeRow['edit'] = ".";
 						}
 					}
-
-
+				
+				
 					$storeComment = new LibertyComment( NULL );
 					$gBitDb->StartTrans();
 					if( $storeComment->storeComment($storeRow) ) {
 						// undo the attachment permission
 						$gBitUser->setPermissionOverride('p_liberty_attach_attachments', false);
-
+					
 						// set moderation approval
 						if( !$pModerate && $gBitSystem->isPackageActive('moderation') && $gBitSystem->isPackageActive('modcomments') ) {
 							global $gModerationSystem, $gBitUser;
@@ -455,16 +457,16 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 								$gBitUser->setPermissionOverride('p_admin', FALSE);
 							}
 						}
-
+					
 						if( !empty( $storeRow['message_guid'] ) ){
 							// map the message guid to the comment
 							$storeComment->mDb->query( "UPDATE `".BIT_DB_PREFIX."liberty_comments` SET `message_guid`=? WHERE `content_id`=?", array( $storeRow['message_guid'], $storeComment->mContentId ) );
-
+							
 							// Store the confirm code
 							if( $pModerate ) {
 								$storeComment->storePreference('board_confirm_code', $pModerate);
 							}
-
+						
 							// done
 							$gBitDb->CompleteTrans();
 							return TRUE;
@@ -484,45 +486,44 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 							return FALSE;
 						}
 					}
-				}else{
-					if ($pLog) print "No Board match found for $to[email]\n";
-				}
-			}
-		} elseif ( !empty($contentId) ) {
-			if ($pLog) print "Message Exists: $contentId : $message_id : $pModerate\n";
-			// If this isn't a moderation message
-			if( $pModerate === FALSE ) {
-				// If the message exists it must have been approved via some
-				// moderation mechanism, so make sure it is available
-				if( $gBitSystem->isPackageActive('moderation') && $gBitSystem->isPackageActive('modcomments') ) {
-					global $gModerationSystem, $gBitUser;
-					$storeComment = new LibertyComment( NULL, $contentId );
-					$storeComment->loadComment();
-					if ($storeComment->mInfo['content_status_id'] > 0) {
-						if ($pLog) print "Already approved: $contentId\n";
-					} else {
-						$moderation = $gModerationSystem->getModeration(NULL, $contentId);
-						//				vd($moderation);
-						if( !empty($moderation) ) {
-							$gBitUser->setPermissionOverride('p_admin', TRUE);
-							if ($pLog) print( "Setting approved: $contentId\n" );
-							$gModerationSystem->setModerationReply($moderation['moderation_id'], MODERATION_APPROVED);
-							$gBitUser->setPermissionOverride('p_admin', FALSE);
-							if ($pLog) print "Done";
-						} else {
-							if ($pLog) print "ERROR: Unable to find moderation to approve for: $contentId";
+
+				} else {
+					if ($pLog) print "Message Exists: $contentId : $boardContentId : $message_id : $pModerate\n";
+					// If this isn't a moderation message
+					if( $pModerate === FALSE ) {
+						// If the message exists it must have been approved via some
+						// moderation mechanism, so make sure it is available
+						if( $gBitSystem->isPackageActive('moderation') && $gBitSystem->isPackageActive('modcomments') ) {
+							global $gModerationSystem, $gBitUser;
+							$storeComment = new LibertyComment( NULL, $contentId );
+							$storeComment->loadComment();
+							if ($storeComment->mInfo['content_status_id'] > 0) {
+								if ($pLog) print "Already approved: $contentId\n";
+							} else {
+								$moderation = $gModerationSystem->getModeration(NULL, $contentId);
+								//				vd($moderation);
+								if( !empty($moderation) ) {
+									$gBitUser->setPermissionOverride('p_admin', TRUE);
+									if ($pLog) print( "Setting approved: $contentId\n" );
+									$gModerationSystem->setModerationReply($moderation['moderation_id'], MODERATION_APPROVED);
+									$gBitUser->setPermissionOverride('p_admin', FALSE);
+									if ($pLog) print "Done";
+								} else {
+									if ($pLog) print "ERROR: Unable to find moderation to approve for: $contentId";
+								}
+							}
 						}
+					} else {
+						// Store the approve code;
+						if ($pLog) print "Storing approval code: " . $contentId . ":" . $pModerate . "\n";
+						$storeComment = new LibertyComment( NULL, $contentId );
+						$storeComment->storePreference('board_confirm_code', $pModerate);
 					}
+					return TRUE;
 				}
 			} else {
-			  // Store the approve code;
-			  if ($pLog) print "Storing approval code: " . $contentId . ":" . $pModerate . "\n";
-			  $storeComment = new LibertyComment( NULL, $contentId );
-			  $storeComment->storePreference('board_confirm_code', $pModerate);
+				if ($pLog) print "No Board match found for $to[email]\n";
 			}
-			return TRUE;
-		} else {
-			print( "WARNING: Message \"".$subject."\" couldn't find message id header." );
 		}
 	}
 	return FALSE;
