@@ -1,12 +1,12 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/rss.php,v 1.2 2009/10/09 04:07:42 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/rss.php,v 1.3 2010/02/08 21:27:21 wjames5 Exp $
  */
 
 /**
  * required setup
  */
-require_once( '../bit_setup_inc.php' );
+require_once( '../kernel/setup_inc.php' );
 
 $gBitSystem->verifyPackage( 'boards' );
 $gBitSystem->verifyPackage( 'rss' );

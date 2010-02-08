@@ -14,7 +14,7 @@ ALTER SEQUENCE boards_board_id_seq RESTART WITH 6;
 INSERT INTO boards_map (board_content_id, topic_content_id) (SELECT content_id, content_id FROM phpbb.forums INNER JOIN liberty_content ON (content_type_guid='bitboard' AND forum_name=title) );
 */
 
-require_once( '../../bit_setup_inc.php' );
+require_once( '../../kernel/setup_inc.php' );
 
 $gBitSystem->verifyPermission( 'p_admin' );
 
