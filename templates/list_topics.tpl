@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.35 2010/02/02 22:02:21 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_topics.tpl,v 1.36 2010/02/09 17:21:21 wjames5 Exp $ *}
 {strip}
 <div class="listing boards">
 	<div class="navbar">
@@ -139,7 +139,7 @@
 				<div style="text-align:right;">
 					<script type="text/javascript">/* <![CDATA[ check / uncheck all */
 						document.write("<label for=\"switcher\">{tr}Select All{/tr}</label> ");
-						document.write("<input name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"switchCheckboxes(this.form.id,'checked[]','switcher')\" /><br />");
+						document.write("<input name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"BitBase.switchCheckboxes(this.form.id,'checked[]','switcher')\" /><br />");
 					/* ]]> */</script>
 
 					<input type="hidden" name="b" value="{$smarty.request.b}" />
