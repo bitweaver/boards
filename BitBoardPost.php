@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.42 2009/05/01 15:53:15 wjames5 Exp $
- * $Id: BitBoardPost.php,v 1.42 2009/05/01 15:53:15 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.43 2010/03/16 01:40:09 spiderr Exp $
+ * $Id: BitBoardPost.php,v 1.43 2010/03/16 01:40:09 spiderr Exp $
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.42 $ $Date: 2009/05/01 15:53:15 $ $Author: wjames5 $
+ * @version $Revision: 1.43 $ $Date: 2010/03/16 01:40:09 $ $Author: spiderr $
  * @package boards
  */
 
@@ -196,8 +196,8 @@ class BitBoardPost extends LibertyComment {
 					if (!empty($row['warned_message'])) {
 						$row['warned_message'] = str_replace("\n","<br />\n",$row['warned_message']);
 					}
-					$row['data'] = trim($row['data']);
-					$row['user_url']=BitUser::getDisplayUrl($row['login'],$row);
+					$row['data'] = trim( $row['data'] );
+					$row['user_url'] = BitUser::getDisplayUrl( $row['login'], $row );
 					$row['parsed_data'] = $this->parseData( $row );
 					$row['level'] = substr_count ( $row['thread_forward_sequence'], '.' ) - 1;
 					$c = new LibertyComment();
