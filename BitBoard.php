@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.64 2009/10/05 17:19:52 wjames5 Exp $
- * $Id: BitBoard.php,v 1.64 2009/10/05 17:19:52 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_boards/BitBoard.php,v 1.65 2010/04/17 22:46:07 wjames5 Exp $
+ * $Id: BitBoard.php,v 1.65 2010/04/17 22:46:07 wjames5 Exp $
  *
  * BitBoard class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.64 $ $Date: 2009/10/05 17:19:52 $ $Author: wjames5 $
+ * @version $Revision: 1.65 $ $Date: 2010/04/17 22:46:07 $ $Author: wjames5 $
  * @package boards
  */
 
@@ -41,7 +41,7 @@ class BitBoard extends LibertyMime {
 		$this->mContentTypeGuid = BITBOARD_CONTENT_TYPE_GUID;
 		$this->registerContentType( BITBOARD_CONTENT_TYPE_GUID, array(
 				'content_type_guid' => BITBOARD_CONTENT_TYPE_GUID,
-				'content_description' => 'Message Board',
+				'content_name' => 'Message Board',
 				'handler_class' => 'BitBoard',
 				'handler_package' => 'boards',
 				'handler_file' => 'BitBoard.php',
@@ -319,7 +319,7 @@ class BitBoard extends LibertyMime {
 		// reorganise unmapped content for better display
 		$umapped = $b->getUnMapped();
 		foreach( $umapped as $key => $content ) {
-			$umap[$content['content_description']][$key] = $content;
+			$umap[$content['content_name']][$key] = $content;
 		}
 		$ret['umap'] = $umap;
 		return $ret;
@@ -331,7 +331,7 @@ class BitBoard extends LibertyMime {
 		$sql = "SELECT
 			lc.`title`,
 			lc.`content_id`,
-			lct.`content_description`, (
+			lct.`content_name`, (
 			SELECT count(*)
 				FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 				WHERE lcom.`root_id`=lcom.`parent_id` AND lcom.`root_id`=lc.`content_id`
@@ -415,7 +415,7 @@ class BitBoard extends LibertyMime {
 			$sql = "SELECT
 			lc.`title` AS t_title,
 			lc.`content_id` AS t_content_id,
-			lct.`content_description` AS t_content_description,
+			lct.`content_name` AS t_content_name,
 			blc.`title` AS b_title,
 			blc.`content_id` AS b_content_id,
 			b.`board_id` AS b_board_id, (

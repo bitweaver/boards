@@ -92,4 +92,8 @@ if(defined('RSS_PKG_NAME')) {
 $gBitInstaller->registerContentObjects( BOARDS_PKG_NAME, array( 
 	'BitBoard'=>BOARDS_PKG_PATH.'BitBoard.php',
 ));
-?>
+
+// Requirements
+$gBitInstaller->registerRequirements( BOARDS_PKG_NAME, array(
+	'liberty' => array( 'min' => '2.1.4' ),
+));

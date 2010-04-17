@@ -11,8 +11,8 @@
 					{formlabel label="Add Content" for="assign"}
 					{forminput}
 						<select id="assign" name="assign[]" multiple="multiple" size="12">
-							{foreach item=umapped key=content_description from=$data.umap}
-								<optgroup label="{$content_description}">
+							{foreach item=umapped key=content_name from=$data.umap}
+								<optgroup label="{$content_name}">
 									{foreach item=umapping from=$umapped}
 										<option value="{$umapping.content_id}">{$umapping.title|truncate:30} [{$umapping.thread_count}]</option>
 									{/foreach}
@@ -73,7 +73,7 @@
 
 						{foreach item=mapping from=$board.map}
 							<tr class="{cycle values="odd,even"}">
-								<td>{$mapping.t_content_description}</td>
+								<td>{$mapping.t_content_name}</td>
 								<td>{$mapping.t_title|escape}</td>
 								<td style="text-align:right">{$mapping.thread_count}</td>
 								<td class="actionicon">
