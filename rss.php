@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/rss.php,v 1.3 2010/02/08 21:27:21 wjames5 Exp $
+ * $Header$
  */
 
 /**

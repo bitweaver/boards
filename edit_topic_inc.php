@@ -1,7 +1,7 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/edit_topic_inc.php,v 1.6 2008/10/02 16:17:15 wjames5 Exp $
- * $Id: edit_topic_inc.php,v 1.6 2008/10/02 16:17:15 wjames5 Exp $
+ * $Header$
+ * $Id$
  *
  * @package boards
  * @subpackage functions

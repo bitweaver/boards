@@ -1,12 +1,12 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/boards_comments_inc.php,v 1.7 2008/11/29 01:58:30 tekimaki_admin Exp $
- * $Id: boards_comments_inc.php,v 1.7 2008/11/29 01:58:30 tekimaki_admin Exp $
+ * $Header$
+ * $Id$
  *
  * intermediate include file to provide centralized place to pre/post handle comments_inc include
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.7 $ $Date: 2008/11/29 01:58:30 $ $Author: tekimaki_admin $
+ * @version $Revision$
  * @package boards
  */
 

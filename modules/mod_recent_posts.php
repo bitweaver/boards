@@ -5,7 +5,7 @@
  * - b : numeric id of board to show posts from
  * - all_boards : display posts from all boards. Default behavior is to auto-track to board you are in.
  *
- * @version $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.php,v 1.7 2007/09/11 19:40:04 spiderr Exp $
+ * @version $Header$
  * @package boards
  * @subpackage modules
  */

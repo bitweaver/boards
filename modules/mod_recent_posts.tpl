@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/modules/mod_recent_posts.tpl,v 1.10 2008/08/05 16:45:25 laetzer Exp $ *}
+{* $Header$ *}
 {strip}
 {if $gBitSystem->isPackageActive('boards') && {$modLastBoardPosts}
 	{bitmodule title="$moduleTitle" name="last_board_posts"}

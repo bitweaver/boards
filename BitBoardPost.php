@@ -1,13 +1,13 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/BitBoardPost.php,v 1.43 2010/03/16 01:40:09 spiderr Exp $
- * $Id: BitBoardPost.php,v 1.43 2010/03/16 01:40:09 spiderr Exp $
+ * $Header$
+ * $Id$
  *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
  * @author spider <spider@steelsun.com>
- * @version $Revision: 1.43 $ $Date: 2010/03/16 01:40:09 $ $Author: spiderr $
+ * @version $Revision$
  * @package boards
  */
 

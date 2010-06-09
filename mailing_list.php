@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_boards/mailing_list.php,v 1.11 2010/02/08 21:27:21 wjames5 Exp $
+ * $Header$
  * Copyright (c) bitweaver Group
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.

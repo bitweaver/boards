@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_boards/templates/list_boards.tpl,v 1.5 2009/10/05 17:28:58 wjames5 Exp $ *}
+{* $Header$ *}
 {strip}
 <div class="listing boards">
 	<div class="header">

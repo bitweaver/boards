@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_boards/boards_rss.php,v 1.7 2010/02/08 21:27:21 wjames5 Exp $
+ * @version $Header$
  * @package boards
  * @subpackage functions
  */

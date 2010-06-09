@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_boards/admin/admin_boards_inc.php,v 1.12 2009/10/04 15:46:35 wjames5 Exp $
+// $Header$
 // Copyright (c) 2005 bitweaver BitBoards
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
