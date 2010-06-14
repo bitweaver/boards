@@ -2,7 +2,7 @@
 {strip}
 <div class="listing boards">
 	<div class="header">
-		<h1>{tr}Message Boards{/tr}</h1>
+		<h1>{tr}{if $smarty.const.BOARDS_PKG_DIR != 'boards'}{$smarty.const.BOARDS_PKG_DIR|ucfirst}{else}Message Boards{/if}{/tr}</h1>
 	</div>
 
 	<div class="body">
