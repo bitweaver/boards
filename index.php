@@ -14,4 +14,3 @@ if( !empty( $_REQUEST['t'] ) || !empty( $_REQUEST['migrate_topic_id'] ) || !empt
 	require( BOARDS_PKG_PATH.'list_boards_inc.php' );
 }
 
-?>
