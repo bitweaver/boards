@@ -172,7 +172,7 @@ class BitBoardPost extends LibertyComment {
 				post.is_warned,
 				post.warned_message,
 				uu.registration_date AS registration_date,
-				tf_ava.`storage_path` AS `avatar_storage_path`
+				tf_ava.`file_name` AS `avatar_file_name`, tf_ava.`user_id` AS `avatar_user_id`, ta_ava.`attachment_id` AS `avatar_attachment_id`
 				$selectSql $select1
 					FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 						INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
@@ -189,10 +189,9 @@ class BitBoardPost extends LibertyComment {
 				while( $row = $result->FetchRow() ) {
 					if (empty($row['anon_name'])) $row['anon_name'] = "Anonymous";
 					$row['user_avatar_url'] = liberty_fetch_thumbnail_url( array(
-						'storage_path' => $row['avatar_storage_path'],
+						'source_file' => liberty_mime_get_source_file( array( 'user_id'=>$row['avatar_user_id'], 'file_name'=>$row['avatar_file_name'], 'mime_type'=>$row['avatar_mime_type'], 'attachment_id'=>$row['avatar_attachment_id'] ) ),
 						'size' => 'avatar'
 					));
-					unset($row['avatar_storage_path']);
 					if (!empty($row['warned_message'])) {
 						$row['warned_message'] = str_replace("\n","<br />\n",$row['warned_message']);
 					}
@@ -281,7 +280,9 @@ class BitBoardPost extends LibertyComment {
 			$whereSql = preg_replace( '/^[\s]*AND\b/i', 'WHERE ', $whereSql );
 		}
 
-		$sql = "SELECT lcom.`comment_id`, lcom.`parent_id`, lcom.`root_id`, lcom.`thread_forward_sequence`, lcom.`thread_reverse_sequence`, lcom.`anon_name`, lc.*, uu.`email`, uu.`real_name`, uu.`login`, post.is_approved, post.is_warned, post.warned_message, uu.registration_date AS registration_date, tf_ava.`storage_path` AS `avatar_storage_path` $selectSql
+		$sql = "SELECT lcom.`comment_id`, lcom.`parent_id`, lcom.`root_id`, lcom.`thread_forward_sequence`, lcom.`thread_reverse_sequence`, lcom.`anon_name`, lc.*, uu.`email`, uu.`real_name`, uu.`login`, post.is_approved, post.is_warned, post.warned_message, uu.registration_date AS registration_date, 
+					tf_ava.`file_name` AS `avatar_file_name`, tf_ava.`user_id` AS `avatar_user_id`, ta_ava.`attachment_id` AS `avatar_attachment_id`
+					$selectSql
 				FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 					INNER JOIN `".BIT_DB_PREFIX."boards_map` bm ON (lcom.`root_id` = bm.`topic_content_id`)
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
@@ -297,12 +298,15 @@ class BitBoardPost extends LibertyComment {
 		if( $result = $this->mDb->query( $sql, $bindVars, $pListHash['max_records'], $pListHash['offset'] ) ) {
 			while( $row = $result->FetchRow() ) {
 				if (empty($row['anon_name'])) $row['anon_name'] = "Anonymous";
-				if( !empty( $row['avatar_storage_path'] )) {
-					$row['user_avatar_url'] = liberty_fetch_thumbnail_url( array( 'storage_path' => $row['avatar_storage_path'], 'size' => 'avatar' ) );
+				if( !empty( $row['avatar_file_name'] )) {
+					$row['user_avatar_url'] = liberty_fetch_thumbnail_url( array(
+						'source_file' => liberty_mime_get_source_file( array( 'user_id'=>$row['avatar_user_id'], 'file_name'=>$row['avatar_file_name'], 'mime_type'=>$row['avatar_mime_type'], 'attachment_id'=>$row['avatar_attachment_id'] ) ),
+						'size' => 'avatar'
+					));
 				} else {
 					$row['user_avatar_url'] = FALSE;
 				}
-				unset($row['avatar_storage_path']);
+				unset($row['avatar_file_name']);
 				if (!empty($row['warned_message'])) {
 					$row['warned_message'] = str_replace("\n","<br />\n",$row['warned_message']);
 				}
