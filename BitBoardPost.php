@@ -172,7 +172,7 @@ class BitBoardPost extends LibertyComment {
 				post.is_warned,
 				post.warned_message,
 				uu.registration_date AS registration_date,
-				tf_ava.`file_name` AS `avatar_file_name`, tf_ava.`user_id` AS `avatar_user_id`, ta_ava.`attachment_id` AS `avatar_attachment_id`
+				tf_ava.`file_name` AS `avatar_file_name`, tf_ava.`mime_type` AS `avatar_mime_type`, tf_ava.`user_id` AS `avatar_user_id`, ta_ava.`attachment_id` AS `avatar_attachment_id`
 				$selectSql $select1
 					FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 						INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lcom.`content_id` = lc.`content_id`)
@@ -187,11 +187,17 @@ class BitBoardPost extends LibertyComment {
 
 			if( $result = $this->mDb->query( $sql, $bindVars, $pMaxComments, $pOffset ) ) {
 				while( $row = $result->FetchRow() ) {
-					if (empty($row['anon_name'])) $row['anon_name'] = "Anonymous";
-					$row['user_avatar_url'] = liberty_fetch_thumbnail_url( array(
-						'source_file' => liberty_mime_get_source_file( array( 'user_id'=>$row['avatar_user_id'], 'file_name'=>$row['avatar_file_name'], 'mime_type'=>$row['avatar_mime_type'], 'attachment_id'=>$row['avatar_attachment_id'] ) ),
-						'size' => 'avatar'
-					));
+					if (empty($row['anon_name'])) {
+						$row['anon_name'] = "Anonymous";
+					}
+					if( $row['avatar_file_name'] ) {
+						$row['user_avatar_url'] = liberty_fetch_thumbnail_url( array(
+							'source_file' => liberty_mime_get_source_file( array( 'user_id'=>$row['avatar_user_id'], 'file_name'=>$row['avatar_file_name'], 'mime_type'=>$row['avatar_mime_type'], 'attachment_id'=>$row['avatar_attachment_id'] ) ),
+							'size' => 'avatar'
+						));
+					} else {
+						$row['user_avatar_url'] = FALSE;
+					}
 					if (!empty($row['warned_message'])) {
 						$row['warned_message'] = str_replace("\n","<br />\n",$row['warned_message']);
 					}
@@ -281,7 +287,7 @@ class BitBoardPost extends LibertyComment {
 		}
 
 		$sql = "SELECT lcom.`comment_id`, lcom.`parent_id`, lcom.`root_id`, lcom.`thread_forward_sequence`, lcom.`thread_reverse_sequence`, lcom.`anon_name`, lc.*, uu.`email`, uu.`real_name`, uu.`login`, post.is_approved, post.is_warned, post.warned_message, uu.registration_date AS registration_date, 
-					tf_ava.`file_name` AS `avatar_file_name`, tf_ava.`user_id` AS `avatar_user_id`, ta_ava.`attachment_id` AS `avatar_attachment_id`
+					tf_ava.`file_name` AS `avatar_file_name`, tf_ava.`mime_type` AS `avatar_mime_type`, tf_ava.`user_id` AS `avatar_user_id`, ta_ava.`attachment_id` AS `avatar_attachment_id`
 					$selectSql
 				FROM `".BIT_DB_PREFIX."liberty_comments` lcom
 					INNER JOIN `".BIT_DB_PREFIX."boards_map` bm ON (lcom.`root_id` = bm.`topic_content_id`)
