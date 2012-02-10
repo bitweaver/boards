@@ -24,8 +24,7 @@ if( !empty( $_REQUEST['t'] ) || !empty($_REQUEST['b'] ) ){
 		$gContent->load();
 	}
 	else{
-		$gBitSystem->setHttpStatus( 404 );
-		$gBitSystem->fatalError(tra("Unknown discussion"));
+		$gBitSystem->fatalError(tra("Unknown discussion"), NULL, NULL, HttpStatusCodes::HTTP_NOT_FOUND );
 	}
 } 
 $gContent->verifyViewPermission();

@@ -29,8 +29,7 @@ if ( @BitBase::verifyId( $_REQUEST['migrate_board_id'] ) ) {
 require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 
 if( !$gContent->isValid() ) {
-	$gBitSystem->setHttpStatus( 404 );
-	$gBitSystem->fatalError( "The board you requested could not be found." );
+	$gBitSystem->fatalError( "The board you requested could not be found.", NULL, NULL, HttpStatusCodes::HTTP_NOT_FOUND );
 }
 
 // approve or reject ananymous comments

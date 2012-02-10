@@ -34,8 +34,7 @@ if (!empty($_REQUEST['action'])) {
 	$comment = new BitBoardPost($_REQUEST['comment_id']);
 	$comment->loadComment();
 	if (!$comment->isValid()) {
-		$gBitSystem->setHttpStatus( 404 );
-		$gBitSystem->fatalError(tra("Invalid Comment"));
+		$gBitSystem->fatalError( tra("Invalid Comment"), NULL, NULL, HttpStatusCodes::HTTP_NOT_FOUND );
 	}
 	switch ($_REQUEST['action']) {
 		case 1:
@@ -60,8 +59,7 @@ $thread = new BitBoardTopic($_REQUEST['t']);
 $thread->load();
 
 if( !$thread->isValid() ) {
-	$gBitSystem->setHttpStatus( 404 );
-	$gBitSystem->fatalError(tra("Unknown discussion"));
+	$gBitSystem->fatalError( tra("Unknown discussion"), NULL, NULL, HttpStatusCodes::HTTP_NOT_FOUND );
 }
 
 $thread->verifyViewPermission();
@@ -81,8 +79,7 @@ if (empty($thread->mInfo['th_root_id'])) {
 		//Invalid as a result of rejecting the post, redirect to the board
 		header("Location: ".$gBoard->getDisplayUrl());
 	} else {
-		$gBitSystem->setHttpStatus( 404 );
-		$gBitSystem->fatalError(tra( "Invalid topic selection." ) );
+		$gBitSystem->fatalError(tra( "Invalid topic selection." ), NULL, NULL, HttpStatusCodes::HTTP_NOT_FOUND );
 	}
 }
 
