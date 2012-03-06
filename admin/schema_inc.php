@@ -6,7 +6,7 @@ $tables = array(
 		is_warned I1 NOTNULL DEFAULT(0),
 		warned_message X,
 		migrate_post_id INT
-		CONSTRAINTS ', CONSTRAINT `boards_posts_comment_ref` FOREIGN KEY (`comment_id`) REFERENCES `".BIT_DB_PREFIX."liberty_comments` (`comment_id`)'
+		CONSTRAINT ', CONSTRAINT `boards_posts_comment_ref` FOREIGN KEY (`comment_id`) REFERENCES `".BIT_DB_PREFIX."liberty_comments` (`comment_id`)'
 	",
 	'boards_topics' => "
 		parent_id I4 PRIMARY,
@@ -14,7 +14,7 @@ $tables = array(
 		is_moved I4 NOTNULL DEFAULT(0),
 		is_sticky I1 NOTNULL DEFAULT(0),
 		migrate_topic_id INT
-		CONSTRAINTS ', CONSTRAINT `boards_topics_parent_ref` FOREIGN KEY (`parent_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
+		CONSTRAINT ', CONSTRAINT `boards_topics_parent_ref` FOREIGN KEY (`parent_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
 	",
 	'boards_sections' => "
 		section_id I4 PRIMARY,
@@ -26,13 +26,13 @@ $tables = array(
 		section_id I4,
 		pos I4,
 		migrate_board_id INT
-		CONSTRAINTS ', CONSTRAINT `boards_content_ref` FOREIGN KEY (`content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)
+		CONSTRAINT ', CONSTRAINT `boards_content_ref` FOREIGN KEY (`content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)
 					, CONSTRAINT `boards_section_ref` FOREIGN KEY (`section_id`) REFERENCES `".BIT_DB_PREFIX."boards_sections` (`section_id`)'
 	",
 	'boards_map' => "
 		board_content_id I4 NOTNULL,
 		topic_content_id I4 PRIMARY
-		CONSTRAINTS ', CONSTRAINT `boards_topics_boards_ref` FOREIGN KEY (`board_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)
+		CONSTRAINT ', CONSTRAINT `boards_topics_boards_ref` FOREIGN KEY (`board_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)
 					, CONSTRAINT `boards_topics_related_ref` FOREIGN KEY (`topic_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
 	",
 	'boards_tracking' => "
