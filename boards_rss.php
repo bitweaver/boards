@@ -59,7 +59,7 @@ if( $gContent->isValid() ){
 }
 $rss->title = $title; 
 $rss->description = $description; 
-$rss->link =  'http://'.$_SERVER['HTTP_HOST'].$gContent->getDisplayUrl();
+$rss->link =  'http://'.$_SERVER['HTTP_HOST'].$gContent->getContentUrl();
 
 
 // get all topics of a board or all recent topics in general

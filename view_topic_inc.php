@@ -77,7 +77,7 @@ $gBitSmarty->assign_by_ref('gContent', $gContent);
 if (empty($thread->mInfo['th_root_id'])) {
 	if ($_REQUEST['action']==3) {
 		//Invalid as a result of rejecting the post, redirect to the board
-		header("Location: ".$gBoard->getDisplayUrl());
+		header("Location: ".$gBoard->getContentUrl());
 	} else {
 		$gBitSystem->fatalError(tra( "Invalid topic selection." ), NULL, NULL, HttpStatusCodes::HTTP_NOT_FOUND );
 	}
@@ -110,7 +110,7 @@ require_once( BOARDS_PKG_PATH.'boards_comments_inc.php' );
 if( $gBitUser->isRegistered() ) {
 	$postComment['registration_date']=$gBitUser->mInfo['registration_date'];
 	$postComment['user_avatar_url']=$gBitUser->mInfo['avatar_url'];
-	$postComment['user_url'] = $gBitUser->getDisplayUrl();
+	$postComment['user_url'] = $gBitUser->getContentUrl();
 }
 
 

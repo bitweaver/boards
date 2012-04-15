@@ -67,7 +67,7 @@ if( !empty( $_REQUEST["save_bitboard"] ) ) {
 	// disabled
 	if( $gContent->store( $storeHash ) ) {
 		$gContent->storePreference( 'board_sync_list_address', (!empty( $_REQUEST['bitboardconfig']['board_sync_list_address'] ) ?  $_REQUEST['bitboardconfig']['board_sync_list_address'] : NULL) );
-		bit_redirect( $gContent->getDisplayUrl() );
+		bit_redirect( $gContent->getContentUrl() );
 	} else {
 		$gBitSmarty->assign_by_ref( 'errors', $gContent->mErrors );
 	}

@@ -320,7 +320,7 @@ class BitBoardPost extends LibertyComment {
 				$row['user_url']=BitUser::getDisplayUrl($row['login'],$row);
 				$row['parsed_data'] = $this->parseData( $row );
 				$row['level'] = substr_count ( $row['thread_forward_sequence'], '.' ) - 1;
-				$row['display_url'] = $this->getDisplayUrl( $row['comment_id'], boards_get_topic_comment( $row['thread_forward_sequence'] ) );
+				$row['display_url'] = self::getDisplayUrl( $row['comment_id'], boards_get_topic_comment( $row['thread_forward_sequence'] ) );
 				$c = new LibertyComment();
 				$c->mInfo=$row;
 				$row['is_editable'] = $c->userCanEdit();
@@ -360,7 +360,7 @@ class BitBoardPost extends LibertyComment {
 	* Generates the URL to the bitboard page
 	* @return the link to display the page.
 	*/
-	function getDisplayUrl( $pCommentId=NULL, $pTopicId=NULL ) {
+	public static function getDisplayUrl( $pCommentId=NULL, $pTopicId=NULL ) {
 		global $gBitSystem;
 
 		if( empty( $pCommentId ) || empty( $pTopicId ) ) {
@@ -414,7 +414,7 @@ class BitBoardPost extends LibertyComment {
 			$userInfo = $u->mInfo;
 
 			$pm = new Messages();
-			$message = "Your post \"".$this->mInfo['title']."\" [http://".$_SERVER['HTTP_HOST'].$this->getDisplayUrl()."] has been warned with the following message:\n$message\n";
+			$message = "Your post \"".$this->mInfo['title']."\" [http://".$_SERVER['HTTP_HOST'].$this->getContactUrl()."] has been warned with the following message:\n$message\n";
 			$msgHash = array(
 				'to_login' => $userInfo['login'],
 				'to'       => $userInfo['real_name'],
