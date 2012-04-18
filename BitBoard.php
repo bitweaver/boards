@@ -609,7 +609,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 	* Generates the URL to the bitboard page
 	* @return the link to display the page.
 	*/
-	public static function getDisplayUrl( $pBitBoardId = NULL, $pParamHash = NULL ) {
+	public static function getDisplayUrlFromHash( $pBitBoardId = NULL, $pParamHash = NULL ) {
 		global $gBitSystem;
 		$ret = NULL;
 
@@ -619,7 +619,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 			$topicRootId = 	(int)$seq[0];
 			if( BitBase::verifyId( $topicRootId )) {
 				require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
-				$ret = @BitBoardTopic::getDisplayUrl( $topicRootId );
+				$ret = @BitBoardTopic::getDisplayUrlFromHash( $topicRootId );
 				// we're out of here with our topic url
 				return $ret;
 			}
@@ -633,7 +633,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 				$ret = BOARDS_PKG_URL."index.php?b=".$pBitBoardId;
 			}
 		} else {
-			$ret = LibertyContent::getDisplayUrl( NULL, $pParamHash );
+			$ret = LibertyContent::getDisplayUrlFromHash( NULL, $pParamHash );
 		}
 
 		return $ret;
@@ -644,7 +644,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 			$pBitBoardId = $this->mBitBoardId;
 		}
 
-		return self::getDisplayUrl( $pBitBoardId );
+		return self::getDisplayUrlFromHash( $pBitBoardId );
 	}
 
 	function getBoardSelectList( $pBlankFirst=FALSE ) {

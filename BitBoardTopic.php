@@ -126,7 +126,7 @@ class BitBoardTopic extends LibertyMime {
 				// @TODO this would make more sense if this were assigned to mRootId - but that is currently in use as top comment id
 				$this->mInfo['root_id'] = $result->fields['th_root_id'];
 				BitBoardTopic::track($this->mInfo);
-				$this->mInfo['display_url'] = $this->getContentUrl();
+				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				
 				if (empty($this->mInfo['anon_name'])) {
 					$this->mInfo['anon_name'] = "Anonymous";
@@ -488,7 +488,7 @@ class BitBoardTopic extends LibertyMime {
 	* Generates the URL to the bitboard page
 	* @return the link to display the page.
 	*/
-	public static function getDisplayUrl( $pTopicId=NULL ) {
+	public static function getDisplayUrlFromHash( $pTopicId=NULL ) {
 		global $gBitSystem;
 		$ret = NULL;
 
@@ -582,11 +582,11 @@ class BitBoardTopic extends LibertyMime {
 			This topic has received a reply since your last visit.
 			You can use the following link to view the replies made, no more notifications will be sent until you visit the topic.
 
-			".$host.$this->getContentUrl()."
+			".$host.$this->getDisplayUrl()."
 
 			If you no longer wish to watch this topic you can either click the \"Stop watching this topic link\" found at the topic of the topic above, or by clicking the following link after logging on:
 
-			".$host.$this->getContentUrl()."&notify=1";
+			".$host.$this->getDisplayUrl()."&notify=1";
 			
 		@mail($user['email'], $mail_subject , $mail_message, "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n");
 

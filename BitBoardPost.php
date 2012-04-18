@@ -202,7 +202,7 @@ class BitBoardPost extends LibertyComment {
 						$row['warned_message'] = str_replace("\n","<br />\n",$row['warned_message']);
 					}
 					$row['data'] = trim( $row['data'] );
-					$row['user_url'] = BitUser::getDisplayUrl( $row['login'], $row );
+					$row['user_url'] = BitUser::getDisplayUrlFromHash( $row['login'], $row );
 					$row['parsed_data'] = $this->parseData( $row );
 					$row['level'] = substr_count ( $row['thread_forward_sequence'], '.' ) - 1;
 					$c = new LibertyComment();
@@ -317,10 +317,10 @@ class BitBoardPost extends LibertyComment {
 					$row['warned_message'] = str_replace("\n","<br />\n",$row['warned_message']);
 				}
 				$row['data'] = trim($row['data']);
-				$row['user_url']=BitUser::getDisplayUrl($row['login'],$row);
+				$row['user_url']=BitUser::getDisplayUrlFromHash($row['login'],$row);
 				$row['parsed_data'] = $this->parseData( $row );
 				$row['level'] = substr_count ( $row['thread_forward_sequence'], '.' ) - 1;
-				$row['display_url'] = self::getDisplayUrl( $row['comment_id'], boards_get_topic_comment( $row['thread_forward_sequence'] ) );
+				$row['display_url'] = self::getDisplayUrlFromHash( $row['comment_id'], boards_get_topic_comment( $row['thread_forward_sequence'] ) );
 				$c = new LibertyComment();
 				$c->mInfo=$row;
 				$row['is_editable'] = $c->userCanEdit();
@@ -360,7 +360,7 @@ class BitBoardPost extends LibertyComment {
 	* Generates the URL to the bitboard page
 	* @return the link to display the page.
 	*/
-	public static function getDisplayUrl( $pCommentId=NULL, $pTopicId=NULL ) {
+	public static function getDisplayUrlFromHash( $pCommentId=NULL, $pTopicId=NULL ) {
 		global $gBitSystem;
 
 		if( empty( $pCommentId ) || empty( $pTopicId ) ) {
