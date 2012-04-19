@@ -88,7 +88,7 @@ class BitBoard extends LibertyMime {
 
 				$this->mInfo['creator'] =( isset( $result->fields['creator_real_name'] )? $result->fields['creator_real_name'] : $result->fields['creator_user'] );
 				$this->mInfo['editor'] =( isset( $result->fields['modifier_real_name'] )? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
-				$this->mInfo['display_url'] = $this->getContentUrl();
+				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['parsed_data'] = $this->parseData();
 
 				LibertyMime::load();
@@ -587,7 +587,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 	function getLastTopic($data) {
 		global $gBitSystem;
 		$BIT_DB_PREFIX = BIT_DB_PREFIX;
-		$query="SELECT slc.`last_modified`, slc.`user_id`, lcom.`anon_name` AS l_anon_name, slc.`title`, lcom.comment_id AS thread_id
+		$query="SELECT slc.`last_modified`, slc.`user_id`, lcom.`anon_name` AS l_anon_name, slc.`title`, lcom.comment_id AS topic_id
 			FROM `".BIT_DB_PREFIX."boards_map` map
 				INNER JOIN `".BIT_DB_PREFIX."liberty_comments` lcom ON (map.`topic_content_id` = lcom.`root_id`)
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` slc ON( slc.`content_id` = lcom.`content_id` )
@@ -596,11 +596,12 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 		    ORDER BY slc.`last_modified` DESC
 	    ";
 		$result = $this->mDb->getRow( $query, array( $data['content_id'] ) );
-		if (!empty($result['thread_id'])) {
-			if (empty($result['l_anon_name'])) $result['l_anon_name'] = "Anonymous";
-			$result['thread_id']=intval($result['thread_id']);
-			$t = new BitBoardTopic($result['thread_id']);
-			$result['url']=$t->getContentUrl();
+		if (!empty($result['topic_id'])) {
+			if (empty($result['l_anon_name'])) {
+				$result['l_anon_name'] = "Anonymous";
+			}
+			$result['topic_id']=intval($result['topic_id']);
+			$result['url'] = BitBoardTopic::getDisplayUrlFromHash( $result );
 		}
 		return $result;
 	}
@@ -609,7 +610,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 	* Generates the URL to the bitboard page
 	* @return the link to display the page.
 	*/
-	public static function getDisplayUrlFromHash( $pBitBoardId = NULL, $pParamHash = NULL ) {
+	public static function getDisplayUrlFromHash( $pParamHash ) {
 		global $gBitSystem;
 		$ret = NULL;
 
@@ -619,32 +620,24 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 			$topicRootId = 	(int)$seq[0];
 			if( BitBase::verifyId( $topicRootId )) {
 				require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
-				$ret = @BitBoardTopic::getDisplayUrlFromHash( $topicRootId );
+				$ret = BitBoardTopic::getDisplayUrlFromHash( array( 'topic_id' => $topicRootId ) );
 				// we're out of here with our topic url
 				return $ret;
 			}
 		}
 
-		if( BitBase::verifyId( $pBitBoardId )) {
+		if( BitBase::verifyId( $pParamHash['board_id'] )) {
 			if( $gBitSystem->isFeatureActive( 'pretty_urls' ) || $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				$rewrite_tag = $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ? 'view/':'';
-				$ret = BOARDS_PKG_URL.$rewrite_tag.'board/'.$pBitBoardId;
+				$ret = BOARDS_PKG_URL.$rewrite_tag.'board/'.$pParamHash['board_id'];
 			} else {
-				$ret = BOARDS_PKG_URL."index.php?b=".$pBitBoardId;
+				$ret = BOARDS_PKG_URL."index.php?b=".$pParamHash['board_id'];
 			}
 		} else {
-			$ret = LibertyContent::getDisplayUrlFromHash( NULL, $pParamHash );
+			$ret = parent::getDisplayUrlFromHash( $pParamHash );
 		}
 
 		return $ret;
-	}
-
-	function getContentUrl( $pBitBoardId = NULL, $pParamHash = NULL ) {
-		if( empty( $pBitBoardId ) && @BitBase::verifyId( $this->mBitBoardId )) {
-			$pBitBoardId = $this->mBitBoardId;
-		}
-
-		return self::getDisplayUrlFromHash( $pBitBoardId );
 	}
 
 	function getBoardSelectList( $pBlankFirst=FALSE ) {

@@ -487,21 +487,22 @@ class BitBoardTopic extends LibertyMime {
 	/**
 	* Generates the URL to the bitboard page
 	* @return the link to display the page.
-	*/
-	public static function getDisplayUrlFromHash( $pTopicId=NULL ) {
-		global $gBitSystem;
-		$ret = NULL;
 
 		if( empty( $pTopicId ) ) {
 			$pTopicId = $this->mRootId;
 		}
 
-		if( @$this->verifyId( $pTopicId ) ) {
+	*/
+	public static function getDisplayUrlFromHash( $pParamHash ) {
+		global $gBitSystem;
+		$ret = NULL;
+
+		if( self::verifyId( $pParamHash['topic_id'] ) ) {
 			if( $gBitSystem->isFeatureActive( 'pretty_urls' ) || $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				$rewrite_tag = $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ? 'view/':'';
-				$ret = BOARDS_PKG_URL.$rewrite_tag."topic/".$pTopicId;
+				$ret = BOARDS_PKG_URL.$rewrite_tag."topic/".$pParamHash['topic_id'];
 			} else {
-				$ret=BOARDS_PKG_URL."index.php?t=".$pTopicId;
+				$ret=BOARDS_PKG_URL."index.php?t=".$pParamHash['topic_id'];
 			}
 		}
 		return $ret;

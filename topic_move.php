@@ -48,7 +48,7 @@ if( isset( $_REQUEST["target"] ) ) {
 		if (empty($_REQUEST["ref"])) {
 			$_REQUEST["ref"]=$_SERVER['HTTP_REFERER'];
 		} elseif ($_REQUEST["ref"]=="-") {
-			$_REQUEST["ref"]=$gContent->getContentUrl();
+			$_REQUEST["ref"]=$gContent->getDisplayUrl();
 		}
 		$formHash["ref"]=$_REQUEST["ref"];
 		$formHash["target"]=$_REQUEST["target"];

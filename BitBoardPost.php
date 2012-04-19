@@ -202,7 +202,7 @@ class BitBoardPost extends LibertyComment {
 						$row['warned_message'] = str_replace("\n","<br />\n",$row['warned_message']);
 					}
 					$row['data'] = trim( $row['data'] );
-					$row['user_url'] = BitUser::getDisplayUrlFromHash( $row['login'], $row );
+					$row['user_url'] = BitUser::getDisplayUrlFromHash( $row );
 					$row['parsed_data'] = $this->parseData( $row );
 					$row['level'] = substr_count ( $row['thread_forward_sequence'], '.' ) - 1;
 					$c = new LibertyComment();
@@ -317,10 +317,11 @@ class BitBoardPost extends LibertyComment {
 					$row['warned_message'] = str_replace("\n","<br />\n",$row['warned_message']);
 				}
 				$row['data'] = trim($row['data']);
-				$row['user_url']=BitUser::getDisplayUrlFromHash($row['login'],$row);
+				$row['user_url']=BitUser::getDisplayUrlFromHash($row);
 				$row['parsed_data'] = $this->parseData( $row );
 				$row['level'] = substr_count ( $row['thread_forward_sequence'], '.' ) - 1;
-				$row['display_url'] = self::getDisplayUrlFromHash( $row['comment_id'], boards_get_topic_comment( $row['thread_forward_sequence'] ) );
+				$row['topic_id'] = boards_get_topic_comment( $row['thread_forward_sequence'] );
+				$row['display_url'] = self::getDisplayUrlFromHash( $row );
 				$c = new LibertyComment();
 				$c->mInfo=$row;
 				$row['is_editable'] = $c->userCanEdit();
@@ -356,28 +357,34 @@ class BitBoardPost extends LibertyComment {
 		return $ret;
 	}
 
+	function getDisplayUrl() {
+		$ret = NULL;
+		if( $this->isValid() ) {
+			$urlHash['comment_id'] = $this->mCommentId;
+			$urlHash['topic_id'] = $this->getTopicId();
+			$ret = self::getDisplayUrlFromHash( $urlHash );
+		}
+		return $ret;
+	}
+
 	/**
 	* Generates the URL to the bitboard page
 	* @return the link to display the page.
 	*/
-	public static function getDisplayUrlFromHash( $pCommentId=NULL, $pTopicId=NULL ) {
+	public static function getDisplayUrlFromHash( $pParamHash ) {
 		global $gBitSystem;
 
-		if( empty( $pCommentId ) || empty( $pTopicId ) ) {
-			$pCommentId = $this->mCommentId;
-			$pTopicId = $this->getTopicId();
-		}
 		$ret = NULL;
-		if( @$this->verifyId( $pCommentId ) ) {
+		if( self::verifyId( $pParamHash['comment_id'] ) ) {
 			if( $gBitSystem->isFeatureActive( 'pretty_urls' ) || $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				$rewrite_tag = $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ? 'view/':'';
-				$ret = BOARDS_PKG_URL.$rewrite_tag."topic/".$pTopicId;
+				$ret = BOARDS_PKG_URL.$rewrite_tag."topic/".$pParamHash['topic_id'];
 			} else {
-				$ret = BOARDS_PKG_URL."index.php?t=".$pTopicId;
+				$ret = BOARDS_PKG_URL."index.php?t=".$pParamHash['topic_id'];
 			}
 
-			if( $pCommentId != $pTopicId ) {
-				$ret .= '#comment_'.$pCommentId;
+			if( $pParamHash['comment_id'] != $pParamHash['topic_id'] ) {
+				$ret .= '#comment_'.$pParamHash['comment_id'];
 			}
 		}
 		return $ret;
