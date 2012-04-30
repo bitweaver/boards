@@ -81,7 +81,7 @@ class BitBoardPost extends LibertyComment {
 			$ret = TRUE;
 		}
 		return $ret;
-	}	
+	}
 
 	function loadMetaData() {
 		if ($this->isValid()) {
@@ -163,7 +163,7 @@ class BitBoardPost extends LibertyComment {
 		}
 
         $pListHash = array( 'content_id' => $contentId, 'max_records' => $pMaxComments, 'offset'=>$pOffset, 'sort_mode'=> $pSortOrder, 'display_mode' => $pDisplayMode, 'has_comment_view_perm' => TRUE );
-        $this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this, $pListHash );		
+        $this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this, $pListHash );
 
 		if ($pContentId) {
 			$sql = "SELECT lcom.`comment_id`, lcom.`parent_id`, lcom.`root_id`,
@@ -208,7 +208,7 @@ class BitBoardPost extends LibertyComment {
 					$c = new LibertyComment();
 					$c->mInfo=$row;
 					$row['is_editable'] = $c->userCanEdit();
-					
+
 					if( $gBitSystem->isFeatureActive( 'comments_allow_attachments' ) ){
 						// get attachments for each comment
 						global $gLibertySystem;
@@ -228,7 +228,7 @@ class BitBoardPost extends LibertyComment {
 						}
 						// end get attachements for each comment
 					}
-					
+
 					$flat_comments[$row['content_id']] = $row;
 					// vd($row);
 				}

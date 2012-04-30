@@ -34,7 +34,7 @@ if( isset( $_REQUEST["target"] ) ) {
 	if( !$targetBoard->hasAdminPermission() ){
 		$gBitSystem->fatalError( 'You do not have permission to move topics to the Board' . $targetBoard->mInfo['title'] );
 	}
-	
+
 	if( isset( $_REQUEST["confirm"] ) ) {
 		if( $gContent->moveTo($_REQUEST["target"]) ) {
 			header ("location: ".$gContent-getDisplayUrl() );

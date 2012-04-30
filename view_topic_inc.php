@@ -52,7 +52,7 @@ if (!empty($_REQUEST['action'])) {
 		default:
 			break;
 	}
-} 
+}
 
 // Finally - load up our topic
 $thread = new BitBoardTopic($_REQUEST['t']);

@@ -238,7 +238,7 @@ class BitBoard extends LibertyMime {
 
 		return( count( $this->mErrors )== 0 );
 	}
-	
+
 
 	/**
 	 * Prepare data for preview
@@ -251,8 +251,8 @@ class BitBoard extends LibertyMime {
 		}
 
 		if( isset( $pParamHash["title"] ) ) {
-			$this->mInfo["title"] = $pParamHash["title"]; 
-		}       
+			$this->mInfo["title"] = $pParamHash["title"];
+		}
 
 		if( isset( $pParamHash["description"] ) ) {
 			$this->mInfo["description"] = $pParamHash["description"];
@@ -260,7 +260,7 @@ class BitBoard extends LibertyMime {
 
 		if( isset( $pParamHash["format_guid"] ) ) {
 			$this->mInfo['format_guid'] = $pParamHash["format_guid"];
-		}   
+		}
 
 		if( isset( $pParamHash["edit"] ) ) {
 			$this->mInfo["data"] = $pParamHash["edit"];
@@ -616,7 +616,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 
 		if( !empty( $pParamHash['comment'] ) && !empty( $pParamHash['comment']['thread_forward_sequence'] ) ){
 			// look up base of comment sequece which is BitBoardTopic
-			$seq = explode( ".",  $pParamHash['comment']['thread_forward_sequence'] );	
+			$seq = explode( ".",  $pParamHash['comment']['thread_forward_sequence'] );
 			$topicRootId = 	(int)$seq[0];
 			if( BitBase::verifyId( $topicRootId )) {
 				require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
@@ -648,7 +648,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 		$bindVars = array();
 
 		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
-		
+
 		/* DEPRECATED - has some pointless stuff
 		$query = "SELECT lc.`content_id` as hash_key, lc.`title` AS `title`
 			FROM `".BIT_DB_PREFIX."boards` b
@@ -744,7 +744,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 		global $gBitSystem;
 		$ret = NULL;
 		if( $this->isValid() && $gBitSystem->getConfig( 'boards_sync_mail_server' ) && $this->getPreference( 'boards_mailing_list' ) ) {
-			$ret = $this->getPreference( 'boards_mailing_list' ).'@'.$gBitSystem->getConfig( 'boards_email_host', $gBitSystem->getConfig( 'kernel_server_name' ) );	
+			$ret = $this->getPreference( 'boards_mailing_list' ).'@'.$gBitSystem->getConfig( 'boards_email_host', $gBitSystem->getConfig( 'kernel_server_name' ) );
 		}
 		return $ret;
 	}
@@ -830,7 +830,7 @@ function boards_comment_store( &$pObject, &$pParamHash ) {
 	// board posts ( e.g. liberty comments ) service
 	// @TODO check that root object is a board -- otherwise all comments get fired
 	// @TODO probably should migrate sendNotification to Switchboard
-	
+
 	if( $gBitSystem->isPackageActive( 'boards' ) && $pObject->isContentType( BITCOMMENT_CONTENT_TYPE_GUID ) && $gBitSystem->isFeatureActive( 'boards_thread_notification' )) {
 		if( isset( $pObject->mInfo['thread_forward_sequence'] ) ){
 			$topic_id = substr( $pObject->mInfo['thread_forward_sequence'], 0, 10 );

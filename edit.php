@@ -29,7 +29,7 @@ if( $gContent->isValid() ) {
 	$gContent->verifyCreatePermission();
 }
 
-// Handle delete request 
+// Handle delete request
 if( isset( $_REQUEST['remove'] ) ) {
 	// @TODO: Change to verifyExpungePermission when that exists in LibertyContent
 	if ( $gContent->isValid() && $gContent->hasUserPermission( 'p_boards_remove', TRUE, TRUE ) ) {

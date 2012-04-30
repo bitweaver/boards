@@ -2,11 +2,11 @@
 /**
  * $Header$
  * $Id$
- * 
+ *
  * Messageboards class to illustrate best practices when creating a new bitweaver package that
  * builds on core bitweaver functionality, such as the Liberty CMS engine
  *
- * @author spider <spider@steelsun.com> 
+ * @author spider <spider@steelsun.com>
  * @version $Revision$
  * @package boards
  */
@@ -113,7 +113,7 @@ class BitBoardTopic extends LibertyMime {
 				WHERE
 					lcom.`root_id`=lcom.`parent_id` AND	$lookupColumn=?
 				$whereSql";
-			
+
 			$result = $this->mDb->query( $query, $bindVars );
 
 			if( $result && $result->numRows() ) {
@@ -127,7 +127,7 @@ class BitBoardTopic extends LibertyMime {
 				$this->mInfo['root_id'] = $result->fields['th_root_id'];
 				BitBoardTopic::track($this->mInfo);
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
-				
+
 				if (empty($this->mInfo['anon_name'])) {
 					$this->mInfo['anon_name'] = "Anonymous";
 				}
@@ -207,7 +207,7 @@ class BitBoardTopic extends LibertyMime {
 			$ret = TRUE;
 		}
 		return $ret;
-	}	
+	}
 
 	/**
 	* This function locks a topic
@@ -280,7 +280,7 @@ class BitBoardTopic extends LibertyMime {
 		$data['parent_id']=$lcom->mContentId;
 		$data['is_moved']=$this->mRootId;
 		$this->mDb->associateInsert( BIT_DB_PREFIX."boards_topics", $data );
-		
+
 		// move the comment we want to move to the target board
 		$query = "UPDATE `".BIT_DB_PREFIX."liberty_comments`
 					SET
@@ -331,7 +331,7 @@ class BitBoardTopic extends LibertyMime {
 		} elseif( is_string( $find ) ) {
 			// or a string
 			$bindVars[] = '%'. strtoupper( $find ).'%';
-			$whereSql .= " AND UPPER( lc.`title` ) LIKE ?"; 
+			$whereSql .= " AND UPPER( lc.`title` ) LIKE ?";
 		}
 
 		// if we have the board's board_id (b) we use that, or if we have its content_id we can use that
@@ -349,7 +349,7 @@ class BitBoardTopic extends LibertyMime {
 		}
 
 		BitBoardTopic::loadTrack($selectSql,$joinSql);
-		
+
 		// use adodb's substr property
 		$substr = $this->mDb->substr();
 
@@ -567,7 +567,7 @@ class BitBoardTopic extends LibertyMime {
 			$ret['topic']->load();
 			return $ret;
 		}
-		
+
 		return array();
 	}
 
@@ -588,7 +588,7 @@ class BitBoardTopic extends LibertyMime {
 			If you no longer wish to watch this topic you can either click the \"Stop watching this topic link\" found at the topic of the topic above, or by clicking the following link after logging on:
 
 			".$host.$this->getDisplayUrl()."&notify=1";
-			
+
 		@mail($user['email'], $mail_subject , $mail_message, "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n");
 
 		$data = array(

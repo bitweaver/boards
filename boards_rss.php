@@ -26,12 +26,12 @@ if( !empty( $_REQUEST['t'] ) || !empty($_REQUEST['b'] ) ){
 	else{
 		$gBitSystem->fatalError(tra("Unknown discussion"), NULL, NULL, HttpStatusCodes::HTTP_NOT_FOUND );
 	}
-} 
+}
 $gContent->verifyViewPermission();
 
 // check if we want to use the cache file
 // HTTP_HOST is needed beacuse people subscribe to RSS via different URLs (docs.bw.o and www.bw.o for example)
-// cached versions of other URLs will double posts 
+// cached versions of other URLs will double posts
 // $cacheFile = TEMP_PKG_PATH.RSS_PKG_NAME.'/'.BOARDS_PKG_NAME.'/'.$_SERVER['HTTP_HOST']."_".$cacheFileTail;
 $cacheFile = TEMP_PKG_PATH.RSS_PKG_NAME.'/'.BOARDS_PKG_NAME.'/'.$_SERVER['HTTP_HOST'];
 // BitTopic acts strange and does not set mContentTypeGuid
@@ -57,15 +57,15 @@ if( $gContent->isValid() ){
 	$title = $gContent->getField( 'title' )." Feed";
 	$description = $gContent->getField( 'parsed_data' );
 }
-$rss->title = $title; 
-$rss->description = $description; 
+$rss->title = $title;
+$rss->description = $description;
 $rss->link =  $gContent->getDisplayUri();
 
 
 // get all topics of a board or all recent topics in general
 switch( $gContent->getField('content_type_guid') ){
 	case 'bitcomment':
-		// need to use post class to get list of comments 
+		// need to use post class to get list of comments
 		$gComment = new BitBoardPost($_REQUEST['t']);
 		// pass in a reference to the root object so that we can do proper permissions checks
 		$gComment->mRootObj = $gContent;
@@ -98,7 +98,7 @@ foreach( $feeds as $feed ) {
 
 	switch( $gContent->getField('content_type_guid') ){
 		case 'bitcomment':
-			// topic specific 
+			// topic specific
 			$item->link = 'http://'.$_SERVER['HTTP_HOST'].BIT_ROOT_URL.'index.php?content_id='.$feed['content_id']; //comment paths are tricky, but work automagically through the front door
 			$item->description =  $feed['parsed_data'];
 			$item->date = ( int )$feed['last_modified'];
