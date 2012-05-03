@@ -497,7 +497,7 @@ class BitBoardTopic extends LibertyMime {
 		global $gBitSystem;
 		$ret = NULL;
 
-		if( self::verifyId( $pParamHash['topic_id'] ) ) {
+		if( static::verifyId( $pParamHash['topic_id'] ) ) {
 			if( $gBitSystem->isFeatureActive( 'pretty_urls' ) || $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				$rewrite_tag = $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ? 'view/':'';
 				$ret = BOARDS_PKG_URL.$rewrite_tag."topic/".$pParamHash['topic_id'];

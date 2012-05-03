@@ -321,7 +321,7 @@ class BitBoardPost extends LibertyComment {
 				$row['parsed_data'] = $this->parseData( $row );
 				$row['level'] = substr_count ( $row['thread_forward_sequence'], '.' ) - 1;
 				$row['topic_id'] = boards_get_topic_comment( $row['thread_forward_sequence'] );
-				$row['display_url'] = self::getDisplayUrlFromHash( $row );
+				$row['display_url'] = static::getDisplayUrlFromHash( $row );
 				$c = new LibertyComment();
 				$c->mInfo=$row;
 				$row['is_editable'] = $c->userCanEdit();
@@ -362,7 +362,7 @@ class BitBoardPost extends LibertyComment {
 		if( $this->isValid() ) {
 			$urlHash['comment_id'] = $this->mCommentId;
 			$urlHash['topic_id'] = $this->getTopicId();
-			$ret = self::getDisplayUrlFromHash( $urlHash );
+			$ret = static::getDisplayUrlFromHash( $urlHash );
 		}
 		return $ret;
 	}
@@ -375,7 +375,7 @@ class BitBoardPost extends LibertyComment {
 		global $gBitSystem;
 
 		$ret = NULL;
-		if( self::verifyId( $pParamHash['comment_id'] ) ) {
+		if( static::verifyId( $pParamHash['comment_id'] ) ) {
 			if( $gBitSystem->isFeatureActive( 'pretty_urls' ) || $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				$rewrite_tag = $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ? 'view/':'';
 				$ret = BOARDS_PKG_URL.$rewrite_tag."topic/".$pParamHash['topic_id'];
