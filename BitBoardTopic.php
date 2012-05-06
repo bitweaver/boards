@@ -43,7 +43,7 @@ class BitBoardTopic extends LibertyMime {
 	* During initialisation, be sure to call our base constructors
 	**/
 	function BitBoardTopic( $pRootId=NULL ) {
-		LibertyMime::LibertyMime();
+		parent::__construct();
 		$this->mRootId = $pRootId;
 
 		// Permission setup
