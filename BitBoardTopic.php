@@ -493,7 +493,7 @@ class BitBoardTopic extends LibertyMime {
 		}
 
 	*/
-	public static function getDisplayUrlFromHash( $pParamHash ) {
+	public static function getDisplayUrlFromHash( &$pParamHash ) {
 		global $gBitSystem;
 		$ret = NULL;
 

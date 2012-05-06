@@ -286,7 +286,7 @@ class BitBoardPost extends LibertyComment {
 			$whereSql = preg_replace( '/^[\s]*AND\b/i', 'WHERE ', $whereSql );
 		}
 
-		$sql = "SELECT lcom.`comment_id`, lcom.`parent_id`, lcom.`root_id`, lcom.`thread_forward_sequence`, lcom.`thread_reverse_sequence`, lcom.`anon_name`, lc.*, uu.`email`, uu.`real_name`, uu.`login`, post.is_approved, post.is_warned, post.warned_message, uu.registration_date AS registration_date, 
+		$sql = "SELECT lcom.`comment_id`, lcom.`parent_id`, lcom.`root_id`, lcom.`thread_forward_sequence`, lcom.`thread_reverse_sequence`, lcom.`anon_name`, lc.*, uu.`email`, uu.`real_name`, uu.`login`, post.is_approved, post.is_warned, post.warned_message, uu.registration_date AS registration_date,
 					tf_ava.`file_name` AS `avatar_file_name`, tf_ava.`mime_type` AS `avatar_mime_type`, tf_ava.`user_id` AS `avatar_user_id`, ta_ava.`attachment_id` AS `avatar_attachment_id`
 					$selectSql
 				FROM `".BIT_DB_PREFIX."liberty_comments` lcom
@@ -371,7 +371,7 @@ class BitBoardPost extends LibertyComment {
 	* Generates the URL to the bitboard page
 	* @return the link to display the page.
 	*/
-	public static function getDisplayUrlFromHash( $pParamHash ) {
+	public static function getDisplayUrlFromHash( &$pParamHash ) {
 		global $gBitSystem;
 
 		$ret = NULL;

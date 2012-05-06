@@ -610,7 +610,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 	* Generates the URL to the bitboard page
 	* @return the link to display the page.
 	*/
-	public static function getDisplayUrlFromHash( $pParamHash ) {
+	public static function getDisplayUrlFromHash( &$pParamHash ) {
 		global $gBitSystem;
 		$ret = NULL;
 
@@ -714,7 +714,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 		return( $ret );
 	}
 
-	function getLinkedBoard( $pContentId ) {
+	public static function getLinkedBoard( $pContentId ) {
 		global $gBitDb;
 		$ret = NULL;
 		if( BitBase::verifyId( $pContentId ) ) {
