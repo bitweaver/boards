@@ -88,12 +88,12 @@ function board_sync_run($pLog = FALSE) {
 		$dir = TEMP_PKG_PATH.BOARDS_PKG_NAME.'/boardsync';
 		if( is_dir( $dir ) && strpos( $dir, BIT_ROOT_PATH ) === 0 ) {
 			if( !unlink_r( $dir ) ) {
-				bit_log_error( "Failed to clear directory: ".$dir." in boards package mailinglist synchronization." );
+				bit_error_log( "Failed to clear directory: ".$dir." in boards package mailinglist synchronization." );
 			}
 		}
 		
 	} else {
-		bit_log_error( __FILE__." failed imap_open $connectionString ".imap_last_error() );
+		bit_error_log( __FILE__." failed imap_open $connectionString ".imap_last_error() );
 	}
 	
 }
@@ -225,7 +225,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 	$subject = board_sync_get_headerinfo( $pMsgHeader, 'Subject' );
 
 	if( empty( $message_id ) ){
-		bit_log_error( "Email sync for message: ".$subject." failed: No Message Id in mail header." );
+		bit_error_log( "Email sync for message: ".$subject." failed: No Message Id in mail header." );
 	}else{
 		if ($pLog) print("Processing: ".$message_id."\n");
 		if ($pLog) print("  Subject: ".$subject."\n");
@@ -471,7 +471,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 							$gBitDb->CompleteTrans();
 							return TRUE;
 						}else{
-							bit_log_error( "Email sync error: Message Id not set. You shouldn't have even gotten this far." );
+							bit_error_log( "Email sync error: Message Id not set. You shouldn't have even gotten this far." );
 							$gBitDb->RollbackTrans();
 							return FALSE;
 						}
@@ -480,7 +480,7 @@ function board_sync_process_message( $pMbox, $pMsgNum, $pMsgHeader, $pMsgStructu
 							return TRUE;
 						} else {
 							foreach( $storeComment->mErrors as $error ){
-								bit_log_error( $error );
+								bit_error_log( $error );
 							}
 							$gBitDb->RollbackTrans();
 							return FALSE;
