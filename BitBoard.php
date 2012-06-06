@@ -620,7 +620,8 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 			$topicRootId = 	(int)$seq[0];
 			if( BitBase::verifyId( $topicRootId )) {
 				require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
-				$ret = BitBoardTopic::getDisplayUrlFromHash( array( 'topic_id' => $topicRootId ) );
+				$hash = array( 'topic_id' => $topicRootId );
+				$ret = BitBoardTopic::getDisplayUrlFromHash( $hash );
 				// we're out of here with our topic url
 				return $ret;
 			}
