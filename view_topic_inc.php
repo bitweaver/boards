@@ -77,7 +77,7 @@ $gBitSmarty->assign_by_ref('gContent', $gContent);
 if (empty($thread->mInfo['th_root_id'])) {
 	if ($_REQUEST['action']==3) {
 		//Invalid as a result of rejecting the post, redirect to the board
-		header("Location: ".$gBoard->getDisplayUrl());
+		bit_redirect( $gBoard->getDisplayUrl() );
 	} else {
 		$gBitSystem->fatalError(tra( "Invalid topic selection." ), NULL, NULL, HttpStatusCodes::HTTP_NOT_FOUND );
 	}

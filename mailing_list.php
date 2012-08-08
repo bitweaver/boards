@@ -63,7 +63,7 @@ if( !empty( $_REQUEST['create_list'] ) ) {
 			if( !($error = mailman_rmlist( $gContent->getPreference( 'boards_mailing_list' ) )) ) {
 				$gContent->storePreference( 'boards_mailing_list', NULL );
 				$gContent->storePreference( 'boards_mailing_list_password', NULL );
-				header( "Location: ".BOARDS_PKG_URL."mailing_list.php?b=".$gContent->getField( 'board_id' ) );
+				bit_redirect( BOARDS_PKG_URL."mailing_list.php?b=".$gContent->getField( 'board_id' ) );
 			} else {
 				$gBitSmarty->assign( 'errorMsg', $error );
 			}
