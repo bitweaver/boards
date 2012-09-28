@@ -440,7 +440,7 @@ class BitBoard extends LibertyMime {
 		return $ret;
 	}
 
-	function prepGetList( &$pParamHash ) {
+	public static function prepGetList( &$pParamHash ) {
 		if( empty( $pParamHash['sort_mode'] ) ) {
 			// default sort_mode for boards is alphabetical
 			$pParamHash['sort_mode'] = 'title_asc';
