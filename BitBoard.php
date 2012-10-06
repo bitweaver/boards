@@ -454,7 +454,7 @@ class BitBoard extends LibertyMime {
 	function getList( &$pParamHash ) {
 		global $gBitSystem, $gBitUser;
 		// this makes sure parameters used later on are set
-		$this->prepGetList( $pParamHash );
+		LibertyContent::prepGetList( $pParamHash );
 
 		$selectSql = $joinSql = $whereSql = '';
 		$bindVars = array();
