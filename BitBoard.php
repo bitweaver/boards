@@ -440,7 +440,7 @@ class BitBoard extends LibertyMime {
 		return $ret;
 	}
 
-	public static function prepGetList( &$pParamHash ) {
+	function prepGetList( &$pParamHash ) {
 		if( empty( $pParamHash['sort_mode'] ) ) {
 			// default sort_mode for boards is alphabetical
 			$pParamHash['sort_mode'] = 'title_asc';
@@ -454,7 +454,7 @@ class BitBoard extends LibertyMime {
 	function getList( &$pParamHash ) {
 		global $gBitSystem, $gBitUser;
 		// this makes sure parameters used later on are set
-		LibertyContent::prepGetList( $pParamHash );
+		$this->prepGetList( $pParamHash );
 
 		$selectSql = $joinSql = $whereSql = '';
 		$bindVars = array();

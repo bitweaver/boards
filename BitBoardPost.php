@@ -244,7 +244,7 @@ class BitBoardPost extends LibertyComment {
 	function getList( &$pListHash ) {
 		global $gBitUser, $gBitSystem;
 
-		LibertyContent::prepGetList( $pListHash );
+		$this->prepGetList( $pListHash );
 
 		$joinSql = $selectSql = $whereSql = '';
 
