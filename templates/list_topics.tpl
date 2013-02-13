@@ -35,7 +35,10 @@
 	<div class="body">
 		{if $board->hasPostCommentsPermission()}
 			<div class="navbar">
-				<a class="button" title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic" iforce="icon"} {tr}New Topic{/tr}</a>
+				{form action="`$comments_return_url`#editcomments"}
+				<input type="hidden" name="post_comment_request" value="1" />
+				<input type="submit" class="button" value="{tr}New Topic{/tr}" />
+				{/form}
 			</div>
 			{minifind sort_mode=$sort_mode b=$smarty.request.b prompt="Search `$smarty.const.BOARDS_PKG_DIR`..."}
 		{/if}
@@ -128,12 +131,6 @@
 					</td></tr>
 				{/foreach}
 			</table>
-
-			{if $board->hasPostCommentsPermission()}
-				<div class="navbar">
-					<a class="button" title="{tr}New Topic{/tr}" href="{$comments_return_url}&amp;post_comment_request=1#editcomments">{biticon ipackage="icons" iname="mail-message-new" iexplain="New Topic" iforce="icon"} {tr}New Topic{/tr}</a>
-				</div>
-			{/if}
 
 			{if $board->hasAdminPermission()}
 				<div style="text-align:right;">
