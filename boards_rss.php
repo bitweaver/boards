@@ -24,7 +24,7 @@ if( !empty( $_REQUEST['t'] ) || !empty($_REQUEST['b'] ) ){
 		$gContent->load();
 	}
 	else{
-		$gBitSystem->fatalError(tra("Unknown discussion"), NULL, NULL, HttpStatusCodes::HTTP_NOT_FOUND );
+		$gBitSystem->fatalError(tra("Unknown discussion"), NULL, NULL, HttpStatusCodes::HTTP_GONE );
 	}
 }
 $gContent->verifyViewPermission();
