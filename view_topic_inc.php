@@ -34,7 +34,7 @@ if (!empty($_REQUEST['action'])) {
 	$comment = new BitBoardPost($_REQUEST['comment_id']);
 	$comment->loadComment();
 	if (!$comment->isValid()) {
-		$gBitSystem->fatalError( tra("Invalid Comment"), NULL, NULL, HttpStatusCodes::HTTP_NOT_FOUND );
+		$gBitSystem->fatalError( tra("Invalid Comment"), NULL, NULL, HttpStatusCodes::HTTP_GONE );
 	}
 	switch ($_REQUEST['action']) {
 		case 1:
@@ -59,7 +59,7 @@ $thread = new BitBoardTopic($_REQUEST['t']);
 $thread->load();
 
 if( !$thread->isValid() ) {
-	$gBitSystem->fatalError( tra("Unknown discussion"), NULL, NULL, HttpStatusCodes::HTTP_NOT_FOUND );
+	$gBitSystem->fatalError( tra("Unknown discussion"), NULL, NULL, HttpStatusCodes::HTTP_GONE );
 }
 
 $thread->verifyViewPermission();
@@ -79,7 +79,7 @@ if (empty($thread->mInfo['th_root_id'])) {
 		//Invalid as a result of rejecting the post, redirect to the board
 		bit_redirect( $gBoard->getDisplayUrl() );
 	} else {
-		$gBitSystem->fatalError(tra( "Invalid topic selection." ), NULL, NULL, HttpStatusCodes::HTTP_NOT_FOUND );
+		$gBitSystem->fatalError(tra( "Invalid topic selection." ), NULL, NULL, HttpStatusCodes::HTTP_GONE );
 	}
 }
 
@@ -97,6 +97,7 @@ $gBitSmarty->assign('topic_locked',$thread->isLocked());
 // Get the thread of comments
 $commentsParentId=$thread->mInfo['content_id'];
 $comments_return_url= BOARDS_PKG_URL."index.php?t={$thread->mRootId}";
+$gBitSystem->setCanonicalLink( BOARDS_PKG_URI.'index.php?t='.$thread->mRootId );
 $gComment = new BitBoardPost($_REQUEST['t']);
 $gBitSmarty->assign('comment_template','bitpackage:boards/post_display.tpl');
 
