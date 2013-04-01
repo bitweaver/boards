@@ -11,7 +11,7 @@
 
 {jstab title="Mailing List Information"}
 {if $board->getPreference('boards_mailing_list')}
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="Address"}
 		{forminput}
 			{$board->getPreference('boards_mailing_list')}@{$gBitSystem->getConfig('boards_email_host',$gBitSystem->getConfig('kernel_server_name'))}
@@ -19,7 +19,7 @@
 	</div>
 	{form}
 	<input type="hidden" name="b" value="{$board->getField('board_id')}"/>
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="Subscribe"}
 		{forminput}
 			{if mailman_findmember($board->getPreference('boards_mailing_list'),$gBitUser->getField('email'))}
@@ -63,7 +63,7 @@
 	{form}
 	<input type="hidden" name="b" value="{$board->getField('board_id')}"/>
 	{if $gBitSystem->getConfig('boards_sync_mail_server')}
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="Mailing List Address" for="boardsync"}
 		{forminput}
 			<input type="text" size="50" maxlength="200" name="board_sync_list_address" id="board_sync_list_address" value="{$gContent->getPreference('board_sync_list_address')|escape}" />
@@ -82,7 +82,7 @@
 		{/forminput}
 	</div>
 {if $board->getPreference('boards_mailing_list')}
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="Subscribe"}
 		{forminput}
 			{if mailman_findmember($board->getPreference('boards_mailing_list'),$boardSyncInbox)}
@@ -96,7 +96,7 @@
 	</div>
 {/if}
 	{else}
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="Board Sync" for="boardsync"}
 		{forminput}
 		{tr}Board Sync is not available since the Board Sync master email box has not been configured.{/tr} {if !$gBitUser->isAdmin()}{tr}Check with your site administrator.{/tr}{/if}
@@ -111,18 +111,18 @@
 	{form}
 	<input type="hidden" name="b" value="{$board->getField('board_id')}"/>
 {if $board->getPreference('boards_mailing_list')}
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="Address"}
 		{forminput}
 			{$board->getPreference('boards_mailing_list')}@{$gBitSystem->getConfig('boards_email_host',$gBitSystem->getConfig('kernel_server_name'))}
 		{/forminput}
 	</div>
-	<div class="row submit">
+	<div class="control-group submit">
 		{forminput}
 			<input type="submit" name="delete_list" value="Delete List" />
 		{/forminput}
 	</div>
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="Advanced Configuration"}
 		{forminput}
 			<a href="{$gBitSystem->getConfig('boards_mailman_uri',"`$smarty.const.BIT_ROOT_URI`mailman/")}admin/{$board->getPreference('boards_mailing_list')}">
@@ -133,21 +133,21 @@
 	{if $gBitSystem->getConfig('server_mailman_bin') && $gBitSystem->getConfig('boards_sync_user') && $gBitSystem->getConfig('boards_sync_mail_server')}
 {legend legend="Group Mailing List"}
 	<input type="hidden" name="b" value="{$board->getField('board_id')}"/>
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="Mailing List Address" for='emailhost'}
 		{forminput}
 			<input type="text" name="boards_mailing_list" value="{$smarty.request.boards_mailing_list|default:$suggestedListName}" /> <strong> @ {$gBitSystem->getConfig('boards_email_host',$gBitSystem->getConfig('kernel_server_name'))} </strong>
 			{formhelp note="This is the email address for the group. It needs to be all lowercase alpha-numeric characters."}
 		{/forminput}
 	</div>
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="Administrator Password" for='emailhost'}
 		{forminput}
 			<input type="text" name="boards_mailing_list_password" value="{$smarty.request.boards_mailing_list_password}" />
 			{formhelp note="This is the password used to administer the mailing list."}
 		{/forminput}
 	</div>
-	<div class="row submit">
+	<div class="control-group submit">
 		{forminput}
 			<input type="submit" name="create_list" value="Create List" />
 		{/forminput}

@@ -45,7 +45,7 @@
 					{legend legend=$leg}
 						<input type="hidden" name="bitboard[board_id]" value="{$gContent->mInfo.board_id}" />
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Title" for="title"}
 							{forminput}
 								<input type="text" size="50" maxlength="200" name="bitboard[title]" id="title" value="{$gContent->getTitle()|escape}" />
@@ -57,7 +57,7 @@
 						{* any simple service edit options *}
 						{include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_mini_tpl"}
 
-						<div class="row submit">
+						<div class="control-group submit">
 							<input type="submit" name="preview" value="{tr}Preview{/tr}" />
 							<input type="submit" name="save_bitboard" value="{tr}Save{/tr}" />
 						</div>

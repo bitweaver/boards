@@ -23,7 +23,7 @@
 					<hr />
 				{/if}
 
-				<div class="row">
+				<div class="control-group">
 					{formlabel label="Feed Format" for="format"}
 					{forminput}
 						{html_options name=format id=format values=$feedFormat options=$feedFormat selected=$feedlink.format}
@@ -31,7 +31,7 @@
 					{/forminput}
 				</div>
 
-				<div class="row">
+				<div class="control-group">
 					{formlabel label="Feed" for="pkg"}
 					{forminput}
 						{if $gContent->isValid()}{tr}{$gContent->getField('title')} Feed{/tr}{else}{tr}Recent Discussions{/tr}{/if}
@@ -39,7 +39,7 @@
 					{/forminput}
 				</div>
 
-				<div class="row submit">
+				<div class="control-group submit">
 					<input type="submit" name="get_feed" value="Get Feed" />
 				</div>
 			{/legend}

@@ -37,7 +37,7 @@
 			<div class="navbar">
 				{form action="`$comments_return_url`#editcomments"}
 				<input type="hidden" name="post_comment_request" value="1" />
-				<input type="submit" class="button" value="{tr}New Topic{/tr}" />
+				<input type="submit" class="btn" value="{tr}New Topic{/tr}" />
 				{/form}
 			</div>
 			{minifind sort_mode=$sort_mode b=$smarty.request.b prompt="Search `$smarty.const.BOARDS_PKG_DIR`..."}
