@@ -47,7 +47,7 @@
 			{if $board.map}
 				{capture assign=title}
 					{if ! $board.integrity}
-						{biticon iname=dialog-warning iexplain="Integrity Check Failed"}
+						{booticon iname="icon-warning-sign"   iexplain="Integrity Check Failed"}
 					{/if}
 					{$board.title|escape}
 				{/capture}
@@ -56,7 +56,7 @@
 					{if ! $board.integrity}
 						<div class="floaticon">
 							<a href="{$smarty.const.BOARDS_PKG_URL}assign.php?integrity={$board.board_id}#board{$smarty.foreach.board_loop.iteration}">
-								{biticon ipackage="icons" iname="dialog-warning" ipath="large" iexplain="Fix Integrity"}
+								{booticon iname="icon-warning-sign"  ipackage="icons"  ipath="large" iexplain="Fix Integrity"}
 							</a>
 						</div>
 						{formfeedback warning="Integrity Check Failed"}

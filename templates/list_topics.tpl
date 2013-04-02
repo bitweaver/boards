@@ -99,10 +99,10 @@
 								{* modcomments handles this *}
 								{if $thread.flc_user_id<0 && $thread.first_approved==0 && !$gBitSystem->isPackageActive('modcomments')}
 									<a title="{tr}Approve First Post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_board_inc.php?b={$board->mInfo.board_id}&amp;action=1&amp;comment_id={$thread.th_thread_id}">
-										{biticon ipackage="icons" iname="list-add" iexplain="Approve First Post" iforce="icon"}
+										{booticon iname="icon-plus-sign"  ipackage="icons"  iexplain="Approve First Post" iforce="icon"}
 									</a>
 									<a title="{tr}Reject First Post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_board_inc.php?b={$board->mInfo.board_id}&amp;action=2&amp;comment_id={$thread.th_thread_id}">
-										{biticon ipackage="icons" iname="list-remove" iexplain="Reject First Post" iforce="icon"}
+										{booticon iname="icon-minus-sign"  ipackage="icons"  iexplain="Reject First Post" iforce="icon"}
 									</a>
 								{/if}
 

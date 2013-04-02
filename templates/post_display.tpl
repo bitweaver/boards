@@ -28,7 +28,7 @@
 			<div class="floaticon">
 				{if $print_page ne 'y' && $comment.deleted==0 }
 					{if !$topic_locked && $board->hasPostCommentsPermission()}
-						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{biticon ipackage="icons" iname="mail-reply-sender" iexplain="Reply to this Post" iforce="icon"}</a>
+						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{booticon iname="icon-envelope-alt"  ipackage="icons"  iexplain="Reply to this Post" iforce="icon"}</a>
 					{/if}
 					{if !$topic_locked && $board->hasPostCommentsPermission()}
 						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1&amp;quote=y#editcomments" rel="nofollow">{biticon ipackage="icons" iname="mail-reply-all" iexplain="Reply with Quote to this Post" iforce="icon"}</a>
@@ -42,15 +42,15 @@
 					{if $board->hasUpdatePermission() && (($comment.user_id<0 && $comment.is_approved==0)||$comment.user_id>=0) && !$comment.is_warned}
 						{if $comment.user_id<0 && $comment.is_approved==0}
 							<a title="{tr}Approve this post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_topic_inc.php?t={$thread->mRootId}&amp;action=1&amp;comment_id={$comment.comment_id}">
-								{biticon ipackage="icons" iname="list-add" iexplain="Approve Post" iforce="icon"}
+								{booticon iname="icon-plus-sign"  ipackage="icons"  iexplain="Approve Post" iforce="icon"}
 							</a>
 
 							<a title="{tr}Reject this post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_topic_inc.php?t={$thread->mRootId}&amp;action=2&amp;comment_id={$comment.comment_id}">
-								{biticon ipackage="icons" iname="list-remove" iexplain="Reject Post" iforce="icon"}
+								{booticon iname="icon-minus-sign"  ipackage="icons"  iexplain="Reject Post" iforce="icon"}
 							</a>
 						{elseif !$comment.is_warned && $comment.user_id>=0}
 							<a onclick="return BitBoards.warn( 'warn_block_{$comment.comment_id|escape:"url"}', this )" title="{tr}Warn the poster about this post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_topic_inc.php?t={$thread->mRootId}&amp;action=3&amp;comment_id={$comment.comment_id}">
-								{biticon ipackage="icons" iname="dialog-warning" iexplain="Warn Post" iforce="icon"}
+								{booticon iname="icon-warning-sign"  ipackage="icons"  iexplain="Warn Post" iforce="icon"}
 							</a>
 
 							<div class="warn_block" style="display:none;" id="warn_block_{$comment.comment_id|escape:"url"}">
