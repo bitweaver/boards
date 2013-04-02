@@ -19,9 +19,9 @@
 			{* topic tracking icons *}
 				<span style="float:left;">
 					{if $board.track.on && $board.track.mod}
-						{biticon ipackage="icons" iname="folder-new" ipath="large" iexplain="New Posts" iforce="icon"}
+						{booticon iname="icon-folder-close"  ipackage="icons"  ipath="large" iexplain="New Posts" iforce="icon"}
 					{else}
-						{biticon ipackage="icons" iname="folder" ipath="large" iexplain="New Posts" iforce="icon"}
+						{booticon iname="icon-folder-close"  ipackage="icons"  ipath="large" iexplain="New Posts" iforce="icon"}
 					{/if}
 				</span>
 			</td>
