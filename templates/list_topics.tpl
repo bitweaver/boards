@@ -17,10 +17,10 @@
 				<a title="{tr}Get RSS Feed{/tr}" href="{$smarty.const.BOARDS_PKG_URL}rss.php?b={$smarty.request.b}">{biticon iname="rss-16x16" ipackage=rss iexplain="Get RSS Feed"}</a>
 			{/if}
 			{if $board->hasUpdatePermission()}
-				<a title="{tr}Edit message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit Message Board"}</a>
+				<a title="{tr}Edit message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{booticon iname="icon-edit" ipackage="icons" iexplain="Edit Message Board"}</a>
 			{/if}
 			{if $board->hasUserPermission( 'p_boards_remove', TRUE, TRUE )}
-				<a title="{tr}Remove message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?remove=1&amp;b={$board->mInfo.board_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove Message Board"}</a>
+				<a title="{tr}Remove message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?remove=1&amp;b={$board->mInfo.board_id}">{booticon iname="icon-trash" ipackage="icons" iexplain="Remove Message Board"}</a>
 			{/if}
 		{/if}<!-- end print_page -->
 	</div><!-- end .floaticon -->
@@ -111,7 +111,7 @@
 									<a href="{$smarty.const.BOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}"
 										title="{tr}Move Thread{/tr}">{biticon ipackage=icons iname="go-jump" iexplain="Move Thread" iforce="icon"}
 									</a>
-									<a title="{tr}Delete Topic{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit_topic.php?remove=1&amp;t={$thread.th_thread_id|escape:"url"}">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Thread" iforce="icon"}</a>
+									<a title="{tr}Delete Topic{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit_topic.php?remove=1&amp;t={$thread.th_thread_id|escape:"url"}">{booticon iname="icon-trash" ipackage="icons" iexplain="Delete Thread" iforce="icon"}</a>
 								{else}
 									{biticon ipackage=liberty iname=spacer iforce="icon"}
 									{biticon ipackage=liberty iname=spacer iforce="icon"}
