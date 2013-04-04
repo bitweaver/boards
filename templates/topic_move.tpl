@@ -27,7 +27,7 @@
 				{/forminput}
 			</div>
 			<div class="control-group submit">
-				<input type="submit" name="move_thread" value="{tr}Move Topic{/tr}" />
+				<input type="submit" class="btn" name="move_thread" value="{tr}Move Topic{/tr}" />
 			</div>
 		{/form}
 	</div><!-- end .body -->

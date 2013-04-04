@@ -33,9 +33,9 @@
 					<option value="50" {if $maxComments eq 50}selected="selected"{/if}>50</option>
 					<option value="100" {if $maxComments eq 100}selected="selected"{/if}>100</option>
 					<option value="999999" {if $maxComments eq 999999}selected="selected"{/if}>All</option>
-				</select> <input type="submit" name="comments_setOptions" value="set" id="set_btn"/>
+				</select> <input type="submit" class="btn" name="comments_setOptions" value="set" id="set_btn"/>
 			</label>
-			<input type="submit" name="comments_setOptions" value="set" />
+			<input type="submit" class="btn" name="comments_setOptions" value="set" />
 			<script type="text/javascript">/*<![CDATA[*/
 				document.getElementById('set_btn').parentNode.removeChild(document.getElementById('set_btn'));
 			/*]]>*/</script>

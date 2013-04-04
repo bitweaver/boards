@@ -25,7 +25,7 @@
 				</div>
 			{/foreach}
 			<div class="control-group submit">
-				<input type="submit" name="boards[submit]" value="{tr}Change Settings{/tr}" />
+				<input type="submit" class="btn" name="boards[submit]" value="{tr}Change Settings{/tr}" />
 			</div>
 		{/form}
 		{/if}
@@ -35,7 +35,7 @@
 			{formfeedback warning=$error}
 			{textarea gContent=$signatureContent name=bitboarduprefs[edit]" rows=4}{$editUser->getPreference('signature_content_data')}{/textarea}
 			<div class="control-group submit">
-				<input type="submit" name="preview" value="{tr}Preview{/tr}" /> <input type="submit" name="save_bitboarduprefs" value="{tr}Save{/tr}" />
+				<input type="submit" class="btn" name="preview" value="{tr}Preview{/tr}" /> <input type="submit" name="save_bitboarduprefs" value="{tr}Save{/tr}" />
 			</div>
 		{/form}
 

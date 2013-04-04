@@ -24,10 +24,10 @@
 		{forminput}
 			{if mailman_findmember($board->getPreference('boards_mailing_list'),$gBitUser->getField('email'))}
 				<p>{tr}You are currently subscribed to the mailing list using the email:{/tr} {$gBitUser->getField('email')}</p>
-				<input type="submit" name="unsubscribe" value="Unsubscribe" />
+				<input type="submit" class="btn" name="unsubscribe" value="Unsubscribe" />
 			{else}
 				<p>{tr}You are currently not subscribed to the mailing list.{/tr}</p>
-				<input type="submit" name="subscribe" value="Subscribe" />
+				<input type="submit" class="btn" name="subscribe" value="Subscribe" />
 			{/if}
 		{/forminput}
 	</div>
@@ -71,7 +71,7 @@
 				{formfeedback warning="The Mailing List Address does not match the configured board mailing list."}
 			{/if}
 			{formhelp note="All messages posted to this email address will mirrored on the board. The 'Board Sync Inbox' email account must be subscribed to this list and receive the messages in its INBOX."}
-			<input type="submit" name="save_list_address" value="Save" />
+			<input type="submit" class="btn" name="save_list_address" value="Save" />
 		{/forminput}
 	</div>
 	<div>
@@ -87,10 +87,10 @@
 		{forminput}
 			{if mailman_findmember($board->getPreference('boards_mailing_list'),$boardSyncInbox)}
 				<p>{$boardSyncInbox} {tr}is subscribed to{/tr} {$boardsMailingList}</p>
-				<input type="submit" name="unsubscribe_boardsync" value="Unsubscribe" />
+				<input type="submit" class="btn" name="unsubscribe_boardsync" value="Unsubscribe" />
 			{else}
 				<p>{$boardSyncInbox} {tr}is currently not subscribed to the mailing list.{/tr}</p>
-				<input type="submit" name="subscribe_boardsync" value="Subscribe" />
+				<input type="submit" class="btn" name="subscribe_boardsync" value="Subscribe" />
 			{/if}
 		{/forminput}
 	</div>
@@ -119,7 +119,7 @@
 	</div>
 	<div class="control-group submit">
 		{forminput}
-			<input type="submit" name="delete_list" value="Delete List" />
+			<input type="submit" class="btn" name="delete_list" value="Delete List" />
 		{/forminput}
 	</div>
 	<div class="control-group">
@@ -149,7 +149,7 @@
 	</div>
 	<div class="control-group submit">
 		{forminput}
-			<input type="submit" name="create_list" value="Create List" />
+			<input type="submit" class="btn" name="create_list" value="Create List" />
 		{/forminput}
 	</div>
 {/legend}

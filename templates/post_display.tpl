@@ -61,7 +61,7 @@
 									<textarea style="vertical-align: top;" rows="3" cols="10" name="warning_message" onclick="this.value=''; this.innerHTML=''; this.onclick=null;">
 										Enter Warning Message
 									</textarea>
-									<input type="submit" value="Warn" />
+									<input type="submit" class="btn" value="Warn" />
 								{/form}
 							</div>
 						{/if}
