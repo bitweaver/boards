@@ -112,9 +112,6 @@
 										title="{tr}Move Thread{/tr}">{biticon ipackage=icons iname="go-jump" iexplain="Move Thread" iforce="icon"}
 									</a>
 									<a title="{tr}Delete Topic{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit_topic.php?remove=1&amp;t={$thread.th_thread_id|escape:"url"}">{booticon iname="icon-trash" ipackage="icons" iexplain="Delete Thread" iforce="icon"}</a>
-								{else}
-									{biticon ipackage=liberty iname=spacer iforce="icon"}
-									{biticon ipackage=liberty iname=spacer iforce="icon"}
 								{/if}
 							</td>
 
