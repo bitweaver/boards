@@ -1,5 +1,6 @@
 {strip}
-	<ul>
+	<a class="dropdown-toggle" data-toggle="dropdown" href="#"> {tr}{$packageMenuTitle}{/tr} <b class="caret"></b></a>
+<ul class="{$packageMenuClass}">
 		{if $gBitUser->hasPermission( 'p_boards_read')}
 			<li><a class="item" href="{$smarty.const.BOARDS_PKG_URL}index.php">{booticon iname="icon-home" ipackage="icons" iexplain="Boards Home" ilocation=menu}</a></li>
 		{/if}

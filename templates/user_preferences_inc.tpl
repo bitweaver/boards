@@ -20,7 +20,7 @@
 						{else}
 							<input type="checkbox" name="boards[{$option}]" {if $value=='y'}checked="checked"{/if} value="y" id="boards[{$option}]" />
 						{/if}
-						{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
+						{formhelp note=$output.note page=$output.page link=$output.link}
 					{/forminput}
 				</div>
 			{/foreach}
