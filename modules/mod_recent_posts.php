@@ -35,7 +35,7 @@ if( BitBase::verifyId( $gQueryUserId ) ) {
 
 $post = new BitBoardPost();
 if( $postList = $post->getList( $listHash ) ) {
-	$gBitSmarty->assign('modLastBoardPosts', $postList );
+	$_template->tpl_vars['modLastBoardPosts'] = new Smarty_variable( $postList );
 }
 
 ?>
