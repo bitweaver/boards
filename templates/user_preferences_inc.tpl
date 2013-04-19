@@ -33,7 +33,7 @@
 		{form enctype="multipart/form-data" id="bitboarduprefs" legend="Edit Signature"}
 			<input type="hidden" name="view_user" value="{$view_user}" />
 			{formfeedback warning=$error}
-			{textarea gContent=$signatureContent name=bitboarduprefs[edit]" rows=4}{$editUser->getPreference('signature_content_data')}{/textarea}
+			{textarea gContent=$signatureContent name="bitboarduprefs[edit]" rows=4 edit=$editUser->getPreference('signature_content_data')}
 			<div class="control-group submit">
 				<input type="submit" class="btn" name="preview" value="{tr}Preview{/tr}" /> <input type="submit" name="save_bitboarduprefs" value="{tr}Save{/tr}" />
 			</div>

@@ -33,7 +33,7 @@
 					{capture assign="textarea_help"}
 						{tr}Use [http://www.foo.com] or [http://www.foo.com|description] for links.<br />HTML tags are not allowed inside comments.{/tr}
 					{/capture}
-					{textarea noformat=1 label="Comment" id="commentpost" name="comment_data" rows="6"}{$postComment.data}{/textarea}
+					{textarea noformat=1 label="Comment" id="commentpost" name="comment_data" rows="6" edit=$postComment.data}
 
 					<div class="control-group submit">
 						<input type="submit" class="btn" name="post_comment_preview" value="{tr}Preview{/tr}"/>&nbsp;
