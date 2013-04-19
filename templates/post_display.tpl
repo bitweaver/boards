@@ -28,10 +28,10 @@
 			<div class="floaticon">
 				{if $print_page ne 'y' && $comment.deleted==0 }
 					{if !$topic_locked && $board->hasPostCommentsPermission()}
-						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{booticon iname="icon-envelope-alt"  ipackage="icons"  iexplain="Reply to this Post" iforce="icon"}</a>
+						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{booticon iname="icon-comment-alt"  ipackage="icons"  iexplain="Reply to this Post" iforce="icon"}</a>
 					{/if}
 					{if !$topic_locked && $board->hasPostCommentsPermission()}
-						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1&amp;quote=y#editcomments" rel="nofollow">{biticon ipackage="icons" iname="mail-reply-all" iexplain="Reply with Quote to this Post" iforce="icon"}</a>
+						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1&amp;quote=y#editcomments" rel="nofollow">{booticon ipackage="icons" iname="icon-comment" iexplain="Reply with Quote to this Post" iforce="icon"}</a>
 					{/if}
 					{if $comment.is_editable || $gContent->hasUserPermission('p_liberty_edit_comments')}
 						<a href="{$comments_return_url}&amp;post_comment_id={$comment.comment_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{booticon iname="icon-edit" ipackage="icons" iexplain="Edit" iforce="icon"}</a>
@@ -114,7 +114,7 @@
 						');
 					return false;
 					" href="{$thread_mInfo.display_url}&amp;warning[{$comment_id}]={if empty($warnings.$comment_id)}show{else}hide{/if}"
-				>{biticon ipackage="icons" iname="dialog-error" iexplain="Warned Post"}</a>
+				>{booticon ipackage="icons" iname="icon-warning-sign" iexplain="Warned Post"}</a>
 
 				<div id="warned_message_{$comment.comment_id|escape:"url"}">
 					{if !empty($warnings.$comment_id)}{$comment.warned_message}{/if}

@@ -15,7 +15,7 @@
 			{tr}No message boards found{/tr}
 		{/foreach}
 
-		{include file="bitpackage:boards/legend_inc.tpl"  boardicons=1}
+		{include file="bitpackage:boards/legend_inc.tpl" boardicons=1}
 	</div><!-- end .body -->
 </div><!-- end .admin -->
 {/strip}

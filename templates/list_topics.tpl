@@ -11,10 +11,10 @@
 		{if $print_page ne 'y'}
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='icon' serviceHash=$board->mInfo}
 			{if $board->getPreference('boards_mailing_list') || $board->hasAdminPermission()}
-				<a class="item" href="{$smarty.const.BOARDS_PKG_URL}mailing_list.php?b={$board->mInfo.board_id}" title="{tr}Message Board Mailing List{/tr}">{biticon ipackage="icons" iname="internet-mail" iexplain="Edit Board Mailing List"}</a>
+				<a class="item" href="{$smarty.const.BOARDS_PKG_URL}mailing_list.php?b={$board->mInfo.board_id}" title="{tr}Message Board Mailing List{/tr}">{booticon ipackage="icons" iname="icon-envelope" iexplain="Edit Board Mailing List"}</a>
 			{/if}
 			{if $gBitSystem->isPackageActive( 'rss' )}
-				<a title="{tr}Get RSS Feed{/tr}" href="{$smarty.const.BOARDS_PKG_URL}rss.php?b={$smarty.request.b}">{biticon iname="rss-16x16" ipackage=rss iexplain="Get RSS Feed"}</a>
+				<a title="{tr}Get RSS Feed{/tr}" href="{$smarty.const.BOARDS_PKG_URL}rss.php?b={$smarty.request.b}">{booticon iname="icon-rss" ipackage=rss iexplain="Get RSS Feed"}</a>
 			{/if}
 			{if $board->hasUpdatePermission()}
 				<a title="{tr}Edit message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{booticon iname="icon-edit" ipackage="icons" iexplain="Edit Message Board"}</a>
@@ -68,7 +68,7 @@
 					<tr class="{cycle values="even,odd"} {if $gBitSystem->isFeatureActive('boards_post_anon_moderation') && $thread.unreg > 0}unapproved{elseif $thread.th_moved>0}moved{/if} {if $thread.th_sticky==1} highlight{/if}" >
 						<td style="white-space:nowrap;">{* topic status icons *}
 							{if $thread.th_moved>0}
-								{biticon ipackage="icons" iname="go-jump" iexplain="Moved Topic"}
+								{booticon ipackage="icons" iname="icon-share" iexplain="Moved Topic"}
 							{else}
 								{assign var=flip value=$thread.flip}
 								{foreach from=$flip item=flip_s key=flip_name}
@@ -109,9 +109,8 @@
 								{if $thread.th_moved==0 && $board->hasAdminPermission()}
 									{*smartlink ititle="Edit" ifile="edit.php" ibiticon="liberty/edit" board_id=$thread.board_id*}
 									<a href="{$smarty.const.BOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}"
-										title="{tr}Move Thread{/tr}">{biticon ipackage=icons iname="go-jump" iexplain="Move Thread" iforce="icon"}
-									</a>
-									<a title="{tr}Delete Topic{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit_topic.php?remove=1&amp;t={$thread.th_thread_id|escape:"url"}">{booticon iname="icon-trash" ipackage="icons" iexplain="Delete Thread" iforce="icon"}</a>
+										title="{tr}Move Thread{/tr}">{booticon ipackage=icons iname="icon-share" iexplain="Move Thread" iforce="icon"}
+									</a> <a title="{tr}Delete Topic{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit_topic.php?remove=1&amp;t={$thread.th_thread_id|escape:"url"}">{booticon iname="icon-trash" ipackage="icons" iexplain="Delete Thread" iforce="icon"}</a>
 								{/if}
 							</td>
 
