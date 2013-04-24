@@ -62,7 +62,7 @@
 						{formfeedback warning="Integrity Check Failed"}
 					{/if}
 
-					<table class="data">
+					<table class="table data">
 						<caption>{tr}Assigned Content{/tr}</caption>
 						<tr>
 							<th style="width:15%;">{tr}Content Type{/tr}</th>
