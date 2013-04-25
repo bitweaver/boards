@@ -1,7 +1,7 @@
 {* $Header$ *}
 {strip}
 <div class="listing boards">
-	<div class="navbar">
+	<div class="navbar clear">
 		<div class="boards breadcrumb">
 			<a href="{$smarty.const.BOARDS_PKG_URL}">{tr}Message Boards{/tr}</a>
 		</div>
@@ -23,6 +23,10 @@
 				<a title="{tr}Remove message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?remove=1&amp;b={$board->mInfo.board_id}">{booticon iname="icon-trash" ipackage="icons" iexplain="Remove Message Board"}</a>
 			{/if}
 		{/if}<!-- end print_page -->
+		{if $board->hasPostCommentsPermission()}
+			{minifind class="" sort_mode=$sort_mode b=$smarty.request.b prompt="Search `$smarty.const.BOARDS_PKG_DIR`..."}
+		{/if}
+
 	</div><!-- end .floaticon -->
 
 	<div class="header">
@@ -33,16 +37,6 @@
 	</div>
 
 	<div class="body">
-		{if $board->hasPostCommentsPermission()}
-			<div class="navbar">
-				{form action="`$comments_return_url`#editcomments"}
-				<input type="hidden" name="post_comment_request" value="1" />
-				<input type="submit" class="btn" value="{tr}New Topic{/tr}" />
-				{/form}
-			</div>
-			{minifind sort_mode=$sort_mode b=$smarty.request.b prompt="Search `$smarty.const.BOARDS_PKG_DIR`..."}
-		{/if}
-
 		{form id="checkform"}
 			<input type="hidden" name="board_id" value="{$smarty.request.board_id}" />
 			<input type="hidden" name="offset" value="{$control.offset|escape}" />
@@ -51,7 +45,12 @@
 			<table class="table data">
 				{if !$gBitSystem->isFeatureActive('boards_thread_verbrose')}
 					<tr>
-						<th style="width:5%;"> </th>
+						<th style="width:5%;"> 
+							{form class="form-inline" action="`$comments_return_url`#editcomments"}
+							<input type="hidden" name="post_comment_request" value="1" />
+							<input type="submit" class="btn btn-mini btn-primary" value="{tr}New Topic{/tr}" />
+							{/form}
+						</th>
 						<th style="width:40%;">{tr}Title{/tr}</th>
 						<th style="width:5%;">{tr}Replies{/tr}</th>
 						<th style="width:20%;">{tr}Last Reply{/tr}</th>
@@ -123,7 +122,7 @@
 					</tr>
 				{foreachelse}
 					<tr class="norecords"><td colspan="16">
-						{tr}No records found{/tr}
+						{tr}No topics have been posted.{/tr}
 					</td></tr>
 				{/foreach}
 			</table>
@@ -131,8 +130,7 @@
 			{if $board->hasAdminPermission()}
 				<div style="text-align:right;">
 					<script type="text/javascript">/* <![CDATA[ check / uncheck all */
-						document.write("<label for=\"switcher\">{tr}Select All{/tr}</label> ");
-						document.write("<input name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"BitBase.switchCheckboxes(this.form.id,'checked[]','switcher')\" /><br />");
+						document.write("<label class='' for='switcher'>{tr}Select All{/tr} <input name='switcher' id='switcher' type='checkbox' onclick='BitBase.switchCheckboxes(this.form.id,'checked[]','switcher')' /></label>");
 					/* ]]> */</script>
 
 					<input type="hidden" name="b" value="{$smarty.request.b}" />
