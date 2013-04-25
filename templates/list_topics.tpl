@@ -24,7 +24,7 @@
 			{/if}
 		{/if}<!-- end print_page -->
 		{if $board->hasPostCommentsPermission()}
-			{minifind class="" sort_mode=$sort_mode b=$smarty.request.b prompt="Search `$smarty.const.BOARDS_PKG_DIR`..."}
+			{minifind class="" sort_mode=$sort_mode b=$smarty.request.b prompt=$smarty.const.BOARDS_PKG_DIR}
 		{/if}
 
 	</div><!-- end .floaticon -->
