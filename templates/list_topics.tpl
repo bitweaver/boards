@@ -36,7 +36,9 @@
 		{/if}
 	</div>
 
+		{pagination b=$smarty.request.b}
 	<div class="body">
+		{include file="bitpackage:liberty/comments_post_inc.tpl"  post_title="Post" hide=1}
 		{form id="checkform"}
 			<input type="hidden" name="board_id" value="{$smarty.request.board_id}" />
 			<input type="hidden" name="offset" value="{$control.offset|escape}" />
@@ -147,8 +149,6 @@
 			{/if}
 		{/form}
 
-		{pagination b=$smarty.request.b}
-
 		{include file="bitpackage:boards/legend_inc.tpl" topicicons=1}
 	</div><!-- end .body -->
 </div><!-- end .admin -->
@@ -157,5 +157,4 @@
 	{formfeedback warning="Your post will not be shown immediately it will have to be approved by a moderator"}
 {/if}
 
-{include file="bitpackage:liberty/comments_post_inc.tpl"  post_title="Post" hide=1}
 {/strip}
