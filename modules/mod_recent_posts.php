@@ -27,7 +27,7 @@ if( !empty( $module_params['b'] ) ) {
 } elseif( !empty( $_REQUEST['b'] ) && empty( $module_params['all_boards'] ) ) {
 	$listHash['board_id'] = $_REQUEST['b'];
 }
-$_template->tpl_vars['modRecentPostsBoardId'] = new Smarty_variable( !empty( $listHash['board_id'] );
+$_template->tpl_vars['modRecentPostsBoardId'] = new Smarty_variable( !empty( $listHash['board_id'] ) );
 
 if( BitBase::verifyId( $gQueryUserId ) ) {
 	$listHash['user_id'] = $gQueryUserId;

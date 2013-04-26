@@ -1,7 +1,6 @@
-{* $Header$ *}
 {strip}
-{if $gBitSystem->isPackageActive('boards') && {$modLastBoardPosts}
-	{bitmodule title="$moduleTitle" name="last_board_posts"}
+{if $gBitSystem->isPackageActive('boards') && $modLastBoardPosts}
+	{bitmodule title=$moduleTitle name="last_board_posts"}
 		<ul class="boards">
 			{section name=ix loop=$modLastBoardPosts}
 				<li class="{cycle values="odd,even"}">
