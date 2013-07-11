@@ -1,6 +1,9 @@
 <?php
 /**
  * $Header$
+ *
+ * @package boards
+ * @subpackage functions
  */
 
 /**
