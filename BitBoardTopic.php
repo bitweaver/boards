@@ -23,8 +23,8 @@ require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
 define( 'BITBOARDTOPIC_CONTENT_TYPE_GUID', 'bitboardtopic' );
 
 /**
- * @package boards
  * expunge is handled explicitly in LibertyComment::expunge
+ * @package boards
  */
 class BitBoardTopic extends LibertyMime {
 	/**
@@ -189,8 +189,8 @@ class BitBoardTopic extends LibertyMime {
 	}
 
 	/**
-	* This function stickies a topic
-	**/
+	 * This function stickies a topic
+	 */
 	function store( &$pParamHash ) {
 		global $gBitSystem;
 		$ret = FALSE;
@@ -210,8 +210,8 @@ class BitBoardTopic extends LibertyMime {
 	}
 
 	/**
-	* This function locks a topic
-	**/
+	 * This function locks a topic
+	 */
 	function lock($state) {
 		global $gBitSystem;
 		$ret = FALSE;
@@ -234,8 +234,8 @@ class BitBoardTopic extends LibertyMime {
 	}
 
 	/**
-	* This function stickies a topic
-	**/
+	 * This function stickies a topic
+	 */
 	function sticky($state) {
 		global $gBitSystem;
 		$ret = FALSE;
@@ -258,8 +258,8 @@ class BitBoardTopic extends LibertyMime {
 	}
 
 	/**
-	* This function moves a topic to a new messageboard
-	**/
+	 * This function moves a topic to a new messageboard
+	 */
 	function moveTo($board_id) {
 		$ret = FALSE;
 		// start transaction
@@ -307,8 +307,8 @@ class BitBoardTopic extends LibertyMime {
 	}
 
 	/**
-	* This function generates a list of records from the liberty_content database for use in a list page
-	**/
+	 * This function generates a list of records from the liberty_content database for use in a list page
+	 */
 	function getList( &$pParamHash ) {
 		global $gBitSystem, $gBitUser;
 		$BIT_DB_PREFIX = BIT_DB_PREFIX;
@@ -485,21 +485,16 @@ class BitBoardTopic extends LibertyMime {
 	}
 
 	/**
-	* Generates the URL to the bitboard page
-	* @return the link to display the page.
-
-		if( empty( $pTopicId ) ) {
-			$pTopicId = $this->mRootId;
-		}
-
-	*/
+	 * Generates the URL to the bitboard page
+	 * @return the link to display the page.
+	 */
 	public static function getDisplayUrlFromHash( &$pParamHash ) {
 		global $gBitSystem;
 		$ret = NULL;
 
 		if( !empty( $pParamHash['topic_id'] ) && static::verifyId( $pParamHash['topic_id'] ) ) {
 			if( $gBitSystem->isFeatureActive( 'pretty_urls' ) || $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
-				$rewrite_tag = $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ? 'view/':'';
+				$rewrite_tag = $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ? 'view/' : '';
 				$ret = BOARDS_PKG_URL.$rewrite_tag."topic/".$pParamHash['topic_id'];
 			} else {
 				$ret=BOARDS_PKG_URL."index.php?t=".$pParamHash['topic_id'];

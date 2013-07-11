@@ -22,8 +22,8 @@ require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
  */
 class BitBoardPost extends LibertyComment {
 	/**
-	* During initialisation, be sure to call our base constructors
-	**/
+	 * During initialisation, be sure to call our base constructors
+	 */
 	function BitBoardPost($pCommentId = NULL, $pContentId = NULL, $pInfo = NULL) {
 		parent::__construct($pCommentId,$pContentId,$pInfo);
 
@@ -33,6 +33,9 @@ class BitBoardPost extends LibertyComment {
 		$this->mAdminContentPerm = 'p_boards_admin';
 	}
 
+	/**
+	 * This function verifies the data for a post
+	 */
 	function verify( &$pParamHash ) {
 		if( isset( $pParamHash['is_approved'] ) ) {
 			if( !is_numeric( $pParamHash['is_approved'] ) || $pParamHash['is_approved'] > 1 || $pParamHash['is_approved'] < 0 ) {
@@ -62,8 +65,8 @@ class BitBoardPost extends LibertyComment {
 	}
 
 	/**
-	* This function stores a post
-	**/
+	 * This function stores a post
+	 */
 	function store( &$pParamHash ) {
 		global $gBitSystem;
 		$ret = FALSE;
@@ -83,6 +86,9 @@ class BitBoardPost extends LibertyComment {
 		return $ret;
 	}
 
+	/**
+	 * This function gets the meta data relating to a post
+	 */
 	function loadMetaData() {
 		if ($this->isValid()) {
 			if (!isset($this->mInfo['accepted'])) {
@@ -121,6 +127,9 @@ class BitBoardPost extends LibertyComment {
 		return $ret;
 	}
 
+	/**
+	 * This function gets all the post relating to a topic
+	 */
 	function getComments( $pContentId = NULL, $pMaxComments = NULL, $pOffset = NULL, $pSortOrder = NULL, $pDisplayMode = NULL ) {
 		global $gBitUser, $gBitSystem;
 
@@ -241,6 +250,9 @@ class BitBoardPost extends LibertyComment {
 		return $ret;
 	}
 
+	/**
+	 * This function gets a list of posts
+	 */
 	function getList( &$pListHash ) {
 		global $gBitUser, $gBitSystem;
 
@@ -333,6 +345,9 @@ class BitBoardPost extends LibertyComment {
 		return $ret;
 	}
 
+	/**
+	 * This function counts the posts relating to a topic
+	 */
 	function getNumComments($pContentId = NULL) {
 		$ret = 0;
 
@@ -357,6 +372,9 @@ class BitBoardPost extends LibertyComment {
 		return $ret;
 	}
 
+	/**
+	 * This function generates a valid lookup URL
+	 */
 	function getDisplayUrl() {
 		$ret = NULL;
 		if( $this->isValid() ) {
@@ -368,16 +386,16 @@ class BitBoardPost extends LibertyComment {
 	}
 
 	/**
-	* Generates the URL to the bitboard page
-	* @return the link to display the page.
-	*/
+	 * Generates the URL to the bitboard page
+	 * @return the link to display the page.
+	 */
 	public static function getDisplayUrlFromHash( &$pParamHash ) {
 		global $gBitSystem;
 
 		$ret = NULL;
 		if( static::verifyId( $pParamHash['comment_id'] ) ) {
 			if( $gBitSystem->isFeatureActive( 'pretty_urls' ) || $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
-				$rewrite_tag = $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ? 'view/':'';
+				$rewrite_tag = $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ? 'view/' : '';
 				$ret = BOARDS_PKG_URL.$rewrite_tag."topic/".$pParamHash['topic_id'];
 			} else {
 				$ret = BOARDS_PKG_URL."index.php?t=".$pParamHash['topic_id'];
