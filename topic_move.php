@@ -35,31 +35,10 @@ if( isset( $_REQUEST["target"] ) ) {
 		$gBitSystem->fatalError( 'You do not have permission to move topics to the Board' . $targetBoard->mInfo['title'] );
 	}
 
-	if( isset( $_REQUEST["confirm"] ) ) {
-		if( $gContent->moveTo($_REQUEST["target"]) ) {
-			header ("location: ".$gContent-getDisplayUrl() );
-			die;
-		} else {
-			$gBitSystem->fatalError( "There was an error moving the topic: ".vc( $gContent->mErrors ));
-		}
-	}else{
-		$gBitSystem->setBrowserTitle( tra( 'Confirm moving' ).' "' .$gContent->mInfo['title'] .'" '. tra("to Board"). ' "'.$targetBoard->mInfo['title'].'"');
-		$formHash=array();
-		if (empty($_REQUEST["ref"])) {
-			$_REQUEST["ref"]=$_SERVER['HTTP_REFERER'];
-		} elseif ($_REQUEST["ref"]=="-") {
-			$_REQUEST["ref"]=$gContent->getDisplayUrl();
-		}
-		$formHash["ref"]=$_REQUEST["ref"];
-		$formHash["target"]=$_REQUEST["target"];
-		$formHash["t"]=$_REQUEST["t"];
-		$msgHash = array(
-			'label' => tra( "Move Thread" ).": ".$gContent->mInfo['title']  ,
-// redundant to title in tpl
-//			'confirm_item' => $gContent->mInfo['title'] ,
-			'warning' => tra( "Move ".' "' .$gContent->mInfo['title'] .'" '. tra("to Board"). ' "'.$targetBoard->mInfo['title'].'"'."<br />This cannot be undone!" ),
-		);
-		$gBitSystem->confirmDialog( $formHash,$msgHash );
+	if( $gContent->moveTo($_REQUEST["target"]) ) {
+		bit_redirect( $gContent->getDisplayUrl() );
+	} else {
+		$gBitSystem->fatalError( "There was an error moving the topic: ".vc( $gContent->mErrors ));
 	}
 }
 
@@ -69,5 +48,5 @@ $gBitSmarty->assign_by_ref('boards', $boards);
 
 $gBitSmarty->assign('fromBoardId', $board->mContentId);
 
-$gBitSystem->display( 'bitpackage:boards/topic_move.tpl', tra('Category') , array( 'display_mode' => 'display' ));
+$gBitSystem->display( 'bitpackage:boards/topic_move.tpl', tra('Move Topic').':'.$gContent->getTitle(), array( 'display_mode' => 'display' ));
 ?>
