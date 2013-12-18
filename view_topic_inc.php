@@ -97,7 +97,7 @@ $gBitSmarty->assign('topic_locked',$thread->isLocked());
 // Get the thread of comments
 $commentsParentId=$thread->mInfo['content_id'];
 $comments_return_url= BOARDS_PKG_URL."index.php?t={$thread->mRootId}";
-$gBitSystem->setCanonicalLink( BOARDS_PKG_URI.'index.php?t='.$thread->mRootId );
+$gBitSystem->setCanonicalLink( BOARDS_PKG_URL.'index.php?t='.$thread->mRootId );
 $gComment = new BitBoardPost($_REQUEST['t']);
 $gBitSmarty->assign('comment_template','bitpackage:boards/post_display.tpl');
 
