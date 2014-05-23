@@ -36,7 +36,7 @@
 				</div>
 
 				<div class="control-group submit">
-					<input type="submit" class="btn" value="{tr}Assign Content to Board{/tr}" name="action" />
+					<input type="submit" class="btn btn-default" value="{tr}Assign Content to Board{/tr}" name="action" />
 				</div>
 			{/form}
 		{else}
@@ -85,7 +85,7 @@
 					</table>
 
 					<div class="control-group submit">
-						<input type="submit" class="btn" value="{tr}Remove{/tr}" name="action" />
+						<input type="submit" class="btn btn-default" value="{tr}Remove{/tr}" name="action" />
 					</div>
 				{/form}
 			{/if}

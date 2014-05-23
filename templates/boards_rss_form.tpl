@@ -40,7 +40,7 @@
 				</div>
 
 				<div class="control-group submit">
-					<input type="submit" class="btn" name="get_feed" value="Get Feed" />
+					<input type="submit" class="btn btn-default" name="get_feed" value="Get Feed" />
 				</div>
 			{/legend}
 		{/form}

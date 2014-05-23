@@ -36,9 +36,9 @@
 					{textarea noformat=1 label="Comment" id="commentpost" name="comment_data" rows="6" edit=$postComment.data}
 
 					<div class="control-group submit">
-						<input type="submit" class="btn" name="post_comment_preview" value="{tr}Preview{/tr}"/>&nbsp;
-						<input type="submit" class="btn" name="post_comment_submit" value="{tr}Post{/tr}"/>&nbsp;
-						<input type="submit" class="btn" name="post_comment_cancel" value="{tr}Cancel{/tr}"/>
+						<input type="submit" class="btn btn-default" name="post_comment_preview" value="{tr}Preview{/tr}"/>&nbsp;
+						<input type="submit" class="btn btn-default" name="post_comment_submit" value="{tr}Post{/tr}"/>&nbsp;
+						<input type="submit" class="btn btn-default" name="post_comment_cancel" value="{tr}Cancel{/tr}"/>
 					</div>
 				{/legend}
 			{/if}

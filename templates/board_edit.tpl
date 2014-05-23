@@ -65,7 +65,7 @@
 		{/jstabs}
 
 		<div class="control-group submit">
-			<input type="submit" class="btn btn-primary" name="save_bitboard" value="{tr}Save{/tr}" /> <input type="submit" class="btn" name="preview" value="{tr}Preview{/tr}" />
+			<input type="submit" class="btn btn-primary" name="save_bitboard" value="{tr}Save{/tr}" /> <input type="submit" class="btn btn-default" name="preview" value="{tr}Preview{/tr}" />
 		</div>
 	</div><!-- end .body -->
 </div><!-- end .boards -->
