@@ -50,7 +50,7 @@
 						<th style="width:5%;"> 
 							{form class="form-inline" action="`$comments_return_url`#editcomments"}
 							<input type="hidden" name="post_comment_request" value="1" />
-							<input type="submit" class="btn btn-mini btn-primary" value="{tr}New Topic{/tr}" />
+							<input type="submit" class="btn btn-xs btn-primary" value="{tr}New Topic{/tr}" />
 							{/form}
 						</th>
 						<th style="width:40%;">{tr}Title{/tr}</th>
