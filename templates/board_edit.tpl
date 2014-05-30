@@ -45,7 +45,7 @@
 					{legend legend=$leg}
 						<input type="hidden" name="bitboard[board_id]" value="{$gContent->mInfo.board_id}" />
 
-						<div class="control-group">
+						<div class="form-group">
 							{formlabel label="Title" for="title"}
 							{forminput}
 								<input type="text" size="50" maxlength="200" name="bitboard[title]" id="title" value="{$gContent->getTitle()|escape}" />
@@ -64,7 +64,7 @@
 			{include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_tab_tpl"}
 		{/jstabs}
 
-		<div class="control-group submit">
+		<div class="form-group submit">
 			<input type="submit" class="btn btn-primary" name="save_bitboard" value="{tr}Save{/tr}" /> <input type="submit" class="btn btn-default" name="preview" value="{tr}Preview{/tr}" />
 		</div>
 	</div><!-- end .body -->

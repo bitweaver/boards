@@ -6,7 +6,7 @@
 		{form legend="Simple Settings"}
 			<input type="hidden" name="view_user" value="{$view_user}" />
 			{foreach from=$boardsSettings key=option item=output}
-				<div class="control-group">
+				<div class="form-group">
 					{assign var='pref' value=$output.pref}
 					{if $userPrefs.$pref == null}
 						{assign var='value' value=$output.default}
@@ -24,7 +24,7 @@
 					{/forminput}
 				</div>
 			{/foreach}
-			<div class="control-group submit">
+			<div class="form-group submit">
 				<input type="submit" class="btn btn-default" name="boards[submit]" value="{tr}Change Settings{/tr}" />
 			</div>
 		{/form}
@@ -34,7 +34,7 @@
 			<input type="hidden" name="view_user" value="{$view_user}" />
 			{formfeedback warning=$error}
 			{textarea gContent=$signatureContent name="bitboarduprefs[edit]" rows=4 edit=$editUser->getPreference('signature_content_data')}
-			<div class="control-group submit">
+			<div class="form-group submit">
 				<input type="submit" class="btn btn-default" name="preview" value="{tr}Preview{/tr}" /> <input type="submit" name="save_bitboarduprefs" value="{tr}Save{/tr}" />
 			</div>
 		{/form}

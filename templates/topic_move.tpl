@@ -12,7 +12,7 @@
 			{assign var=title value=$gContent->mInfo.title|escape}
 			<input type="hidden" name="ref" value="-" />
 			<input type="hidden" name="t" value="{$smarty.request.t}" />
-			<div class="control-group">
+			<div class="form-group">
 				{formlabel label="To Board" for="target"}
 				{forminput}
 					<select name="target" id="target">
@@ -26,7 +26,7 @@
 					</select>
 				{/forminput}
 			</div>
-			<div class="control-group submit">
+			<div class="form-group submit">
 				<input type="submit" class="btn btn-default" name="move_thread" value="{tr}Move Topic{/tr}" />
 			</div>
 		{/form}
