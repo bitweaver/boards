@@ -11,7 +11,7 @@
 
 {jstab title="Mailing List Information"}
 {if $board->getPreference('boards_mailing_list')}
-	<div class="control-group">
+	<div class="control-group column-group gutters">
 		{formlabel label="Address"}
 		{forminput}
 			{$board->getPreference('boards_mailing_list')}@{$gBitSystem->getConfig('boards_email_host',$gBitSystem->getConfig('kernel_server_name'))}
@@ -19,15 +19,15 @@
 	</div>
 	{form}
 	<input type="hidden" name="b" value="{$board->getField('board_id')}"/>
-	<div class="control-group">
+	<div class="control-group column-group gutters">
 		{formlabel label="Subscribe"}
 		{forminput}
 			{if mailman_findmember($board->getPreference('boards_mailing_list'),$gBitUser->getField('email'))}
 				<p>{tr}You are currently subscribed to the mailing list using the email:{/tr} {$gBitUser->getField('email')}</p>
-				<input type="submit" class="btn" name="unsubscribe" value="Unsubscribe" />
+				<input type="submit" class="ink-button" name="unsubscribe" value="Unsubscribe" />
 			{else}
 				<p>{tr}You are currently not subscribed to the mailing list.{/tr}</p>
-				<input type="submit" class="btn" name="subscribe" value="Subscribe" />
+				<input type="submit" class="ink-button" name="subscribe" value="Subscribe" />
 			{/if}
 		{/forminput}
 	</div>
@@ -63,7 +63,7 @@
 	{form}
 	<input type="hidden" name="b" value="{$board->getField('board_id')}"/>
 	{if $gBitSystem->getConfig('boards_sync_mail_server')}
-	<div class="control-group">
+	<div class="control-group column-group gutters">
 		{formlabel label="Mailing List Address" for="boardsync"}
 		{forminput}
 			<input type="text" size="50" maxlength="200" name="board_sync_list_address" id="board_sync_list_address" value="{$gContent->getPreference('board_sync_list_address')|escape}" />
@@ -71,7 +71,7 @@
 				{formfeedback warning="The Mailing List Address does not match the configured board mailing list."}
 			{/if}
 			{formhelp note="All messages posted to this email address will mirrored on the board. The 'Board Sync Inbox' email account must be subscribed to this list and receive the messages in its INBOX."}
-			<input type="submit" class="btn" name="save_list_address" value="Save" />
+			<input type="submit" class="ink-button" name="save_list_address" value="Save" />
 		{/forminput}
 	</div>
 	<div>
@@ -82,21 +82,21 @@
 		{/forminput}
 	</div>
 {if $board->getPreference('boards_mailing_list')}
-	<div class="control-group">
+	<div class="control-group column-group gutters">
 		{formlabel label="Subscribe"}
 		{forminput}
 			{if mailman_findmember($board->getPreference('boards_mailing_list'),$boardSyncInbox)}
 				<p>{$boardSyncInbox} {tr}is subscribed to{/tr} {$boardsMailingList}</p>
-				<input type="submit" class="btn" name="unsubscribe_boardsync" value="Unsubscribe" />
+				<input type="submit" class="ink-button" name="unsubscribe_boardsync" value="Unsubscribe" />
 			{else}
 				<p>{$boardSyncInbox} {tr}is currently not subscribed to the mailing list.{/tr}</p>
-				<input type="submit" class="btn" name="subscribe_boardsync" value="Subscribe" />
+				<input type="submit" class="ink-button" name="subscribe_boardsync" value="Subscribe" />
 			{/if}
 		{/forminput}
 	</div>
 {/if}
 	{else}
-	<div class="control-group">
+	<div class="control-group column-group gutters">
 		{formlabel label="Board Sync" for="boardsync"}
 		{forminput}
 		{tr}Board Sync is not available since the Board Sync master email box has not been configured.{/tr} {if !$gBitUser->isAdmin()}{tr}Check with your site administrator.{/tr}{/if}
@@ -111,7 +111,7 @@
 	{form}
 	<input type="hidden" name="b" value="{$board->getField('board_id')}"/>
 {if $board->getPreference('boards_mailing_list')}
-	<div class="control-group">
+	<div class="control-group column-group gutters">
 		{formlabel label="Address"}
 		{forminput}
 			{$board->getPreference('boards_mailing_list')}@{$gBitSystem->getConfig('boards_email_host',$gBitSystem->getConfig('kernel_server_name'))}
@@ -119,10 +119,10 @@
 	</div>
 	<div class="control-group submit">
 		{forminput}
-			<input type="submit" class="btn" name="delete_list" value="Delete List" />
+			<input type="submit" class="ink-button" name="delete_list" value="Delete List" />
 		{/forminput}
 	</div>
-	<div class="control-group">
+	<div class="control-group column-group gutters">
 		{formlabel label="Advanced Configuration"}
 		{forminput}
 			<a href="{$gBitSystem->getConfig('boards_mailman_uri',"`$smarty.const.BIT_ROOT_URI`mailman/")}admin/{$board->getPreference('boards_mailing_list')}">
@@ -133,14 +133,14 @@
 	{if $gBitSystem->getConfig('server_mailman_bin') && $gBitSystem->getConfig('boards_sync_user') && $gBitSystem->getConfig('boards_sync_mail_server')}
 {legend legend="Group Mailing List"}
 	<input type="hidden" name="b" value="{$board->getField('board_id')}"/>
-	<div class="control-group">
+	<div class="control-group column-group gutters">
 		{formlabel label="Mailing List Address" for='emailhost'}
 		{forminput}
 			<input type="text" name="boards_mailing_list" value="{$smarty.request.boards_mailing_list|default:$suggestedListName}" /> <strong> @ {$gBitSystem->getConfig('boards_email_host',$gBitSystem->getConfig('kernel_server_name'))} </strong>
 			{formhelp note="This is the email address for the group. It needs to be all lowercase alpha-numeric characters."}
 		{/forminput}
 	</div>
-	<div class="control-group">
+	<div class="control-group column-group gutters">
 		{formlabel label="Administrator Password" for='emailhost'}
 		{forminput}
 			<input type="text" name="boards_mailing_list_password" value="{$smarty.request.boards_mailing_list_password}" />
@@ -149,7 +149,7 @@
 	</div>
 	<div class="control-group submit">
 		{forminput}
-			<input type="submit" class="btn" name="create_list" value="Create List" />
+			<input type="submit" class="ink-button" name="create_list" value="Create List" />
 		{/forminput}
 	</div>
 {/legend}

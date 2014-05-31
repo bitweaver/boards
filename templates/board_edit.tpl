@@ -45,7 +45,7 @@
 					{legend legend=$leg}
 						<input type="hidden" name="bitboard[board_id]" value="{$gContent->mInfo.board_id}" />
 
-						<div class="control-group">
+						<div class="control-group column-group gutters">
 							{formlabel label="Title" for="title"}
 							{forminput}
 								<input type="text" size="50" maxlength="200" name="bitboard[title]" id="title" value="{$gContent->getTitle()|escape}" />
@@ -65,7 +65,7 @@
 		{/jstabs}
 
 		<div class="control-group submit">
-			<input type="submit" class="btn btn-primary" name="save_bitboard" value="{tr}Save{/tr}" /> <input type="submit" class="btn" name="preview" value="{tr}Preview{/tr}" />
+			<input type="submit" class="btn btn-primary" name="save_bitboard" value="{tr}Save{/tr}" /> <input type="submit" class="ink-button" name="preview" value="{tr}Preview{/tr}" />
 		</div>
 	</div><!-- end .body -->
 </div><!-- end .boards -->

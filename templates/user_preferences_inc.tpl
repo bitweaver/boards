@@ -6,7 +6,7 @@
 		{form legend="Simple Settings"}
 			<input type="hidden" name="view_user" value="{$view_user}" />
 			{foreach from=$boardsSettings key=option item=output}
-				<div class="control-group">
+				<div class="control-group column-group gutters">
 					{assign var='pref' value=$output.pref}
 					{if $userPrefs.$pref == null}
 						{assign var='value' value=$output.default}
@@ -25,7 +25,7 @@
 				</div>
 			{/foreach}
 			<div class="control-group submit">
-				<input type="submit" class="btn" name="boards[submit]" value="{tr}Change Settings{/tr}" />
+				<input type="submit" class="ink-button" name="boards[submit]" value="{tr}Change Settings{/tr}" />
 			</div>
 		{/form}
 		{/if}
@@ -35,7 +35,7 @@
 			{formfeedback warning=$error}
 			{textarea gContent=$signatureContent name="bitboarduprefs[edit]" rows=4 edit=$editUser->getPreference('signature_content_data')}
 			<div class="control-group submit">
-				<input type="submit" class="btn" name="preview" value="{tr}Preview{/tr}" /> <input type="submit" name="save_bitboarduprefs" value="{tr}Save{/tr}" />
+				<input type="submit" class="ink-button" name="preview" value="{tr}Preview{/tr}" /> <input type="submit" name="save_bitboarduprefs" value="{tr}Save{/tr}" />
 			</div>
 		{/form}
 

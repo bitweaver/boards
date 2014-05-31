@@ -26,10 +26,10 @@
 					{$board.parsed_data}
 				</div>
 			</td>
-			<td class="aligncenter">
+			<td class="content-center">
 				<strong class="count">{$board.topic_count}</strong>
 			</td>
-			<td class="aligncenter">
+			<td class="content-center">
 				<strong class="count">{$board.post_count}</strong>
 			</td>
 			<td>

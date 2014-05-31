@@ -54,7 +54,7 @@
 	<div class="body">
 		{if !$topic_locked && $board->hasPostCommentsPermission()}
 			<div class="control-group submit">
-				<a title="{tr}Post Reply{/tr}" class="btn" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{booticon iname="icon-comment-alt"  ipackage="icons"  iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
+				<a title="{tr}Post Reply{/tr}" class="ink-button" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{booticon iname="icon-comment-alt"  ipackage="icons"  iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
 			</div>
 		{/if}
 
@@ -82,7 +82,7 @@
 
 		{if !$topic_locked && $board->hasPostCommentsPermission()}
 			<div class="control-group submit">
-				<a title="{tr}Post Reply{/tr}" class="btn" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{booticon iname="icon-comment-alt"  ipackage="icons"  iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
+				<a title="{tr}Post Reply{/tr}" class="ink-button" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{booticon iname="icon-comment-alt"  ipackage="icons"  iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
 			</div>
 		{/if}
 
