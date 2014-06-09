@@ -89,7 +89,11 @@ $ret['children']=array();
 $listHash = array('nboards'=>$board_all_cids,'paginationOff'=>'y');
 $board = new BitBoard();
 $ret['members'] = $board->getList($listHash);
-if (count($ret['members'])>0) {
+if (count($ret['members']) == 1) {
+	$_REQUEST['b'] = $ret['members'][0]['board_id'];
+	require( BOARDS_PKG_PATH.'view_board_inc.php' );
+	die;
+} elseif (count($ret['members']) > 0) {
 	$ns[] = $ret;
 }
 

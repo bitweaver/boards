@@ -7,7 +7,7 @@
 	<div class="body">
 		{if $data.umap}
 			{form legend="Assign Content"}
-				<div class="control-group column-group gutters">
+				<div class="form-group">
 					{formlabel label="Add Content" for="assign"}
 					{forminput}
 						<select id="assign" name="assign[]" multiple="multiple" size="12">
@@ -23,7 +23,7 @@
 					{/forminput}
 				</div>
 
-				<div class="control-group column-group gutters">
+				<div class="form-group">
 					{formlabel label="Assign to Board" for="to_board_id"}
 					{forminput}
 						<select name="to_board_id" id="to_board_id">
@@ -35,8 +35,8 @@
 					{/forminput}
 				</div>
 
-				<div class="control-group submit">
-					<input type="submit" class="ink-button" value="{tr}Assign Content to Board{/tr}" name="action" />
+				<div class="form-group submit">
+					<input type="submit" class="btn btn-default" value="{tr}Assign Content to Board{/tr}" name="action" />
 				</div>
 			{/form}
 		{else}
@@ -84,8 +84,8 @@
 						{/foreach}
 					</table>
 
-					<div class="control-group submit">
-						<input type="submit" class="ink-button" value="{tr}Remove{/tr}" name="action" />
+					<div class="form-group submit">
+						<input type="submit" class="btn btn-default" value="{tr}Remove{/tr}" name="action" />
 					</div>
 				{/form}
 			{/if}

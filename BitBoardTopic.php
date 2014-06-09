@@ -261,7 +261,7 @@ class BitBoardTopic extends LibertyMime {
 	 * This function moves a topic to a new messageboard
 	 */
 	function moveTo($board_id) {
-		$ret = FALSE;
+
 		// start transaction
 		$this->mDb->StartTrans();
 
@@ -282,28 +282,18 @@ class BitBoardTopic extends LibertyMime {
 		$this->mDb->associateInsert( BIT_DB_PREFIX."boards_topics", $data );
 
 		// move the comment we want to move to the target board
-		$query = "UPDATE `".BIT_DB_PREFIX."liberty_comments`
-					SET
-						`root_id` = $board_id,
-						`parent_id` = $board_id
-					WHERE
-						`thread_forward_sequence` LIKE '".sprintf("%09d.", $this->mRootId)."%'
-						AND `root_id`=`parent_id`
-						";
-		$result = $this->mDb->query( $query );
-		$query = "UPDATE `".BIT_DB_PREFIX."liberty_comments`
-					SET
-						`root_id` = $board_id
-					WHERE
-						`thread_forward_sequence` LIKE '".sprintf("%09d.", $this->mRootId)."%'";
-		$result = $this->mDb->query( $query );
+		$query = "UPDATE `".BIT_DB_PREFIX."liberty_comments` SET `root_id` = ?, `parent_id` = ?
+				  WHERE `thread_forward_sequence` LIKE '".sprintf("%09d.", $this->mRootId)."%' AND `root_id`=`parent_id`";
+		$result = $this->mDb->query( $query, array( $board_id, $board_id ) );
+
+		$query = "UPDATE `".BIT_DB_PREFIX."liberty_comments` SET `root_id` = ?
+				  WHERE `thread_forward_sequence` LIKE '".sprintf("%09d.", $this->mRootId)."%'";
+		$result = $this->mDb->query( $query, array( $board_id ) );
 
 		// end transaction
 		$this->mDb->CompleteTrans();
 
-		$ret = TRUE;
-
-		return $ret;
+		return TRUE;
 	}
 
 	/**
@@ -493,11 +483,17 @@ class BitBoardTopic extends LibertyMime {
 		$ret = NULL;
 
 		if( !empty( $pParamHash['topic_id'] ) && static::verifyId( $pParamHash['topic_id'] ) ) {
+			$topicId = $pParamHash['topic_id'];
+		} elseif( !empty( $pParamHash['th_thread_id'] ) && static::verifyId( $pParamHash['th_thread_id'] ) ) {
+			$topicId = $pParamHash['th_thread_id'];
+		}
+
+		if( !empty( $topicId ) ) {
 			if( $gBitSystem->isFeatureActive( 'pretty_urls' ) || $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				$rewrite_tag = $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ? 'view/' : '';
-				$ret = BOARDS_PKG_URL.$rewrite_tag."topic/".$pParamHash['topic_id'];
+				$ret = BOARDS_PKG_URL.$rewrite_tag."topic/".$topicId;
 			} else {
-				$ret=BOARDS_PKG_URL."index.php?t=".$pParamHash['topic_id'];
+				$ret = BOARDS_PKG_URL."index.php?t=".$topicId;
 			}
 		}
 		return $ret;

@@ -22,7 +22,7 @@
 					<input type="hidden" name="post_comment_reply_id" value="{$post_comment_reply_id}" />
 				    <input type="hidden" name="post_comment_id" value="{$post_comment_id}" />
 
-					<div class="control-group column-group gutters">
+					<div class="form-group">
 						{formlabel label="Title" for="comments-title"}
 						{forminput}
 							<input type="text" size="50" name="comment_title" id="comments-title" value="{$postComment.title|escape:html}" />
@@ -35,10 +35,10 @@
 					{/capture}
 					{textarea noformat=1 label="Comment" id="commentpost" name="comment_data" rows="6" edit=$postComment.data}
 
-					<div class="control-group submit">
-						<input type="submit" class="ink-button" name="post_comment_preview" value="{tr}Preview{/tr}"/>&nbsp;
-						<input type="submit" class="ink-button" name="post_comment_submit" value="{tr}Post{/tr}"/>&nbsp;
-						<input type="submit" class="ink-button" name="post_comment_cancel" value="{tr}Cancel{/tr}"/>
+					<div class="form-group submit">
+						<input type="submit" class="btn btn-default" name="post_comment_preview" value="{tr}Preview{/tr}"/>&nbsp;
+						<input type="submit" class="btn btn-default" name="post_comment_submit" value="{tr}Post{/tr}"/>&nbsp;
+						<input type="submit" class="btn btn-default" name="post_comment_cancel" value="{tr}Cancel{/tr}"/>
 					</div>
 				{/legend}
 			{/if}
