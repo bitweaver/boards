@@ -1,7 +1,7 @@
 {strip}
 {if $gBitSystem->isPackageActive('boards') && $modLastBoardPosts}
 	{bitmodule title=$moduleTitle name="last_board_posts"}
-		<ul class="boards">
+		<ul class="list-unstyled">
 			{section name=ix loop=$modLastBoardPosts}
 				<li class="{cycle values="odd,even"}">
 					<a title="{tr}Author:{/tr} {displayname nolink=1 hash=$modLastBoardPosts[ix]}" href="{$modLastBoardPosts[ix].display_url}">{$modLastBoardPosts[ix].title|default:"Comment"|escape:html}</a>
