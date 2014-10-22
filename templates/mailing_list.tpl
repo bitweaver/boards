@@ -19,7 +19,7 @@
 	</div>
 	{form}
 	<input type="hidden" name="b" value="{$board->getField('board_id')}"/>
-	<div class="control-group">
+	<div class="form-group">
 		{formlabel label="Subscribe"}
 		{forminput}
 			{if mailman_findmember($board->getPreference('boards_mailing_list'),$gBitUser->getField('email'))}
