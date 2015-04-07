@@ -5,6 +5,7 @@
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
 // Initialization
 require_once( '../kernel/setup_inc.php' );
+$gBitSystem->verifyPackage( 'boards' );
 
 if( !empty( $_REQUEST['t'] ) || !empty( $_REQUEST['migrate_topic_id'] ) || !empty( $_REQUEST['migrate_post_id'] ) ) {
 	require( BOARDS_PKG_PATH.'view_topic_inc.php' );
@@ -13,5 +14,3 @@ if( !empty( $_REQUEST['t'] ) || !empty( $_REQUEST['migrate_topic_id'] ) || !empt
 } else {
 	require( BOARDS_PKG_PATH.'list_boards_inc.php' );
 }
-
-?>
