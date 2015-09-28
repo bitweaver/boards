@@ -5,9 +5,9 @@
 	{forminput}
 		{if $boardList}
 			{if $smarty.post.preview}
-				{html_options name="linked_board_cid" options=$boardList selected=$smarty.post.linked_board_cid}
+				{html_options class="form-control" name="linked_board_cid" options=$boardList selected=$smarty.post.linked_board_cid}
 			{else}
-				{html_options name="linked_board_cid" options=$boardList selected=$boardInfo.board_content_id}
+				{html_options class="form-control" name="linked_board_cid" options=$boardList selected=$boardInfo.board_content_id}
 			{/if}
 		{else}
 			<em>{tr}No discussion boards have been created.{/tr}</em>
