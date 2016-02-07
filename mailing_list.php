@@ -93,13 +93,13 @@ if( $gContent->getBoardMailingList() ) {
 	$gBitSmarty->assign( 'boardsMailingList', $gContent->getBoardMailingList() );
 	if ( $gContent->hasUserPermission( 'p_boards_boards_members_view' ) ){
 		$members = mailman_list_members( $gContent->getPreference( 'boards_mailing_list' ) );
-		$gBitSmarty->assign_by_ref( 'listMembers', $members );
+		$gBitSmarty->assignByRef( 'listMembers', $members );
 	}
 } else {
 	$gBitSmarty->assign( 'suggestedListName', preg_replace( '/[^a-z0-9]/', '', strtolower( $gContent->getTitle() ) ) );
 }
 
 // display
-$gBitSmarty->assign_by_ref( 'board', $gContent );
+$gBitSmarty->assignByRef( 'board', $gContent );
 $gBitSystem->display( "bitpackage:boards/mailing_list.tpl", $gContent->getTitle() ." ".  tra( 'Message Board Mailing List' ) , array( 'display_mode' => 'list' ));
 ?>

@@ -99,12 +99,12 @@ $threads->mRootObj = $gContent;
 $threadsListHash = $_REQUEST;
 $threadList = $threads->getList( $threadsListHash );
 
-$gBitSmarty->assign_by_ref( 'threadList', $threadList );
+$gBitSmarty->assignByRef( 'threadList', $threadList );
 
 // getList() has now placed all the pagination information in $_REQUEST['listInfo']
-$gBitSmarty->assign_by_ref( 'listInfo', $threadsListHash['listInfo'] );
+$gBitSmarty->assignByRef( 'listInfo', $threadsListHash['listInfo'] );
 
-$gBitSmarty->assign_by_ref( 'board', $gContent );
+$gBitSmarty->assignByRef( 'board', $gContent );
 $gBitSmarty->assign( 'cat_url', BOARDS_PKG_URL."index.php"); //?ct=".urlencode($gContent->mInfo['content_type_guid']));
 
 $gBitThemes->loadAjax( 'mochikit' );

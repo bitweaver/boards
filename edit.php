@@ -38,7 +38,7 @@ if( isset( $_REQUEST['remove'] ) ) {
 			$formHash['remove'] = TRUE;
 			$gBitSystem->confirmDialog( $formHash, array( 'warning' => tra( 'Are you sure you want to remove the entire message board' ).' "'.$gContent->getTitle().'" ?', 'error' => 'This cannot be undone!' ) );
 		} elseif( !$gContent->expunge() ) {
-			$gBitSmarty->assign_by_ref( 'errors', $deleteComment->mErrors );
+			$gBitSmarty->assignByRef( 'errors', $deleteComment->mErrors );
 		} else {
 			bit_redirect( BOARDS_PKG_URL.'index.php' );
 		}
@@ -69,7 +69,7 @@ if( !empty( $_REQUEST["save_bitboard"] ) ) {
 		$gContent->storePreference( 'board_sync_list_address', (!empty( $_REQUEST['bitboardconfig']['board_sync_list_address'] ) ?  $_REQUEST['bitboardconfig']['board_sync_list_address'] : NULL) );
 		bit_redirect( $gContent->getDisplayUrl() );
 	} else {
-		$gBitSmarty->assign_by_ref( 'errors', $gContent->mErrors );
+		$gBitSmarty->assignByRef( 'errors', $gContent->mErrors );
 	}
 }
 

@@ -66,7 +66,7 @@ if( isset($_REQUEST['is_locked']) || isset($_REQUEST['is_sticky']) ){
 		// @TODO Topic should extend LibertyComment - but until that day we load it up a second time
 		$topicAsComment = new LibertyComment( $_REQUEST['t'] );
 		if( !$topicAsComment->expunge() ) {
-			$gBitSmarty->assign_by_ref( 'errors', $topicAsComment->mErrors );
+			$gBitSmarty->assignByRef( 'errors', $topicAsComment->mErrors );
 		}
 		// send us back to the baord - http_referer won't work with confirm process 
 		bit_redirect( BOARDS_PKG_URL.'index.php?b='. $gContent->mInfo['board_id'] );

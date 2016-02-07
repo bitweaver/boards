@@ -40,12 +40,12 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 			$deleteComment = new LibertyComment( $deleteId );
 			if( $deleteComment->isValid() && $gBitUser->hasPermission('p_liberty_admin_comments') ) {
 				if( !$deleteComment->expunge() ) {
-					$gBitSmarty->assign_by_ref( 'errors', $deleteComment->mErrors );
+					$gBitSmarty->assignByRef( 'errors', $deleteComment->mErrors );
 				}
 			}
 		}
 		if( !empty( $errors ) ) {
-			$gBitSmarty->assign_by_ref( 'errors', $errors );
+			$gBitSmarty->assignByRef( 'errors', $errors );
 		}
 	}
 }

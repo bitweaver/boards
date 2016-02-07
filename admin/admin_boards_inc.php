@@ -79,5 +79,5 @@ if( $processForm ) {
 
 $board = new BitBoard();
 $boards = $board->getBoardSelectList( $_REQUEST );
-$gBitSmarty->assign_by_ref(BOARDS_PKG_NAME, $boards['data']);
+$gBitSmarty->assignByRef(BOARDS_PKG_NAME, $boards['data']);
 ?>

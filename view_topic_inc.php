@@ -67,10 +67,10 @@ $thread->verifyViewPermission();
 // load up the root board we need it
 $gBoard = new BitBoard(null,$thread->mInfo['board_content_id']);
 $gBoard->load();
-$gBitSmarty->assign_by_ref( 'board', $gBoard );
+$gBitSmarty->assignByRef( 'board', $gBoard );
 // force root board to be gContent
 $gContent = &$gBoard;
-$gBitSmarty->assign_by_ref('gContent', $gContent);
+$gBitSmarty->assignByRef('gContent', $gContent);
 
 
 // if you know what this is please comment it
@@ -90,7 +90,7 @@ $thread->invokeServices( 'content_display_function', $displayHash );
 
 $thread->readTopic();
 
-$gBitSmarty->assign_by_ref( 'thread', $thread );
+$gBitSmarty->assignByRef( 'thread', $thread );
 $gBitSmarty->assign('topic_locked',$thread->isLocked());
 
 
@@ -124,7 +124,7 @@ if (!empty($_REQUEST['warning'])) {
 		}
 	}
 }
-$gBitSmarty->assign_by_ref('warnings',$warnings);
+$gBitSmarty->assignByRef('warnings',$warnings);
 
 
 // ajax support

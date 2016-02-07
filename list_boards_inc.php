@@ -97,7 +97,7 @@ if (count($ret['members']) == 1) {
 	$ns[] = $ret;
 }
 
-$gBitSmarty->assign_by_ref('ns',$ns);
+$gBitSmarty->assignByRef('ns',$ns);
 
 // this might be for getting a count of nested boards - not entirely sure, if you figure it out please clarify this comment.
 function countBoards(&$a) {

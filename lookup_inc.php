@@ -28,6 +28,6 @@ if( @BitBase::verifyId( $_REQUEST['t'] ) ) {
 }
 
 $gContent->load();
-$gBitSmarty->assign_by_ref( "gContent", $gContent );
+$gBitSmarty->assignByRef( "gContent", $gContent );
 
 ?>

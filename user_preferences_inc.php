@@ -38,7 +38,7 @@ if (!empty($content_type) && !empty($content_data)) {
 	$signatureContent->mInfo['format_guid']=$editUser->getPreference('signature_content_type');
 	$signatureContent->mInfo['data']=$content_data;
 }
-$gBitSmarty->assign_by_ref( 'signatureContent', $signatureContent );
+$gBitSmarty->assignByRef( 'signatureContent', $signatureContent );
 
 
 if( isset( $_REQUEST["format_guid"] ) ) {

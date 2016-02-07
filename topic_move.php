@@ -44,7 +44,7 @@ if( isset( $_REQUEST["target"] ) ) {
 
 // get list of boards we can move the topic to
 $boards = $board->getBoardSelectList();
-$gBitSmarty->assign_by_ref('boards', $boards);
+$gBitSmarty->assignByRef('boards', $boards);
 
 $gBitSmarty->assign('fromBoardId', $board->mContentId);
 

@@ -57,7 +57,7 @@ if (!empty($_REQUEST['integrity'])) {
 }
 
 $data = BitBoard::getAllMap();
-$gBitSmarty->assign_by_ref('data',$data);
+$gBitSmarty->assignByRef('data',$data);
 
 // Display the template
 $gBitSystem->display( 'bitpackage:boards/board_assign.tpl', tra('Assign content to Board') , array( 'display_mode' => 'display' ));
