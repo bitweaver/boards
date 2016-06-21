@@ -1,4 +1,4 @@
-{if $smarty.const.ACTIVE_PACKAGE == 'boards'}
+{if $gBitSystem->getActivePackage() == 'boards'}
 	<script type="text/javascript">/* <![CDATA[ */
 		{literal}
 		/* DEPENDENCIES: MochiKit Base Async, BitAjax */
