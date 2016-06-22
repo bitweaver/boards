@@ -29,7 +29,7 @@ class BitBoard extends LibertyMime {
 	* Primary key for our mythical BitBoard class object & table
 	* @public
 	*/
-	var $mBitBoardId;
+	public $mBitBoardId;
 
 	/**
 	* During initialisation, be sure to call our base constructors

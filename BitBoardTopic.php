@@ -31,13 +31,13 @@ class BitBoardTopic extends LibertyMime {
 	* Primary key for our mythical Messageboards class object & table
 	* @public
 	*/
-	var $mRootId;
+	public $mRootId;
 
 	/**
 	 * the content id of the topic comment object
 	 * this is really the contentId, but mContentId houses the parent board content_id currently
 	 **/
-	var $mCommentContentId;
+	public $mCommentContentId;
 
 	/**
 	* During initialisation, be sure to call our base constructors
