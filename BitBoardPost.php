@@ -115,10 +115,10 @@ class BitBoardPost extends LibertyComment {
 	function expunge() {
 		$ret = FALSE;
 		if( $this->isValid() ) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			// parent actually has deletion of rows in boards for constraint reasons
 			if( parent::expunge() ) {
-				$this->mDb->CompleteTrans();
+				$this->CompleteTrans();
 				$ret = TRUE;
 			} else {
 				$this->mDb->RollbackTrans();

@@ -263,7 +263,7 @@ class BitBoardTopic extends LibertyMime {
 	function moveTo($board_id) {
 
 		// start transaction
-		$this->mDb->StartTrans();
+		$this->StartTrans();
 
 		// create a new comment letting people know it has beem moved
 		$lcom = new LibertyComment();
@@ -291,7 +291,7 @@ class BitBoardTopic extends LibertyMime {
 		$result = $this->mDb->query( $query, array( $board_id ) );
 
 		// end transaction
-		$this->mDb->CompleteTrans();
+		$this->CompleteTrans();
 
 		return TRUE;
 	}

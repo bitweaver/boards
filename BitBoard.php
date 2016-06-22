@@ -121,7 +121,7 @@ class BitBoard extends LibertyMime {
 	function store( &$pParamHash ) {
 		if( $this->verify( $pParamHash )&& LibertyMime::store( $pParamHash ) ) {
 			$table = BIT_DB_PREFIX."boards";
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			if( $this->mBitBoardId ) {
 				$locId = array( "board_id" => $pParamHash['board_id'] );
 				$result = $this->mDb->associateUpdate( $table, $pParamHash['board_store'], $locId );
@@ -160,7 +160,7 @@ class BitBoard extends LibertyMime {
 			}
 
 			if( count( $this->mErrors ) == 0 ) {
-				$this->mDb->CompleteTrans();
+				$this->CompleteTrans();
 				$this->load();
 			} else {
 				$this->mDb->RollbackTrans();
@@ -275,7 +275,7 @@ class BitBoard extends LibertyMime {
 	function expunge() {
 		$ret = FALSE;
 		if( $this->isValid() ) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			$mailingList = $this->getPreference( 'boards_mailing_list' );
 			$query = "DELETE FROM `".BIT_DB_PREFIX."boards_map` WHERE `board_content_id` = ?";
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
@@ -289,7 +289,7 @@ class BitBoard extends LibertyMime {
 					}
 				}
 				$ret = TRUE;
-				$this->mDb->CompleteTrans();
+				$this->CompleteTrans();
 			} else {
 				$this->mDb->RollbackTrans();
 			}
