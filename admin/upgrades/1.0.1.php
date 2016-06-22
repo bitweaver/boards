@@ -57,7 +57,7 @@ $map_errors = $oTopic->mDb->query( $list_query, $bind_vars, $max_records );
 
 // fix everything 
 // transaction will save us if something goes bad
-$oTopic->mDb->StartTrans();
+$oTopic->StartTrans();
 
 // expunge all the bad records we just got a list of
 $expunge_query = "DELETE FROM `".BIT_DB_PREFIX."boards_topics` 
@@ -87,7 +87,7 @@ while( $topic = $map_errors->fetchRow() ) {
     }
 }
 
-$oTopic->mDb->CompleteTrans();
+$oTopic->CompleteTrans();
 ' ),
 
 
