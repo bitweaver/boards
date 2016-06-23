@@ -24,7 +24,7 @@ class BitBoardPost extends LibertyComment {
 	/**
 	 * During initialisation, be sure to call our base constructors
 	 */
-	function BitBoardPost($pCommentId = NULL, $pContentId = NULL, $pInfo = NULL) {
+	function __construct($pCommentId = NULL, $pContentId = NULL, $pInfo = NULL) {
 		parent::__construct($pCommentId,$pContentId,$pInfo);
 
 		// Permission setup

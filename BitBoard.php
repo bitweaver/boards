@@ -34,7 +34,7 @@ class BitBoard extends LibertyMime {
 	/**
 	* During initialisation, be sure to call our base constructors
 	**/
-	function BitBoard( $pBitBoardId=NULL, $pContentId=NULL ) {
+	function __construct( $pBitBoardId=NULL, $pContentId=NULL ) {
 		parent::__construct();
 		$this->mBitBoardId = $pBitBoardId;
 		$this->mContentId = $pContentId;
