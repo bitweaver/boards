@@ -16,7 +16,7 @@
 					{formlabel label=$output.label for=$option}
 					{forminput}
 						{if $output.type == 'text'}
-							<input type="text" maxlength="250" size="250" name="boards[{$option}]" id="boards[{$option}]" value="{$value|escape}" />
+							<input type="text" maxlength="250" size="250" name="boards[{$option}]" id="boards[{$option}]" value="{$value|escape}" class="form-control"/>
 						{else}
 							<input type="checkbox" name="boards[{$option}]" {if $value=='y'}checked="checked"{/if} value="y" id="boards[{$option}]" />
 						{/if}
@@ -35,7 +35,7 @@
 			{formfeedback warning=$error}
 			{textarea gContent=$signatureContent name="bitboarduprefs[edit]" rows=4 edit=$editUser->getPreference('signature_content_data')}
 			<div class="form-group submit">
-				<input type="submit" class="btn btn-default" name="preview" value="{tr}Preview{/tr}" /> <input type="submit" name="save_bitboarduprefs" value="{tr}Save{/tr}" />
+				<input type="submit" class="btn btn-default" name="preview" value="{tr}Preview{/tr}" /> <input type="submit" class="btn btn-default" name="save_bitboarduprefs" value="{tr}Save{/tr}" />
 			</div>
 		{/form}
 
