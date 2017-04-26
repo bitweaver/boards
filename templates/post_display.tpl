@@ -14,10 +14,9 @@
 				<strong>{displayname hash=$comment}</strong>
 				<br />
 				{if $comment.user_id != $smarty.const.ANONYMOUS_USER_ID && !empty($comment.user_avatar_url)}
-					<a href="{$comment.user_url}"><img src="{$comment.user_avatar_url}" title="{tr}Avatar{/tr}" alt="{tr}Avatar{/tr}" /></a>
-					<br />
+					<div><a href="{$comment.user_url}"><img src="{$comment.user_avatar_url}" class="img-responsive" alt="{tr}Profile Picture{/tr}" /></a></div>
 				{/if}
-				<small>{tr}Joined: {/tr}{$comment.registration_date|bit_short_date}</small><br />
+				<div class="date">{tr}Joined: {/tr}{$comment.registration_date|bit_short_date}</div>
 			{/if}
 		</div>
 
