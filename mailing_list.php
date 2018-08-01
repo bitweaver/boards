@@ -17,7 +17,7 @@ require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
 require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
 require_once( BOARDS_PKG_PATH.'BitBoard.php' );
 require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
-require_once( UTIL_PKG_PATH.'mailman_lib.php' );
+require_once( UTIL_PKG_INC.'mailman_lib.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'boards' );

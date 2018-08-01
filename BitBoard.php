@@ -139,7 +139,7 @@ class BitBoard extends LibertyMime {
 				$result = $this->mDb->associateInsert( BIT_DB_PREFIX."boards_map",array('board_content_id'=>$pParamHash['board_store']['content_id'],'topic_content_id'=>$pParamHash['board_store']['content_id']));
 				if( !empty( $pParamHash['boards_mailing_list'] ) ) {
 					global $gBitSystem, $gBitUser;
-					require_once( UTIL_PKG_PATH.'mailman_lib.php' );
+					require_once( UTIL_PKG_INC.'mailman_lib.php' );
 					if( $gBitSystem->getConfig( 'boards_sync_mail_server' ) ) {
 						if( !($error = mailman_newlist( array( 'listname' => $pParamHash['boards_mailing_list'], 'listhost' => $gBitSystem->getConfig( 'boards_email_host', $gBitSystem->getConfig( 'kernel_server_name' ) ), 'admin-password'=>$pParamHash['boards_mailing_list_password'], 'listadmin-addr'=>$gBitUser->getField( 'email' ) ) )) ) {
 							$this->storePreference( 'boards_mailing_list', !empty( $pParamHash['boards_mailing_list'] ) ? $pParamHash['boards_mailing_list'] : NULL );
@@ -283,7 +283,7 @@ class BitBoard extends LibertyMime {
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
 			if( LibertyMime::expunge() ) {
 				if( $mailingList ) {
-					require_once( UTIL_PKG_PATH.'mailman_lib.php' );
+					require_once( UTIL_PKG_INC.'mailman_lib.php' );
 					if( $error = mailman_rmlist( $mailingList ) ) {
 						$this->mErrors['mailing_list'] = $error;
 					}
