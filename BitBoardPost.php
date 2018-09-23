@@ -283,7 +283,7 @@ class BitBoardPost extends LibertyComment {
 
 		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, $this );
 
-		if( !empty( $pListHash['board_id'] ) ) {
+		if( BitBase::verifyIdParameter(  $pListHash, 'board_id' ) ) {
 			$joinSql .= "INNER JOIN `".BIT_DB_PREFIX."boards` b ON (b.`content_id` = bm.`board_content_id`)";
 			$whereSql .= ' AND b.`board_id`=? ';
 			array_push( $bindVars, (int)$pListHash['board_id'] );
