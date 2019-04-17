@@ -25,6 +25,8 @@ if ( @BitBase::verifyId( $_REQUEST['migrate_board_id'] ) ) {
 	}
 }
 
+$_REQUEST['board_id'] = BitBase::getParameter( $_REQUEST, 'b' );
+
 // Load up the board
 require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 
