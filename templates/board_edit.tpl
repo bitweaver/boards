@@ -33,40 +33,31 @@
 	</div>
 
 	<div class="body">
+		{form enctype="multipart/form-data" id="editbitboardform"}
 		{jstabs}
-			{if $gContent->isValid()}
-				{assign var='leg' value=$gContent->getTitle()|escape}
-				{assign var='leg' value="Edit Board: $leg"}
-			{else}
-				{assign var='leg' value='Create Board'}
-			{/if}
 			{jstab title=$leg}
-				{form enctype="multipart/form-data" id="editbitboardform"}
-					{legend legend=$leg}
-						<input type="hidden" name="bitboard[board_id]" value="{$gContent->mInfo.board_id}" />
+				<input type="hidden" name="bitboard[board_id]" value="{$gContent->mInfo.board_id}" />
 
-						<div class="form-group">
-							{formlabel label="Title" for="title"}
-							{forminput}
-								<input type="text" size="50" maxlength="200" name="bitboard[title]" id="title" value="{$gContent->getTitle()|escape}" />
-							{/forminput}
-						</div>
+				<div class="form-group">
+					{formlabel label="Title" for="title"}
+					{forminput}
+						<input type="text" class="form-control" maxlength="200" name="bitboard[title]" id="title" value="{$gContent->getTitle()|escape}" />
+					{/forminput}
+				</div>
 
-						{textarea name="bitboard[edit]" edit=$gContent->mInfo.data}
+				{textarea name="bitboard[edit]" edit=$gContent->mInfo.data}
 
-						{* any simple service edit options *}
-						{include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_mini_tpl"}
-
-					{/legend}
-				{/form}
+				{* any simple service edit options *}
+				{include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_mini_tpl"}
 			{/jstab}
-			{* any service edit template tabs *}
+
 			{include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_tab_tpl"}
 		{/jstabs}
 
 		<div class="form-group submit">
 			<input type="submit" class="btn btn-primary" name="save_bitboard" value="{tr}Save{/tr}" /> <input type="submit" class="btn btn-default" name="preview" value="{tr}Preview{/tr}" />
 		</div>
+		{/form}
 	</div><!-- end .body -->
 </div><!-- end .boards -->
 
