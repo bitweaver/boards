@@ -23,9 +23,9 @@
 				<a title="{tr}Remove message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?remove=1&amp;b={$board->mInfo.board_id}">{booticon iname="icon-trash" ipackage="icons" iexplain="Remove Message Board"}</a>
 			{/if}
 		{/if}<!-- end print_page -->
-		{if $board->hasPostCommentsPermission()}
+		{*if $board->hasPostCommentsPermission()}
 			{minifind class="" sort_mode=$sort_mode b=$smarty.request.b prompt=$smarty.const.BOARDS_PKG_DIR}
-		{/if}
+		{/if*}
 
 	</div><!-- end .floaticon -->
 
@@ -47,11 +47,10 @@
 			<table class="table data">
 				{if !$gBitSystem->isFeatureActive('boards_thread_verbrose')}
 					<tr>
-						<th style="width:5%;"> 
+						<th colspan="2" style="width:5%;"> 
 							<a href="{$comments_return_url}&amp;post_comment_request=1#editcomments" class="btn btn-primary btn-xs">{tr}New Topic{/tr}</a>
 						</th>
 						<th style="width:40%;">{tr}Title{/tr}</th>
-						<th style="width:5%;">{tr}Replies{/tr}</th>
 						<th style="width:20%;">{tr}Last Reply{/tr}</th>
 						{if $board->hasUpdatePermission() || $gBitUser->hasPermission('p_boards_post_update')}
 							<th style="width:1%;"><abbr title="{tr}Number of posts by Anonymous users{/tr}">Anon</abbr></th>
@@ -65,6 +64,7 @@
 				{foreach item=thread from=$threadList}
 					<tr class="{cycle values="even,odd"} {if $gBitSystem->isFeatureActive('boards_post_anon_moderation') && $thread.unreg > 0}unapproved{elseif $thread.th_moved>0}moved{/if} {if $thread.th_sticky==1} highlight{/if}" >
 						<td style="white-space:nowrap;">{* topic status icons *}
+
 							{if $thread.th_moved>0}
 								{booticon ipackage="icons" iname="icon-share" iexplain="Moved Topic"}
 							{else}
@@ -74,14 +74,13 @@
 								{/foreach}
 							{/if}
 						</td>
+						<td class="topiccount">{if $thread.post_count-1}<span class="badge">{$thread.post_count-1}</span>{/if}</td>
 
 						<td>
 							<div class="topictitle"><a href="{$thread.url}" title="{$thread.title|escape}">{$thread.title|escape}</a></div>
 							{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='list' serviceHash=$thread}
-							{tr}by{/tr} {if $thread.flc_user_id < 0}{$thread.anon_name|escape}{else}{displayname user_id=$thread.flc_user_id}{/if} {tr}on{/tr} {$thread.flc_created|reltime:short|escape}
+							<span class="small">{tr}by{/tr} {if $thread.flc_user_id < 0}{$thread.anon_name|escape}{else}{displayname user_id=$thread.flc_user_id}{/if} {tr}on{/tr} {$thread.flc_created|reltime:short|escape}</span>
 						</td>
-
-						<td class="topiccount">{if $thread.post_count-1}{$thread.post_count-1}{/if}</td>
 
 						<td class="topiclastreply">
 							{if $thread.post_count > 1}{$thread.llc_last_modified|reltime:short|escape}{else}{/if}<br/>
