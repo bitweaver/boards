@@ -36,8 +36,8 @@ class BitBoard extends LibertyMime {
 	**/
 	function __construct( $pBitBoardId=NULL, $pContentId=NULL ) {
 		parent::__construct();
-		$this->mBitBoardId = $pBitBoardId;
-		$this->mContentId = $pContentId;
+		$this->mBitBoardId = (int)$pBitBoardId;
+		$this->mContentId = (int)$pContentId;
 		$this->mContentTypeGuid = BITBOARD_CONTENT_TYPE_GUID;
 		$this->registerContentType( BITBOARD_CONTENT_TYPE_GUID, array(
 				'content_type_guid' => BITBOARD_CONTENT_TYPE_GUID,
@@ -67,7 +67,7 @@ class BitBoard extends LibertyMime {
 			$lookupColumn = $this->verifyId( $this->mBitBoardId ) ? 'board_id' : 'content_id';
 			$bindVars = array();
 			$selectSql = $joinSql = $whereSql = '';
-			array_push( $bindVars, $lookupId = @BitBase::verifyId( $this->mBitBoardId ) ? $this->mBitBoardId : $this->mContentId );
+			array_push( $bindVars, (int)($lookupId = @BitBase::verifyId( $this->mBitBoardId ) ? $this->mBitBoardId : $this->mContentId) );
 			$this->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
 			$query = "SELECT s.*, lc.*, " .

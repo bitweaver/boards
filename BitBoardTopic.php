@@ -44,7 +44,7 @@ class BitBoardTopic extends LibertyMime {
 	**/
 	function __construct( $pRootId=NULL ) {
 		parent::__construct();
-		$this->mRootId = $pRootId;
+		$this->mRootId = (int)$pRootId;
 
 		// Permission setup
 		$this->mViewContentPerm  = 'p_boards_read';
