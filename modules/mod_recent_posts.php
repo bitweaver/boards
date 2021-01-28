@@ -21,7 +21,12 @@ if( !empty( $moduleParams ) ) {
 	extract( $moduleParams );
 }
 
-$listHash = array( 'user_id' => $gQueryUserId, 'sort_mode' => 'created_desc', 'max_records' => $module_rows );
+$listHash = array( 'user_id' => $gQueryUserId, 'sort_mode' => 'created_desc' );
+
+if( !empty( $moduleParams['module_rows'] ) ) {
+	$listHash['max_records'] = $moduleParams['module_rows'];
+}
+
 if( !empty( $module_params['b'] ) ) {
 	$listHash['board_id'] = $module_params['b'];
 } elseif( !empty( $_REQUEST['b'] ) && empty( $module_params['all_boards'] ) ) {
