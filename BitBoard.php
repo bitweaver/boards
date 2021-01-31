@@ -264,7 +264,7 @@ class BitBoard extends LibertyMime {
 
 		if( isset( $pParamHash["edit"] ) ) {
 			$this->mInfo["data"] = $pParamHash["edit"];
-			$this->mInfo['parsed_data'] = $this->parseData();
+			$this->parseData();
 		}
 	}
 
