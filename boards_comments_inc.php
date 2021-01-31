@@ -41,7 +41,7 @@ if (!function_exists("send_board_email")) {
 				$headerHash['sender'] = $userInfo['email'];
 			}
 			$headerHash['x_headers']['X-BitBoards-Comment'] = $storeComment->mCommentId;
-			$messageId = $bitMailer->sendEmail( $storeComment->getTitle(), $storeComment->parseData(), $email, $headerHash );
+			$messageId = $bitMailer->sendEmail( $storeComment->getTitle(), $storeComment->getParsedData(), $email, $headerHash );
 			$storeComment->storeMessageId( $messageId );
 		}
 	}

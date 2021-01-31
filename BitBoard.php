@@ -89,7 +89,7 @@ class BitBoard extends LibertyMime {
 				$this->mInfo['creator'] =( isset( $result->fields['creator_real_name'] )? $result->fields['creator_real_name'] : $result->fields['creator_user'] );
 				$this->mInfo['editor'] =( isset( $result->fields['modifier_real_name'] )? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
-				$this->mInfo['parsed_data'] = $this->parseData();
+				$this->parseData();
 
 				LibertyMime::load();
 			}
@@ -572,7 +572,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 					$res['track']['on'] = false;
 				}
 				unset($res['track_count']);
-				$res['parsed_data']=$this->parseData($res);
+				$res['parsed_data'] = LibertyContent::parseDataHash( $res );
 				$res['last'] = $this->getLastTopic($res);
 			}
 			$ret[] = $res;

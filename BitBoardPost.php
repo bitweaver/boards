@@ -212,7 +212,7 @@ class BitBoardPost extends LibertyComment {
 					}
 					$row['data'] = trim( $row['data'] );
 					$row['user_url'] = BitUser::getDisplayUrlFromHash( $row );
-					$row['parsed_data'] = $this->parseData( $row );
+					$row['parsed_data'] = self::parseDataHash( $row );
 					$row['level'] = substr_count ( $row['thread_forward_sequence'], '.' ) - 1;
 					$c = new LibertyComment();
 					$c->mInfo=$row;
@@ -330,7 +330,7 @@ class BitBoardPost extends LibertyComment {
 				}
 				$row['data'] = trim($row['data']);
 				$row['user_url']=BitUser::getDisplayUrlFromHash($row);
-				$row['parsed_data'] = $this->parseData( $row );
+				$row['parsed_data'] = self::parseDataHash( $row );
 				$row['level'] = substr_count ( $row['thread_forward_sequence'], '.' ) - 1;
 				$row['topic_id'] = boards_get_topic_comment( $row['thread_forward_sequence'] );
 				$row['display_url'] = static::getDisplayUrlFromHash( $row );

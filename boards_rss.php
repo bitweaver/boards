@@ -53,9 +53,8 @@ $rss->useCached( $rss_version_name, $cacheFile, $gBitSystem->getConfig( 'rssfeed
 $title = tra("Recent Discussions");
 $description = tra("All recent forum discussions on ".$gBitSystem->getConfig( 'site_title' ) );
 if( $gContent->isValid() ){
-	$gContent->parseData();
 	$title = $gContent->getField( 'title' )." Feed";
-	$description = $gContent->getField( 'parsed_data' );
+	$description = $gContent->getParsedData();
 }
 $rss->title = $title;
 $rss->description = $description;

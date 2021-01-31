@@ -47,7 +47,6 @@ if( isset( $_REQUEST["format_guid"] ) ) {
 
 if( isset( $_REQUEST['bitboarduprefs']["edit"] ) ) {
 	$signatureContent->mInfo["data"] = $_REQUEST['bitboarduprefs']["edit"];
-	$signatureContent->mInfo['parsed_data'] = $signatureContent->parseData();
 }
 
 // If we are in preview mode then preview it!
