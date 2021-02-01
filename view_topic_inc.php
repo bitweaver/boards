@@ -91,7 +91,7 @@ $thread->invokeServices( 'content_display_function', $displayHash );
 $thread->readTopic();
 
 $gBitSmarty->assignByRef( 'thread', $thread );
-$gBitSmarty->assign('topic_locked',$thread->isLocked());
+$gBitSmarty->assign( 'topic_locked', BitBoardTopic::isLocked( $thread->mCommentContentId ) );
 
 
 // Get the thread of comments
