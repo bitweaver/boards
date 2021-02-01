@@ -619,7 +619,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 			$seq = explode( ".",  $pParamHash['comment']['thread_forward_sequence'] );
 			$topicRootId = 	(int)$seq[0];
 			if( BitBase::verifyId( $topicRootId )) {
-				require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
+				require_once( BOARDS_PKG_CLASS_PATH.'BitBoardTopic.php' );
 				$hash = array( 'topic_id' => $topicRootId );
 				$ret = BitBoardTopic::getDisplayUrlFromHash( $hash );
 				// we're out of here with our topic url
@@ -768,7 +768,7 @@ function boards_content_edit ( $pContent, $pParamHash ) {
 			$boardInfo['board_content_id'] = $pParamHash['linked_board_cid'];
 			$gBitSmarty->assign( 'boardInfo', $boardInfo );
 		}
-		require_once( BOARDS_PKG_PATH.'BitBoard.php' );
+		require_once( BOARDS_PKG_CLASS_PATH.'BitBoard.php' );
 		$board = new BitBoard();
 		$boardList = $board->getBoardSelectList( TRUE );
 		$gBitSmarty->assign( 'boardList', $boardList );
@@ -779,7 +779,7 @@ function boards_content_edit ( $pContent, $pParamHash ) {
 function boards_content_store( $pContent, $pParamHash ) {
 	global $gBitDb, $gBitSmarty, $gBitSystem;
 
-	require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
+	require_once( BOARDS_PKG_CLASS_PATH.'BitBoardTopic.php' );
 	// do not allow unassigning topics. the UI should prevent this, but just to make sure...
 	if( $pContent->isValid() && !$pContent->isContentType( BITBOARDTOPIC_CONTENT_TYPE_GUID ) && !$pContent->isContentType( BITBOARD_CONTENT_TYPE_GUID ) ) {
 		// wipe out all previous assignments for good measure. Not the sanest thing to do, but edits are infrequent - at least for now

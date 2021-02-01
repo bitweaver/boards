@@ -15,7 +15,7 @@
  * required setup
  */
 require_once( LIBERTY_PKG_PATH.'LibertyMime.php' );
-require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoardTopic.php' );
 
 /**
  * @package boards

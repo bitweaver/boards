@@ -16,8 +16,8 @@ if( $gBitSystem->isPackageActive( 'boards' ) && $gBitUser->hasPermission( 'p_boa
 	);
 	$gBitSystem->registerAppMenu( $menuHash );
 
-	require_once( BOARDS_PKG_PATH.'BitBoard.php' );
-	require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
+	require_once( BOARDS_PKG_CLASS_PATH.'BitBoard.php' );
+	require_once( BOARDS_PKG_CLASS_PATH.'BitBoardTopic.php' );
 
 	$registerArray = array(
 		'content_display_function' => 'boards_content_display',

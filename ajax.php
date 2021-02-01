@@ -87,7 +87,7 @@ set_error_handler("ajax_nice_error");
 
 switch ($_GET['req']) {
 	case 10:
-		require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
+		require_once( BOARDS_PKG_CLASS_PATH.'BitBoardPost.php' );
 		$comment = new BitBoardPost($_GET['comment_id']);
 		$comment->loadMetaData();
 		if (@$comment->verifyId($comment->mCommentId)) {

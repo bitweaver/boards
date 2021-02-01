@@ -18,7 +18,7 @@ $gBitSystem->verifyPackage( 'boards' );
 
 // if we're getting a migrate id then lets move on right away
 if ( @BitBase::verifyId( $_REQUEST['migrate_board_id'] ) ) {
-	require_once( BOARDS_PKG_PATH.'BitBoard.php' );
+	require_once( BOARDS_PKG_CLASS_PATH.'BitBoard.php' );
 
 	if( $_REQUEST['b'] = BitBoard::lookupByMigrateBoard( $_REQUEST['migrate_board_id'] ) ) {
 		bit_redirect( BOARDS_PKG_URL.'index.php?b='. $_REQUEST['b'] );
@@ -43,7 +43,7 @@ if (!empty($_REQUEST['action'])) {
 	$gBitUser->verifyTicket();
 
 	// Load up the comment as a board post
-	require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
+	require_once( BOARDS_PKG_CLASS_PATH.'BitBoardPost.php' );
 	$comment = new BitBoardPost($_REQUEST['comment_id']);
 	$comment->loadComment();
 
@@ -92,7 +92,7 @@ $comments_return_url=  BOARDS_PKG_URL."index.php?b=".urlencode($gContent->mBitBo
 require_once( BOARDS_PKG_PATH.'boards_comments_inc.php' );
 
 // get the topics for this board
-require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoardTopic.php' );
 
 $threads = new BitBoardTopic( $gContent->mContentId );
 

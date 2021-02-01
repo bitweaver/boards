@@ -10,9 +10,9 @@
 require_once( '../kernel/setup_inc.php' );
 
 // we need all three
-require_once( BOARDS_PKG_PATH.'BitBoard.php' );
-require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
-require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoard.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoardTopic.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoardPost.php' );
 
 // if we're getting a migrate id then lets move on right away
 if( @BitBase::verifyId( $_REQUEST['migrate_topic_id'] ) ) {

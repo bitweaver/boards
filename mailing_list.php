@@ -13,9 +13,9 @@
  * required setup
  */
 require_once( '../kernel/setup_inc.php' );
-require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
-require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
-require_once( BOARDS_PKG_PATH.'BitBoard.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoardTopic.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoardPost.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoard.php' );
 require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
 require_once( UTIL_PKG_INC.'mailman_lib.php' );
 

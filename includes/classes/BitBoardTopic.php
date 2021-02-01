@@ -15,7 +15,7 @@
  * required setup
  */
 require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
-require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoardPost.php' );
 
 /**
 * This is used to uniquely identify the object
