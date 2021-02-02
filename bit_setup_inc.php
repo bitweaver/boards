@@ -81,7 +81,7 @@ if( $gBitSystem->isPackageActive( 'boards' ) && $gBitUser->hasPermission( 'p_boa
 					if( !empty($code) && !empty($boardSync) && !empty($approved) ) {
 						$boardSync = str_replace('@', '-request@', $boardSync);
 						$code = 'confirm '.$code;
-						require_once(KERNEL_PKG_PATH.'BitMailer.php');
+uire_once(KERNEL_PKG_CLASS_PATH.'BitMailer.php');
 						$mailer = new BitMailer();
 	
 						if( $pModerationInfo['last_status'] == MODERATION_DELETE ) {
