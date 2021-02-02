@@ -28,7 +28,7 @@ if ( @BitBase::verifyId( $_REQUEST['migrate_board_id'] ) ) {
 $_REQUEST['board_id'] = BitBase::getParameter( $_REQUEST, 'b' );
 
 // Load up the board
-require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
+require_once( BOARDS_PKG_INCLUDE_PATH.'lookup_inc.php' );
 
 if( !$gContent->isValid() ) {
 	$gBitSystem->fatalError( "The board you requested could not be found. <a href='".BOARDS_PKG_URL."'>View all boards</a>", NULL, NULL, HttpStatusCodes::HTTP_GONE );
@@ -75,7 +75,7 @@ if (!empty($_REQUEST['action'])) {
  *
  * @TODO perhaps move this into the action process above
  */
-require_once( BOARDS_PKG_PATH.'edit_topic_inc.php' );
+require_once( BOARDS_PKG_INCLUDE_PATH.'edit_topic_inc.php' );
 
 
 // Ok finally we can get on with viewing our board
@@ -89,7 +89,7 @@ $commentsParentId=$gContent->mContentId;
 $comments_return_url=  BOARDS_PKG_URL."index.php?b=".urlencode($gContent->mBitBoardId);
 
 // @TODO not clear why we load up comments and topics after this when its likely to get both. If someone figures it out please clarify.
-require_once( BOARDS_PKG_PATH.'boards_comments_inc.php' );
+require_once( BOARDS_PKG_INCLUDE_PATH.'boards_comments_inc.php' );
 
 // get the topics for this board
 require_once( BOARDS_PKG_CLASS_PATH.'BitBoardTopic.php' );

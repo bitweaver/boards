@@ -13,7 +13,7 @@
 /**
  * Initialization
  */
-require_once (LIBERTY_PKG_PATH.'comments_inc.php');
+require_once (LIBERTY_PKG_INCLUDE_PATH.'comments_inc.php');
 
 if (!function_exists("send_board_email")) {
 	function send_board_email($storeComment) {

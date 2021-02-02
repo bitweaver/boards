@@ -6,7 +6,7 @@ $gShellScript = TRUE;
 
 require_once( '../../kernel/setup_inc.php' );
 
-require_once( BOARDS_PKG_PATH.'admin/boardsync_inc.php');
+require_once( BOARDS_PKG_INCLUDE_PATH.'admin/boardsync_inc.php');
 
 print "Running: ".date(DATE_RFC822)."\r\n";
 

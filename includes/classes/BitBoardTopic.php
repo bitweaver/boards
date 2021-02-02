@@ -14,7 +14,7 @@
 /**
  * required setup
  */
-require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
+require_once( LIBERTY_PKG_CLASS_PATH.'LibertyComment.php' );
 require_once( BOARDS_PKG_CLASS_PATH.'BitBoardPost.php' );
 
 /**

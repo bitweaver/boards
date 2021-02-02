@@ -74,7 +74,7 @@ if( $gBitSystem->isPackageActive( 'boards' ) && $gBitUser->hasPermission( 'p_boa
 					$approved = $board->getPreference('boards_mailing_list_password');
 					// Possible race. Did we beat the cron?
 					if( empty($code) ) {
-						require_once(BOARDS_PKG_PATH.'admin/boardsync_inc.php');
+						require_once(BOARDS_PKG_INCLUDE_PATH.'admin/boardsync_inc.php');
 						// Try to pick up the message!
 						board_sync_run(TRUE);
 					}

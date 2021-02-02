@@ -29,7 +29,7 @@ $feedFormat = array(
 $gBitSmarty->assign( "feedFormat", $feedFormat );
 
 // Load up the board or topic
-require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
+require_once( BOARDS_PKG_INCLUDE_PATH.'lookup_inc.php' );
 
 if( !empty( $_REQUEST['get_feed'] ) ) {
 	$feedlink['url'] = BOARDS_PKG_URL.'boards_rss.php?';

@@ -106,7 +106,7 @@ if( empty( $_REQUEST["comments_style"] ) ) {
 	$_REQUEST["comments_style"] = "flat";
 }
 
-require_once( BOARDS_PKG_PATH.'boards_comments_inc.php' );
+require_once( BOARDS_PKG_INCLUDE_PATH.'boards_comments_inc.php' );
 
 if( $gBitUser->isRegistered() ) {
 	$postComment['registration_date']=$gBitUser->mInfo['registration_date'];

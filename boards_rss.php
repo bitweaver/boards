@@ -13,10 +13,10 @@ require_once( "../kernel/setup_inc.php" );
 $gBitSystem->verifyPackage( 'boards' );
 $gBitSystem->verifyPackage( 'rss' );
 
-require_once( RSS_PKG_PATH."rss_inc.php" );
+require_once( RSS_PKG_INCLUDE_PATH.'rss_inc.php' );
 
 // Load up the board or topic
-require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
+require_once( BOARDS_PKG_INCLUDE_PATH.'lookup_inc.php' );
 
 // access check
 if( !empty( $_REQUEST['t'] ) || !empty($_REQUEST['b'] ) ){
