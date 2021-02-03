@@ -10,9 +10,9 @@
 require_once( '../kernel/setup_inc.php' );
 
 // we need all three
-require_once( BOARDS_PKG_PATH.'BitBoard.php' );
-require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
-require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoard.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoardTopic.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoardPost.php' );
 
 // if we're getting a migrate id then lets move on right away
 if( @BitBase::verifyId( $_REQUEST['migrate_topic_id'] ) ) {
@@ -91,7 +91,7 @@ $thread->invokeServices( 'content_display_function', $displayHash );
 $thread->readTopic();
 
 $gBitSmarty->assignByRef( 'thread', $thread );
-$gBitSmarty->assign('topic_locked',$thread->isLocked());
+$gBitSmarty->assign( 'topic_locked', BitBoardTopic::isLocked( $thread->mCommentContentId ) );
 
 
 // Get the thread of comments
@@ -106,7 +106,7 @@ if( empty( $_REQUEST["comments_style"] ) ) {
 	$_REQUEST["comments_style"] = "flat";
 }
 
-require_once( BOARDS_PKG_PATH.'boards_comments_inc.php' );
+require_once( BOARDS_PKG_INCLUDE_PATH.'boards_comments_inc.php' );
 
 if( $gBitUser->isRegistered() ) {
 	$postComment['registration_date']=$gBitUser->mInfo['registration_date'];

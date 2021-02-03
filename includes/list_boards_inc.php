@@ -12,9 +12,9 @@
  * required setup
  */
 require_once("../kernel/setup_inc.php");
-require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
-require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
-require_once( BOARDS_PKG_PATH.'BitBoard.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoardTopic.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoardPost.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoard.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'boards' );
@@ -91,7 +91,7 @@ $board = new BitBoard();
 $ret['members'] = $board->getList($listHash);
 if (count($ret['members']) == 1) {
 	$_REQUEST['b'] = $ret['members'][0]['board_id'];
-	require( BOARDS_PKG_PATH.'view_board_inc.php' );
+	require( BOARDS_PKG_INCLUDE_PATH.'view_board_inc.php' );
 	die;
 } elseif (count($ret['members']) > 0) {
 	$ns[] = $ret;

@@ -16,7 +16,7 @@ require_once( '../kernel/setup_inc.php' );
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'boards' );
 
-require_once(BOARDS_PKG_PATH.'lookup_inc.php' );
+require_once(BOARDS_PKG_INCLUDE_PATH.'lookup_inc.php' );
 
 // verify minimal edit permission level
 $gContent->verifyUpdatePermission();

@@ -12,7 +12,7 @@
  */
 
 require_once( '../../kernel/setup_inc.php' );
-require_once( UTIL_PKG_INC.'mailman_lib.php' );
+require_once( UTIL_PKG_INCLUDE_PATH.'mailman_lib.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'boards' );

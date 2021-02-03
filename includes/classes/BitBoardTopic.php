@@ -14,8 +14,8 @@
 /**
  * required setup
  */
-require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
-require_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
+require_once( LIBERTY_PKG_CLASS_PATH.'LibertyComment.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoardPost.php' );
 
 /**
 * This is used to uniquely identify the object
@@ -499,18 +499,21 @@ class BitBoardTopic extends LibertyMime {
 		return $ret;
 	}
 
-	function isLocked($pThreadId=false) {
+	public static function isLocked( $pThreadId ) {
 		global $gBitSystem;
+/*
+		// remove mixed static / dynamic function invocation
 		if (!$pThreadId) {
 			$pThreadId = $this->mCommentContentId;
 		} else {
 			$pThreadId=intval($pThreadId);
 		}
-		$ret = $gBitSystem->mDb->getOne("SELECT `is_locked` FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = ?", array( $pThreadId ) );
+*/
+		$ret = $gBitSystem->mDb->getOne("SELECT `is_locked` FROM `".BIT_DB_PREFIX."boards_topics` WHERE `parent_id` = ?", array( (int)$pThreadId ) );
 		return !empty($ret);
 	}
 
-	function isLockedMsg($parent_id) {
+	public static function isLockedMsg( $parent_id ) {
 		// $parentComment = new LibertyComment(NULL,$parent_id);
 		// $topicId = $parentComment->mInfo['thread_forward_sequence'];
 		if (!empty($parent_id)) {
@@ -519,16 +522,19 @@ class BitBoardTopic extends LibertyMime {
 		return false;
 	}
 
-	function isNotificationOn($pThreadId=false) {
+	public static function isNotificationOn( $pThreadId ) {
 		global $gBitSystem, $gBitUser;
 		if ($gBitSystem->isPackageActive('boards') && $gBitSystem->isFeatureActive('boards_thread_track')) {
+/*
+		// remove mixed static / dynamic function invocation
 			if (!$pThreadId) {
 				$pThreadId = $this->mRootId;
 			}
 			if (is_numeric($pThreadId)) {
 				$topicId = sprintf("%09d.",$pThreadId);
 			}
-			return $gBitSystem->mDb->getOne("SELECT SUM(`notify`) FROM `".BIT_DB_PREFIX."boards_tracking` WHERE topic_id='$topicId'");
+*/
+			return $gBitSystem->mDb->getOne("SELECT SUM(`notify`) FROM `".BIT_DB_PREFIX."boards_tracking` WHERE topic_id=?", array( (int)$topicId ) );
 		}
 		return false;
 	}

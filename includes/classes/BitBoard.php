@@ -14,7 +14,7 @@
 /**
  * required setup
  */
-require_once( LIBERTY_PKG_PATH.'LibertyMime.php' );
+require_once( LIBERTY_PKG_CLASS_PATH.'LibertyMime.php' );
 
 /**
 * This is used to uniquely identify the object
@@ -97,7 +97,7 @@ class BitBoard extends LibertyMime {
 		return( count( $this->mInfo ) );
 	}
 
-	function lookupByMigrateBoard( $pMigrateBoardId ) {
+	public static function lookupByMigrateBoard( $pMigrateBoardId ) {
 		global $gBitDb;
 		$ret = NULL;
 		if( BitBase::verifyId( $pMigrateBoardId ) ) {
@@ -139,7 +139,7 @@ class BitBoard extends LibertyMime {
 				$result = $this->mDb->associateInsert( BIT_DB_PREFIX."boards_map",array('board_content_id'=>$pParamHash['board_store']['content_id'],'topic_content_id'=>$pParamHash['board_store']['content_id']));
 				if( !empty( $pParamHash['boards_mailing_list'] ) ) {
 					global $gBitSystem, $gBitUser;
-					require_once( UTIL_PKG_INC.'mailman_lib.php' );
+					require_once( UTIL_PKG_INCLUDE_PATH.'mailman_lib.php' );
 					if( $gBitSystem->getConfig( 'boards_sync_mail_server' ) ) {
 						if( !($error = mailman_newlist( array( 'listname' => $pParamHash['boards_mailing_list'], 'listhost' => $gBitSystem->getConfig( 'boards_email_host', $gBitSystem->getConfig( 'kernel_server_name' ) ), 'admin-password'=>$pParamHash['boards_mailing_list_password'], 'listadmin-addr'=>$gBitUser->getField( 'email' ) ) )) ) {
 							$this->storePreference( 'boards_mailing_list', !empty( $pParamHash['boards_mailing_list'] ) ? $pParamHash['boards_mailing_list'] : NULL );
@@ -283,7 +283,7 @@ class BitBoard extends LibertyMime {
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
 			if( LibertyMime::expunge() ) {
 				if( $mailingList ) {
-					require_once( UTIL_PKG_INC.'mailman_lib.php' );
+					require_once( UTIL_PKG_INCLUDE_PATH.'mailman_lib.php' );
 					if( $error = mailman_rmlist( $mailingList ) ) {
 						$this->mErrors['mailing_list'] = $error;
 					}
@@ -619,7 +619,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 			$seq = explode( ".",  $pParamHash['comment']['thread_forward_sequence'] );
 			$topicRootId = 	(int)$seq[0];
 			if( BitBase::verifyId( $topicRootId )) {
-				require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
+				require_once( BOARDS_PKG_CLASS_PATH.'BitBoardTopic.php' );
 				$hash = array( 'topic_id' => $topicRootId );
 				$ret = BitBoardTopic::getDisplayUrlFromHash( $hash );
 				// we're out of here with our topic url
@@ -768,7 +768,7 @@ function boards_content_edit ( $pContent, $pParamHash ) {
 			$boardInfo['board_content_id'] = $pParamHash['linked_board_cid'];
 			$gBitSmarty->assign( 'boardInfo', $boardInfo );
 		}
-		require_once( BOARDS_PKG_PATH.'BitBoard.php' );
+		require_once( BOARDS_PKG_CLASS_PATH.'BitBoard.php' );
 		$board = new BitBoard();
 		$boardList = $board->getBoardSelectList( TRUE );
 		$gBitSmarty->assign( 'boardList', $boardList );
@@ -779,7 +779,7 @@ function boards_content_edit ( $pContent, $pParamHash ) {
 function boards_content_store( $pContent, $pParamHash ) {
 	global $gBitDb, $gBitSmarty, $gBitSystem;
 
-	require_once( BOARDS_PKG_PATH.'BitBoardTopic.php' );
+	require_once( BOARDS_PKG_CLASS_PATH.'BitBoardTopic.php' );
 	// do not allow unassigning topics. the UI should prevent this, but just to make sure...
 	if( $pContent->isValid() && !$pContent->isContentType( BITBOARDTOPIC_CONTENT_TYPE_GUID ) && !$pContent->isContentType( BITBOARD_CONTENT_TYPE_GUID ) ) {
 		// wipe out all previous assignments for good measure. Not the sanest thing to do, but edits are infrequent - at least for now

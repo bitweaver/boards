@@ -13,7 +13,7 @@ require_once( '../kernel/setup_inc.php' );
 $gBitSystem->verifyPackage( 'boards' );
 
 // Look up Topic (lookup_inc is universal, gContent == BitBoardTopic)
-require_once( BOARDS_PKG_PATH.'lookup_inc.php' );
+require_once( BOARDS_PKG_INCLUDE_PATH.'lookup_inc.php' );
 
 // Make sure topic exists since we only run through here for existing topics. New topics are created via comment system.
 if( !$gContent->isValid() ){

@@ -20,7 +20,7 @@ if( isset( $_REQUEST['bitboard']['board_id'] ) ) {
 	$_REQUEST['b'] = $_REQUEST['bitboard']['board_id'];
 }
 
-require_once(BOARDS_PKG_PATH.'lookup_inc.php' );
+require_once(BOARDS_PKG_INCLUDE_PATH.'lookup_inc.php' );
 
 //must be owner or admin to edit an existing board
 if( $gContent->isValid() ) {

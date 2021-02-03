@@ -10,7 +10,7 @@
 //	$gBitSmarty->assign('home_bitboard', $_REQUEST["homeBitBoards"]);
 //}
 
-require_once( BOARDS_PKG_PATH.'BitBoard.php' );
+require_once( BOARDS_PKG_CLASS_PATH.'BitBoard.php' );
 
 $formBitBoardsLists = array(
 	'boards_thread_track' => array(
