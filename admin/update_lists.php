@@ -11,7 +11,7 @@
  * default moderation setting in mailman.cfg
  */
 
-require_once( '../../kernel/setup_inc.php' );
+require_once( '../../kernel/includes/setup_inc.php' );
 require_once( UTIL_PKG_INCLUDE_PATH.'mailman_lib.php' );
 
 // Is package installed and enabled
