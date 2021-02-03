@@ -4,7 +4,7 @@
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
 // Initialization
-require_once( '../kernel/setup_inc.php' );
+require_once( '../kernel/includes/setup_inc.php' );
 $gBitSystem->verifyPackage( 'boards' );
 
 if( !empty( $_REQUEST['t'] ) || !empty( $_REQUEST['migrate_topic_id'] ) || !empty( $_REQUEST['migrate_post_id'] ) ) {

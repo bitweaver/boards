@@ -97,7 +97,7 @@ class BitBoard extends LibertyMime {
 		return( count( $this->mInfo ) );
 	}
 
-	function lookupByMigrateBoard( $pMigrateBoardId ) {
+	public static function lookupByMigrateBoard( $pMigrateBoardId ) {
 		global $gBitDb;
 		$ret = NULL;
 		if( BitBase::verifyId( $pMigrateBoardId ) ) {
@@ -264,7 +264,7 @@ class BitBoard extends LibertyMime {
 
 		if( isset( $pParamHash["edit"] ) ) {
 			$this->mInfo["data"] = $pParamHash["edit"];
-			$this->mInfo['parsed_data'] = $this->parseData();
+			$this->parseData();
 		}
 	}
 
