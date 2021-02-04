@@ -138,7 +138,7 @@ class BitBoardTopic extends LibertyMime {
 		return( count( $this->mInfo ) );
 	}
 
-	function lookupByMigratePost( $pMigratePostId ) {
+	public static function lookupByMigratePost( $pMigratePostId ) {
 		global $gBitDb;
 		$ret = NULL;
 		if( BitBase::verifyId( $pMigratePostId ) ) {
@@ -150,7 +150,7 @@ class BitBoardTopic extends LibertyMime {
 		return $ret;
 	}
 
-	function lookupByMigrateTopic( $pMigrateTopicId ) {
+	public static function lookupByMigrateTopic( $pMigrateTopicId ) {
 		global $gBitDb;
 		$ret = NULL;
 		if( BitBase::verifyId( $pMigrateTopicId ) ) {
