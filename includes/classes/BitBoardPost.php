@@ -432,7 +432,7 @@ class BitBoardPost extends LibertyComment {
 		$this->setMetaData($data);
 
 		if ($gBitSystem->isPackageActive('messages')) {
-			require_once(MESSAGES_PKG_PATH.'Messages.php');
+			require_once(MESSAGES_PKG_CLASS_PATH.'Messages.php');
 
 			$u = new BitUser($this->mInfo['user_id']);
 			$u->load();

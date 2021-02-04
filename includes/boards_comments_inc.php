@@ -28,7 +28,7 @@ if (!function_exists("send_board_email")) {
 		if ( !empty( $boardSync ) ||
 			 $storeComment->getContentStatus() > 0 ) {
 
-			require_once( KERNEL_PKG_PATH.'BitMailer.php' );
+			require_once( KERNEL_PKG_CLASS_PATH.'BitMailer.php' );
 			$bitMailer = new BitMailer();
 			$email = $gContent->getPreference('boards_mailing_list').'@'.$gBitSystem->getConfig( 'boards_email_host', $gBitSystem->getConfig( 'kernel_server_name' ) );
 			if( $storeComment->getField( 'user_id' ) == ANONYMOUS_USER_ID ) {

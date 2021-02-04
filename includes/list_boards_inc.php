@@ -28,7 +28,7 @@ $board_all_cids =array();
 
 // @TODO move pigeonholes to its own file library or something
 if($gBitSystem->isPackageActive('pigeonholes')) {
-	require_once(PIGEONHOLES_PKG_PATH.'Pigeonholes.php');
+	require_once(PIGEONHOLES_PKG_CLASS_PATH.'Pigeonholes.php');
 
 	$p = new Pigeonholes();
 	$s = new LibertyStructure();

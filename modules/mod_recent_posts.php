@@ -14,7 +14,7 @@
  * required setup
  */
 
-include_once( BOARDS_PKG_PATH.'BitBoardPost.php' );
+include_once( BOARDS_PKG_CLASS_PATH.'BitBoardPost.php' );
 
 global $gBitSmarty, $gQueryUserId, $gBitSystem, $moduleParams;
 if( !empty( $moduleParams ) ) {

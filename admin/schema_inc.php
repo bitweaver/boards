@@ -90,7 +90,7 @@ if(defined('RSS_PKG_NAME')) {
 
 // ### Register content types
 $gBitInstaller->registerContentObjects( BOARDS_PKG_NAME, array( 
-	'BitBoard'=>BOARDS_PKG_PATH.'BitBoard.php',
+	'BitBoard'=>BOARDS_PKG_CLASS_PATH.'BitBoard.php',
 ));
 
 // Requirements

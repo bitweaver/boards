@@ -791,7 +791,7 @@ function boards_content_store( $pContent, $pParamHash ) {
 			$p = null;
 			if ( ! empty( $pParamHash['pigoneholes'] ) ) {
 				foreach( $pParamHash['pigeonholes']['pigeonhole'] as $p_id ) {
-					require_once(PIGEONHOLES_PKG_PATH.'Pigeonholes.php');
+					require_once(PIGEONHOLES_PKG_CLASS_PATH.'Pigeonholes.php');
 					if (empty($p)) {
 						$p = new Pigeonholes();
 					}

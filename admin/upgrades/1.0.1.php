@@ -39,7 +39,7 @@ global $gBitSystem;
 
 $gBitSystem->verifyPackage( "boards" );
 
-require_once( BOARDS_PKG_PATH."BitBoardTopic.php");
+require_once( BOARDS_PKG_CLASS_PATH."BitBoardTopic.php");
 
 $oTopic = new BitBoardTopic();
 
