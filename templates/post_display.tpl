@@ -27,29 +27,29 @@
 			<div class="floaticon">
 				{if $print_page ne 'y' && $comment.deleted==0 }
 					{if !$topic_locked && $board->hasPostCommentsPermission()}
-						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{booticon iname="icon-comment-alt"  ipackage="icons"  iexplain="Reply to this Post" iforce="icon"}</a>
+						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{booticon iname="fa-comment" iexplain="Reply to this Post"}</a>
 					{/if}
 					{if !$topic_locked && $board->hasPostCommentsPermission()}
-						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1&amp;quote=y#editcomments" rel="nofollow">{booticon ipackage="icons" iname="icon-comment" iexplain="Reply with Quote to this Post" iforce="icon"}</a>
+						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1&amp;quote=y#editcomments" rel="nofollow">{booticon iname="fa-comment" iexplain="Reply with Quote to this Post"}</a>
 					{/if}
 					{if $comment.is_editable || $gContent->hasUserPermission('p_liberty_edit_comments')}
-						<a href="{$comments_return_url}&amp;post_comment_id={$comment.comment_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{booticon iname="icon-edit" ipackage="icons" iexplain="Edit" iforce="icon"}</a>
+						<a href="{$comments_return_url}&amp;post_comment_id={$comment.comment_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{booticon iname="fa-pen-to-square" iexplain="Edit"}</a>
 					{/if}
 					{if $board->hasUserPermission( 'p_liberty_admin_comments' )}
-						<a href="{$comments_return_url}&amp;delete_comment_id={$comment.comment_id}" rel="nofollow">{booticon iname="icon-trash" ipackage="icons" iexplain="Remove" iforce="icon"}</a>
+						<a href="{$comments_return_url}&amp;delete_comment_id={$comment.comment_id}" rel="nofollow">{booticon iname="fa-trash" iexplain="Remove"}</a>
 					{/if}
 					{if $board->hasUpdatePermission() && (($comment.user_id<0 && $comment.is_approved==0)||$comment.user_id>=0) && !$comment.is_warned}
 						{if $comment.user_id<0 && $comment.is_approved==0}
 							<a title="{tr}Approve this post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_topic_inc.php?t={$thread->mRootId}&amp;action=1&amp;comment_id={$comment.comment_id}">
-								{booticon iname="icon-plus-sign"  ipackage="icons"  iexplain="Approve Post" iforce="icon"}
+								{booticon iname="fa-circle-plus" iexplain="Approve Post"}
 							</a>
 
 							<a title="{tr}Reject this post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_topic_inc.php?t={$thread->mRootId}&amp;action=2&amp;comment_id={$comment.comment_id}">
-								{booticon iname="icon-minus-sign"  ipackage="icons"  iexplain="Reject Post" iforce="icon"}
+								{booticon iname="fa-circle-minus" iexplain="Reject Post"}
 							</a>
 						{elseif !$comment.is_warned && $comment.user_id>=0}
 							<a onclick="return BitBoards.warn( 'warn_block_{$comment.comment_id|escape:"url"}', this )" title="{tr}Warn the poster about this post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_topic_inc.php?t={$thread->mRootId}&amp;action=3&amp;comment_id={$comment.comment_id}">
-								{booticon iname="icon-warning-sign"  ipackage="icons"  iexplain="Warn Post" iforce="icon"}
+								{booticon iname="fa-triangle-exclamation" iexplain="Warn Post"}
 							</a>
 
 							<div class="warn_block" style="display:none;" id="warn_block_{$comment.comment_id|escape:"url"}">
@@ -113,7 +113,7 @@
 						');
 					return false;
 					" href="{$thread_mInfo.display_url}&amp;warning[{$comment_id}]={if empty($warnings.$comment_id)}show{else}hide{/if}"
-				>{booticon ipackage="icons" iname="icon-warning-sign" iexplain="Warned Post"}</a>
+				>{booticon iname="fa-triangle-exclamation" iexplain="Warned Post"}</a>
 
 				<div id="warned_message_{$comment.comment_id|escape:"url"}">
 					{if !empty($warnings.$comment_id)}{$comment.warned_message}{/if}

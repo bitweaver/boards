@@ -11,16 +11,16 @@
 		{if $print_page ne 'y'}
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='icon' serviceHash=$board->mInfo}
 			{if $board->getPreference('boards_mailing_list') || $board->hasAdminPermission()}
-				<a class="item" href="{$smarty.const.BOARDS_PKG_URL}mailing_list.php?b={$board->mInfo.board_id}" title="{tr}Message Board Mailing List{/tr}">{booticon ipackage="icons" iname="icon-envelope" iexplain="Edit Board Mailing List"}</a>
+				<a class="item" href="{$smarty.const.BOARDS_PKG_URL}mailing_list.php?b={$board->mInfo.board_id}" title="{tr}Message Board Mailing List{/tr}">{booticon iname="fa-envelope" iexplain="Edit Board Mailing List"}</a>
 			{/if}
 			{if $gBitSystem->isPackageActive( 'rss' )}
-				<a title="{tr}Get RSS Feed{/tr}" href="{$smarty.const.BOARDS_PKG_URL}rss.php?b={$smarty.request.b}">{booticon iname="icon-rss" ipackage=rss iexplain="Get RSS Feed"}</a>
+				<a title="{tr}Get RSS Feed{/tr}" href="{$smarty.const.BOARDS_PKG_URL}rss.php?b={$smarty.request.b}">{booticon iname="fa-rss" iexplain="Get RSS Feed"}</a>
 			{/if}
 			{if $board->hasUpdatePermission()}
-				<a title="{tr}Edit message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{booticon iname="icon-edit" ipackage="icons" iexplain="Edit Message Board"}</a>
+				<a title="{tr}Edit message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?b={$board->mInfo.board_id}">{booticon iname="fa-pen-to-square" iexplain="Edit Message Board"}</a>
 			{/if}
 			{if $board->hasUserPermission( 'p_boards_remove', TRUE, TRUE )}
-				<a title="{tr}Remove message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?remove=1&amp;b={$board->mInfo.board_id}">{booticon iname="icon-trash" ipackage="icons" iexplain="Remove Message Board"}</a>
+				<a title="{tr}Remove message board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit.php?remove=1&amp;b={$board->mInfo.board_id}">{booticon iname="fa-trash" iexplain="Remove Message Board"}</a>
 			{/if}
 		{/if}<!-- end print_page -->
 		{*if $board->hasPostCommentsPermission()}
@@ -66,7 +66,7 @@
 						<td style="white-space:nowrap;">{* topic status icons *}
 
 							{if $thread.th_moved>0}
-								{booticon ipackage="icons" iname="icon-share" iexplain="Moved Topic"}
+								{booticon ipackage="icons" iname="fa-share" iexplain="Moved Topic"}
 							{else}
 								{assign var=flip value=$thread.flip}
 								{foreach from=$flip item=flip_s key=flip_name}
@@ -96,18 +96,18 @@
 								{* modcomments handles this *}
 								{if $thread.flc_user_id<0 && $thread.first_approved==0 && !$gBitSystem->isPackageActive('modcomments')}
 									<a title="{tr}Approve First Post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_board_inc.php?b={$board->mInfo.board_id}&amp;action=1&amp;comment_id={$thread.th_thread_id}">
-										{booticon iname="icon-plus-sign"  ipackage="icons"  iexplain="Approve First Post" iforce="icon"}
+										{booticon iname="fa-circle-plus" iexplain="Approve First Post"}
 									</a>
 									<a title="{tr}Reject First Post{/tr}" href="{$smarty.const.BOARDS_PKG_URL}view_board_inc.php?b={$board->mInfo.board_id}&amp;action=2&amp;comment_id={$thread.th_thread_id}">
-										{booticon iname="icon-minus-sign"  ipackage="icons"  iexplain="Reject First Post" iforce="icon"}
+										{booticon iname="fa-circle-minus" iexplain="Reject First Post"}
 									</a>
 								{/if}
 
 								{if $thread.th_moved==0 && $board->hasAdminPermission()}
 									{*smartlink ititle="Edit" ifile="edit.php" ibiticon="liberty/edit" board_id=$thread.board_id*}
 									<a href="{$smarty.const.BOARDS_PKG_URL}topic_move.php?t={$thread.th_thread_id|escape:"url"}"
-										title="{tr}Move Thread{/tr}">{booticon ipackage=icons iname="icon-share" iexplain="Move Thread" iforce="icon"}
-									</a> <a title="{tr}Delete Topic{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit_topic.php?remove=1&amp;t={$thread.th_thread_id|escape:"url"}">{booticon iname="icon-trash" ipackage="icons" iexplain="Delete Thread" iforce="icon"}</a>
+										title="{tr}Move Thread{/tr}">{booticon iname="fa-share" iexplain="Move Thread"}
+									</a> <a title="{tr}Delete Topic{/tr}" href="{$smarty.const.BOARDS_PKG_URL}edit_topic.php?remove=1&amp;t={$thread.th_thread_id|escape:"url"}">{booticon iname="fa-trash" iexplain="Delete Thread"}</a>
 								{/if}
 							</td>
 

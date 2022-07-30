@@ -14,13 +14,13 @@ $flip_downname=>$flip.$flip_name.downname
 {if $gContent->hasUserPermission( $flip.$flip_name.perm )}
 <a href="{$smarty.const.BOARDS_PKG_URL}edit_topic.php?{$flip.$flip_name.idname}={$flip.$flip_name.id|escape:"url"}&amp;{$flip_name}={$flip.$flip_name.state|escape:"url"}" />
 	{if $flip.$flip_name.state==1}
-		{booticon ipackage=icons iname=$flip.$flip_name.up iexplain=$flip.$flip_name.upname iforce="icon"}
+		{booticon ipackage=icons iname=$flip.$flip_name.up iexplain=$flip.$flip_name.upname}
 	{else}
-		{booticon ipackage=icons iname=$flip.$flip_name.down iexplain=$flip.$flip_name.downname iforce="icon"}
+		{booticon ipackage=icons iname=$flip.$flip_name.down iexplain=$flip.$flip_name.downname}
 	{/if}
 </a>
 {elseif $flip.$flip_name.state==1}
-	{booticon ipackage=icons iname=$flip.$flip_name.up iexplain=$flip.$flip_name.upname iforce="icon"}
+	{booticon iname=$flip.$flip_name.up iexplain=$flip.$flip_name.upname}
 {/if}
 </span>
 {/strip}

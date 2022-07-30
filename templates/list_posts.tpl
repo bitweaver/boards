@@ -15,7 +15,7 @@
 			{* always go back to page 1 since changing any of these values
 			   repaginates and makes the current page number meaningless *}
 			<input type="hidden" name="comment_page" value="1" />
-			<i class="icon-sort"></i> <select name="comments_sort_mode" id="comments-sort">
+			<i class="fa fal fa-sort"></i> <select name="comments_sort_mode" id="comments-sort">
 				<option value="commentDate_desc" {if $comments_sort_mode eq "commentDate_desc"}selected="selected"{/if}>{tr}Newest{/tr}</option>
 				<option value="commentDate_asc" {if $comments_sort_mode eq "commentDate_asc"}selected="selected"{/if}>{tr}Oldest{/tr}</option>
 			</select>
@@ -36,7 +36,7 @@
 			</label>
 		{/form}
 		{if $gBitSystem->isPackageActive( 'rss' )}
-			<a title="{tr}Get RSS Feed{/tr}" href="{$smarty.const.BOARDS_PKG_URL}rss.php?t={$smarty.request.t}">{booticon iname="icon-rss" ipackage=rss iexplain="Get RSS Feed"}</a>
+			<a title="{tr}Get RSS Feed{/tr}" href="{$smarty.const.BOARDS_PKG_URL}rss.php?t={$smarty.request.t}">{booticon iname="fa-rss" iexplain="Get RSS Feed"}</a>
 		{/if}
 		{assign var=flip value=$thread->getFlipFlop()}
 		{foreach from=$flip item=flip_s key=flip_name}
@@ -54,7 +54,7 @@
 	<div class="body">
 		{if !$topic_locked && $board->hasPostCommentsPermission()}
 			<div class="form-group submit">
-				<a title="{tr}Post Reply{/tr}" class="btn btn-default" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{booticon iname="icon-comment-alt"  ipackage="icons"  iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
+				<a title="{tr}Post Reply{/tr}" class="btn btn-default" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{booticon iname="fa-comment" iexplain="Post Reply"} {tr}Post Reply{/tr}</a>
 			</div>
 		{/if}
 
@@ -82,7 +82,7 @@
 
 		{if !$topic_locked && $board->hasPostCommentsPermission()}
 			<div class="form-group submit">
-				<a title="{tr}Post Reply{/tr}" class="btn btn-default" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{booticon iname="icon-comment-alt"  ipackage="icons"  iexplain="Post Reply" iforce="icon"} {tr}Post Reply{/tr}</a>
+				<a title="{tr}Post Reply{/tr}" class="btn btn-default" href="{$comments_return_url}&amp;post_comment_reply_id={$thread->mInfo.flc_content_id}&amp;post_comment_request=1#editcomments">{booticon iname="fa-comment" iexplain="Post Reply"} {tr}Post Reply{/tr}</a>
 			</div>
 		{/if}
 

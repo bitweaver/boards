@@ -47,7 +47,7 @@
 			{if $board.map}
 				{capture assign=title}
 					{if ! $board.integrity}
-						{booticon iname="icon-warning-sign"   iexplain="Integrity Check Failed"}
+						{booticon iname="fa-triangle-exclamation" iexplain="Integrity Check Failed"}
 					{/if}
 					{$board.title|escape}
 				{/capture}
@@ -56,7 +56,7 @@
 					{if ! $board.integrity}
 						<div class="floaticon">
 							<a href="{$smarty.const.BOARDS_PKG_URL}assign.php?integrity={$board.board_id}#board{$smarty.foreach.board_loop.iteration}">
-								{booticon iname="icon-warning-sign"  ipackage="icons"  ipath="large" iexplain="Fix Integrity"}
+								{booticon iname="fa-triangle-exclamation" iexplain="Fix Integrity"}
 							</a>
 						</div>
 						{formfeedback warning="Integrity Check Failed"}
@@ -78,7 +78,7 @@
 								<td style="text-align:right">{$mapping.thread_count}</td>
 								<td class="actionicon">
 									<input type="checkbox" name="remove[{$board.board_id}][{$mapping.t_content_id}]" value="1" />
-									<a title="{tr}Remove from board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}assign.php?remove[{$board.board_id}][{$mapping.t_content_id}]=1#board{$smarty.foreach.board_loop.iteration}">{booticon iname="icon-trash" ipackage="icons" iexplain="Remove from board"}</a>
+									<a title="{tr}Remove from board{/tr}" href="{$smarty.const.BOARDS_PKG_URL}assign.php?remove[{$board.board_id}][{$mapping.t_content_id}]=1#board{$smarty.foreach.board_loop.iteration}">{booticon iname="fa-trash" iexplain="Remove from board"}</a>
 								</td>
 							</tr>
 						{/foreach}

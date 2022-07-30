@@ -18,9 +18,9 @@
 			{* topic tracking icons *}
 			<td>
 				{if $board.track.on && $board.track.mod}
-					{booticon iname="icon-asterisk"  ipackage="icons"  ipath="large" iexplain="New Posts" iforce="icon"}
+					{booticon iname="fa-asterisk" iexplain="New Posts"}
 				{else}
-					{booticon iname="icon-asterisk"  ipackage="icons"  ipath="large" iexplain="New Posts" iforce="icon"}
+					{booticon iname="fa-asterisk" iexplain="New Posts"}
 				{/if} <strong><a href="{$board.url}" title="{$board_title}">{$board_title}</a></strong>
 				<div class="desc">
 					{$board.parsed_data}

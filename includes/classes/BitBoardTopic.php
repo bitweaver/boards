@@ -610,9 +610,9 @@ class BitBoardTopic extends LibertyMime {
 		$flip['is_locked']['req']=2;
 		$flip['is_locked']['id']=$arr['th_thread_id'];
 		$flip['is_locked']['idname']='t';
-		$flip['is_locked']['up']='icon-lock';
+		$flip['is_locked']['up']='fa-lock';
 		$flip['is_locked']['upname']=tra('Thread Locked');
-		$flip['is_locked']['down']='icon-unlock';
+		$flip['is_locked']['down']='fa-unlock';
 		$flip['is_locked']['downname']=tra('Thread Unlocked');
 		$flip['is_locked']['perm']='p_boards_update';
 
@@ -620,9 +620,9 @@ class BitBoardTopic extends LibertyMime {
 		$flip['is_sticky']['req'] = 3;
 		$flip['is_sticky']['id']=$arr['th_thread_id'];
 		$flip['is_sticky']['idname']='t';
-		$flip['is_sticky']['up']='icon-exclamation-sign';
+		$flip['is_sticky']['up']='fa-circle-exclamation';
 		$flip['is_sticky']['upname']=tra('Sticky Thread');
-		$flip['is_sticky']['down']='icon-list';
+		$flip['is_sticky']['down']='fa-list-ul';
 		$flip['is_sticky']['downname']=tra('Non Sticky Thread');
 		$flip['is_sticky']['perm']='p_boards_update';
 
@@ -631,7 +631,7 @@ class BitBoardTopic extends LibertyMime {
 			$flip['notify']['req']=5;
 			$flip['notify']['id']=$arr['th_thread_id'];
 			$flip['notify']['idname']='t';
-			$flip['notify']['up']='icon-bell-alt';
+			$flip['notify']['up']='fa-bell';
 			$flip['notify']['upname']=tra('Reply Notification');
 			$flip['notify']['down']='icon-bell';
 			$flip['notify']['downname']=tra('Reply Notification Disabled');
@@ -642,9 +642,9 @@ class BitBoardTopic extends LibertyMime {
 			$flip['new']['req']=4;
 			$flip['new']['id']=$arr['th_thread_id'];
 			$flip['new']['idname']='t';
-			$flip['new']['up']='icon-asterisk';
+			$flip['new']['up']='fa-asterisk';
 			$flip['new']['upname']=tra('New Posts');
-//			$flip['new']['down']='icon-comment-alt';
+//			$flip['new']['down']='fa-comment';
 //			$flip['new']['downname']=tra('No new posts');
 			$flip['new']['perm']='p_boards_read';
 		}
