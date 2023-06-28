@@ -28,9 +28,7 @@
 				{if $print_page ne 'y' && $comment.deleted==0 }
 					{if !$topic_locked && $board->hasPostCommentsPermission()}
 						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{booticon iname="fa-comment" iexplain="Reply to this Post"}</a>
-					{/if}
-					{if !$topic_locked && $board->hasPostCommentsPermission()}
-						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1&amp;quote=y#editcomments" rel="nofollow">{booticon iname="fa-comment" iexplain="Reply with Quote to this Post"}</a>
+						<a href="{$comments_return_url}&amp;post_comment_reply_id={$comment.content_id}&amp;post_comment_request=1&amp;quote=y#editcomments" rel="nofollow">{booticon iname="fa-comment-quote" iexplain="Reply with Quote to this Post"}</a>
 					{/if}
 					{if $comment.is_editable || $gContent->hasUserPermission('p_liberty_edit_comments')}
 						<a href="{$comments_return_url}&amp;post_comment_id={$comment.comment_id}&amp;post_comment_request=1#editcomments" rel="nofollow">{booticon iname="fa-pen-to-square" iexplain="Edit"}</a>
