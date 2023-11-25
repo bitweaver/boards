@@ -118,7 +118,7 @@
 				</div>
 
 				{if empty($warnings.$comment_id)}
-					<script type="text/javascript">/*<![CDATA[*/
+					<script>/*<![CDATA[*/
 						var warned_message_{$comment.comment_id|escape:"url"} = document.getElementById('warned_message_{$comment.comment_id|escape:"url"}');
 						warned_message_{$comment.comment_id|escape:"url"}.style.display='none';
 					/*]]>*/</script>

@@ -1,5 +1,5 @@
 {if $gBitSystem->getActivePackage() == 'boards'}
-	<script type="text/javascript">/* <![CDATA[ */
+	<script>/* <![CDATA[ */
 		{literal}
 		/* DEPENDENCIES: MochiKit Base Async, BitAjax */
 		BitBoards = {
