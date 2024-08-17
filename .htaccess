@@ -1,5 +1,8 @@
 <IfModule mod_rewrite.c>
     RewriteEngine  on
+
+    RewriteRule .*index.php/.*php$    /forums/     [L,R=404]
+
 #	Uncomment this if mod_rewrites are not working for you. some hosting services have cranky mod_rewrite
 #    RewriteBase     /boards/
     RewriteCond %{SCRIPT_FILENAME}  -f [OR]
@@ -11,7 +14,6 @@
     RewriteRule ^topic/(\d+.*)$    index.php?t=$1     [L,QSA]
     RewriteRule ^view/board/(\d+.*)$    index.php?b=$1     [L,QSA]
     RewriteRule ^view/topic/(\d+.*)$    index.php?t=$1     [L,QSA]
-
 
 
     # fake out phpBB user profile page
