@@ -845,7 +845,7 @@ function boards_comment_store( &$pObject, &$pParamHash ) {
 	}
 }
 
-function boards_content_verify( &$pObject, &$pParamHash ){
+function boards_content_verify( $pObject, &$pParamHash ){
 	// board posts ( e.g. liberty comments ) service
 	global $gBitSystem, $gBitUser;
 	// use is_a instead of isContentType( BITCOMMENT_CONTENT_TYPE_GUID ) as isContentType() checks isValid(), and this service method will not properly handle new object stores
