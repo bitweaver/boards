@@ -819,7 +819,7 @@ function boards_content_store( $pContent, $pParamHash ) {
 		}
 		$gBitSmarty->assign( 'boardInfo', BitBoard::getLinkedBoard( $pContent->mContentId ) );
 	} else {
-		if( @BitBase::verifyId( $pParamHash['content_id'] ) && @BitBase::verifyId( $pParamHash['linked_board_cid'] ) ) {
+		if( BitBase::verifyId( $pParamHash['content_id'] ?? null ) && BitBase::verifyId( $pParamHash['linked_board_cid'] ?? null ) ) {
 			$pContent->mDb->query( "INSERT INTO `".BIT_DB_PREFIX."boards_map` (`board_content_id`,`topic_content_id`) VALUES (?,?)", array( $pParamHash['linked_board_cid'], $pParamHash['content_id'] ) );
 		}
 	}
