@@ -328,7 +328,7 @@ class BitBoardPost extends LibertyComment {
 				if (!empty($row['warned_message'])) {
 					$row['warned_message'] = str_replace("\n","<br />\n",$row['warned_message']);
 				}
-				$row['data'] = trim($row['data']);
+				$row['data'] = trim( (string)($row['data'] ?? '') );
 				$row['user_url']=BitUser::getDisplayUrlFromHash($row);
 				$row['parsed_data'] = self::parseDataHash( $row );
 				$row['level'] = substr_count ( $row['thread_forward_sequence'], '.' ) - 1;
