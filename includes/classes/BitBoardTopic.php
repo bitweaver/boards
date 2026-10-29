@@ -586,7 +586,7 @@ class BitBoardTopic extends LibertyMime {
 
 			".$host.$this->getDisplayUrl()."&notify=1";
 
-		@mail($user['email'], $mail_subject , $mail_message, "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n");
+		@bit_mail($user['email'], $mail_subject , $mail_message, "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n");
 
 		$data = array(
 			'notify_date'=>time(),
