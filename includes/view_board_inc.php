@@ -109,7 +109,6 @@ $gBitSmarty->assignByRef( 'listInfo', $threadsListHash['listInfo'] );
 $gBitSmarty->assignByRef( 'board', $gContent );
 $gBitSmarty->assign( 'cat_url', BOARDS_PKG_URL."index.php"); //?ct=".urlencode($gContent->mInfo['content_type_guid']));
 
-$gBitThemes->loadAjax( 'mochikit' );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:boards/list_topics.tpl', tra( 'Message Board Threads: ' . $gContent->getField('title') ) , array( 'display_mode' => 'display' ));

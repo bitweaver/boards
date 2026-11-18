@@ -128,7 +128,6 @@ $gBitSmarty->assignByRef('warnings',$warnings);
 
 
 // ajax support
-$gBitThemes->loadAjax( 'mochikit' );
 
 $gBitSystem->display('bitpackage:boards/list_posts.tpl', "Show Thread: " . $thread->getField('title') , array( 'display_mode' => 'display' ));
 ?>
