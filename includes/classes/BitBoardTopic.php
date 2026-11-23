@@ -310,8 +310,7 @@ class BitBoardTopic extends LibertyMime {
 		$pParamHash['include_comments'] = 'y';
 		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, NULL, $pParamHash );
 
-		// this will set $find, $sort_mode, $max_records and $offset
-		extract( $pParamHash );
+		$find = $pParamHash['find'];
 
 		if(empty($find)) {
 		} elseif( is_array( $find ) ) {
@@ -362,7 +361,6 @@ class BitBoardTopic extends LibertyMime {
 				$selectSql .= ", 0 AS unreg";
 			}
 
-			$sort_sql = "flc.".$this->mDb->convertSortmode( $sort_mode );
 
 			$query = "SELECT
 						lc.`user_id` AS flc_user_id,
@@ -426,7 +424,7 @@ class BitBoardTopic extends LibertyMime {
 							lcom.`root_id`=lcom.`parent_id`
 							$whereSql";
 
-		$result = $this->mDb->query( $query, $bindVars, $max_records, $offset );
+		$result = $this->mDb->query( $query, $bindVars, $pParamHash['max_records'], $pParamHash['offset'] );
 		$ret = array();
 		while( $res = $result->fetchRow() ) {
 			if (empty($res['anon_name'])) $res['anon_name'] = "Anonymous";

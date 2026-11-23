@@ -461,8 +461,7 @@ class BitBoard extends LibertyMime {
 		array_push( $bindVars, $this->mContentTypeGuid );
 		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
-		// this will set $find, $sort_mode, $max_records and $offset
-		extract( $pParamHash );
+		$find = $pParamHash['find'];
 
 		if( is_array( $find ) ) {
 			// you can use an array of pages
@@ -534,7 +533,7 @@ WHERE map.`board_content_id`=lc.`content_id` AND ((s_lc.`user_id` < 0) AND (s.`i
 			FROM `".BIT_DB_PREFIX."boards` ts
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
-			ORDER BY ".$this->mDb->convertSortmode( $sort_mode );
+			ORDER BY ".$this->mDb->convertSortmode( $pParamHash['sort_mode'] );
 
 		$query_cant = "select count(*)
 			FROM `".BIT_DB_PREFIX."boards` ts INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
